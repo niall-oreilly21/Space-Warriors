@@ -1,5 +1,5 @@
-from Component import Component
-from Sprite import Sprite
+from Engine.Components.Component import Component
+from Engine.Graphics.Sprites.Sprite import Sprite
 
 
 class SpriteAnimator2D(Component):
@@ -14,9 +14,8 @@ class SpriteAnimator2D(Component):
     def update(self, game_time):
         # Calculate the duration of each frame in milliseconds
         frame_duration = 1000 / self.fps
-
         # Add the elapsed time to the animation timer
-        self.elapsed_time += game_time.get_elapsed_game_time()
+        self.elapsed_time += game_time.elapsed_time
 
         # If the animation timer exceeds the frame duration, advance to the next frame
         if self.elapsed_time >= frame_duration:
