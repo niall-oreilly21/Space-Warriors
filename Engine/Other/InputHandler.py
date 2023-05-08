@@ -23,6 +23,7 @@ class InputHandler:
             return True
         else:
             return False
+
     def is_tap(self, key, tap_threshold):
         if self.is_pressed(key):
             return True

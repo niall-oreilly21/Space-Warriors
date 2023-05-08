@@ -13,10 +13,6 @@ class GameTime:
         self.elapsed_time = now - self.last_tick
         self.last_tick = now
         self.total_time = now - self.start_time
-        return self.elapsed_time, self.total_time
-
-    def get_elapsed_game_time(self):
-        return self.tick()[0]
 
     def fps(self):
         return self.clock.get_fps()

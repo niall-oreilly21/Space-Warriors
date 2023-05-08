@@ -1,4 +1,4 @@
-from GameObject import GameObjectType
+from Engine.GameObjects.GameObject import GameObjectType
 
 class Scene:
     def __init__(self, name):
@@ -40,6 +40,14 @@ class Scene:
             for category in type.values():
                 for game_object in category:
                     game_object.update(game_time)
+
+    def get_all_components_by_type(self, component_type):
+        all_components_by_type = []
+        for type in self.game_object_list.values():
+            for category in type.values():
+                for game_object in category:
+                    all_components_by_type.append(game_object.get_component(component_type))
+        return all_components_by_type
 
     def render(self, screen, game_time):
         for type in self.game_object_list.values():

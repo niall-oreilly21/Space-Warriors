@@ -1,13 +1,12 @@
 from abc import abstractmethod
 
-from Component import Component
+from Engine.Components.Component import Component
 
 
 class Renderer2D(Component):
         def __init__(self,name, material):
             super().__init__(name)
             self.material = material
-            print(material.color)
 
         @abstractmethod
         def draw(self, surface):

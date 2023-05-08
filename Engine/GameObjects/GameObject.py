@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from enum import Enum
 
-from Transform2D import Transform2D
+from Engine.Other.Transform2D import Transform2D
 
 
 class GameObjectType(Enum):
@@ -39,17 +39,13 @@ class GameObject(ABC):
 
     def get_component(self, component_type):
         for component in self.components:
-            if type(component) == component_type:
+            if isinstance(component, component_type):
                 return component
         return None
 
     def update(self, game_time):
         for  component in self.components:
             component.update(game_time)
-
-    @abstractmethod
-    def render(self, screen, game_time):
-        pass
 
 
 

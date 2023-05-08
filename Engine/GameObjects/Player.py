@@ -1,6 +1,4 @@
-import pygame
-
-from GameObject import GameObject
+from Engine.GameObjects.GameObject import GameObject
 
 class Player(GameObject):
     def __init__(self, name, transform, type, category):
