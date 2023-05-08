@@ -8,9 +8,11 @@ class Material2D(ABC):
         self.layer_depth = layer_depth
         self.origin = origin
         self.sprite_effects = sprite_effects
+        self.flip_x = False
+        self.flip_y = False
 
     @abstractmethod
-    def draw(self, surface):
+    def draw(self, surface, transform):
         pass
 
 

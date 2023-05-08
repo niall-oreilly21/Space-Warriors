@@ -1,6 +1,5 @@
-import pygame
 from pygame.math import Vector2
-from Material2D import Material2D
+from Engine.Graphics.Materials.Material2D import Material2D
 
 class TextMaterial2D(Material2D):
     def __init__(self, sprite_font, text, text_offset, color, layer_depth=0, origin=(0, 0), sprite_effects=None):
