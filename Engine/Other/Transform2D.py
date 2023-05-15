@@ -1,8 +1,5 @@
-import pygame
-
-from enum import Enum
-
-from pygame import Vector2
+import pygame.math as pgmath
+from pygame import Vector3, Vector2
 
 
 class Direction:
@@ -11,7 +8,8 @@ class Direction:
     UP = Vector2(0, -1)
     DOWN = Vector2(0, 1)
 
-
+import math
+import pygame.math
 class Transform2D:
     def __init__(self, position, rotation, scale):
         self.position = position
@@ -20,3 +18,13 @@ class Transform2D:
 
     def translate_by(self, translate_by):
         self.position += translate_by
+
+    def translate(self, x, y):
+        self.position += Vector2(x, y)
+
+    def rotate(self, angle):
+        self.rotation += angle
+
+    def scale_by(self, x, y, z):
+        self.scale *= Vector2(x, y)
+

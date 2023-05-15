@@ -12,13 +12,13 @@ class TextureMaterial2D(Material2D):
     def draw(self, surface, transform):
         texture_surface = pygame.Surface(self.source_rect.size, pygame.SRCALPHA)
         texture_surface.blit(self.texture, (0, 0), self.source_rect)
-        if self.color:
-            texture_surface.fill(self.color, special_flags=pygame.BLEND_RGBA_MULT)
+        if self._color:
+            texture_surface.fill(self._color, special_flags=pygame.BLEND_RGBA_MULT)
 
-        if self.flip_x or self.flip_y:
-            texture_surface = pygame.transform.flip(texture_surface, self.flip_x, self.flip_y)
+        if self._flip_x or self._flip_y:
+            texture_surface = pygame.transform.flip(texture_surface, self._flip_x, self._flip_y)
 
-        surface.blit(texture_surface, transform.position)
+        surface.blit(texture_surface,(transform.position.x, transform.position.y))
 
 
 

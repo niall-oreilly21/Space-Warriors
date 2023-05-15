@@ -1,21 +1,25 @@
 class SceneManager:
     def __init__(self):
-        self.scenes = {}
-        self.activeScene = None
+        self.__scenes = {}
+        self.__active_scene = None
 
-    def add(self, id, scene):
-        id = id.strip().lower()
-        if id in self.scenes:
-            return False
-        self.scenes[id] = scene
-        return True
+    @property
+    def active_scene(self):
+        return self.__active_scene
 
     def set_active_scene(self, id):
         id = id.strip().lower()
-        if id in self.scenes:
-            self.activeScene = self.scenes[id]
-        return self.activeScene
+        if id in self.__scenes:
+            self.__active_scene = self.__scenes[id]
+        return self.__active_scene
+
+    def add(self, id, scene):
+        id = id.strip().lower()
+        if id in self.__scenes:
+            return False
+        self.__scenes[id] = scene
+        return True
 
     def update(self, game_time):
-        if  self.activeScene is not None:
-            self.activeScene.update(game_time)
+        if  self.__active_scene is not None:
+            self.__active_scene.update(game_time)

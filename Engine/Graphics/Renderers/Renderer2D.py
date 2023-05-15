@@ -1,14 +1,14 @@
 from abc import abstractmethod
 
-from Engine.Components.Component import Component
+from Engine.GameObjects.Components.Component import Component
 
 
 class Renderer2D(Component):
         def __init__(self,name, material):
             super().__init__(name)
-            self.material = material
+            self._material = material
 
         @abstractmethod
         def draw(self, surface):
-            self.material.draw(surface, self.parent.transform)
+            self._material.draw(surface, self.parent.transform)
 
