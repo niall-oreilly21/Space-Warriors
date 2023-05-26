@@ -59,6 +59,17 @@ class Material2D(ABC):
     def flip_y(self, flip_y):
         self._flip_y = flip_y
 
+    def _rotate_surface(self, surface, rotation):
+        return pygame.transform.rotate(surface, rotation)
+
+    @abstractmethod
+    def _transform_material(self, surface, transform):
+        pass
+
+    def _blits(self, surface, texture_surface, transform):
+        surface.blit(self._transform_material(texture_surface, transform)[0],
+                     self._transform_material(texture_surface, transform)[1])
+
     @abstractmethod
     def draw(self, surface, transform):
         pass
