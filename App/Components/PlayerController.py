@@ -44,7 +44,6 @@ class PlayerController(Component, IMoveable):
 
     def _move_up(self):
         if self.__input_handler.is_tap(pygame.K_UP, self.__tap_threshold):
-                self._parent.get_component(SpriteRenderer2D).flip_y = True
                 self._parent.get_component(Rigidbody2D).velocity = Vector2(self._parent.get_component(Rigidbody2D).velocity.x, -self.__speed_y)
 
     def _move_down(self):
