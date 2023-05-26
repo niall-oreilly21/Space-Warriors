@@ -18,7 +18,10 @@ class TextureMaterial2D(Material2D):
         if self._flip_x or self._flip_y:
             texture_surface = pygame.transform.flip(texture_surface, self._flip_x, self._flip_y)
 
-        surface.blit(texture_surface,(transform.position.x, transform.position.y))
+        scaled_surface = pygame.transform.scale(texture_surface, (int(texture_surface.get_width() * transform.scale.x),
+                                                                  int(texture_surface.get_height() * transform.scale.y)))
+
+        surface.blit(scaled_surface,(transform.position.x, transform.position.y))
 
 
 

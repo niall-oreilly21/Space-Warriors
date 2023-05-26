@@ -1,3 +1,5 @@
+from pygame import Vector2
+
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 
@@ -24,7 +26,7 @@ class SpriteRenderer2D(Renderer2D):
     def flip_y(self, flip_y):
         self.__flip_y = flip_y
 
-    def draw(self, surface):
+    def draw(self, surface, transform):
         sprite = self.parent.get_component(SpriteAnimator2D).get_current_sprite()
 
         if sprite:
@@ -34,7 +36,7 @@ class SpriteRenderer2D(Renderer2D):
             self._material.origin = sprite.pivot
             self._material.flip_x = self.__flip_x
             self._material.flip_y = self.__flip_y
-            self._material.draw(surface, self.parent.transform)
+            self._material.draw(surface, transform)
 
 
 

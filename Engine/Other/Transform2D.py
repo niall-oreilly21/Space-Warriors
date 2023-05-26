@@ -12,19 +12,35 @@ import math
 import pygame.math
 class Transform2D:
     def __init__(self, position, rotation, scale):
-        self.position = position
-        self.rotation = rotation
-        self.scale = scale
+        self.__position = position
+        self.__rotation = rotation
+        self.__scale = scale
+
+    @property
+    def position(self):
+        return self.__position
+
+    @position.setter
+    def position(self, position):
+        self.__position = position
+
+    @property
+    def rotation(self):
+        return self.__rotation
+
+    @property
+    def scale(self):
+        return self.__scale
 
     def translate_by(self, translate_by):
-        self.position += translate_by
+        self.__position += translate_by
 
     def translate(self, x, y):
-        self.position += Vector2(x, y)
+        self.__position += Vector2(x, y)
 
     def rotate(self, angle):
-        self.rotation += angle
+        self.__rotation += angle
 
     def scale_by(self, x, y, z):
-        self.scale *= Vector2(x, y)
+        self.__scale *= Vector2(x, y)
 

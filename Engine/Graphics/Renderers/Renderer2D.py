@@ -8,7 +8,10 @@ class Renderer2D(Component):
             super().__init__(name)
             self._material = material
 
-        @abstractmethod
-        def draw(self, surface):
-            self._material.draw(surface, self.parent.transform)
+        @property
+        def material(self):
+            return self._material
+
+        def draw(self, surface, transform):
+            self._material.draw(surface, transform)
 
