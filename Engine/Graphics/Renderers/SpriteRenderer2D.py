@@ -4,8 +4,8 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 
 class SpriteRenderer2D(Renderer2D):
-    def __init__(self, name, material, sprite=None):
-        super().__init__(name, material)
+    def __init__(self, name, material, layer, sprite=None):
+        super().__init__(name, material, layer)
         self.__sprite = sprite
         self.__flip_x = False
         self.__flip_y = False

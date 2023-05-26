@@ -32,6 +32,12 @@ class GameObject():
     def category(self):
         return self.__category
 
+    def get_components(self, component_type):
+        components = []
+        for component in self.__components:
+            if isinstance(component, component_type):
+                components.append(component)
+        return components
 
     def add_component(self, component):
         if component.transform == None:
