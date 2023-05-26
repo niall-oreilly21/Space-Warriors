@@ -8,11 +8,12 @@ class ActiveTake:
 
 
 class SpriteAnimator2D(Component):
-    def __init__(self, name, animator_info, material, fps=10):
+    def __init__(self, name, animator_info, material, active_take, fps):
         super().__init__(name)
         self.__animator_info = animator_info
         self.__current_frames = None
         self.__active_take = None
+        self.set_active_take(active_take)
         self.__material = material
         self.__fps = fps
         self.__current_frame = 0
