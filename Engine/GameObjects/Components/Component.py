@@ -33,3 +33,5 @@ class Component(ABC):
 
     def update(self, game_time):
         pass
+    def start(self):
+        pass

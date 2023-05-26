@@ -1,4 +1,4 @@
-from Engine.Managers.IUpdateable import IUpdateable
+from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
 class SceneManager(IUpdateable):
@@ -26,3 +26,6 @@ class SceneManager(IUpdateable):
     def update(self, game_time):
         if  self.__active_scene is not None:
             self.__active_scene.update(game_time)
+
+    def start(self):
+        self.__active_scene.start()

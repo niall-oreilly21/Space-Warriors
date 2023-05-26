@@ -56,7 +56,9 @@ class GameObject():
         for  component in self.__components:
             component.update(game_time)
 
-
+    def start(self):
+        for  component in self.__components:
+            component.start()
 
 
 

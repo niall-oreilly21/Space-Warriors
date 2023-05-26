@@ -1,12 +1,10 @@
-import os
 from typing import Dict
 
 import pygame
-from pygame import Vector2
 
 from Engine.GameObjects.Components.Camera import Camera
 from Engine.GameObjects.GameObject import GameObject
-from Engine.Managers.IUpdateable import IUpdateable
+from Engine.Other.Interfaces.IUpdateable import IUpdateable
 from Engine.Other.Enums.GameObjectEnums import GameObjectType
 
 
