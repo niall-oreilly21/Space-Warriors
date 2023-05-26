@@ -1,4 +1,7 @@
-class SceneManager:
+from Engine.Managers.IUpdateable import IUpdateable
+
+
+class SceneManager(IUpdateable):
     def __init__(self):
         self.__scenes = {}
         self.__active_scene = None

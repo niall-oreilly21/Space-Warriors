@@ -11,7 +11,8 @@ class Scene:
     def add(self, game_object):
         if game_object.category not in self.__game_object_list[game_object.type]:
             self.__game_object_list[game_object.type][game_object.category] = []
-            self.__game_object_list[game_object.type][game_object.category].append(game_object)
+
+        self.__game_object_list[game_object.type][game_object.category].append(game_object)
 
     def remove(self, game_object):
         if game_object.type in self.__game_object_list[game_object.category]:
@@ -49,9 +50,4 @@ class Scene:
                     all_components_by_type.append(game_object.get_component(component_type))
         return all_components_by_type
 
-    def render(self, screen, game_time):
-        for type in self.__game_object_list.values():
-            for category in type.values():
-                for game_object in category:
-                    game_object.render(screen, game_time)
 
