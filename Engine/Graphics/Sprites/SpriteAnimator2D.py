@@ -19,8 +19,6 @@ class SpriteAnimator2D(Component):
         self.__current_frame = 0
         self.__elapsed_time = 0
 
-
-
     def update(self, game_time):
 
         if self.__active_take is None:
@@ -37,7 +35,10 @@ class SpriteAnimator2D(Component):
             self.__elapsed_time -= frame_duration
 
         # Set the current sprite on the material
-        self.__material.source_rect = self.__current_frames[self.__current_frame]
+        if self.__current_frame < len(self.__current_frames):
+            self.__material.source_rect = self.__current_frames[self.__current_frame]
+        else:
+            self.__material.source_rect = self.__current_frames[0]
 
     def set_active_take(self, active_take):
         for animator_info in self.__animator_info:
@@ -45,10 +46,8 @@ class SpriteAnimator2D(Component):
                 self.__current_frames = animator_info.frame_rects
                 self.__active_take = active_take
 
-
     def get_current_sprite(self):
-        return Sprite(self.__material.texture, self.__current_frames[self.__current_frame], self.__material.color)
-
-
-
-
+        if self.__current_frame < len(self.__current_frames):
+            return Sprite(self.__material.texture, self.__current_frames[self.__current_frame], self.__material.color)
+        else:
+            return Sprite(self.__material.texture, self.__current_frames[0], self.__material.color)
