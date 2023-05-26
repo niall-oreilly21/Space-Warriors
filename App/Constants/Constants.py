@@ -106,3 +106,12 @@ class Constants:
         ENEMY_MOVE_UP = Take(ActiveTake.ENEMY_ALIEN_MOVE_UP, ENEMY_MOVE_UP_FRAME_RECTS)
 
         ENEMY_ANIMATOR_INFO = [ENEMY_MOVE_X, ENEMY_MOVE_DOWN, ENEMY_MOVE_UP]
+
+    class PetDog:
+        PET_WALK_FRAME_RECTS = [
+            pygame.Rect(110, 276, 37, 28), pygame.Rect(174, 275, 34, 28), pygame.Rect(238, 276, 34, 28),
+            pygame.Rect(304, 277, 32, 27), pygame.Rect(368, 275, 32, 29),
+        ]
+        PET_WALK = Take(ActiveTake.PET_DOG_WALK, PET_WALK_FRAME_RECTS)
+
+        PET_ANIMATOR_INFO = [PET_WALK]
