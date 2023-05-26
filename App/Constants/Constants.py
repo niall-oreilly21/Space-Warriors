@@ -10,10 +10,14 @@ class Constants:
     CHARACTER_MOVE_SPEED = 6
 
     class Player:
+        __MOVE_X_Y = 712
+        __MOVE_X_HEIGHT = 54
+
         __PLAYER_MOVE_X_FRAME_RECTS = [
-            pygame.Rect(83, 718, 45, 48), pygame.Rect(147, 717, 45, 48), pygame.Rect(211, 717, 44, 48),
-            pygame.Rect(274, 716, 40, 50), pygame.Rect(337, 717, 34, 49), pygame.Rect(402, 717, 40, 49),
-            pygame.Rect(467, 717, 45, 49), pygame.Rect(531, 717, 45, 49)
+            pygame.Rect(83, __MOVE_X_Y, 45, __MOVE_X_HEIGHT), pygame.Rect(147, __MOVE_X_Y, 45, __MOVE_X_HEIGHT),
+            pygame.Rect(211, __MOVE_X_Y, 44, __MOVE_X_HEIGHT), pygame.Rect(274, __MOVE_X_Y, 40, __MOVE_X_HEIGHT),
+            pygame.Rect(337, __MOVE_X_Y, 34, __MOVE_X_HEIGHT), pygame.Rect(402, __MOVE_X_Y, 40, __MOVE_X_HEIGHT),
+            pygame.Rect(467, __MOVE_X_Y, 45, __MOVE_X_HEIGHT), pygame.Rect(531, __MOVE_X_Y, 45, __MOVE_X_HEIGHT)
         ]
         __PLAYER_MOVE_X = Take(ActiveTake.PLAYER_MOVE_X, __PLAYER_MOVE_X_FRAME_RECTS)
 
@@ -31,7 +35,36 @@ class Constants:
         ]
         __PLAYER_MOVE_UP = Take(ActiveTake.PLAYER_MOVE_UP, __PLAYER_MOVE_UP_FRAME_RECTS)
 
-        PLAYER_ANIMATOR_INFO = [__PLAYER_MOVE_X, __PLAYER_MOVE_DOWN, __PLAYER_MOVE_UP]
+        __PLAYER_IDLE_X_FRAME_RECT = [pygame.Rect(19, 712, 38, 54)]
+        __PLAYER_IDLE_X = Take(ActiveTake.PLAYER_IDLE_X, __PLAYER_IDLE_X_FRAME_RECT)
+
+        __PLAYER_IDLE_DOWN_FRAME_RECT = [pygame.Rect(9, 653, 37, 51)]
+        __PLAYER_IDLE_DOWN = Take(ActiveTake.PLAYER_IDLE_DOWN, __PLAYER_IDLE_DOWN_FRAME_RECT)
+
+        __PLAYER_IDLE_UP_FRAME_RECT = [pygame.Rect(8, 525, 39, 48)]
+        __PLAYER_IDLE_UP = Take(ActiveTake.PLAYER_IDLE_UP, __PLAYER_IDLE_UP_FRAME_RECT)
+
+        __PLAYER_ATTACK_X_FRAME_RECT = [pygame.Rect(83, 1997, 93, 51), pygame.Rect(277, 1999, 93, 51),
+                                        pygame.Rect(458, 1997, 93, 51), pygame.Rect(641, 1997, 93, 51),
+                                        pygame.Rect(852, 1997, 93, 51), pygame.Rect(1044, 1997, 93, 51)]
+
+        __PLAYER_ATTACK_X = Take(ActiveTake.PLAYER_ATTACK_X, __PLAYER_ATTACK_X_FRAME_RECT)
+
+        __PLAYER_ATTACK_UP_FRAME_RECT = [pygame.Rect(72, 1404, 38, 67), pygame.Rect(255, 1404, 46, 67),
+                                         pygame.Rect(448, 1404, 44, 67), pygame.Rect(629, 1404, 57, 67),
+                                         pygame.Rect(821, 1404, 81, 67), pygame.Rect(1043, 1404, 76, 67)]
+
+        __PLAYER_ATTACK_UP = Take(ActiveTake.PLAYER_ATTACK_UP, __PLAYER_ATTACK_UP_FRAME_RECT)
+
+        __PLAYER_ATTACK_DOWN_FRAME_RECT = [pygame.Rect(72, 1805, 38, 52), pygame.Rect(255, 1805, 46, 49),
+                                           pygame.Rect(448, 1807, 44, 47), pygame.Rect(632, 1806, 55, 48),
+                                           pygame.Rect(821, 1805, 81, 68), pygame.Rect(1044, 1805, 75, 65)]
+
+        __PLAYER_ATTACK_DOWN = Take(ActiveTake.PLAYER_ATTACK_DOWN, __PLAYER_ATTACK_DOWN_FRAME_RECT)
+
+        PLAYER_ANIMATOR_INFO = [__PLAYER_MOVE_X, __PLAYER_MOVE_DOWN, __PLAYER_MOVE_UP, __PLAYER_IDLE_X,
+                                __PLAYER_IDLE_DOWN, __PLAYER_IDLE_UP, __PLAYER_ATTACK_X, __PLAYER_ATTACK_UP,
+                                __PLAYER_ATTACK_DOWN]
 
         __GIRL_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_girl.png")
         __BOY_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_boy.png")
