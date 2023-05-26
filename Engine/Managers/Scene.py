@@ -41,7 +41,8 @@ class Scene:
         for type in self.__game_object_list.values():
             for category in type.values():
                 for game_object in category:
-                    all_components_by_type.append(game_object.get_component(component_type))
+                    components = game_object.get_components(component_type)
+                    all_components_by_type.extend(components)
         return all_components_by_type
 
     def update(self, game_time):
