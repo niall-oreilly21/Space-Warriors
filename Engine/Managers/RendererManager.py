@@ -11,9 +11,14 @@ class RendererManager:
 
     def draw(self, game_time):
         renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
+
+        # Sort the renderers based on their layer depth
+        renderers.sort(key=lambda renderer: renderer.layer)
+
         for renderer in renderers:
             object_draw_position = renderer.transform.position - self.__camera_manager.active_camera.transform.position
-            renderer.draw(self.__surface, Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
+            renderer.draw(self.__surface,
+                          Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
 
 
 
