@@ -1,6 +1,10 @@
+from pygame import Vector2
+
 from Engine.GameObjects.Components.Component import Component
+from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Managers.CameraManager import CameraManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.MovementInterface import MovementInterface
@@ -19,6 +23,7 @@ class PlayerController(Component, MovementInterface):
         self.__tap_threshold = 200
 
     def update(self, game_time):
+        self._parent.get_component(Rigidbody2D).velocity = Vector2(0, 0)
         self.__input_handler.update()
         self._move_left(game_time)
         self._move_right(game_time)
@@ -28,21 +33,21 @@ class PlayerController(Component, MovementInterface):
     def _move_left(self, game_time):
         if self.__input_handler.is_tap(pygame.K_LEFT, self.__tap_threshold):
                 self._parent.get_component(SpriteRenderer2D).flip_x = True
+                self._parent.get_component(Rigidbody2D).velocity = Vector2(-self.__speed_x, self._parent.get_component(Rigidbody2D).velocity.y)
                 self._parent.get_component(SpriteAnimator2D).set_active_take(ActiveTake.PLAYER_WALKING)
-                self._transform.translate_by(Direction.LEFT * self.__speed_x * game_time.elapsed_time)
 
     def _move_right(self, game_time):
         if self.__input_handler.is_tap(pygame.K_RIGHT, self.__tap_threshold):
             self._parent.get_component(SpriteRenderer2D).flip_x = False
             self._parent.get_component(SpriteAnimator2D).set_active_take(ActiveTake.PLAYER_RUNNING)
-            self._transform.translate_by(Direction.RIGHT * self.__speed_x * game_time.elapsed_time)
+            self._parent.get_component(Rigidbody2D).velocity = Vector2(self.__speed_x, self._parent.get_component(Rigidbody2D).velocity.y)
 
     def _move_up(self, game_time):
         if self.__input_handler.is_tap(pygame.K_UP, self.__tap_threshold):
                 self._parent.get_component(SpriteRenderer2D).flip_y = True
-                self._transform.translate_by(Direction.UP * self.__speed_y * game_time.elapsed_time)
+                self._parent.get_component(Rigidbody2D).velocity = Vector2(self._parent.get_component(Rigidbody2D).velocity.x, -self.__speed_y)
 
     def _move_down(self, game_time):
         if self.__input_handler.is_tap(pygame.K_DOWN, self.__tap_threshold):
                 self._parent.get_component(SpriteRenderer2D).flip_y = False
-                self._transform.translate_by(Direction.DOWN * self.__speed_y * game_time.elapsed_time)
+                self._parent.get_component(Rigidbody2D).velocity = Vector2(self._parent.get_component(Rigidbody2D).velocity.x, self.__speed_y)
