@@ -1,10 +1,5 @@
 from Engine.GameObjects.Components.Component import Component
-from Engine.Graphics.Sprites.Take import Take
 from Engine.Graphics.Sprites.Sprite import Sprite
-
-
-class ActiveTake:
-    pass
 
 
 class SpriteAnimator2D(Component):
@@ -18,13 +13,20 @@ class SpriteAnimator2D(Component):
         self.__fps = fps
         self.__current_frame = 0
         self.__elapsed_time = 0
+        self.__is_repeated = False
+        self.__is_animation_complete = False
 
+    @property
+    def active_take(self):
+        return self.__active_take
 
+    @property
+    def is_animation_complete(self):
+        return self.__is_animation_complete
 
     def update(self, game_time):
-
         if self.__active_take is None:
-            pass
+            return
 
         # Calculate the duration of each frame in milliseconds
         frame_duration = 1000 / self.__fps
@@ -36,6 +38,16 @@ class SpriteAnimator2D(Component):
             self.__current_frame = (self.__current_frame + 1) % len(self.__current_frames)
             self.__elapsed_time -= frame_duration
 
+            # Check if the animation has reached the end
+            if self.__current_frame == 0:
+                if self.__is_repeated:
+                    # Animation is repeated, reset the animation complete flag
+                    self.__is_animation_complete = False
+                else:
+                    # Animation completed, set the animation complete flag
+                    self.__is_animation_complete = True
+                    self.__active_take = None
+
         # Set the current sprite on the material
         self.__material.source_rect = self.__current_frames[self.__current_frame]
 
@@ -44,11 +56,8 @@ class SpriteAnimator2D(Component):
             if animator_info.active_take == active_take:
                 self.__current_frames = animator_info.frame_rects
                 self.__active_take = active_take
-
+                self.__is_repeated = animator_info.is_repeated
+                self.__is_animation_complete = False
 
     def get_current_sprite(self):
         return Sprite(self.__material.texture, self.__current_frames[self.__current_frame], self.__material.color)
-
-
-
-

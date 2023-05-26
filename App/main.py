@@ -1,12 +1,14 @@
+import math
 import os
 import pygame
-from pygame import Vector2
+from pygame import Vector2, Rect
 
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -71,27 +73,35 @@ cameraManager.add(cameraGameObject)
 cameraManager.set_active_camera("MainCamera")
 
 # Create a font object
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font(None, 80)
+font_name = None
 
-text_material = TextMaterial2D(font, "Hello, World!", Vector2(0, 0), (255, 0, 0))
+
+text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150,40), (255, 0, 0))
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene("New Scene")
 player = GameObject("Player", Transform2D(Vector2(0, 300), 0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
 player.add_component(Rigidbody2D("Rigid"))
-player.add_component(BoxCollider2D("Box", 100, 200))
+player.add_component(BoxCollider2D("Box"))
 #player.add_component(Rigidbody2D("Body"))
 
 enemy = GameObject("Enemy", Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
-enemy.add_component(BoxCollider2D("Box-1", 100 , 100))
+enemy.add_component(BoxCollider2D("Box-1"))
 
 
-# text = GameObject("Text", Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
-# text.add_component(text_material)
+text = GameObject("Text", Transform2D(Vector2(0, 0),0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
+
+image = pygame.image.load("menu_button.png")
+texture_material = TextureMaterial2D(image, None, 0, Vector2(0, 0), None)
+text.add_component(Renderer2D("Renderer-2", texture_material, 1))
+text.add_component(Renderer2D("Renderer-1", text_material, 2))
+
+text.add_component(BoxCollider2D("Box-2"))
 
 scene.add(player)
 scene.add(enemy)
-#.add(text)
+scene.add(text)
 
 
 # Load an image and create a TextureMaterial2D object with it
@@ -100,7 +110,7 @@ material = TextureMaterial2D(image, None, 0, Vector2(0, 0), None)
 
 material2 = TextureMaterial2D(image, (255,255,0), 0, Vector2(0, 0), None)
 
-enemy.add_component(SpriteRenderer2D("renderer-enemy", material2))
+enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, 3))
 
 
 sceneManager.add("Game", scene)
@@ -121,18 +131,16 @@ frame_rects2.append(rect)
 rect = pygame.Rect(126, 6, 60, 90)
 frame_rects2.append(rect)
 
-animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2)]
-sprite_sheet = pygame.image.load("image.png")
-animator = SpriteAnimator2D("animator", animator_info, material, 5)
-animator.set_active_take(ActiveTake.PLAYER_WALKING)
-renderer = SpriteRenderer2D("renderer", material)
+animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2, False)]
+
+animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.PLAYER_WALKING, 1)
+renderer = SpriteRenderer2D("renderer", material, 4)
 player.add_component(renderer)
 
 playerController = PlayerController("Player movement", 0.3, 0.3)
 player.add_component(playerController)
 
-animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, 5)
-animator1.set_active_take(ActiveTake.PLAYER_RUNNING)
+animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.PLAYER_WALKING, 5)
 enemy.add_component(animator1)
 
 player.add_component(animator)
@@ -218,6 +226,7 @@ while running:
 
     player.get_component(BoxCollider2D).draw(screen , cameraManager)
     enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
+    text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
     renderManager.draw(game_time)
 
