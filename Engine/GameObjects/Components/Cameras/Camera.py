@@ -1,4 +1,4 @@
-import pygame
+
 from pygame import Vector2
 
 from Engine.GameObjects.Components.Component import Component

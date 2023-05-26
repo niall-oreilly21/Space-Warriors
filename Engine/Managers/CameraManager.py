@@ -2,13 +2,14 @@ from typing import Dict
 
 import pygame
 
-from Engine.GameObjects.Components.Camera import Camera
+from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObject
+from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 from Engine.Other.Enums.GameObjectEnums import GameObjectType
 
 
-class CameraManager(IUpdateable):
+class CameraManager(IUpdateable, IStartable):
     def __init__(self, screen, sceneManager):
         self.__screen = screen
         self.__active_camera = None
@@ -63,13 +64,10 @@ class CameraManager(IUpdateable):
         self.__screen = pygame.display.set_mode((self.__active_camera.viewport.x, self.__active_camera.viewport.y))
         self.__needs_redraw = True
 
+    def start(self):
+        self.__active_game_object.start()
 
     def update(self, game_time):
         self.__active_game_object.update(game_time)
-
-        game_objects = self.__sceneManager.active_scene.find_all_by_type(GameObjectType.Dynamic)
-
-
-        # Apply the offset to the game objects' positions or rendering
 
 

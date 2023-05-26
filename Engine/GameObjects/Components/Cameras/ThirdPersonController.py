@@ -1,10 +1,5 @@
 from pygame import Vector2
-from Engine.GameObjects.Components.Camera import Camera
-from Engine.GameObjects.Components.Component import Component
-
-
-from pygame import Vector2
-from Engine.GameObjects.Components.Camera import Camera
+from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Component import Component
 
 class ThirdPersonController(Component):
@@ -13,12 +8,16 @@ class ThirdPersonController(Component):
         self.__target = target
         self.__transition_speed = 0.01  # Adjust the speed of the transition as desired
         self.__smooth_position = None
+        self.__camera = None
+        
+    def start(self):
+        self.__camera = self.parent.get_component(Camera)
 
     def update(self, game_time):
         if self.__target is not None:
             camera_component = self.parent.get_component(Camera)
             if camera_component is not None:
-                viewport_center = Vector2(camera_component.viewport.x / 2, camera_component.viewport.y / 2)
+                viewport_center = Vector2(self.__camera.viewport.x / 2, self.__camera.viewport.y / 2)
                 target_position = self.__target.transform.position - viewport_center
 
                 if self.__smooth_position is None:

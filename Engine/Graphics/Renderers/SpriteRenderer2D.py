@@ -9,6 +9,10 @@ class SpriteRenderer2D(Renderer2D):
         self.__sprite = sprite
         self.__flip_x = False
         self.__flip_y = False
+        self.__animator = None
+
+    def start(self):
+        self.__animator = self.parent.get_component(SpriteAnimator2D)
 
     @property
     def flip_x(self):
@@ -27,7 +31,7 @@ class SpriteRenderer2D(Renderer2D):
         self.__flip_y = flip_y
 
     def draw(self, surface, transform):
-        sprite = self.parent.get_component(SpriteAnimator2D).get_current_sprite()
+        sprite = self.__animator.get_current_sprite()
 
         if sprite:
             self._material.texture = sprite.texture

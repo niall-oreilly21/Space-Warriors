@@ -11,7 +11,11 @@ class BoxCollider2D(Component):
         self.__width = width
         self.__height = height
         self.__anchor = anchor
-        self.__color = (255, 0, 0)  # Color of the collider
+        self.__color = (255, 0, 0)
+        self.__rend = None
+
+    def start(self):
+        self.__rend = self._parent.get_component(Renderer2D)
 
     @property
     def width(self):
@@ -39,8 +43,15 @@ class BoxCollider2D(Component):
 
     @property
     def bounds(self):
-        material_source_rect = self._parent.get_component(Renderer2D).material.source_rect
-        return Rect(self._transform.position.x,  self._transform.position.y, material_source_rect.width * self.transform.scale.x, material_source_rect.height * self.transform.scale.y)
+        material_source_rect = self.__rend.material.source_rect
+        bounds = Rect(self._transform.position.x, self._transform.position.y,
+                      material_source_rect.width * self.transform.scale.x,
+                      material_source_rect.height * self.transform.scale.y)
+        rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
+                                                  -self._transform.rotation)
+        rotated_bounds = rotated_surface.get_rect(center=bounds.center)
+        self.__bounds = rotated_bounds
+        return self.__bounds
 
     def collides_with(self, other_collider):
         return self.bounds.colliderect(other_collider.bounds)
@@ -48,9 +59,17 @@ class BoxCollider2D(Component):
     def update(self, game_time):
         pass
 
-    def draw(self, screen, cameraManager):
+    def draw(self, screen, camera_manager):
         bounds = self.bounds
 
-        bounds.x -= cameraManager.active_camera.transform.position.x
-        bounds.y -= cameraManager.active_camera.transform.position.y
-        pygame.draw.rect(screen, self.__color, bounds, 1)
+        bounds.x -= camera_manager.active_camera.transform.position.x
+        bounds.y -= camera_manager.active_camera.transform.position.y
+
+        # rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
+        #                                           -self._transform.rotation)
+        # rotated_bounds = rotated_surface.get_rect(center=bounds.center)
+        # self.__width = rotated_bounds.width
+        # #print(self.__width)
+        # self.__height = rotated_bounds.height
+
+        pygame.draw.rect(screen, self.__color, bounds, 2)
