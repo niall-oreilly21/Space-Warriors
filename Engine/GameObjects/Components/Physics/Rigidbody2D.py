@@ -34,14 +34,6 @@ class Rigidbody2D(Component):
     def drag(self, value):
         self.__drag = value
 
-    @property
-    def velocity(self):
-        return self.__velocity
-
-    @velocity.setter
-    def velocity(self, value):
-        self.__velocity = value
-
     def apply_force(self, force):
         self.__acceleration += force / self.__mass
 
@@ -55,7 +47,3 @@ class Rigidbody2D(Component):
         # Update position using velocity
         self._transform.position += self.__velocity * delta_time
 
-
-
-        # Reset acceleration for the next frame
-        #self.__acceleration = Vector2(0, 0)

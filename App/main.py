@@ -2,9 +2,10 @@ import os
 import pygame
 from pygame import Vector2
 
-from Engine.GameObjects.Components.Camera import Camera
+from Engine.GameObjects.Components.Cameras.Camera import Camera
+from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.ThirdPersonController import ThirdPersonController
+from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CameraManager import CameraManager
@@ -73,20 +74,24 @@ cameraManager.set_active_camera("MainCamera")
 font = pygame.font.Font(None, 36)
 
 text_material = TextMaterial2D(font, "Hello, World!", Vector2(0, 0), (255, 0, 0))
-sprite_transform = Transform2D(Vector2(10, 100), Vector2(1, 1), 0)
+sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene("New Scene")
-player = GameObject("Player", Transform2D(Vector2(0, 300), Vector2(0, 0), Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
+player = GameObject("Player", Transform2D(Vector2(0, 300), 0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
 player.add_component(Rigidbody2D("Rigid"))
 player.add_component(BoxCollider2D("Box", 100, 200))
 #player.add_component(Rigidbody2D("Body"))
 
-enemy = GameObject("Enemy", Transform2D(Vector2(100, 100), Vector2(1, 1), Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
+enemy = GameObject("Enemy", Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
 enemy.add_component(BoxCollider2D("Box-1", 100 , 100))
 
 
+# text = GameObject("Text", Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
+# text.add_component(text_material)
+
 scene.add(player)
 scene.add(enemy)
+#.add(text)
 
 
 # Load an image and create a TextureMaterial2D object with it
@@ -139,7 +144,8 @@ managers.append(sceneManager)
 game_time = GameTime()
 cameraGameObject.add_component(ThirdPersonController("Third Person Controller", player))
 
-
+for manager in managers:
+    manager.start()
 # Fill the screen with a background color
 background_color = (0, 0, 0) # white
 if screen is  not None:
@@ -154,6 +160,7 @@ while running:
     if player.get_component(BoxCollider2D).collides_with(enemy.get_component(BoxCollider2D)):
         player_collider = player.get_component(BoxCollider2D)
         enemy_collider = enemy.get_component(BoxCollider2D)
+        print("collide")
 
         player_velocity = player.get_component(Rigidbody2D).velocity
 
