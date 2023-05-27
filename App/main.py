@@ -1,20 +1,21 @@
-import math
 import os
 import pygame
 from pygame import Vector2, Rect
 
-from App.Colliders.EnemyCollider import EnemyCollider
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
-from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
-from Engine.GameObjects.Components.Physics.CollisionSystem import CollisionSystem
+from Engine.GameObjects.Tiles.Tile import Tile
+from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
+from Engine.GameObjects.Tiles.Tileset import Tileset
+from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
 from App.Components.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
@@ -26,23 +27,6 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-
-def resolve_collision(collider1, collider2):
-    # Example collision response logic
-    # Modify the positions, velocities, or other properties of the colliding objects
-
-    # Example separation
-    collider1_transform = collider1.parent.get_component(Transform2D)
-    collider2_transform = collider2.parent.get_component(Transform2D)
-    collider1_position = collider1.parent.get_component(Transform2D)
-    collider2_position = collider2_transform.position
-
-    # Calculate the separation vector
-    separation_vector = collider1.bounds.clip(collider2.bounds).size
-
-    # Separate the colliders
-    collider1_position -= separation_vector / 2
-    collider2_position += separation_vector / 2
 
 def update(game_time):
     scene.update(game_time)
@@ -105,7 +89,7 @@ text.add_component(BoxCollider2D("Box-2"))
 
 scene.add(player)
 scene.add(enemy)
-scene.add(text)
+#scene.add(text)
 
 
 # Load an image and create a TextureMaterial2D object with it
@@ -145,7 +129,7 @@ player.add_component(renderer)
 
 playerController = PlayerController("Player movement", 0.3, 0.3)
 player.add_component(playerController)
-player.add_component(EnemyCollider("Collider"))
+#player.add_component(EnemyCollider("Collider"))
 
 animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, 5)
 enemy.add_component(animator1)
@@ -155,29 +139,50 @@ player.add_component(animator)
 managers.append(cameraManager)
 managers.append(sceneManager)
 
-enemy2 = text.clone()
-#
-enemy2.transform.translate(0,100)
-#enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
-#
+#enemy2 = player.clone()
 
 
-# enemy3 = enemy.clone()
-#
-#
-#
-# enemy3.transform.translate(0,100)
-# enemy3.name = "Enemy3"
-#enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
-#
 
+# scene.add(enemy2)
+# scene.remove(player)
+#
+# print(enemy2.get_component(Renderer2D))
 
 game_time = GameTime()
 cameraGameObject.add_component(ThirdPersonController("Third Person Controller", player))
 
-collider_system = CollisionSystem()
+collider_system = CollisionManager(sceneManager)
+managers.append(collider_system)
+
 for manager in managers:
-    manager.start()
+    if isinstance(manager, IStartable):
+        manager.start()
+
+
+
+tileset = Tileset("image.png", 60, 60)
+
+# Add tiles to the tileset
+tileset.add_tile(Tile("Grass", 1, Vector2(18, 6)))
+tileset.add_tile(Tile("Water", 2, Vector2(6, 114)))
+tileset.add_tile(Tile("Nathan", 3, Vector2(342, 120)))
+
+# Add more tiles as needed
+
+# Define map data
+map_data = [
+    [TileAttributes(1, True, None, 10), TileAttributes(1, False)],
+    # More map data rows
+]
+
+# Create the map using the tileset and map data
+map_tiles = tileset.create_map(map_data)
+
+for tiles in map_tiles:
+    for tile in tiles:
+        if tile.get_component(BoxCollider2D):
+            tile.get_component(BoxCollider2D).start()
+
 # Fill the screen with a background color
 background_color = (0, 0, 0) # white
 if screen is  not None:
@@ -189,60 +194,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-
-
-    # if player.get_component(BoxCollider2D).collides_with(enemy.get_component(BoxCollider2D)):
-    #     player_collider = player.get_component(BoxCollider2D)
-    #     enemy_collider = enemy.get_component(BoxCollider2D)
-    #     print("collide")
-    #
-    #     player_velocity = player.get_component(Rigidbody2D).velocity
-    #
-    #
-    #
-    #     offset = 0
-    #
-    #     # Adjust player's position to prevent passing through enemy horizontally
-    #     if player_collider.bounds.right > enemy_collider.bounds.left and player_collider.bounds.left < enemy_collider.bounds.left:
-    #         player.transform.position.x = enemy_collider.bounds.left - player_collider.bounds.width
-    #     elif player_collider.bounds.left < enemy_collider.bounds.right and player_collider.bounds.right > enemy_collider.bounds.right:
-    #         player.transform.position.x = enemy_collider.bounds.right
-    #
-    #     # Adjust player's position to prevent passing through enemy vertically
-    #     if player_collider.bounds.bottom > enemy_collider.bounds.top and player_collider.bounds.top < enemy_collider.bounds.top:
-    #         player.transform.position.y = enemy_collider.bounds.top - player_collider.bounds.height
-    #     elif player_collider.bounds.top < enemy_collider.bounds.bottom and player_collider.bounds.bottom > enemy_collider.bounds.bottom:
-    #         player.transform.position.y = enemy_collider.bounds.bottom
-
-        # elif self.velocity[0] < 0:  # Moving left
-        #     self.rect.left = obj.rect.right
-        # if self.velocity[1] > 0:  # Moving down
-        #     self.rect.bottom = obj.rect.top
-        # elif self.velocity[1] < 0:  # Moving up
-        #     self.rect.top = obj.rect.bottom
-
-        # Calculate the overlap depth
-        # overlap_x = (player_collider.right - static_object_collider.left) if player.velocity.x > 0 else (
-        #             static_object_collider.right - player_collider.left)
-        # overlap_y = (player_collider.bottom - static_object_collider.top) if player.velocity.y > 0 else (
-        #             static_object_collider.bottom - player_collider.top)
-        #
-        # if overlap_x > 0 and overlap_y > 0:
-        #     # Determine the axis of least penetration
-        #     if overlap_x < overlap_y:
-        #         # Resolve collision horizontally
-        #         if player.velocity.x > 0:
-        #             player.transform.position.x = static_object_collider.left - player_collider.width
-        #         else:
-        #             player.transform.position.x = static_object_collider.right
-        #     else:
-        #         # Resolve collision vertically
-        #         if player.velocity.y > 0:
-        #             player.transform.position.y = static_object_collider.top - player_collider.height
-        #         else:
-        #             player.transform.position.y = static_object_collider.bottom
-    collider_system.update(sceneManager.active_scene)
     game_time.tick()
+
+
 
     for manager in managers:
         manager.update(game_time)
@@ -250,10 +204,17 @@ while running:
     if screen is not None:
         screen.fill(background_color)
 
-    player.get_component(BoxCollider2D).draw(screen , cameraManager)
-    enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
+    # player.get_component(BoxCollider2D).draw(screen , cameraManager)
+    # enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
     #enemy2.get_component(BoxCollider2D).draw(screen, cameraManager)
-    text.get_component(BoxCollider2D).draw(screen, cameraManager)
+    # text.get_component(BoxCollider2D).draw(screen, cameraManager)
+
+    for tiles in map_tiles:
+        for tile in tiles:
+            tile.get_component(Renderer2D).draw(screen, Transform2D((tile.transform.position -  cameraManager.active_camera.transform.position), tile.transform.rotation,tile.transform.scale))
+
+            if tile.get_component(BoxCollider2D):
+                tile.get_component(BoxCollider2D).draw(screen, cameraManager)
 
     renderManager.draw(game_time)
 

@@ -33,12 +33,12 @@ class Tileset:
         for y in range(map_height):
             row = []
             for x in range(map_width):
-                tile_id = map_data[y][x]
+                current_tile_attributes = map_data[y][x]
 
                 current_tile = None
 
                 for tile in self.tiles:
-                    if tile.tile_id == tile_id:
+                    if tile.tile_id == current_tile_attributes.tile_id:
                         current_tile = tile.clone()
                         break
 
@@ -48,8 +48,12 @@ class Tileset:
                     ## Set sprite image for the cloned tile
                     tile_position = current_tile.position_on_sprite_sheet
 
-                    current_tile.add_component(SpriteRenderer2D("tile", TextureMaterial2D(self.sprite_sheet, None, Vector2(0, 0)), 8, Sprite(self.sprite_sheet, Rect(tile_position.x, tile_position.y ,self.__tile_width, self.__tile_height))))
-                    current_tile.add_component(BoxCollider2D("Box"))
+                    current_tile.add_component(SpriteRenderer2D("tile", TextureMaterial2D(self.sprite_sheet, None, Vector2(0, 0)), 8,
+                                                                Sprite(self.sprite_sheet, Rect(tile_position.x, tile_position.y ,self.__tile_width, self.__tile_height),
+                                                                       current_tile_attributes.color, current_tile_attributes.alpha)))
+                    if current_tile_attributes.is_collidable:
+                        current_tile.add_component(BoxCollider2D("Box"))
+
                     row.append(current_tile)
             map_tiles.append(row)
 

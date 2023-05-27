@@ -37,10 +37,10 @@ class SpriteRenderer2D(Renderer2D):
             self._material.texture = self.__sprite.texture
             self._material.source_rect = self.__sprite.source_rect
             self._material.color = self.__sprite.color
+            self._material.alpha = self.__sprite.alpha
             self._material.origin = self.__sprite.pivot
             self._material.flip_x = self.__flip_x
             self._material.flip_y = self.__flip_y
-
             self._material.draw(surface, transform)
 
     def clone(self):
