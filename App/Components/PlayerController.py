@@ -10,8 +10,6 @@ from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IMoveable import IMoveable
 import pygame
 
-from Engine.Other.Transform2D import Direction
-
 
 class PlayerController(Component, IMoveable):
 
@@ -71,4 +69,4 @@ class PlayerController(Component, IMoveable):
                 self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
 
     def clone(self):
-        pass
+        return PlayerController(self._name, self.__speed_x, self.__speed_y)

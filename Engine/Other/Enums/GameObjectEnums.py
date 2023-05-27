@@ -8,3 +8,4 @@ class GameObjectType(Enum):
 class GameObjectCategory(Enum):
     Entity = 0
     Player = 1
+    Tile = 2
