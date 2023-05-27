@@ -1,6 +1,8 @@
 import pygame.math as pgmath
 from pygame import Vector3, Vector2
 
+from Engine.Other.Interfaces.ICloneable import ICloneable
+
 
 class Direction:
     RIGHT = Vector2(1, 0)
@@ -8,9 +10,8 @@ class Direction:
     UP = Vector2(0, -1)
     DOWN = Vector2(0, 1)
 
-import math
-import pygame.math
-class Transform2D:
+
+class Transform2D(ICloneable):
     def __init__(self, position, rotation, scale):
         self.__position = position
         self.__rotation = rotation
@@ -44,3 +45,5 @@ class Transform2D:
     def scale_by(self, x, y, z):
         self.__scale *= Vector2(x, y)
 
+    def clone(self):
+        return Transform2D(self.__position.copy(), self.__rotation, self.__scale.copy())

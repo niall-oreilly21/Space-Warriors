@@ -2,12 +2,14 @@ from abc import ABC, abstractmethod
 
 import pygame
 
-class Material2D(ABC):
-    def __init__(self, color, layer_depth, origin, sprite_effects):
+from Engine.Other.Interfaces.ICloneable import ICloneable
+
+
+class Material2D(ICloneable, ABC):
+    def __init__(self, color, alpha, origin):
         self._color = color
-        self.__layer_depth = layer_depth
-        self.__origin = origin
-        self.__sprite_effects = sprite_effects
+        self._alpha = alpha
+        self._origin = origin
         self._flip_x = False
         self._flip_y = False
 
@@ -20,12 +22,12 @@ class Material2D(ABC):
         self._color = color
 
     @property
-    def layer_depth(self):
-        return self.__layer_depth
+    def alpha(self):
+        return self.__alpha
 
-    @layer_depth.setter
-    def layer_depth(self, layer_depth):
-        self.__layer_depth = layer_depth
+    @alpha.setter
+    def alpha(self, alpha):
+        self.__alpha = alpha
 
     @property
     def origin(self):
@@ -34,14 +36,6 @@ class Material2D(ABC):
     @origin.setter
     def origin(self, origin):
         self.__origin = origin
-
-    @property
-    def sprite_effects(self):
-        return self.__sprite_effects
-
-    @sprite_effects.setter
-    def sprite_effects(self, sprite_effects):
-        self.__sprite_effects = sprite_effects
 
     @property
     def flip_x(self):
@@ -66,12 +60,16 @@ class Material2D(ABC):
     def _transform_material(self, surface, transform):
         pass
 
-    def _blits(self, surface, texture_surface, transform):
-        surface.blit(self._transform_material(texture_surface, transform)[0],
-                     self._transform_material(texture_surface, transform)[1])
+    def _blits(self, surface, material_surface, transform):
+        material_surface.set_alpha(self._alpha)
+        surface.blit(self._transform_material(material_surface, transform)[0],
+                     self._transform_material(material_surface, transform)[1])
 
     @abstractmethod
     def draw(self, surface, transform):
+        pass
+
+    def clone(self):
         pass
 
 

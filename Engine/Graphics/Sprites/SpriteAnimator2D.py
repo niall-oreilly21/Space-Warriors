@@ -17,6 +17,9 @@ class SpriteAnimator2D(Component):
         self.__elapsed_time = 0
         self.set_active_take(active_take)
 
+    @property
+    def animator_info(self):
+        return self.__animator_info
 
     @property
     def active_take(self):
@@ -81,3 +84,8 @@ class SpriteAnimator2D(Component):
                     # Animation completed, set the animation complete flag
                     self.__is_animation_complete = True
                     self.__active_take = None
+
+    def clone(self):
+        clone_animator_info = [take.clone() for take in self.__animator_info]
+        return SpriteAnimator2D(self._name, clone_animator_info, self.__material.clone(), self.__active_take,
+                                self.__fps)

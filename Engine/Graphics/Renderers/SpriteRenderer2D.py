@@ -42,7 +42,8 @@ class SpriteRenderer2D(Renderer2D):
             self._material.flip_y = self.__flip_y
             self._material.draw(surface, transform)
 
-
+    def clone(self):
+            return SpriteRenderer2D(self._name, self._material.clone(), self._layer)
 
 
 
