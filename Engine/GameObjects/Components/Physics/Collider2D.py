@@ -15,4 +15,6 @@ class Collider2D(Component, ABC):
     @abstractmethod
     def handle_response(self, parent_game_object):
         pass
+    def clone(self):
+        pass
 
