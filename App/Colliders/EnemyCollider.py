@@ -17,3 +17,6 @@ class EnemyCollider(Collider2D):
 
             if parent_game_object.health <=0:
                 print("HI")
+
+    def clone(self):
+        return EnemyCollider(self._name)
