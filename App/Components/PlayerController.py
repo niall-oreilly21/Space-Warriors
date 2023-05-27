@@ -31,8 +31,17 @@ class PlayerController(Component, IMoveable):
         self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     def update(self, game_time):
-        self.transform.rotate(0.1 * game_time.elapsed_time)
         self._parent.get_component(Rigidbody2D).velocity = Vector2(0, 0)
+
+        self._parent.transform.rotate(5)
+        # if self.__animator.active_take == ActiveTake.COOK:
+        #     if not self.__animator.is_animation_complete:
+        #         # Animation is still playing, stop movement
+        #         return
+        # else:
+        #     # Animation is complete, switch to the next take
+        #     self.__animator.set_active_take(ActiveTake.PLAYER_WALKING)
+
         self.__input_handler.update()
         self._move_left()
         self._move_right()
@@ -60,3 +69,6 @@ class PlayerController(Component, IMoveable):
         if self.__input_handler.is_tap(pygame.K_DOWN, self.__tap_threshold):
                 self.__rend.flip_y = False
                 self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
+
+    def clone(self):
+        pass

@@ -6,7 +6,7 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 
 
 class BoxCollider2D(Component):
-    def __init__(self, name, anchor=(0, 0)):
+    def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name)
         self.__anchor = anchor
         self.__color = (255, 0, 0)
@@ -74,4 +74,7 @@ class BoxCollider2D(Component):
             #print(self.__width)
             self.__height = rotated_bounds.height
 
-            pygame.draw.rect(screen, self.__color, bounds, 2)
+            pygame.draw.rect(screen, self.__color, bounds, 4)
+
+    def clone(self):
+        return BoxCollider2D(self._name, self.__anchor.copy())

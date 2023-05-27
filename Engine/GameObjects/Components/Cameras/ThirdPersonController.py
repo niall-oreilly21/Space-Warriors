@@ -34,6 +34,7 @@ class ThirdPersonController(Component):
                 # Update the camera position
                 self._transform.position = self.__smooth_position
 
-
+    def clone(self):
+        return ThirdPersonController(self._name, self.__target)
 
 

@@ -3,15 +3,16 @@ from abc import ABC
 from enum import Enum
 
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.Other.Interfaces.ICloneable import ICloneable
 from Engine.Other.Transform2D import Transform2D
 
-class GameObject():
-    def __init__(self, name, transform = None, type=GameObjectType.Static, category=GameObjectCategory.Player):
+class GameObject(ICloneable):
+    def __init__(self, name, transform = None, game_object_type=GameObjectType.Static, game_object_category=GameObjectCategory.Entity):
         self.__name = name
         self.__transform = transform
         self.__components = []
-        self.__type = type
-        self.__category = category
+        self.__game_object_type = game_object_type
+        self.__game_object_category = game_object_category
 
         if self.__transform is None:
             self.__transform = Transform2D
@@ -20,17 +21,21 @@ class GameObject():
     def name(self):
         return self.__name
 
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
     @property
     def transform(self):
         return self.__transform
 
     @property
-    def type(self):
-        return self.__type
+    def game_object_type(self):
+        return self.__game_object_type
 
     @property
-    def category(self):
-        return self.__category
+    def game_object_category(self):
+        return self.__game_object_category
 
     def get_components(self, component_type):
         components = []
@@ -40,17 +45,14 @@ class GameObject():
         return components
 
     def add_component(self, component):
-        if component.transform == None:
-            component.transform = self.__transform
-
-        if component.parent == None:
-            component.parent = self
-
+        component.transform = self.__transform
+        component.parent = self
         self.__components.append(component)
 
-    def remove_component(self, component):
-        if component in self.__components:
-            self.__components.remove(component)
+    def remove_component(self, component_type):
+        for component in self.__components:
+            if isinstance(component, component_type):
+                self.__components.remove(component)
 
     def get_component(self, component_type):
         for component in self.__components:
@@ -65,6 +67,15 @@ class GameObject():
     def start(self):
         for  component in self.__components:
             component.start()
+
+    def clone(self):
+        clone_game_object = GameObject(self.__name, self.__transform.clone(), self.__game_object_type, self.__game_object_category)
+
+        for component in self.__components:
+            cloned_component = component.clone()
+            clone_game_object.add_component(cloned_component)
+
+        return clone_game_object
 
 
 

@@ -1,19 +1,21 @@
 from abc import ABC
 
+from Engine.Other.Interfaces.ICloneable import ICloneable
 
-class Component(ABC):
+
+class Component( ICloneable, ABC):
     def __init__(self, name):
-        self.__name = name
+        self._name = name
         self._parent = None
         self._transform = None
 
     @property
     def name(self):
-        return self.__name
+        return self._name
 
     @name.setter
     def name(self, name):
-        self.__name = name
+        self._name = name
 
     @property
     def parent(self):
@@ -34,4 +36,7 @@ class Component(ABC):
     def update(self, game_time):
         pass
     def start(self):
+        pass
+
+    def clone(self):
         pass

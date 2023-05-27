@@ -6,4 +6,5 @@ class GameObjectType(Enum):
     Dynamic = 1
 
 class GameObjectCategory(Enum):
-    Player = 0
+    Entity = 0
+    Player = 1
