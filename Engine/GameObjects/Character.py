@@ -23,4 +23,10 @@ class Character(GameObject, IDamageable, ICloneable):
         pass
 
     def clone(self):
-        pass
+        character = Character(self.name, self.health, self.transform.clone(), self.game_object_type, self.game_object_category)
+
+        for component in self._components:
+            cloned_component = component.clone()
+            character.add_component(cloned_component)
+
+        return character
