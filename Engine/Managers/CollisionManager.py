@@ -5,7 +5,7 @@ from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
-class CollisionManager(IUpdateable, IStartable):
+class CollisionManager(IUpdateable):
     def __init__(self, scene_manager):
         self.__scene_manager = scene_manager
 
