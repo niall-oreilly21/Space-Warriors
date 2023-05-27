@@ -131,16 +131,18 @@ frame_rects2.append(rect)
 rect = pygame.Rect(126, 6, 60, 90)
 frame_rects2.append(rect)
 
-animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2, False)]
+frame_rects3 = [Rect(6, 114, 84, 84)]
 
-animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.PLAYER_WALKING, 1)
+animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2), Take(ActiveTake.COOK, frame_rects3)]
+
+animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.COOK, 0.8)
 renderer = SpriteRenderer2D("renderer", material, 4)
 player.add_component(renderer)
 
 playerController = PlayerController("Player movement", 0.3, 0.3)
 player.add_component(playerController)
 
-animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.PLAYER_WALKING, 5)
+animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, 5)
 enemy.add_component(animator1)
 
 player.add_component(animator)
