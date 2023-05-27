@@ -3,9 +3,13 @@ import os
 import pygame
 from pygame import Vector2, Rect
 
+from App.Colliders.EnemyCollider import EnemyCollider
+from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
+from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
+from Engine.GameObjects.Components.Physics.CollisionSystem import CollisionSystem
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.Take import Take
@@ -81,12 +85,12 @@ text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150,40)
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene("New Scene")
-player = GameObject("Player", Transform2D(Vector2(0, 300), 0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
+player = Character("Player", 100, Transform2D(Vector2(0, 300), 0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
 player.add_component(Rigidbody2D("Rigid"))
 player.add_component(BoxCollider2D("Box"))
 #player.add_component(Rigidbody2D("Body"))
 
-enemy = GameObject("Enemy", Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
+enemy = Character("Enemy", 200, Transform2D(Vector2(100, 100), 0, Vector2(4, 4)), GameObjectType.Dynamic, GameObjectCategory.Player)
 enemy.add_component(BoxCollider2D("Box-1"))
 
 
@@ -141,6 +145,7 @@ player.add_component(renderer)
 
 playerController = PlayerController("Player movement", 0.3, 0.3)
 player.add_component(playerController)
+player.add_component(EnemyCollider("Collider"))
 
 animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, 5)
 enemy.add_component(animator1)
@@ -155,23 +160,22 @@ enemy2 = text.clone()
 enemy2.transform.translate(0,100)
 #enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
 #
-scene.add(enemy2)
-
-enemy3 = enemy.clone()
 
 
-
-enemy3.transform.translate(0,100)
-enemy3.name = "Enemy3"
+# enemy3 = enemy.clone()
+#
+#
+#
+# enemy3.transform.translate(0,100)
+# enemy3.name = "Enemy3"
 #enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
 #
-scene.add(enemy3)
-scene.remove(text)
 
 
 game_time = GameTime()
 cameraGameObject.add_component(ThirdPersonController("Third Person Controller", player))
 
+collider_system = CollisionSystem()
 for manager in managers:
     manager.start()
 # Fill the screen with a background color
@@ -185,28 +189,30 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    if player.get_component(BoxCollider2D).collides_with(enemy.get_component(BoxCollider2D)):
-        player_collider = player.get_component(BoxCollider2D)
-        enemy_collider = enemy.get_component(BoxCollider2D)
-        print("collide")
-
-        player_velocity = player.get_component(Rigidbody2D).velocity
 
 
-
-        offset = 0
-
-        # Adjust player's position to prevent passing through enemy horizontally
-        if player_collider.bounds.right > enemy_collider.bounds.left and player_collider.bounds.left < enemy_collider.bounds.left:
-            player.transform.position.x = enemy_collider.bounds.left - player_collider.bounds.width
-        elif player_collider.bounds.left < enemy_collider.bounds.right and player_collider.bounds.right > enemy_collider.bounds.right:
-            player.transform.position.x = enemy_collider.bounds.right
-
-        # Adjust player's position to prevent passing through enemy vertically
-        if player_collider.bounds.bottom > enemy_collider.bounds.top and player_collider.bounds.top < enemy_collider.bounds.top:
-            player.transform.position.y = enemy_collider.bounds.top - player_collider.bounds.height
-        elif player_collider.bounds.top < enemy_collider.bounds.bottom and player_collider.bounds.bottom > enemy_collider.bounds.bottom:
-            player.transform.position.y = enemy_collider.bounds.bottom
+    # if player.get_component(BoxCollider2D).collides_with(enemy.get_component(BoxCollider2D)):
+    #     player_collider = player.get_component(BoxCollider2D)
+    #     enemy_collider = enemy.get_component(BoxCollider2D)
+    #     print("collide")
+    #
+    #     player_velocity = player.get_component(Rigidbody2D).velocity
+    #
+    #
+    #
+    #     offset = 0
+    #
+    #     # Adjust player's position to prevent passing through enemy horizontally
+    #     if player_collider.bounds.right > enemy_collider.bounds.left and player_collider.bounds.left < enemy_collider.bounds.left:
+    #         player.transform.position.x = enemy_collider.bounds.left - player_collider.bounds.width
+    #     elif player_collider.bounds.left < enemy_collider.bounds.right and player_collider.bounds.right > enemy_collider.bounds.right:
+    #         player.transform.position.x = enemy_collider.bounds.right
+    #
+    #     # Adjust player's position to prevent passing through enemy vertically
+    #     if player_collider.bounds.bottom > enemy_collider.bounds.top and player_collider.bounds.top < enemy_collider.bounds.top:
+    #         player.transform.position.y = enemy_collider.bounds.top - player_collider.bounds.height
+    #     elif player_collider.bounds.top < enemy_collider.bounds.bottom and player_collider.bounds.bottom > enemy_collider.bounds.bottom:
+    #         player.transform.position.y = enemy_collider.bounds.bottom
 
         # elif self.velocity[0] < 0:  # Moving left
         #     self.rect.left = obj.rect.right
@@ -235,7 +241,7 @@ while running:
         #             player.transform.position.y = static_object_collider.top - player_collider.height
         #         else:
         #             player.transform.position.y = static_object_collider.bottom
-
+    collider_system.update(sceneManager.active_scene)
     game_time.tick()
 
     for manager in managers:
@@ -246,8 +252,8 @@ while running:
 
     player.get_component(BoxCollider2D).draw(screen , cameraManager)
     enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
-    enemy2.get_component(BoxCollider2D).draw(screen, cameraManager)
-    #text.get_component(BoxCollider2D).draw(screen, cameraManager)
+    #enemy2.get_component(BoxCollider2D).draw(screen, cameraManager)
+    text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
     renderManager.draw(game_time)
 
