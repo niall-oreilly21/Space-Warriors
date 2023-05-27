@@ -1,11 +1,13 @@
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.Other.Interfaces.IStartable import IStartable
+from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
-class CollisionSystem:
-    def __init__(self):
-        pass
+class CollisionManager(IUpdateable, IStartable):
+    def __init__(self, scene_manager):
+        self.__scene_manager = scene_manager
 
     def check_collision(self, collider1, collider2):
         if collider1.collides_with(collider2):
@@ -29,9 +31,12 @@ class CollisionSystem:
                 collider.handle_response(collider2_entity)
 
 
-    def update(self, scene):
+    def start(self):
+        pass
+
+    def update(self, game_time):
         # Iterate through all colliders or pairs of colliders to check for collisions
-        colliders = scene.get_all_components_by_type(BoxCollider2D)
+        colliders = self.__scene_manager.active_scene.get_all_components_by_type(BoxCollider2D)
 
         for i in range(len(colliders)):
             for j in range(i + 1, len(colliders)):
