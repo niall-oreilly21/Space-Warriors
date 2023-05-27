@@ -146,7 +146,7 @@ text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObje
                   GameObjectCategory.Player)
 
 image = pygame.image.load("menu_button.png")
-texture_material = TextureMaterial2D(image, None, 0, Vector2(0, 0), None)
+texture_material = TextureMaterial2D(image, None, Vector2(0, 0), None)
 text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 text.add_component(BoxCollider2D("Box-2"))

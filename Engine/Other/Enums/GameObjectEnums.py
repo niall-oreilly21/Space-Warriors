@@ -8,6 +8,7 @@ class GameObjectType(Enum):
 
 class GameObjectCategory(Enum):
     Player = 0
+    Entity = 1
 
 
 class GameObjectDirection(Enum):
