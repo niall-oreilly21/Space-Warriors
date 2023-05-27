@@ -1,7 +1,8 @@
+from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
-class SceneManager(IUpdateable):
+class SceneManager(IUpdateable, IStartable):
     def __init__(self):
         self.__scenes = {}
         self.__active_scene = None
