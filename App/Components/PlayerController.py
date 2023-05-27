@@ -32,8 +32,18 @@ class PlayerController(Component, IMoveable):
 
     def update(self, game_time):
         # self.transform.rotate(0.1 * game_time.elapsed_time)
-
         self.__rb.velocity = Vector2(0, 0)
+
+        if self.__animator.active_take == ActiveTake.PLAYER_ATTACK_X \
+                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_UP\
+                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_DOWN:
+            if not self.__animator.is_animation_complete:
+                # Animation is still playing, stop movement
+                return
+        else:
+            # Animation is complete, switch to the next take
+            self._set_idle_animation()
+
         self.__input_handler.update()
         self._move_left()
         self._move_right()

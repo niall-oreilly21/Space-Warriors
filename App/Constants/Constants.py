@@ -7,7 +7,7 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
 class Constants:
-    CHARACTER_MOVE_SPEED = 6
+    CHARACTER_MOVE_SPEED = 5
 
     class Player:
         __MOVE_X_Y = 712
@@ -48,19 +48,19 @@ class Constants:
                                         pygame.Rect(458, 1997, 93, 51), pygame.Rect(641, 1997, 93, 51),
                                         pygame.Rect(852, 1997, 93, 51), pygame.Rect(1044, 1997, 93, 51)]
 
-        __PLAYER_ATTACK_X = Take(ActiveTake.PLAYER_ATTACK_X, __PLAYER_ATTACK_X_FRAME_RECT)
+        __PLAYER_ATTACK_X = Take(ActiveTake.PLAYER_ATTACK_X, __PLAYER_ATTACK_X_FRAME_RECT, False, 1)
 
         __PLAYER_ATTACK_UP_FRAME_RECT = [pygame.Rect(72, 1404, 38, 67), pygame.Rect(255, 1404, 46, 67),
                                          pygame.Rect(448, 1404, 44, 67), pygame.Rect(629, 1404, 57, 67),
                                          pygame.Rect(821, 1404, 81, 67), pygame.Rect(1043, 1404, 76, 67)]
 
-        __PLAYER_ATTACK_UP = Take(ActiveTake.PLAYER_ATTACK_UP, __PLAYER_ATTACK_UP_FRAME_RECT)
+        __PLAYER_ATTACK_UP = Take(ActiveTake.PLAYER_ATTACK_UP, __PLAYER_ATTACK_UP_FRAME_RECT, False, 1)
 
         __PLAYER_ATTACK_DOWN_FRAME_RECT = [pygame.Rect(72, 1805, 38, 52), pygame.Rect(255, 1805, 46, 49),
                                            pygame.Rect(448, 1807, 44, 47), pygame.Rect(632, 1806, 55, 48),
                                            pygame.Rect(821, 1805, 81, 68), pygame.Rect(1044, 1805, 75, 65)]
 
-        __PLAYER_ATTACK_DOWN = Take(ActiveTake.PLAYER_ATTACK_DOWN, __PLAYER_ATTACK_DOWN_FRAME_RECT)
+        __PLAYER_ATTACK_DOWN = Take(ActiveTake.PLAYER_ATTACK_DOWN, __PLAYER_ATTACK_DOWN_FRAME_RECT, False, 1)
 
         PLAYER_ANIMATOR_INFO = [__PLAYER_MOVE_X, __PLAYER_MOVE_DOWN, __PLAYER_MOVE_UP, __PLAYER_IDLE_X,
                                 __PLAYER_IDLE_DOWN, __PLAYER_IDLE_UP, __PLAYER_ATTACK_X, __PLAYER_ATTACK_UP,
@@ -73,6 +73,8 @@ class Constants:
         MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None, 0, Vector2(0, 0), None)
 
     class EnemyWolf:
+        MOVE_SPEED = 3
+
         __ENEMY_MOVE_X_FRAME_RECTS = [
             pygame.Rect(84, 723, 27, 43), pygame.Rect(149, 722, 26, 43), pygame.Rect(211, 722, 28, 43),
             pygame.Rect(274, 722, 29, 44), pygame.Rect(336, 723, 31, 43), pygame.Rect(402, 722, 29, 44),
@@ -105,6 +107,8 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, 0, Vector2(0, 0), None)
 
     class EnemyRat:
+        MOVE_SPEED = 0.75
+
         __MOVE_X_Y = 715
         __MOVE_X_HEIGHT = 51
 
@@ -141,6 +145,8 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, 0, Vector2(0, 0), None)
 
     class EnemyAlien:
+        MOVE_SPEED = 1.5
+
         __ENEMY_MOVE_X_FRAME_RECTS = [
             pygame.Rect(84, 721, 35, 45), pygame.Rect(149, 720, 36, 45), pygame.Rect(211, 720, 36, 45),
             pygame.Rect(274, 720, 36, 46), pygame.Rect(336, 721, 33, 45), pygame.Rect(402, 720, 36, 46),

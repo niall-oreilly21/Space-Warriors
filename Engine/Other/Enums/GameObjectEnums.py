@@ -15,3 +15,9 @@ class GameObjectDirection(Enum):
     Down = 1
     Left = 2
     Right = 3
+
+
+class GameObjectEnemyType(Enum):
+    Wolf = 0
+    Rat = 1
+    Alien = 2
