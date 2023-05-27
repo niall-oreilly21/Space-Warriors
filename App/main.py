@@ -3,7 +3,6 @@ import os
 import pygame
 from pygame import Vector2, Rect
 
-from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
@@ -74,6 +73,7 @@ cameraManager.set_active_camera("MainCamera")
 
 # Create a font object
 font = pygame.font.Font(None, 80)
+
 font_name = None
 
 
@@ -93,7 +93,7 @@ enemy.add_component(BoxCollider2D("Box-1"))
 text = GameObject("Text", Transform2D(Vector2(0, 0),0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
 
 image = pygame.image.load("menu_button.png")
-texture_material = TextureMaterial2D(image, None, 0, Vector2(0, 0), None)
+texture_material = TextureMaterial2D(image, None, Vector2(0, 0), None)
 text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 
@@ -106,9 +106,9 @@ scene.add(text)
 
 # Load an image and create a TextureMaterial2D object with it
 image = pygame.image.load("image.png")
-material = TextureMaterial2D(image, None, 0, Vector2(0, 0), None)
+material = TextureMaterial2D(image, None, Vector2(0, 0), 60, None)
 
-material2 = TextureMaterial2D(image, (255,255,0), 0, Vector2(0, 0), None)
+material2 = TextureMaterial2D(image, (255,255,0), Vector2(0, 0), None)
 
 enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, 3))
 
@@ -149,6 +149,24 @@ player.add_component(animator)
 
 managers.append(cameraManager)
 managers.append(sceneManager)
+
+enemy2 = text.clone()
+#
+enemy2.transform.translate(0,100)
+#enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
+#
+scene.add(enemy2)
+
+enemy3 = enemy.clone()
+
+
+
+enemy3.transform.translate(0,100)
+enemy3.name = "Enemy3"
+#enemy2.get_component(SpriteAnimator2D).set_active_take(ActiveTake.COOK)
+#
+scene.add(enemy3)
+scene.remove(text)
 
 
 game_time = GameTime()
@@ -228,7 +246,8 @@ while running:
 
     player.get_component(BoxCollider2D).draw(screen , cameraManager)
     enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
-    text.get_component(BoxCollider2D).draw(screen, cameraManager)
+    enemy2.get_component(BoxCollider2D).draw(screen, cameraManager)
+    #text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
     renderManager.draw(game_time)
 
