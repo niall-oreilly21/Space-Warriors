@@ -47,3 +47,5 @@ class Rigidbody2D(Component):
         # Update position using velocity
         self._transform.position += self.__velocity * delta_time
 
+    def clone(self):
+        return Rigidbody2D(self._name, self.__mass, self.__drag)

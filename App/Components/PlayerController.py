@@ -4,7 +4,7 @@ from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Other.Enums import GameObjectEnums
+from Engine.Managers.CameraManager import CameraManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IMoveable import IMoveable
@@ -22,8 +22,6 @@ class PlayerController(Component, IMoveable):
         self.__animator = None
         self.__rb = None
         self.__rend = None
-        self.__is_moving = False
-        self.__previous_direction = None
 
     def start(self):
         self.__rb = self._parent.get_component(Rigidbody2D)
@@ -31,83 +29,44 @@ class PlayerController(Component, IMoveable):
         self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     def update(self, game_time):
-        # self.transform.rotate(0.1 * game_time.elapsed_time)
-        self.__rb.velocity = Vector2(0, 0)
+        self._parent.get_component(Rigidbody2D).velocity = Vector2(0, 0)
 
-        if self.__animator.active_take == ActiveTake.PLAYER_ATTACK_X \
-                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_UP\
-                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_DOWN:
-            if not self.__animator.is_animation_complete:
-                # Animation is still playing, stop movement
-                return
-        else:
-            # Animation is complete, switch to the next take
-            self._set_idle_animation()
+        self._parent.transform.rotate(5)
+        # if self.__animator.active_take == ActiveTake.COOK:
+        #     if not self.__animator.is_animation_complete:
+        #         # Animation is still playing, stop movement
+        #         return
+        # else:
+        #     # Animation is complete, switch to the next take
+        #     self.__animator.set_active_take(ActiveTake.PLAYER_WALKING)
 
         self.__input_handler.update()
         self._move_left()
         self._move_right()
         self._move_up()
         self._move_down()
-        self._attack()
 
     def _move_left(self):
-        self._set_idle_animation()
-        if self.__input_handler.is_tap(pygame.K_a, self.__tap_threshold):
-            self.__rend.flip_x = True
-            self.__rb.velocity = Vector2(-self.__speed_x, self.__rb.velocity.y)
-            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_X)
-            self.__is_moving = True
-            self.__previous_direction = GameObjectEnums.GameObjectDirection.Left
+        if self.__input_handler.is_tap(pygame.K_LEFT, self.__tap_threshold):
+                self.__rend.flip_x = True
+                self.__rb.velocity = Vector2(-self.__speed_x, self.__rb.velocity.y)
+                self.__animator.set_active_take(ActiveTake.PLAYER_WALKING)
 
     def _move_right(self):
-        self._set_idle_animation()
-        if self.__input_handler.is_tap(pygame.K_d, self.__tap_threshold):
+        if self.__input_handler.is_tap(pygame.K_RIGHT, self.__tap_threshold):
             self.__rend.flip_x = False
-            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_X)
+            self.__animator.set_active_take(ActiveTake.PLAYER_RUNNING)
             self.__rb.velocity = Vector2(self.__speed_x, self.__rb.velocity.y)
-            self.__is_moving = True
-            self.__previous_direction = GameObjectEnums.GameObjectDirection.Right
 
     def _move_up(self):
-        self._set_idle_animation()
-        if self.__input_handler.is_tap(pygame.K_w, self.__tap_threshold):
-            self.__rend.flip_y = False
-            self.__rb.velocity = Vector2(self.__rb.velocity.x, -self.__speed_y)
-            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_UP)
-            self.__is_moving = True
-            self.__previous_direction = GameObjectEnums.GameObjectDirection.Up
+        if self.__input_handler.is_tap(pygame.K_UP, self.__tap_threshold):
+                self.__rend.flip_y = True
+                self.__rb.velocity = Vector2(self.__rb.velocity.x, -self.__speed_y)
 
     def _move_down(self):
-        self._set_idle_animation()
-        if self.__input_handler.is_tap(pygame.K_s, self.__tap_threshold):
-            self.__rend.flip_y = False
-            self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
-            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_DOWN)
-            self.__is_moving = True
-            self.__previous_direction = GameObjectEnums.GameObjectDirection.Down
+        if self.__input_handler.is_tap(pygame.K_DOWN, self.__tap_threshold):
+                self.__rend.flip_y = False
+                self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
 
-    def _set_idle_animation(self):
-        if not self.__input_handler.is_tap(pygame.K_w, self.__tap_threshold) \
-                and not self.__input_handler.is_tap(pygame.K_a, self.__tap_threshold) \
-                and not self.__input_handler.is_tap(pygame.K_s, self.__tap_threshold) \
-                and not self.__input_handler.is_tap(pygame.K_d, self.__tap_threshold):
-            self.__is_moving = False
-        if not self.__is_moving:
-            if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \
-                    or self.__previous_direction == GameObjectEnums.GameObjectDirection.Right:
-                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_X)
-            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
-                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_UP)
-            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
-                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
-
-    def _attack(self):
-        if pygame.mouse.get_pressed()[0]:
-            if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \
-                    or self.__previous_direction == GameObjectEnums.GameObjectDirection.Right:
-                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_X)
-            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
-                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_UP)
-            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
-                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_DOWN)
+    def clone(self):
+        return PlayerController(self._name, self.__speed_x, self.__speed_y)

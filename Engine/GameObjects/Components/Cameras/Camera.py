@@ -13,3 +13,5 @@ class Camera(Component):
     def viewport(self):
         return self.__viewport
 
+    def clone(self):
+        return Camera(self._name, self.__viewport.x, self.__viewport.y)
