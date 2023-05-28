@@ -10,6 +10,13 @@ class Constants:
     CHARACTER_MOVE_SPEED = 5
 
     class Player:
+        WIDTH = 29
+
+        DEFAULT_HEALTH = 200
+        DEFAULT_ATTACK_DAMAGE = 5
+
+        TOTAL_LIVES = 5
+
         __MOVE_X_Y = 712
         __MOVE_X_HEIGHT = 54
 
@@ -69,8 +76,8 @@ class Constants:
         __GIRL_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_girl.png")
         __BOY_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_boy.png")
 
-        MATERIAL_GIRL = TextureMaterial2D(__GIRL_SPRITE_SHEET, None, 0, Vector2(0, 0), None)
-        MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None, 0, Vector2(0, 0), None)
+        MATERIAL_GIRL = TextureMaterial2D(__GIRL_SPRITE_SHEET, None, Vector2(0, 0), None)
+        MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None,  Vector2(0, 0), None)
 
     class EnemyWolf:
         MOVE_SPEED = 3
@@ -102,9 +109,9 @@ class Constants:
         __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_wolf2.png")
         __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_wolf3.png")
 
-        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, 0, Vector2(0, 0), None)
+        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class EnemyRat:
         MOVE_SPEED = 0.75
@@ -140,9 +147,9 @@ class Constants:
         __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_rat2.png")
         __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_rat3.png")
 
-        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, 0, Vector2(0, 0), None)
+        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None,  Vector2(0, 0), None)
 
     class EnemyAlien:
         MOVE_SPEED = 1.5
@@ -174,9 +181,9 @@ class Constants:
         __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien2.png")
         __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien3.png")
 
-        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, 0, Vector2(0, 0), None)
-        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, 0, Vector2(0, 0), None)
+        MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
+        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class PetDog:
         __PET_WALK_FRAME_RECTS = [
@@ -189,4 +196,4 @@ class Constants:
 
         __PET_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/pet_dog.png")
 
-        MATERIAL_PET = TextureMaterial2D(__PET_SPRITE_SHEET, None, 0, Vector2(0, 0), None)
+        MATERIAL_PET = TextureMaterial2D(__PET_SPRITE_SHEET, None, Vector2(0, 0), None)
