@@ -20,15 +20,14 @@ class PlayerAttackCollider(Collider2D):
 
     def handle_response(self, parent_game_object):
         current_time = time.time()
+
+        # Player and enemy collide
         if parent_game_object.game_object_category == GameObjectCategory.Alien or \
                 parent_game_object.game_object_category == GameObjectCategory.Wolf or \
                 parent_game_object.game_object_category == GameObjectCategory.Rat:
-            # player and enemy collide
-            # print("cur time ", current_time)
-            # print("last damage time", self.parent.last_damage_time)
 
+            # Player take damage
             if current_time - self.parent.last_damage_time >= self.parent.damage_cooldown:
-                # print(self.parent.damage_cooldown)
                 self.parent.is_damaged = True
                 self.parent.damage(parent_game_object.attack_damage)
                 print("Health: ", self.parent.health)
@@ -36,9 +35,8 @@ class PlayerAttackCollider(Collider2D):
 
             else:
                 self.parent.is_damaged = False
-            # self = player
-            # parent_game_object = enemy
 
+            # Enemy take damage
             player_active_take = self.parent.get_component(SpriteAnimator2D).active_take
             if player_active_take == ActiveTake.PLAYER_ATTACK_X or \
                     player_active_take == ActiveTake.PLAYER_ATTACK_UP or \
@@ -57,5 +55,7 @@ class PlayerAttackCollider(Collider2D):
 
             if parent_game_object.health == 0:
                 print("Enemy dead")
+                # TODO: this is a temporary fix for testing purposes
                 parent_game_object.remove_component(SpriteRenderer2D)
+                parent_game_object.remove_component(BoxCollider2D)
                 parent_game_object.remove_component(SpriteAnimator2D)

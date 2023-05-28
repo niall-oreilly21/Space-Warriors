@@ -43,18 +43,17 @@ class BoxCollider2D(Component):
         displacement = pygame.Vector2(0, 0)
 
         # Calculate the minimum translation distance to separate the colliders
-        if self.bounds.right > other_collider.bounds.left and self.bounds.left < other_collider.bounds.left:
+        if self.bounds.right > other_collider.bounds.left > self.bounds.left:
             displacement.x = other_collider.bounds.left - self.bounds.right
-        elif self.bounds.left < other_collider.bounds.right and self.bounds.right > other_collider.bounds.right:
+        elif self.bounds.left < other_collider.bounds.right < self.bounds.right:
             displacement.x = other_collider.bounds.right - self.bounds.left
 
-        if self.bounds.bottom > other_collider.bounds.top and self.bounds.top < other_collider.bounds.top:
+        if self.bounds.bottom > other_collider.bounds.top > self.bounds.top:
             displacement.y = other_collider.bounds.top - self.bounds.bottom
-        elif self.bounds.top < other_collider.bounds.bottom and self.bounds.bottom > other_collider.bounds.bottom:
+        elif self.bounds.top < other_collider.bounds.bottom < self.bounds.bottom:
             displacement.y = other_collider.bounds.bottom - self.bounds.top
 
         return displacement
-
 
     @property
     def bounds(self):
@@ -80,7 +79,6 @@ class BoxCollider2D(Component):
 
     def update(self, game_time):
         pass
-
 
      # Calculate the distance between two colliders
     def distance_to(self, other_collider):
