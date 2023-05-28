@@ -11,6 +11,16 @@ class RendererManager:
         self.__surface = surface
         self.__scene_manager = scene_manager
         self.__camera_manager = camera_manager
+        self.__is_debug_mode = False
+
+
+    @property
+    def is_debug_mode(self):
+        return self.__is_debug_mode
+
+    @is_debug_mode.setter
+    def is_debug_mode(self, is_debug_mode):
+        self.__is_debug_mode = is_debug_mode
 
     def draw(self, game_time):
         renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
@@ -37,8 +47,9 @@ class RendererManager:
                 renderer.draw(self.__surface,
                               Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
 
-                if renderer.parent.get_component(BoxCollider2D):
-                    renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager)
+                if self.__is_debug_mode:
+                    if renderer.parent.get_component(BoxCollider2D):
+                        renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager)
 
 
 
