@@ -39,6 +39,23 @@ class BoxCollider2D(Component):
     def anchor(self, value):
         self.__anchor = value
 
+    def calculate_displacement_vector(self, other_collider):
+        displacement = pygame.Vector2(0, 0)
+
+        # Calculate the minimum translation distance to separate the colliders
+        if self.bounds.right > other_collider.bounds.left and self.bounds.left < other_collider.bounds.left:
+            displacement.x = other_collider.bounds.left - self.bounds.right
+        elif self.bounds.left < other_collider.bounds.right and self.bounds.right > other_collider.bounds.right:
+            displacement.x = other_collider.bounds.right - self.bounds.left
+
+        if self.bounds.bottom > other_collider.bounds.top and self.bounds.top < other_collider.bounds.top:
+            displacement.y = other_collider.bounds.top - self.bounds.bottom
+        elif self.bounds.top < other_collider.bounds.bottom and self.bounds.bottom > other_collider.bounds.bottom:
+            displacement.y = other_collider.bounds.bottom - self.bounds.top
+
+        return displacement
+
+
     @property
     def bounds(self):
 
@@ -54,11 +71,22 @@ class BoxCollider2D(Component):
 
         return self.__bounds
 
+    @property
+    def size(self):
+        return pygame.Vector2(self.bounds.width, self.bounds.height)
+
     def collides_with(self, other_collider):
         return self.bounds.colliderect(other_collider.bounds)
 
     def update(self, game_time):
         pass
+
+
+     # Calculate the distance between two colliders
+    def distance_to(self, other_collider):
+        self_center = Vector2(self.bounds.centerx, self.bounds.centery)
+        other_center = Vector2(other_collider.bounds.centerx, other_collider.bounds.centery)
+        return self_center.distance_to(other_center)
 
     def draw(self, screen, camera_manager):
         if isinstance(self.__rend.material, TextureMaterial2D):

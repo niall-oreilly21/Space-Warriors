@@ -11,7 +11,7 @@ class TextureMaterial2D(Material2D):
             alpha = 255
         super().__init__(color, alpha, origin)
         self.__texture = texture
-        self.source_rect = source_rect or pygame.Rect((0, 0, texture.get_width(), texture.get_height()))
+        self.__source_rect = source_rect or pygame.Rect((0, 0, texture.get_width(), texture.get_height()))
 
     @property
     def texture(self):
@@ -20,6 +20,14 @@ class TextureMaterial2D(Material2D):
     @texture.setter
     def texture(self, texture):
         self.__texture = texture
+
+    @property
+    def source_rect(self):
+        return self.__source_rect
+
+    @source_rect.setter
+    def source_rect(self, source_rect):
+        self.__source_rect = source_rect
 
     def _transform_material(self, surface, transform):
         rotated_surface = self._rotate_surface(surface, transform.rotation)

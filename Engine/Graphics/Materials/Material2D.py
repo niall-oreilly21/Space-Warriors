@@ -23,11 +23,11 @@ class Material2D(ICloneable, ABC):
 
     @property
     def alpha(self):
-        return self.__alpha
+        return self._alpha
 
     @alpha.setter
     def alpha(self, alpha):
-        self.__alpha = alpha
+        self._alpha = alpha
 
     @property
     def origin(self):
