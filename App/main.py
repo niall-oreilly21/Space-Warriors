@@ -86,7 +86,7 @@ player.add_component(player_controller)
 player_collider = PlayerAttackCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(5000, 5000), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
                   GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 # enemy.add_component(Rigidbody2D("Rigid"))
@@ -97,8 +97,9 @@ enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_
 enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED)
 enemy.add_component(enemy_controller)
 
-enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
-                    GameObjectCategory.Wolf)
+enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
+                   GameObjectType.Dynamic,
+                   GameObjectCategory.Wolf)
 enemy2.add_component(BoxCollider2D("Box-3"))
 # enemy.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY1
@@ -108,8 +109,9 @@ enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMAT
 enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED)
 enemy2.add_component(enemy_controller2)
 
-enemy3 = Character("Enemy3", 50, 2, 1, 1, Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
-                    GameObjectCategory.Wolf)
+enemy3 = Character("Enemy3", 50, 2, 1, 1, Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
+                   GameObjectType.Dynamic,
+                   GameObjectCategory.Wolf)
 enemy3.add_component(BoxCollider2D("Box-3"))
 # enemy.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
@@ -155,7 +157,7 @@ text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 text.add_component(BoxCollider2D("Box-2"))
 
-# scene.add(player)
+scene.add(player)
 scene.add(enemy)
 
 sceneManager.add("Game", scene)
@@ -168,7 +170,7 @@ renderManager = RendererManager(screen, sceneManager, cameraManager)
 scene.add(enemy2)
 scene.add(enemy3)
 # scene.add(enemy4)
-# scene.add(text)
+scene.add(text)
 managers.append(cameraManager)
 managers.append(sceneManager)
 
@@ -209,8 +211,7 @@ while running:
     # if player.lives == 0:
     #     sceneManager.set_active_scene("Test")
 
- #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
-
+    #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
     renderManager.draw(game_time)
 

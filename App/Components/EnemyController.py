@@ -25,37 +25,40 @@ class EnemyController(Component):
         target_position = self.__target_object.transform.position
         enemy_position = self.transform.position
 
-        target_position = self.__target_object.transform.position
-        enemy_position = self.transform.position
+        distance = math.sqrt((target_position.x - enemy_position.x) ** 2 + (target_position.y - enemy_position.y) ** 2)
 
-        direction = target_position - enemy_position
-        direction.normalize()
+        if distance <= 300:
+            direction = target_position - enemy_position
+            direction.normalize()
 
-        angle = math.degrees(math.atan2(direction.y, direction.x))
-        if angle < 0:
-            angle += 360
+            angle = math.degrees(math.atan2(direction.y, direction.x))
+            if angle < 0:
+                angle += 360
 
-        if 45 <= angle < 135:
-            movement_direction = GameObjectDirection.Down
-        elif 135 <= angle < 225:
-            movement_direction = GameObjectDirection.Left
-        elif 225 <= angle < 315:
-            movement_direction = GameObjectDirection.Up
+            if 45 <= angle < 135:
+                movement_direction = GameObjectDirection.Down
+            elif 135 <= angle < 225:
+                movement_direction = GameObjectDirection.Left
+            elif 225 <= angle < 315:
+                movement_direction = GameObjectDirection.Up
+            else:
+                movement_direction = GameObjectDirection.Right
+
+            self.transform.position += direction * game_time.elapsed_time * 0.001 * self.__speed
+
+            if movement_direction == GameObjectDirection.Right:
+                self.__rend.flip_x = False
+                self.__animator.set_active_take(self.move_x_active_take())
+            elif movement_direction == GameObjectDirection.Left:
+                self.__rend.flip_x = True
+                self.__animator.set_active_take(self.move_x_active_take())
+            elif movement_direction == GameObjectDirection.Up:
+                self.__animator.set_active_take(self.move_up_active_take())
+            elif movement_direction == GameObjectDirection.Down:
+                self.__animator.set_active_take(self.move_down_active_take())
         else:
-            movement_direction = GameObjectDirection.Right
-
-        self.transform.position += direction * game_time.elapsed_time * 0.001 * self.__speed
-
-        if movement_direction == GameObjectDirection.Right:
-            self.__rend.flip_x = False
+            # Enemy is outside the desired range, so it remains stationary
             self.__animator.set_active_take(self.move_x_active_take())
-        elif movement_direction == GameObjectDirection.Left:
-            self.__rend.flip_x = True
-            self.__animator.set_active_take(self.move_x_active_take())
-        elif movement_direction == GameObjectDirection.Up:
-            self.__animator.set_active_take(self.move_up_active_take())
-        elif movement_direction == GameObjectDirection.Down:
-            self.__animator.set_active_take(self.move_down_active_take())
 
     def move_x_active_take(self):
         if self.parent.game_object_category == GameObjectCategory.Rat:
