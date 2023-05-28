@@ -42,8 +42,9 @@ class Transform2D(ICloneable):
     def rotate(self, angle):
         self.__rotation += angle
 
-    def scale_by(self, x, y, z):
-        self.__scale *= Vector2(x, y)
+    @scale.setter
+    def scale(self, scale):
+        self.__scale = scale
 
     def clone(self):
         return Transform2D(self.__position.copy(), self.__rotation, self.__scale.copy())
