@@ -2,6 +2,8 @@ from abc import ABC
 
 from enum import Enum
 
+from pygame import Vector2
+
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Interfaces.ICloneable import ICloneable
 from Engine.Other.Transform2D import Transform2D
@@ -15,7 +17,7 @@ class GameObject(ICloneable):
         self.__game_object_category = game_object_category
 
         if self.__transform is None:
-            self.__transform = Transform2D
+            self.__transform = Transform2D(Vector2(1,1), 0, Vector2(2,2))
 
     @property
     def name(self):

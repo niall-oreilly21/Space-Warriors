@@ -9,6 +9,9 @@ class GameObjectType(Enum):
 class GameObjectCategory(Enum):
     Player = 0
     Entity = 1
+    Wolf = 2
+    Rat = 3
+    Alien = 4
 
 
 class GameObjectDirection(Enum):
@@ -16,9 +19,3 @@ class GameObjectDirection(Enum):
     Down = 1
     Left = 2
     Right = 3
-
-
-class GameObjectEnemyType(Enum):
-    Wolf = 0
-    Rat = 1
-    Alien = 2

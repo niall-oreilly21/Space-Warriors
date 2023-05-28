@@ -10,6 +10,13 @@ class Constants:
     CHARACTER_MOVE_SPEED = 5
 
     class Player:
+        WIDTH = 29
+
+        DEFAULT_HEALTH = 200
+        DEFAULT_ATTACK_DAMAGE = 5
+
+        TOTAL_LIVES = 5
+
         __MOVE_X_Y = 712
         __MOVE_X_HEIGHT = 54
 

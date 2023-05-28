@@ -1,7 +1,7 @@
 from pygame import Vector2
 import math
 
-from Engine.Other.Enums.GameObjectEnums import GameObjectEnemyType
+from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
@@ -10,13 +10,12 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
 class EnemyController(Component):
-    def __init__(self, name, target_object, speed, enemy_type):
+    def __init__(self, name, target_object, speed):
         super().__init__(name)
         self.__animator = None
         self.__rend = None
         self.__target_object = target_object
         self.__speed = speed
-        self.__type = enemy_type
 
     def start(self):
         self.__rend = self._parent.get_component(SpriteRenderer2D)
@@ -37,47 +36,50 @@ class EnemyController(Component):
             angle += 360
 
         if 45 <= angle < 135:
-            movement_direction = "down"
+            movement_direction = GameObjectDirection.Down
         elif 135 <= angle < 225:
-            movement_direction = "left"
+            movement_direction = GameObjectDirection.Left
         elif 225 <= angle < 315:
-            movement_direction = "up"
+            movement_direction = GameObjectDirection.Up
         else:
-            movement_direction = "right"
+            movement_direction = GameObjectDirection.Right
 
         self.transform.position += direction * game_time.elapsed_time * 0.001 * self.__speed
 
-        if movement_direction == "right":
+        if movement_direction == GameObjectDirection.Right:
             self.__rend.flip_x = False
             self.__animator.set_active_take(self.move_x_active_take())
-        elif movement_direction == "left":
+        elif movement_direction == GameObjectDirection.Left:
             self.__rend.flip_x = True
             self.__animator.set_active_take(self.move_x_active_take())
-        elif movement_direction == "up":
+        elif movement_direction == GameObjectDirection.Up:
             self.__animator.set_active_take(self.move_up_active_take())
-        elif movement_direction == "down":
+        elif movement_direction == GameObjectDirection.Down:
             self.__animator.set_active_take(self.move_down_active_take())
 
     def move_x_active_take(self):
-        if self.__type == GameObjectEnemyType.Rat:
+        if self.parent.game_object_category == GameObjectCategory.Rat:
             return ActiveTake.ENEMY_RAT_MOVE_X
-        elif self.__type == GameObjectEnemyType.Wolf:
+        elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_X
         else:
             return ActiveTake.ENEMY_ALIEN_MOVE_X
 
     def move_up_active_take(self):
-        if self.__type == GameObjectEnemyType.Rat:
+        if self.parent.game_object_category == GameObjectCategory.Rat:
             return ActiveTake.ENEMY_RAT_MOVE_UP
-        elif self.__type == GameObjectEnemyType.Wolf:
+        elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_UP
         else:
             return ActiveTake.ENEMY_ALIEN_MOVE_UP
 
     def move_down_active_take(self):
-        if self.__type == GameObjectEnemyType.Rat:
+        if self.parent.game_object_category == GameObjectCategory.Rat:
             return ActiveTake.ENEMY_RAT_MOVE_DOWN
-        elif self.__type == GameObjectEnemyType.Wolf:
+        elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_DOWN
         else:
             return ActiveTake.ENEMY_ALIEN_MOVE_DOWN
+
+    def clone(self):
+        return EnemyController(self.name, self.__target_object, self.__speed)
