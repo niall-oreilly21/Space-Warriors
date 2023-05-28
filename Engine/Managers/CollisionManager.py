@@ -15,8 +15,7 @@ class CollisionManager(IUpdateable):
         self.__collision_range = collision_range
         self.__scene_manager = scene_manager
         self.__camera_manager = camera_manager
-        self.collision_area = CollisionArea(self.__camera_manager.active_camera.parent.transform.position.x, self.__camera_manager.active_camera.parent.transform.position.y
-                                       , self.__camera_manager.active_camera.viewport.x, self.__camera_manager.active_camera.viewport.y)
+        self.collision_area = CollisionArea(self.__camera_manager.active_camera.parent.transform.position.x, self.__camera_manager.active_camera.parent.transform.position.y, self.__camera_manager.active_camera.viewport.x, self.__camera_manager.active_camera.viewport.y)
 
     def check_collision(self, collider1, collider2):
         if collider1.collides_with(collider2):
