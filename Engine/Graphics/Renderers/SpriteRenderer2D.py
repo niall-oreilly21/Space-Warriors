@@ -1,3 +1,4 @@
+import pygame
 from pygame import Rect
 
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -18,13 +19,7 @@ class SpriteRenderer2D(Renderer2D):
     def flip_x(self):
         return self.__flip_x
 
-    def get_bounding_rect(self, transform):
-        # Calculate the object's bounding rect in screen coordinates
-        sprite_rect = self._material.source_rect
-        scaled_sprite_rect = sprite_rect.inflate(transform.scale.x, transform.scale.y)
-        screen_rect = scaled_sprite_rect.move(transform.position.x - sprite_rect.width / 2,
-                                              transform.position.y - sprite_rect.height / 2)
-        return screen_rect
+
 
     @property
     def flip_y(self):
