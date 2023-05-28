@@ -5,7 +5,17 @@ class GameObjectType(Enum):
     Static = 0
     Dynamic = 1
 
+
 class GameObjectCategory(Enum):
-    Entity = 0
-    Player = 1
-    Tile = 2
+    Player = 0
+    Entity = 1
+    Wolf = 2
+    Rat = 3
+    Alien = 4
+
+
+class GameObjectDirection(Enum):
+    Up = 0
+    Down = 1
+    Left = 2
+    Right = 3

@@ -1,10 +1,13 @@
 from pygame import Vector2
 
+from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from Engine.GameObjects.Components.Component import Component
+from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Managers.CameraManager import CameraManager
+from Engine.Other.Enums import GameObjectEnums
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IMoveable import IMoveable
@@ -13,7 +16,7 @@ import pygame
 
 class PlayerController(Component, IMoveable):
 
-    def __init__(self, name, speed_x, speed_y):
+    def __init__(self, name, speed_x, speed_y, box_collider):
         super().__init__(name)
         self.__input_handler = InputHandler()
         self.__speed_x = speed_x
@@ -22,6 +25,14 @@ class PlayerController(Component, IMoveable):
         self.__animator = None
         self.__rb = None
         self.__rend = None
+        self.__is_moving = False
+        self.__is_attacking = False
+        self.__previous_direction = None
+        self.__box_collider = box_collider
+
+    @property
+    def previous_direction(self):
+        return self.__previous_direction
 
     def start(self):
         self.__rb = self._parent.get_component(Rigidbody2D)
@@ -29,44 +40,104 @@ class PlayerController(Component, IMoveable):
         self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     def update(self, game_time):
-        self._parent.get_component(Rigidbody2D).velocity = Vector2(0, 0)
+        # self.transform.rotate(0.1 * game_time.elapsed_time)
+        self.__rb.velocity = Vector2(0, 0)
 
-        self._parent.transform.rotate(5)
-        # if self.__animator.active_take == ActiveTake.COOK:
-        #     if not self.__animator.is_animation_complete:
-        #         # Animation is still playing, stop movement
-        #         return
-        # else:
-        #     # Animation is complete, switch to the next take
-        #     self.__animator.set_active_take(ActiveTake.PLAYER_WALKING)
+        if self.__animator.active_take == ActiveTake.PLAYER_ATTACK_X \
+                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_UP\
+                or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_DOWN:
+            if not self.__animator.is_animation_complete:
+                # Animation is still playing, stop movement
+                return
+        else:
+            # Animation is complete, switch to the next take
+            self._set_idle_animation()
 
         self.__input_handler.update()
         self._move_left()
         self._move_right()
         self._move_up()
         self._move_down()
+        self._attack()
+        self._faint()
+        #
+        # if self.parent.is_damaged:
+        #     self.parent.get_component(Renderer2D).material.alpha = 150
+        # else:
+        #     self.parent.get_component(Renderer2D).material.alpha = 225
 
     def _move_left(self):
-        if self.__input_handler.is_tap(pygame.K_LEFT, self.__tap_threshold):
-                self.__rend.flip_x = True
-                self.__rb.velocity = Vector2(-self.__speed_x, self.__rb.velocity.y)
-                self.__animator.set_active_take(ActiveTake.PLAYER_WALKING)
+        self._set_idle_animation()
+        if self.__input_handler.is_tap(pygame.K_a, self.__tap_threshold):
+            self.__rend.flip_x = True
+            self.__rb.velocity = Vector2(-self.__speed_x, self.__rb.velocity.y)
+            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_X)
+            self.__is_moving = True
+            self.__previous_direction = GameObjectEnums.GameObjectDirection.Left
 
     def _move_right(self):
-        if self.__input_handler.is_tap(pygame.K_RIGHT, self.__tap_threshold):
+        self._set_idle_animation()
+        if self.__input_handler.is_tap(pygame.K_d, self.__tap_threshold):
             self.__rend.flip_x = False
-            self.__animator.set_active_take(ActiveTake.PLAYER_RUNNING)
+            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_X)
             self.__rb.velocity = Vector2(self.__speed_x, self.__rb.velocity.y)
+            self.__is_moving = True
+            self.__previous_direction = GameObjectEnums.GameObjectDirection.Right
 
     def _move_up(self):
-        if self.__input_handler.is_tap(pygame.K_UP, self.__tap_threshold):
-                self.__rend.flip_y = True
-                self.__rb.velocity = Vector2(self.__rb.velocity.x, -self.__speed_y)
+        self._set_idle_animation()
+        if self.__input_handler.is_tap(pygame.K_w, self.__tap_threshold):
+            self.__rend.flip_y = False
+            self.__rb.velocity = Vector2(self.__rb.velocity.x, -self.__speed_y)
+            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_UP)
+            self.__is_moving = True
+            self.__previous_direction = GameObjectEnums.GameObjectDirection.Up
 
     def _move_down(self):
-        if self.__input_handler.is_tap(pygame.K_DOWN, self.__tap_threshold):
-                self.__rend.flip_y = False
-                self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
+        self._set_idle_animation()
+        if self.__input_handler.is_tap(pygame.K_s, self.__tap_threshold):
+            self.__rend.flip_y = False
+            self.__rb.velocity = Vector2(self.__rb.velocity.x, self.__speed_y)
+            self.__animator.set_active_take(ActiveTake.PLAYER_MOVE_DOWN)
+            self.__is_moving = True
+            self.__previous_direction = GameObjectEnums.GameObjectDirection.Down
 
-    def clone(self):
-        return PlayerController(self._name, self.__speed_x, self.__speed_y)
+    def _set_idle_animation(self):
+        if not self.__input_handler.is_tap(pygame.K_w, self.__tap_threshold) \
+                and not self.__input_handler.is_tap(pygame.K_a, self.__tap_threshold) \
+                and not self.__input_handler.is_tap(pygame.K_s, self.__tap_threshold) \
+                and not self.__input_handler.is_tap(pygame.K_d, self.__tap_threshold):
+            self.__is_moving = False
+        if not self.__is_moving:
+            if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \
+                    or self.__previous_direction == GameObjectEnums.GameObjectDirection.Right:
+                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_X)
+            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
+                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_UP)
+            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
+                self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
+
+    def _attack(self):
+        if pygame.mouse.get_pressed()[0]:
+            self.parent.remove_component(BoxCollider2D)
+
+            self.__is_attacking = True
+            attack_collider = AttackBoxCollider2D("Attack box collider", self.__box_collider, self)
+            self.parent.add_component(attack_collider)
+
+            if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \
+                    or self.__previous_direction == GameObjectEnums.GameObjectDirection.Right:
+                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_X)
+            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
+                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_UP)
+            elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
+                self.__animator.set_active_take(ActiveTake.PLAYER_ATTACK_DOWN)
+        else:
+            self.__is_attacking = False
+            if self.parent.get_component(AttackBoxCollider2D):
+                self.parent.remove_component(AttackBoxCollider2D)
+                self.parent.add_component(self.__box_collider)
+
+    def _faint(self):
+        if self.parent.health == 0:
+            self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
