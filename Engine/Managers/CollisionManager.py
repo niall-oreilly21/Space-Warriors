@@ -2,10 +2,9 @@
 import math
 
 from pygame import Rect
-
-from App.test1 import CollisionArea
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
+from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
