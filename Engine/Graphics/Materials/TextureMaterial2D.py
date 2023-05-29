@@ -11,7 +11,11 @@ class TextureMaterial2D(Material2D):
             alpha = 255
         super().__init__(color, alpha, origin)
         self.__texture = texture
-        self.__source_rect = source_rect or pygame.Rect((0, 0, texture.get_width(), texture.get_height()))
+
+        if self.__texture is None:
+            self.__source_rect = None
+        else:
+            self.__source_rect = source_rect or pygame.Rect((0, 0, texture.get_width(), texture.get_height()))
 
     @property
     def texture(self):
