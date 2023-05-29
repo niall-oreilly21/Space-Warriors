@@ -1,3 +1,5 @@
+import pygame
+
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
@@ -18,7 +20,10 @@ class SceneManager(Manager):
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MainMenuScene:
             self.set_active_scene("Main Menu")
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera, None))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+
+        elif event_data.event_action_type == EventActionType.ExitGame:
+            pygame.quit()
 
     @property
     def active_scene(self):
