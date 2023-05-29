@@ -15,12 +15,11 @@ class SoundManager(Manager):
 
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.PlaySound:
-
-            sound_name = event_data.parameters[0].lower()
+            sound_name = event_data.parameters[0]
             self.play_sound(sound_name)
 
         elif event_data.event_action_type == EventActionType.StopSound:
-            sound_name = event_data.parameters[0].lower()
+            sound_name = event_data.parameters[0]
             self.stop_sound(sound_name)
 
         elif event_data.event_action_type == EventActionType.StopAllSounds:
@@ -41,10 +40,12 @@ class SoundManager(Manager):
         self.__sounds[sound_name] = sound
 
     def play_sound(self, sound_name):
+        sound_name = sound_name.lower()
         if sound_name in self.__sounds:
             self.__sounds[sound_name].play()
 
     def stop_sound(self, sound_name):
+        sound_name = sound_name.lower()
         if sound_name in self.__sounds:
             self.__sounds[sound_name].stop()
 
