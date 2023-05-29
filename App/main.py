@@ -21,8 +21,12 @@ from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, Ga
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
+from Engine.Managers.SoundManager import SoundManager
+from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.EventEnums import EventActionType, EventCategoryType
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
 from App.Components.PlayerController import PlayerController
@@ -46,6 +50,10 @@ def print_array_size(arr):
 
 def update(game_time):
     scene.update(game_time)
+
+event_dispatcher = EventDispatcher()
+soundManager = SoundManager(event_dispatcher)
+
 
 # Initialize Pygame
 pygame.init()
@@ -72,11 +80,19 @@ managers = []
 
 
 sceneManager = SceneManager(EventDispatcher())
-event_dispatcher = EventDispatcher()
+
 cameraManager = CameraManager(screen, sceneManager, event_dispatcher)
 cameraManager.add(cameraGameObject)
 
 cameraManager.set_active_camera("MainCamera")
+
+# Sounds
+
+
+
+soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
+soundManager.set_sound_volume("backgroundmusic", .05)
+event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
 
 # Create a font object
 font = pygame.font.Font(None, 80)
@@ -91,13 +107,13 @@ sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene("New Scene")
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(starting_area, 0, Vector2(1, 1)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(starting_area, 0, Vector2(1.5,1.5)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
 player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
-player.add_component(SpriteRenderer2D("player", material_player, 10))
+player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
 player_controller = PlayerController("Player movement", 0.3, 0.3, player_box_collider)
@@ -115,8 +131,8 @@ text = GameObject("Text", Transform2D(Vector2(0, 0),0, Vector2(1, 1)), GameObjec
 
 image = pygame.image.load("menu_button.png")
 texture_material = TextureMaterial2D(image, None, Vector2(0, 0), None)
-text.add_component(Renderer2D("Renderer-2", texture_material, 1))
-text.add_component(Renderer2D("Renderer-1", text_material, 2))
+text.add_component(Renderer2D("Renderer-2", texture_material, RendererLayers.UI))
+text.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
 
 #text.add_component(BoxCollider2D("Box-2"))
 
@@ -130,7 +146,7 @@ material = TextureMaterial2D(image, None, Vector2(0, 0), 60, None)
 
 material2 = TextureMaterial2D(image, (255,255,0), Vector2(0, 0), None)
 
-enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, 3))
+enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, RendererLayers.Enemy))
 
 
 sceneManager.add("Game", scene)
@@ -155,15 +171,15 @@ frame_rects3 = [Rect(6, 114, 84, 84)]
 
 animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2), Take(ActiveTake.COOK, frame_rects3)]
 
-animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.COOK, 5)
-renderer = SpriteRenderer2D("renderer", material, 4)
+animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.COOK, RendererLayers.Player)
+renderer = SpriteRenderer2D("renderer", material, RendererLayers.Background)
 player.add_component(renderer)
 
 playerController = PlayerController("Player movement", 0.3, 0.3, EventDispatcher())
 player.add_component(playerController)
 #player.add_component(EnemyCollider("Collider"))
 
-animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, 5)
+animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, RendererLayers.Enemy)
 enemy.add_component(animator1)
 
 player.add_component(animator)
@@ -198,6 +214,8 @@ renderManager.is_debug_mode = True
 for manager in managers:
     if isinstance(manager, IStartable):
         manager.start()
+
+
 
 
 
@@ -302,7 +320,6 @@ for object in object_data:
         if id == 5:
             tree_object = GameObjectConstants.TALL_TREE.clone()
             tree_object.transform.position = Vector2(x*70,y*70) #starting area forces every tree to one point
-            print(tree_object.transform.position)
 
             scene.add(tree_object)
 

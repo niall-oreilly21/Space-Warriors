@@ -9,6 +9,7 @@ from Engine.Graphics.Sprites.Take import Take
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Transform2D import Transform2D
+from Engine.Other.Enums.RendererLayers import RendererLayers
 
 tp_image = pygame.image.load("Assets\SpriteSheets\Tilesets/portal_site.png")
 image = pygame.image.load("Assets\SpriteSheets\Tilesets/plain_tileset.png")
@@ -18,21 +19,8 @@ bushes_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Bushes_source.png
 
 
 class GameObjectConstants:
-    layer = 15
+    layer = RendererLayers.WorldObjects
 
-    def __init__(self, name, transform, object_type, object_category):
-        self.name = name
-        self.transform = transform
-        self.object_type = object_type
-        self.object_category = object_category
-        self.components = []
-
-    def clone(self):
-        # Create a new instance of the GameObject and copy its properties
-        cloned_object = GameObject(self.name, self.transform, self.object_type, self.object_category)
-        for component in self.components:
-            cloned_object.add_component(component)
-        return cloned_object
 
     TELEPORTER = GameObject("Teleporter", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Dynamic,
                             GameObjectCategory.Tile)
