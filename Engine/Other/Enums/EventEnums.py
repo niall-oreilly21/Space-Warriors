@@ -16,3 +16,5 @@ class EventActionType:
     SetSoundVolume = 7
     SetSoundMasterVolume = 8
     ExitGame = 9
+    DebugModeOn = 10
+    DebugModeOff = 11

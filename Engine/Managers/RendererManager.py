@@ -4,14 +4,16 @@ from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
-from Engine.Other.Enums.EventEnums import EventCategoryType
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.Other.Interfaces.IDrawable import IDrawable
 from Engine.Other.Transform2D import Transform2D
 
 
-class RendererManager(Manager):
-    def __init__(self, surface, scene_manager, camera_manager: CameraManager, event_dispatcher):
+class RendererManager(Manager, IDrawable):
+    def __init__(self, surface, scene_manager, camera_manager, event_dispatcher):
         super().__init__(event_dispatcher)
         self.__surface = surface
         self.__scene_manager = scene_manager
@@ -31,9 +33,13 @@ class RendererManager(Manager):
         self._event_dispatcher.add_listener(EventCategoryType.RendererManager, self._handle_events)
 
     def _handle_events(self, event_data):
-        pass
+        if event_data.event_action_type == EventActionType.DebugModeOn:
+            self.__is_debug_mode = True
 
-    def draw(self, game_time):
+        elif event_data.event_action_type == EventActionType.DebugModeOff:
+            self.__is_debug_mode = False
+
+    def draw(self):
         renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
 
         # Sort the renderers based on their layer depth

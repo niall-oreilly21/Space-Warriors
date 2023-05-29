@@ -14,7 +14,6 @@ class GameObjectCategory(Enum):
     Alien = 4
     UI = 5
 
-
 class GameObjectDirection(Enum):
     Up = 0
     Down = 1
