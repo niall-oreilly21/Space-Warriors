@@ -30,6 +30,49 @@ from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
 
 
+def initialise_menu(background_material, title_text, menu_button_text_top, menu_button_text_bottom):
+    camera_manager.set_active_camera("MenuCamera")
+
+    menu_scene = Scene("MenuScene")
+    menu_scene.add(camera_main_menu_game_object)
+    scene_manager.add("MenuScene", menu_scene)
+    scene_manager.set_active_scene("MenuScene")
+
+    background = GameObject("MenuBackground", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)))
+    background.add_component(Renderer2D("MenuRenderer", background_material))
+
+    title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                       GameObjectCategory.Menu)
+    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE)
+    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, title_text,
+                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 120), (255, 255, 255))
+    title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
+
+    start_button = GameObject("StartButton",
+                              Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 220), 0, Vector2(1, 1)),
+                              GameObjectType.Static, GameObjectCategory.Menu)
+    start_button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None,
+                                                      Vector2(0, 0), None)
+    text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE)
+    start_button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, menu_button_text_top,
+                                                Vector2(150, 27), (0, 0, 0))
+    start_button.add_component(Renderer2D("StartButtonRenderer", start_button_texture_material, 1))
+    start_button.add_component(Renderer2D("StartButtonTextRenderer", start_button_text_material, 2))
+
+    end_button = start_button.clone()
+    end_button.transform.position.y = 320
+    renderers = end_button.get_components(Renderer2D)
+
+    for renderer in renderers:
+        if isinstance(renderer.material, TextMaterial2D):
+            renderer.material.text = menu_button_text_bottom
+
+    menu_scene.add(background)
+    menu_scene.add(title)
+    menu_scene.add(start_button)
+    menu_scene.add(end_button)
+
+
 def update(game_time):
     scene.update(game_time)
 
@@ -50,17 +93,18 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((400, 400))
 
-cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
-                              GameObjectType.Dynamic, GameObjectCategory.Player)
-camera = Camera("MainCamera", 1000, 500)
-cameraGameObject.add_component(camera)
+camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+                                GameObjectType.Dynamic, GameObjectCategory.Player)
+camera = Camera("MainCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+
+camera_game_object.add_component(camera)
 managers = []
-sceneManager = SceneManager()
+scene_manager = SceneManager()
 
-cameraManager = CameraManager(screen, sceneManager)
-cameraManager.add(cameraGameObject)
+camera_manager = CameraManager(screen, scene_manager)
+camera_manager.add(camera_game_object)
 
-cameraManager.set_active_camera("MainCamera")
+camera_manager.set_active_camera("MainCamera")
 
 # Create a font object
 font_path = "Assets/Fonts/Starjedi.ttf"
@@ -149,10 +193,10 @@ enemy3.add_component(enemy_controller2)
 # scene.add(enemy5)
 # scene.add(enemy6)
 
-text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Dynamic,
+text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
                   GameObjectCategory.Player)
-image = pygame.image.load("menu_button.png")
-texture_material = TextureMaterial2D(image, None, Vector2(0, 0), None)
+image = pygame.image.load("Assets/UI/Menu/menu_button.png")
+texture_material = TextureMaterial2D(image, None, Vector2(0.1, 0.1), None)
 text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 text.add_component(BoxCollider2D("Box-2"))
@@ -160,9 +204,9 @@ text.add_component(BoxCollider2D("Box-2"))
 scene.add(player)
 scene.add(enemy)
 
-sceneManager.add("Game", scene)
-sceneManager.set_active_scene("Game")
-renderManager = RendererManager(screen, sceneManager, cameraManager)
+scene_manager.add("Game", scene)
+scene_manager.set_active_scene("Game")
+renderManager = RendererManager(screen, scene_manager, camera_manager)
 
 # renderManager.is_debug_mode = True
 
@@ -171,20 +215,27 @@ scene.add(enemy2)
 scene.add(enemy3)
 # scene.add(enemy4)
 scene.add(text)
-managers.append(cameraManager)
-managers.append(sceneManager)
+managers.append(camera_manager)
+managers.append(scene_manager)
 
 # scene2 = Scene("Test scene")
 # scene2.add(text)
 # sceneManager.add("Test", scene2)
 
 game_time = GameTime()
-cameraGameObject.add_component(ThirdPersonController("Third Person Controller", player))
+# camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 
-collider_system = CollisionManager(200, sceneManager, cameraManager)
+collider_system = CollisionManager(200, scene_manager, camera_manager)
 managers.append(collider_system)
 
-# sceneManager.set_active_scene("Main Menu")
+camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+camera_main_menu_game_object = GameObject("MenuCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+                                          GameObjectType.Static, GameObjectCategory.Menu)
+camera_main_menu_game_object.add_component(camera_main_menu)
+
+initialise_menu(Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit")
+# initialise_menu(Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu")
+
 for manager in managers:
     if isinstance(manager, IStartable):
         manager.start()

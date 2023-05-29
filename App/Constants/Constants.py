@@ -7,6 +7,11 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
 class Constants:
+    GAME_NAME = "Space Warriors"
+
+    VIEWPORT_WIDTH = 1000
+    VIEWPORT_HEIGHT = 500
+
     CHARACTER_MOVE_SPEED = 5
 
     class Player:
@@ -197,3 +202,19 @@ class Constants:
         __PET_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/pet_dog.png")
 
         MATERIAL_PET = TextureMaterial2D(__PET_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+    class Menu:
+        __MAIN_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/main_menu.png")
+        MATERIAL_MAIN_MENU = TextureMaterial2D(__MAIN_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
+        __PAUSE_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/pause_menu.png")
+        MATERIAL_PAUSE_MENU = TextureMaterial2D(__PAUSE_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
+        TITLE_FONT_SIZE = 35
+        TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
+
+        TEXT_FONT_SIZE = 40
+        TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
+
+        MENU_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/menu_button.png")
+        # FONT = pygame.font.Font(FONT_PATH, __TITLE_FONT_SIZE)
