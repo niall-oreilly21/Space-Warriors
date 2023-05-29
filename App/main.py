@@ -4,7 +4,7 @@ from pygame import Vector2, Rect
 
 from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
-from App.Components.EnemyController import EnemyController
+from App.Components.Controllers.EnemyController import EnemyController
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Character import Character
 from Engine.Graphics.Sprites.Take import Take
@@ -18,7 +18,7 @@ from Engine.Managers.CameraManager import CameraManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
-from App.Components.PlayerController import PlayerController
+from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
