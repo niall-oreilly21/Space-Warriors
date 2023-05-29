@@ -1,7 +1,7 @@
 import pygame
 
 class Sprite:
-    def __init__(self, texture, source_rect, color=(255, 255, 255), alpha=255, pivot=pygame.Vector2(0.5, 0.5)):
+    def __init__(self, texture, source_rect = None, color=(255, 255, 255), alpha=255, pivot=pygame.Vector2(0.5, 0.5)):
         self.__texture = texture
         self.__source_rect = source_rect
         self.__color = color
