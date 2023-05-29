@@ -13,7 +13,7 @@ class Collider2D(Component, ABC):
         super().__init__(name)
 
     @abstractmethod
-    def handle_response(self, parent_game_object):
+    def handle_response(self, colliding_game_object):
         pass
     def clone(self):
         pass

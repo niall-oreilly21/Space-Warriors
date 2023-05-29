@@ -23,13 +23,10 @@ class CameraManager(Manager):
         self.player_is_moving = False
 
     def _subscribe_to_events(self):
-        pass
-    #self._event_dispatcher.add_listener(EventCategoryType.FoodManager, self._handle_events)
+        self._event_dispatcher.add_listener(EventCategoryType.CameraManager, self._handle_events)
 
     def _handle_events(self, event_data):
-        print(event_data)
-        print(event_data.parameters[0])
-        event_data.handled = True
+        pass
 
 
     @property
