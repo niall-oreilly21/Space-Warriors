@@ -8,12 +8,15 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 class BoxCollider2D(Component):
     def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name)
+        self.__width = None
+        self.__height = None
         self.__anchor = anchor
         self.__color = (255, 0, 0)
         self.__rend = None
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
+
 
     @property
     def width(self):
@@ -43,14 +46,14 @@ class BoxCollider2D(Component):
         displacement = pygame.Vector2(0, 0)
 
         # Calculate the minimum translation distance to separate the colliders
-        if self.bounds.right > other_collider.bounds.left and self.bounds.left < other_collider.bounds.left:
+        if self.bounds.right > other_collider.bounds.left > self.bounds.left:
             displacement.x = other_collider.bounds.left - self.bounds.right
-        elif self.bounds.left < other_collider.bounds.right and self.bounds.right > other_collider.bounds.right:
+        elif self.bounds.left < other_collider.bounds.right < self.bounds.right:
             displacement.x = other_collider.bounds.right - self.bounds.left
 
-        if self.bounds.bottom > other_collider.bounds.top and self.bounds.top < other_collider.bounds.top:
+        if self.bounds.bottom > other_collider.bounds.top > self.bounds.top:
             displacement.y = other_collider.bounds.top - self.bounds.bottom
-        elif self.bounds.top < other_collider.bounds.bottom and self.bounds.bottom > other_collider.bounds.bottom:
+        elif self.bounds.top < other_collider.bounds.bottom < self.bounds.bottom:
             displacement.y = other_collider.bounds.bottom - self.bounds.top
 
         return displacement
@@ -60,7 +63,6 @@ class BoxCollider2D(Component):
     def bounds(self):
 
         material_source_rect = self.__rend.material.source_rect
-
         bounds = Rect(self._transform.position.x, self._transform.position.y, material_source_rect.width * self.transform.scale.x,
                       material_source_rect.height * self.transform.scale.y)
 
@@ -99,7 +101,7 @@ class BoxCollider2D(Component):
                                                       -self._transform.rotation)
             rotated_bounds = rotated_surface.get_rect(center=bounds.center)
             self.__width = rotated_bounds.width
-            #print(self.__width)
+
             self.__height = rotated_bounds.height
 
             pygame.draw.rect(screen, self.__color, bounds, 4)
