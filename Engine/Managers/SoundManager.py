@@ -16,11 +16,11 @@ class SoundManager(Manager):
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.PlaySound:
 
-            sound_name = event_data.parameters[0]
+            sound_name = event_data.parameters[0].lower()
             self.play_sound(sound_name)
 
         elif event_data.event_action_type == EventActionType.StopSound:
-            sound_name = event_data.parameters[0]
+            sound_name = event_data.parameters[0].lower()
             self.stop_sound(sound_name)
 
         elif event_data.event_action_type == EventActionType.StopAllSounds:
@@ -36,6 +36,7 @@ class SoundManager(Manager):
             self.set_master_volume(sound_volume)
 
     def load_sound(self, sound_name, file_path):
+        sound_name = sound_name.lower()
         sound = pygame.mixer.Sound(file_path)
         self.__sounds[sound_name] = sound
 
