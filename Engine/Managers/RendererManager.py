@@ -67,7 +67,7 @@ class RendererManager(Manager):
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
-        camera_rect = Rect(0, 0, viewport.x, viewport.y)
+        camera_rect = Rect(0, 0, viewport.x + 100, viewport.y + 100)
         camera_rect.center = (viewport.x // 2, viewport.y // 2)
 
 

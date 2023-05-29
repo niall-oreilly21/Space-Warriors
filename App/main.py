@@ -6,8 +6,9 @@ import pygame
 from pygame import Vector2, Rect
 
 from App.Components.Colliders.PlayerAttackCollider import PlayerAttackCollider
-import App.Constants.GameObjects
-from App.Constants import GameObjects
+from App.Constants.Constants import Constants
+from App.Constants.GameObjectConstants import GameObjectConstants
+
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -34,7 +35,7 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-from App.Constants.Constants import Constants
+
 
 def print_array_size(arr):
     num_rows = len(arr)
@@ -57,21 +58,22 @@ screen_height = 1
 screen_info = pygame.display.Info()
 screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 
+starting_area = Vector2(2050, 5300)
 
 # Set the environment variable to center the window
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((500, 500))
 
-cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Dynamic, GameObjectCategory.Player)
-camera = Camera("MainCamera", 1000, 500)
+cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(2050, 5300), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Dynamic, GameObjectCategory.Player)
+camera = Camera("MainCamera", 1500, 750)
 cameraGameObject.add_component(camera)
 managers = []
 
 
 sceneManager = SceneManager(EventDispatcher())
-
-cameraManager = CameraManager(screen, sceneManager, None)
+event_dispatcher = EventDispatcher()
+cameraManager = CameraManager(screen, sceneManager, event_dispatcher)
 cameraManager.add(cameraGameObject)
 
 cameraManager.set_active_camera("MainCamera")
@@ -85,7 +87,7 @@ font_name = None
 text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150,40), (255, 0, 0))
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
-starting_area = Vector2(2050, 5300)
+
 
 scene = Scene("New Scene")
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
@@ -133,7 +135,7 @@ enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, 3))
 
 sceneManager.add("Game", scene)
 sceneManager.set_active_scene("Game")
-renderManager = RendererManager(screen, sceneManager, cameraManager)
+renderManager = RendererManager(screen, sceneManager, cameraManager, event_dispatcher)
 
 frame_rects = []
 
@@ -291,32 +293,32 @@ for ground in tile_data:
             map_data[y][x] = TileAttributes(s_id, False, c_value)
 
 # Object generation
-# for object in object_data:
-#     if object["x"] < 100 and object["y"] < 100:
-#         x = object["x"]
-#         y = object["y"]
-#         c_value = object["c"]
-#         id = object["t"]["id"]
-#         if id == 5:
-#             tree_object = GameObjects.GameObjects.TALL_TREE.clone()
-#             tree_object.transform.position = Vector2(x*70,y*70) #starting area forces every tree to one point
-#             print(tree_object.transform.position)
-#
-#             scene.add(tree_object)
+for object in object_data:
+    if object["x"] < 100 and object["y"] < 100:
+        x = object["x"]
+        y = object["y"]
+        c_value = object["c"]
+        id = object["t"]["id"]
+        if id == 5:
+            tree_object = GameObjectConstants.TALL_TREE.clone()
+            tree_object.transform.position = Vector2(x*70,y*70) #starting area forces every tree to one point
+            print(tree_object.transform.position)
 
-ruin = GameObjects.GameObjects.RUIN_ONE.clone()
+            scene.add(tree_object)
+
+ruin = GameObjectConstants.RUIN_ONE.clone()
 ruin.transform.position = Vector2(2000,5000)
 scene.add(ruin)
 
-ruin = GameObjects.GameObjects.RUIN_TWO.clone()
+ruin = GameObjectConstants.RUIN_TWO.clone()
 ruin.transform.position = Vector2(1800,5000)
 scene.add(ruin)
 
-boulder = GameObjects.GameObjects.BOULDER_TWO.clone()
+boulder = GameObjectConstants.BOULDER_TWO.clone()
 boulder.transform.position = Vector2(2200,5000)
 scene.add(boulder)
 
-statue = GameObjects.GameObjects.STATUE.clone()
+statue = GameObjectConstants.STATUE.clone()
 statue.transform.position = Vector2(2000,5400)
 scene.add(statue)
 
@@ -372,7 +374,7 @@ while running:
             running = False
 
     game_time.tick()
-
+    event_dispatcher.process_events()
     for manager in managers:
         manager.update(game_time)
 

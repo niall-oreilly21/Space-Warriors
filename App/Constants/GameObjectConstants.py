@@ -15,17 +15,17 @@ image = pygame.image.load("Assets\SpriteSheets\Tilesets/plain_tileset.png")
 ruins_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Assets_source.png")
 rocks_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Rocks_source.png")
 bushes_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Bushes_source.png")
-class GameObjects:
 
+
+class GameObjectConstants:
     layer = 15
+
     def __init__(self, name, transform, object_type, object_category):
         self.name = name
         self.transform = transform
         self.object_type = object_type
         self.object_category = object_category
         self.components = []
-
-
 
     def clone(self):
         # Create a new instance of the GameObject and copy its properties
@@ -34,13 +34,11 @@ class GameObjects:
             cloned_object.add_component(component)
         return cloned_object
 
-
-
     TELEPORTER = GameObject("Teleporter", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Dynamic,
                             GameObjectCategory.Tile)
     texture_material = TextureMaterial2D(tp_image, None, Vector2(0, 0), None)
     TELEPORTER.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #TELEPORTER.add_component(BoxCollider2D("Box-3"))
+    # TELEPORTER.add_component(BoxCollider2D("Box-3"))
 
     TALL_TREE = GameObject("Tree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                            GameObjectCategory.Environment)
@@ -67,49 +65,49 @@ class GameObjects:
     object_frame = ruins_image.subsurface(pygame.Rect(148, 145, 40, 42))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     BOULDER_TWO.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #BOULDER_TWO.add_component(BoxCollider2D("Box-3"))
+    # BOULDER_TWO.add_component(BoxCollider2D("Box-3"))
 
     RUIN_ONE = GameObject("RuinOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                           GameObjectCategory.Player)
     object_frame = ruins_image.subsurface(pygame.Rect(307, 293, 97, 103))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     RUIN_ONE.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #RUIN_ONE.add_component(BoxCollider2D("Box-3"))
+    # RUIN_ONE.add_component(BoxCollider2D("Box-3"))
 
     RUIN_TWO = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                           GameObjectCategory.Player)
     object_frame = ruins_image.subsurface(pygame.Rect(9, 193, 67, 92))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     RUIN_TWO.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #RUIN_TWO.add_component(BoxCollider2D("Box-3"))
+    # RUIN_TWO.add_component(BoxCollider2D("Box-3"))
 
     STATUE = GameObject("Statue", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                         GameObjectCategory.Player)
     object_frame = ruins_image.subsurface(pygame.Rect(341, 1, 42, 60))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     STATUE.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #STATUE.add_component(BoxCollider2D("Box-3"))
+    # STATUE.add_component(BoxCollider2D("Box-3"))
 
     ROCK_ONE = GameObject("RockOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                           GameObjectCategory.Player)
     object_frame = rocks_image.subsurface(pygame.Rect(193, 6, 62, 52))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     ROCK_ONE.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #ROCK_ONE.add_component(BoxCollider2D("Box-3"))
+    # ROCK_ONE.add_component(BoxCollider2D("Box-3"))
 
     ROCK_TWO = GameObject("RockTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                           GameObjectCategory.Player)
     object_frame = rocks_image.subsurface(pygame.Rect(67, 2, 58, 57))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     ROCK_TWO.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #ROCK_TWO.add_component(BoxCollider2D("Box-3"))
+    # ROCK_TWO.add_component(BoxCollider2D("Box-3"))
 
     ROCK_THREE = GameObject("RockThree", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                             GameObjectCategory.Player)
     object_frame = rocks_image.subsurface(pygame.Rect(192, 67, 64, 58))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     ROCK_THREE.add_component(Renderer2D("Renderer-2", texture_material, layer))
-    #ROCK_THREE.add_component(BoxCollider2D("Box-3"))
+    # ROCK_THREE.add_component(BoxCollider2D("Box-3"))
 
     BUSH_ONE = GameObject("BushOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Dynamic,
                           GameObjectCategory.Player)
