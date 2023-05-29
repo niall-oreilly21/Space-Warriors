@@ -3,8 +3,8 @@ import math
 import pygame
 from pygame import Rect
 
-from App.Components.EnemyController import EnemyController
-from App.Components.PlayerController import PlayerController
+from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.PlayerController import PlayerController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
 from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea

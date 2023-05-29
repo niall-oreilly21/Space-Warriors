@@ -1,6 +1,6 @@
 import pygame
 
-from App.Constants import Constants
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.Managers.EventSystem.EventData import EventData

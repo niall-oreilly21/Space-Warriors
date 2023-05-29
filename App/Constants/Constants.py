@@ -3,14 +3,17 @@ from pygame import Vector2
 
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
+from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
 class Constants:
     GAME_NAME = "Space Warriors"
 
-    VIEWPORT_WIDTH = 1000
-    VIEWPORT_HEIGHT = 500
+    EVENT_DISPATCHER = EventDispatcher()
+
+    VIEWPORT_WIDTH = 1500
+    VIEWPORT_HEIGHT = 750
 
     CHARACTER_MOVE_SPEED = 5
 
@@ -119,7 +122,7 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class EnemyRat:
-        MOVE_SPEED = 0.75
+        MOVE_SPEED = 3
 
         __MOVE_X_Y = 715
         __MOVE_X_HEIGHT = 51
@@ -210,11 +213,14 @@ class Constants:
         __PAUSE_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/pause_menu.png")
         MATERIAL_PAUSE_MENU = TextureMaterial2D(__PAUSE_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
-        TITLE_FONT_SIZE = 35
+        TITLE_FONT_SIZE = 45
         TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
 
         TEXT_FONT_SIZE = 40
         TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
         MENU_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/menu_button.png")
-        # FONT = pygame.font.Font(FONT_PATH, __TITLE_FONT_SIZE)
+
+        EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
+        MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
+        SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
