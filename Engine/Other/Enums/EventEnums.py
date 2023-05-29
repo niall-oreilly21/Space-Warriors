@@ -15,3 +15,4 @@ class EventActionType:
     StopAllSounds = 6
     SetSoundVolume = 7
     SetSoundMasterVolume = 8
+    ExitGame = 9
