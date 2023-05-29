@@ -12,6 +12,8 @@ class GameObjectCategory(Enum):
     Wolf = 2
     Rat = 3
     Alien = 4
+    Tile = 5
+    Environment = 6
 
 
 class GameObjectDirection(Enum):

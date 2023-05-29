@@ -22,4 +22,6 @@ class ActiveTake(Enum):
     PLAYER_IDLE_DOWN = 17,
     PLAYER_ATTACK_X = 18,
     PLAYER_ATTACK_DOWN = 19,
-    PLAYER_ATTACK_UP = 20
+    PLAYER_ATTACK_UP = 20,
+    COOK = 21,
+    TELEPORT = 22
