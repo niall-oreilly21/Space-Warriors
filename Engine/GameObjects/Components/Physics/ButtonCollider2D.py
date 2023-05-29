@@ -12,26 +12,25 @@ class ButtonCollider2D(BoxCollider2D):
         super().__init__(name, anchor)
         self.event_handler = event_handler
         self.camera_manager = camera_manager
+        self._mouse_position = None
 
-    def button_pressed(self):
-
-        Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SceneManager, EventActionType.ExitGame))
-
-        if self._parent.name.lower() == "main menu button":
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.MainMenuScene))
+    def start(self):
+        super().start()
 
     def update(self, game_time):
-        mouse_pos = pygame.mouse.get_pos()
+        self._mouse_position = pygame.mouse.get_pos()
         mouse_buttons = pygame.mouse.get_pressed()
 
-        if self.camera_manager.active_camera.parent.get_component(ThirdPersonController):
-            mouse_pos =  mouse_pos + self.camera_manager.active_camera.transform.position
-
-        if self.bounds.collidepoint(mouse_pos) and mouse_buttons[0]:
+        if self.bounds.collidepoint(self._mouse_position) and mouse_buttons[0]:
             self.button_pressed()
 
 
     def draw(self, screen, camera_manager):
         super().draw(screen, camera_manager)
-        # Additional drawing logic for buttons can be added here, if needed
+
+    def button_pressed(self):
+        Constants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.SceneManager, EventActionType.MainMenuScene))
+
+        if self._parent.name.lower() == "main menu button":
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.MainMenuScene))

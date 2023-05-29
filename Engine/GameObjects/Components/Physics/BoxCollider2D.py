@@ -8,12 +8,15 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 class BoxCollider2D(Component):
     def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name)
+        self.__width = None
+        self.__height = None
         self.__anchor = anchor
         self.__color = (255, 0, 0)
         self.__rend = None
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
+
 
     @property
     def width(self):
@@ -59,7 +62,6 @@ class BoxCollider2D(Component):
     def bounds(self):
 
         material_source_rect = self.__rend.material.source_rect
-
         bounds = Rect(self._transform.position.x, self._transform.position.y, material_source_rect.width * self.transform.scale.x,
                       material_source_rect.height * self.transform.scale.y)
 
@@ -97,7 +99,7 @@ class BoxCollider2D(Component):
                                                       -self._transform.rotation)
             rotated_bounds = rotated_surface.get_rect(center=bounds.center)
             self.__width = rotated_bounds.width
-            #print(self.__width)
+
             self.__height = rotated_bounds.height
 
             pygame.draw.rect(screen, self.__color, bounds, 4)
