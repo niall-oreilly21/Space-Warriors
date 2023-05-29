@@ -10,18 +10,18 @@ from Engine.Other.Transform2D import Transform2D
 
 class GameObject(ICloneable):
     def __init__(self, name, transform = None, game_object_type=GameObjectType.Static, game_object_category=GameObjectCategory.Entity):
-        self._name = name
-        self._transform = transform
+        self.__name = name
+        self.__transform = transform
         self._components = []
         self.__game_object_type = game_object_type
         self.__game_object_category = game_object_category
 
-        if self._transform is None:
-            self._transform = Transform2D(Vector2(1,1), 0, Vector2(2,2))
+        if self.__transform is None:
+            self.__transform = Transform2D(Vector2(0, 0), 0, Vector2(1, 1))
 
     @property
     def name(self):
-        return self._name
+        return self.__name
 
     @name.setter
     def name(self, name):
@@ -29,7 +29,7 @@ class GameObject(ICloneable):
 
     @property
     def transform(self):
-        return self._transform
+        return self.__transform
 
     @property
     def game_object_type(self):
@@ -47,7 +47,7 @@ class GameObject(ICloneable):
         return components
 
     def add_component(self, component):
-        component.transform = self._transform
+        component.transform = self.__transform
         component.parent = self
         self._components.append(component)
 
@@ -71,18 +71,10 @@ class GameObject(ICloneable):
             component.start()
 
     def clone(self):
-        clone_game_object = GameObject(self._name, self._transform.clone(), self.__game_object_type, self.__game_object_category)
+        clone_game_object = GameObject(self.__name, self.__transform.clone(), self.__game_object_type, self.__game_object_category)
 
         for component in self._components:
             cloned_component = component.clone()
             clone_game_object.add_component(cloned_component)
 
         return clone_game_object
-
-
-
-
-
-
-
-

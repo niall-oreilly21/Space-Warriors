@@ -1,4 +1,3 @@
-from pygame import Vector2
 import math
 
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
@@ -16,15 +15,14 @@ class EnemyController(Component):
         self.__rend = None
         self.__target_object = target_object
         self.__speed = speed
+        self.__rigidbody = None
 
     def start(self):
         self.__rend = self._parent.get_component(SpriteRenderer2D)
         self.__animator = self._parent.get_component(SpriteAnimator2D)
+        self.__rigidbody = self._parent.get_component(Rigidbody2D)
 
     def update(self, game_time):
-        target_position = self.__target_object.transform.position
-        enemy_position = self.transform.position
-
         target_position = self.__target_object.transform.position
         enemy_position = self.transform.position
 
@@ -44,7 +42,7 @@ class EnemyController(Component):
         else:
             movement_direction = GameObjectDirection.Right
 
-        self.transform.position += direction * game_time.elapsed_time * 0.001 * self.__speed
+        self.__rigidbody.velocity = direction * self.__speed * 0.0001
 
         if movement_direction == GameObjectDirection.Right:
             self.__rend.flip_x = False

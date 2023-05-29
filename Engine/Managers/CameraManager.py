@@ -4,13 +4,16 @@ import pygame
 
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObject
+from Engine.Managers.Manager import Manager
+from Engine.Other.Enums.EventEnums import EventCategoryType
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 from Engine.Other.Enums.GameObjectEnums import GameObjectType
 
 
-class CameraManager(IUpdateable, IStartable):
-    def __init__(self, screen, sceneManager):
+class CameraManager(Manager):
+    def __init__(self, screen, sceneManager, event_dispatcher):
+        super().__init__(event_dispatcher)
         self.__screen = screen
         self.__active_camera = None
         self.__active_game_object = None
@@ -18,6 +21,13 @@ class CameraManager(IUpdateable, IStartable):
         self.__needs_redraw = True
         self.__sceneManager = sceneManager
         self.player_is_moving = False
+
+    def _subscribe_to_events(self):
+        self._event_dispatcher.add_listener(EventCategoryType.CameraManager, self._handle_events)
+
+    def _handle_events(self, event_data):
+        pass
+
 
     @property
     def active_camera_transform(self):

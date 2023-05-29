@@ -4,11 +4,14 @@ from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.Manager import Manager
+from Engine.Other.Enums.EventEnums import EventCategoryType
 from Engine.Other.Transform2D import Transform2D
 
 
-class RendererManager:
-    def __init__(self, surface, scene_manager, camera_manager: CameraManager):
+class RendererManager(Manager):
+    def __init__(self, surface, scene_manager, camera_manager: CameraManager, event_dispatcher):
+        super().__init__(event_dispatcher)
         self.__surface = surface
         self.__scene_manager = scene_manager
         self.__camera_manager = camera_manager
@@ -22,6 +25,12 @@ class RendererManager:
     @is_debug_mode.setter
     def is_debug_mode(self, is_debug_mode):
         self.__is_debug_mode = is_debug_mode
+
+    def _subscribe_to_events(self):
+        self._event_dispatcher.add_listener(EventCategoryType.RendererManager, self._handle_events)
+
+    def _handle_events(self, event_data):
+        pass
 
     def draw(self, game_time):
         renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
