@@ -1,16 +1,12 @@
 import time
 
-from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
-from App.Components.PlayerController import PlayerController
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
-from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
-from Engine.Other.Interfaces.IDamageable import IDamageable
 
 
 class PlayerAttackCollider(Collider2D):
