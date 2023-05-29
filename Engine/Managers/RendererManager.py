@@ -6,6 +6,7 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType
+from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Transform2D import Transform2D
 
 
@@ -44,13 +45,12 @@ class RendererManager(Manager):
 
         for renderer in renderers:
             object_position = renderer.transform.position
-            object_draw_position = object_position - camera_position
 
-            if isinstance(renderer.material, TextMaterial2D):
-                renderer.draw(self.__surface,
-                              Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
+            if renderer.parent.game_object_category == GameObjectCategory.UI:
+                renderer.draw(self.__surface,Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
             else:
+                object_draw_position = object_position - camera_position
                 # Calculate the object's bounding rect in screen coordinates
                 object_rect = renderer.get_bounding_rect(
                     Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
@@ -70,9 +70,9 @@ class RendererManager(Manager):
         camera_rect = Rect(0, 0, viewport.x, viewport.y)
         camera_rect.center = (viewport.x // 2, viewport.y // 2)
 
+        # Check if the object's rect intersects with or is contained within the camera's viewport
+        return rect.colliderect(camera_rect) or camera_rect.contains(rect)
 
-        # Check if the object's rect intersects with the camera's viewport
-        return rect.colliderect(camera_rect)
 
 
 

@@ -10,7 +10,7 @@ from Engine.Other.Transform2D import Transform2D
 
 
 class Character(GameObject, IDamageable, ICloneable):
-    def __init__(self, name, health, attack_damage, damage_cooldown, lives, transform=None, game_object_type=GameObjectType.Static, game_object_category=GameObjectCategory.Entity):
+    def __init__(self, name, health, attack_damage, damage_cooldown, lives, transform=None, game_object_type=GameObjectType.Dynamic, game_object_category=GameObjectCategory.Entity):
         super().__init__(name, transform, game_object_type, game_object_category)
         self.__health = health
         self.__attack_damage = attack_damage
