@@ -1,5 +1,7 @@
 from queue import Queue
 
+from Engine.Other.Enums.EventEnums import EventCategoryType
+
 
 class EventDispatcher:
     def __init__(self):
@@ -25,7 +27,7 @@ class EventDispatcher:
             if event_data == self.previous_event:
                 continue  # Skip processing the same event multiple times
             self.previous_event = event_data
-            event_type = event_data.event_action_type
+            event_type = event_data.event_category_type
             if event_type in self.listeners:
                 callbacks = self.listeners[event_type].copy()  # Make a copy to iterate over
                 for callback, registered_event_data in callbacks:
