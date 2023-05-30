@@ -9,7 +9,7 @@ from Engine.Other.Interfaces.ICloneable import ICloneable
 from Engine.Other.Transform2D import Transform2D
 
 class GameObject(ICloneable):
-    def __init__(self, name, transform = None, game_object_type=GameObjectType.Static, game_object_category=GameObjectCategory.Entity):
+    def __init__(self, name, transform=None, game_object_type=GameObjectType.Static, game_object_category=GameObjectCategory.Entity):
         self.__name = name
         self.__transform = transform
         self._components = []

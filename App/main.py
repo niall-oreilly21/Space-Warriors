@@ -1,35 +1,29 @@
-import json
 import os
-import random
-
 import pygame
 from pygame import Vector2, Rect
 
-from App.Components.Colliders.PlayerAttackCollider import PlayerAttackCollider
+from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
+from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
+from App.Components.Controllers.EnemyController import EnemyController
+from App.Constants.Application import Application
 from App.Constants.Constants import Constants
-from App.Constants.GameObjectConstants import GameObjectConstants
-
 from Engine.GameObjects.Character import Character
+from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
+from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.Graphics.Sprites.Take import Take
+from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
-from Engine.GameObjects.Tiles.Tile import Tile
-from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
-from Engine.GameObjects.Tiles.Tileset import Tileset
-from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
-from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CameraManager import CameraManager
-from Engine.Managers.EventSystem.EventData import EventData
-from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
-from Engine.Managers.SoundManager import SoundManager
-from Engine.Other.Enums.RendererLayers import RendererLayers
+from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.Enums.EventEnums import EventActionType, EventCategoryType
+from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
-from App.Components.PlayerController import PlayerController
+from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
@@ -41,18 +35,119 @@ from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
 
 
-def print_array_size(arr):
-    num_rows = len(arr)
-    num_cols = len(arr[0]) if arr else 0
+def initialise_menu_scene(scene_name):
+    camera_manager.set_active_camera("MenuCamera")
 
-    print("Number of rows:", num_rows)
-    print("Number of columns:", num_cols)
+    menu_scene = Scene(scene_name)
+    menu_scene.add(camera_main_menu_game_object)
+    scene_manager.add(scene_name, menu_scene)
+
+    return menu_scene
+
+
+def initialise_menu_background(background_material):
+    background = GameObject("MenuBackground", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)))
+    background.add_component(Renderer2D("MenuRenderer", background_material))
+
+    return background
+
+
+def initialise_level_menu(menu_scene):
+    background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
+
+    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, 30)
+    text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, 40)
+
+    title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                       GameObjectCategory.Menu)
+    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, "Land on...",
+                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
+    title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
+
+    earth = GameObject(Constants.Button.EARTH_BUTTON, Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
+                       0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
+    earth_texture_material = TextureMaterial2D(Constants.Menu.EARTH_IMAGE, None,
+                                               Vector2(0, 0), None)
+    earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
+    earth.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
+
+    earth_text = GameObject("EarthText", Transform2D(Vector2(earth.transform.position.x + 130,
+                                                             earth.transform.position.y + 330), 0, Vector2(1, 1)),
+                            GameObjectType.Static, GameObjectCategory.Menu)
+    earth_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, "Earth",
+                                         Vector2(0, 0), (255, 255, 255))
+    earth_text.add_component(Renderer2D("EarthTextRenderer", earth_text_material, 2))
+
+    mars = earth.clone()
+    mars.name = Constants.Button.MARS_BUTTON
+    mars.transform.position.x = earth.transform.position.x + 883 * 0.3 + 150
+    mars.get_component(Renderer2D).material.texture = Constants.Menu.MARS_IMAGE
+
+    mars_text = earth_text.clone()
+    mars_text.transform.position.x = mars.transform.position.x + 135
+    mars_text.get_component(Renderer2D).material.text = "Mars"
+
+    saturn = earth.clone()
+    saturn.name = Constants.Button.SATURN_BUTTON
+    saturn.transform.position.x = mars.transform.position.x + 883 * 0.3 + 100
+    saturn_texture_material = TextureMaterial2D(Constants.Menu.SATURN_IMAGE, None,
+                                                Vector2(0, 0), None)
+    saturn.get_component(Renderer2D).material = saturn_texture_material
+
+    saturn_text = earth_text.clone()
+    saturn_text.transform.position.x = saturn.transform.position.x + 240
+    saturn_text.get_component(Renderer2D).material.text = "Saturn"
+
+    menu_scene.add(background)
+    menu_scene.add(title)
+    menu_scene.add(earth)
+    menu_scene.add(earth_text)
+    menu_scene.add(mars)
+    menu_scene.add(mars_text)
+    menu_scene.add(saturn)
+    menu_scene.add(saturn_text)
+
+
+def initialise_menu(menu_scene, background_material, title_text, menu_button_text_top, menu_button_text_bottom,
+                    top_button_name, bottom_button_name):
+    background = initialise_menu_background(background_material)
+
+    title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                       GameObjectCategory.Menu)
+    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE)
+    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, title_text,
+                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 200), (255, 255, 255))
+    title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
+
+    start_button = GameObject(top_button_name,
+                              Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 330), 0, Vector2(1, 1)),
+                              GameObjectType.Static, GameObjectCategory.Menu)
+    start_button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None,
+                                                      Vector2(0, 0), None)
+    text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE)
+    start_button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, menu_button_text_top,
+                                                Vector2(150, 27), (0, 0, 0))
+    start_button.add_component(Renderer2D("StartButtonRenderer", start_button_texture_material, 1))
+    start_button.add_component(Renderer2D("StartButtonTextRenderer", start_button_text_material, 2))
+    start_button.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
+
+    end_button = start_button.clone()
+    end_button.name = bottom_button_name
+    end_button.transform.position.y = 440
+    renderers = end_button.get_components(Renderer2D)
+
+    for renderer in renderers:
+        if isinstance(renderer.material, TextMaterial2D):
+            renderer.material.text = menu_button_text_bottom
+
+    menu_scene.add(background)
+    menu_scene.add(title)
+    menu_scene.add(start_button)
+    menu_scene.add(end_button)
+
 
 def update(game_time):
     scene.update(game_time)
-
-event_dispatcher = EventDispatcher()
-soundManager = SoundManager(event_dispatcher)
 
 
 # Initialize Pygame
@@ -66,54 +161,55 @@ screen_height = 1
 screen_info = pygame.display.Info()
 screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 
-starting_area = Vector2(2600,4900)
-
 # Set the environment variable to center the window
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((400, 400))
 
-cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(2600,4900), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Dynamic, GameObjectCategory.Player)
-camera = Camera("MainCamera", 1500, 750)
-cameraGameObject.add_component(camera)
+camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+                                GameObjectType.Dynamic, GameObjectCategory.Player)
+camera = Camera("MainCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+
+camera_game_object.add_component(camera)
 managers = []
+scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
+
+camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
+
+camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+camera_main_menu_game_object = GameObject(Constants.Camera.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+                                          GameObjectType.Static, GameObjectCategory.Menu)
+camera_main_menu_game_object.add_component(camera_main_menu)
+
+third_person_camera_game_object = camera_main_menu_game_object.clone()
+third_person_camera_game_object.name = Constants.Camera.GAME_CAMERA
 
 
-sceneManager = SceneManager(EventDispatcher())
 
-cameraManager = CameraManager(screen, sceneManager, event_dispatcher)
-cameraManager.add(cameraGameObject)
+camera_manager.add(camera_main_menu_game_object)
+camera_manager.add(third_person_camera_game_object)
 
-cameraManager.set_active_camera("MainCamera")
-
-# Sounds
-
-
-
-soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
-soundManager.set_sound_volume("backgroundmusic", .05)
-event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
+camera_manager.set_active_camera(camera_main_menu_game_object.name)
 
 # Create a font object
-font = pygame.font.Font(None, 80)
+font_path = "Assets/Fonts/Starjedi.ttf"
+font = pygame.font.Font(font_path, 80)
+font_name = font_path
 
-font_name = None
-
-
-text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150,40), (255, 0, 0))
+text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150, 40), (255, 0, 0))
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
-
-
-scene = Scene("New Scene")
+scene = Scene(Constants.Scene.GAME)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(starting_area, 0, Vector2(1.5,1.5)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(300, 300), 0, Vector2(1, 1)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
+
+third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
 player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
-player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
+player.add_component(SpriteRenderer2D("player", material_player, 5))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
 player_controller = PlayerController("Player movement", 0.3, 0.3, player_box_collider)
@@ -121,268 +217,162 @@ player.add_component(player_controller)
 player_collider = PlayerAttackCollider("Players attack collider")
 player.add_component(player_collider)
 
-
-
-enemy = Character("Enemy", 200, Transform2D(Vector2(200, 500), 0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
+enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+                  GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
+enemy.add_component(Rigidbody2D("Rigid"))
+material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
+enemy.add_component(SpriteRenderer2D("enemy", material_enemy, 0))
+enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_INFO, material_enemy,
+                                     ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED)
+enemy.add_component(enemy_controller)
 
+enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
+                   GameObjectType.Dynamic,
+                   GameObjectCategory.Wolf)
+enemy2.add_component(BoxCollider2D("Box-3"))
+enemy2.add_component(Rigidbody2D("Rigid"))
+material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY1
+enemy2.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
+enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
+                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED)
+enemy2.add_component(enemy_controller2)
 
-text = GameObject("Text", Transform2D(Vector2(0, 0),0, Vector2(1, 1)), GameObjectType.Dynamic, GameObjectCategory.Player)
+enemy3 = Character("Enemy3", 50, 2, 1, 1, Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
+                   GameObjectType.Dynamic,
+                   GameObjectCategory.Wolf)
+enemy3.add_component(BoxCollider2D("Box-3"))
+# enemy.add_component(Rigidbody2D("Rigid"))
+material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
+enemy3.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
+enemy3.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
+                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED)
+enemy3.add_component(enemy_controller2)
+# enemy4 = enemy.clone()
 
-image = pygame.image.load("menu_button.png")
-texture_material = TextureMaterial2D(image, None, Vector2(0, 0), None)
-text.add_component(Renderer2D("Renderer-2", texture_material, RendererLayers.UI))
-text.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
+# enemy3 = GameObject("Enemy3", Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+#                     GameObjectCategory.Alien)
+# enemy3.add_component(BoxCollider2D("Box-4"))
+# # enemy.add_component(Rigidbody2D("Rigid"))
+# material_enemy = Constants.EnemyAlien.MATERIAL_ENEMY1
+# enemy3.add_component(SpriteRenderer2D("enemy3", material_enemy, 1))
+# enemy3.add_component(SpriteAnimator2D("enemy3", Constants.EnemyAlien.ENEMY_ANIMATOR_INFO, material_enemy,
+#                                       ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+# enemy_controller3 = EnemyController("Enemy movement 3", player, Constants.EnemyAlien.MOVE_SPEED)
+# enemy3.add_component(enemy_controller3)
+#
+# enemy4 = GameObject("Enemy4", Transform2D(Vector2(750, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+#                     GameObjectCategory.Alien)
+# enemy4.add_component(BoxCollider2D("Box-5"))
+# # enemy.add_component(Rigidbody2D("Rigid"))
+# material_enemy = Constants.EnemyAlien.MATERIAL_ENEMY3
+# enemy4.add_component(SpriteRenderer2D("enemy4", material_enemy, 1))
+# enemy4.add_component(SpriteAnimator2D("enemy4", Constants.EnemyAlien.ENEMY_ANIMATOR_INFO, material_enemy,
+#                                       ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+# enemy_controller4 = EnemyController("Enemy movement 4", player, Constants.EnemyAlien.MOVE_SPEED)
+# enemy4.add_component(enemy_controller4)
+# enemy5 = enemy4.clone()
+# enemy6 = enemy4.clone()
+# enemy6.transform.translate(20, 20)
+# scene.add(enemy5)
+# scene.add(enemy6)
 
-#text.add_component(BoxCollider2D("Box-2"))
+test_scene = Scene("Test")
+scene_manager.add("Test", test_scene)
+
+text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
+                  GameObjectCategory.Player)
+image = pygame.image.load("Assets/UI/Menu/menu_button.png")
+texture_material = TextureMaterial2D(image, None, Vector2(0.1, 0.1), None)
+text.add_component(Renderer2D("Renderer-2", texture_material, 1))
+text.add_component(Renderer2D("Renderer-1", text_material, 2))
+text.add_component(BoxCollider2D("Box-2"))
 
 scene.add(player)
 scene.add(enemy)
-#scene.add(text)
 
-# Load an image and create a TextureMaterial2D object with it
-image = pygame.image.load("image.png")
-material = TextureMaterial2D(image, None, Vector2(0, 0), 60, None)
+scene_manager.add(Constants.Scene.GAME, scene)
+scene_manager.set_active_scene(Constants.Scene.GAME)
+render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
 
-material2 = TextureMaterial2D(image, (255,255,0), Vector2(0, 0), None)
+# render_manager.is_debug_mode = True
 
-enemy.add_component(SpriteRenderer2D("renderer-enemy", material2, RendererLayers.Enemy))
+scene.add(enemy2)
+scene.add(enemy3)
+# scene.add(enemy4)
+# scene.add(text)
+managers.append(camera_manager)
+managers.append(scene_manager)
 
-
-sceneManager.add("Game", scene)
-sceneManager.set_active_scene("Game")
-renderManager = RendererManager(screen, sceneManager, cameraManager, event_dispatcher)
-
-frame_rects = []
-
-rect = pygame.Rect(234, 120, 60, 72)
-frame_rects.append(rect)
-rect = pygame.Rect(342, 120, 60, 72)
-frame_rects.append(rect)
-
-frame_rects2 = []
-
-rect = pygame.Rect(18, 6, 60, 90)
-frame_rects2.append(rect)
-rect = pygame.Rect(126, 6, 60, 90)
-frame_rects2.append(rect)
-
-frame_rects3 = [Rect(6, 114, 84, 84)]
-
-animator_info = [Take(ActiveTake.PLAYER_RUNNING, frame_rects), Take(ActiveTake.PLAYER_WALKING, frame_rects2), Take(ActiveTake.COOK, frame_rects3)]
-
-animator = SpriteAnimator2D("animator", animator_info, material, ActiveTake.COOK, RendererLayers.Player)
-renderer = SpriteRenderer2D("renderer", material, RendererLayers.Background)
-player.add_component(renderer)
-
-playerController = PlayerController("Player movement", 0.3, 0.3, EventDispatcher())
-player.add_component(playerController)
-#player.add_component(EnemyCollider("Collider"))
-
-animator1 = SpriteAnimator2D("animator-enemy", animator_info, material2, ActiveTake.COOK, RendererLayers.Enemy)
-enemy.add_component(animator1)
-
-player.add_component(animator)
-
-managers.append(cameraManager)
-managers.append(sceneManager)
-
-#enemy2 = player.clone()
-
-
-
-# scene.add(enemy2)
-# scene.remove(player)
-#
-# print(enemy2.get_component(Renderer2D))
+# scene2 = Scene("Test scene")
+# scene2.add(text)
+# sceneManager.add("Test", scene2)
 
 game_time = GameTime()
-cameraGameObject.add_component(ThirdPersonController("Third Person Controller", player))
 
-collider_system = CollisionManager(200, sceneManager, cameraManager)
+
+collider_system = CollisionManager(200, scene_manager, camera_manager)
 managers.append(collider_system)
 
 
 
-renderManager.is_debug_mode = True
+pause_menu_scene = initialise_menu_scene(Constants.Scene.PAUSE_MENU)
+main_menu_scene = initialise_menu_scene(Constants.Scene.MAIN_MENU)
+level_menu_scene = initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 
-#for i in range(200):
-# newEnemy = enemy.clone()
-# scene.add(newEnemy)
-# newEnemy.transform.translate_by(Vector2(random.randint(-4000, 8000), random.randint(-1000, 1000)))
+initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit",
+                Constants.Button.START_BUTTON, Constants.Button.QUIT_BUTTON)
+initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu",
+                Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON)
+initialise_level_menu(level_menu_scene)
+
+# scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
+
+# scene_manager.add(Constants.Scene.MAIN_MENU, scene)
+scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+# initialise_level_menu()
+
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
+managers.append(game_state_manager)
+
+Application.ActiveScene = main_menu_scene
+Application.ActiveCamera = camera_manager.active_camera
 
 for manager in managers:
-    if isinstance(manager, IStartable):
-        manager.start()
-
-
-
-
-
-
-tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
-
-# Add tiles to the tileset
-tileset.add_tile(Tile("Grass", 1, Vector2(216, 12)))
-tileset.add_tile(Tile("Water", 2, Vector2(264, 156)))
-tileset.add_tile(Tile("Dark Grass", 3, Vector2(216, 108)))
-tileset.add_tile(Tile("Dirt", 5, Vector2(216, 156)))
-tileset.add_tile(Tile("Sand", 6, Vector2(216, 156)))
-tileset.add_tile(Tile("Dirt", 7, Vector2(216, 156)))
-tileset.add_tile(Tile("CoarseDirt", 9, Vector2(216, 108)))
-
-    # map_data.append([TileAttributes(1, True, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)])
-#
-# for row in map_data:
-#     for i in range(5):
-#         row.append(TileAttributes(1, False))
-
-# Define the number of times to repeat the appending process
-
-num_repeats = 100
-
-# Create the map_data using a nested list comprehension
-#map_data = [[TileAttributes(1, False, None) for _ in range(num_repeats)] for _ in range(num_repeats)]
-map_data = []
-
-
-
-
-#load map data
-file_path = "Assets/SpriteSheets/Tilesets/PlanetB.json"
-
-with open(file_path, "r") as file:
-    json_data = json.load(file)
-
-tile_data = json_data["grounds"]
-object_data = json_data["objects"]
-
-
-
-for x in range(100):
-    row = []
-    for z in range(100):
-        tile = TileAttributes(2, False, None)
-        row.append(tile)
-    map_data.append(row)
-# More map data rows
-
-# update tiles that are available, everything else default
-for ground in tile_data:
-    if ground["x"] < 100 and ground["y"] < 100:
-        x = ground["x"]
-        y = ground["y"]
-        c_value = ground["c"]
-        s_id = ground["s"]["id"]
-        if s_id == 2:
-            map_data[y][x] = TileAttributes(s_id, True, c_value)
-        else:
-            map_data[y][x] = TileAttributes(s_id, False, c_value)
-
-# Object generation
-for object in object_data:
-    if object["x"] < 100 and object["y"] < 100:
-        x = object["x"]
-        y = object["y"]
-        c_value = object["c"]
-        id = object["t"]["id"]
-        if id == 5:
-            tree_object = GameObjectConstants.TALL_TREE.clone()
-            tree_object.transform.position = Vector2(x*70,y*70) #starting area forces every tree to one point
-
-            scene.add(tree_object)
-
-# ruin = GameObjectConstants.RUIN_ONE.clone()
-# ruin.transform.position = Vector2(2000,5000)
-# scene.add(ruin)
-#
-# ruin = GameObjectConstants.RUIN_TWO.clone()
-# ruin.transform.position = Vector2(1800,5000)
-# scene.add(ruin)
-#
-# boulder = GameObjectConstants.BOULDER_TWO.clone()
-# boulder.transform.position = Vector2(2200,5000)
-# scene.add(boulder)
-
-statue = GameObjectConstants.STATUE.clone()
-statue.transform.position = Vector2(2900,4700)
-scene.add(statue)
-
-planet_a_first_house = Vector2(2200,2000)
-first_boss_coords = Vector2(6000,1500)
-
-teleporter = GameObjectConstants.TELEPORTER.clone()
-teleporter.transform.position = Vector2(2500,5000)
-scene.add(teleporter)
-
-
-# Create the map using the tileset and map data
-map_tiles = tileset.create_map(map_data)
-
-
-
-# # Create the map using the tileset and map data
-# map_tiles = tileset.create_map(map_data)
-
-print_array_size(map_tiles)
-
-
-for tiles in map_tiles:
-    for tile in tiles:
-        tile.transform.scale = Vector2(2,2)
-        tile.transform.position *= 2
-        # random_translation = Vector2(random.randint(1000, 2000), random.randint(10, 10))
-        # tile.transform.translate_by(random_translation)
-        scene.add(tile)
-
-        if tile.get_component(BoxCollider2D):
-            tile.get_component(BoxCollider2D).start()
-
-colliders = scene.get_all_components_by_type(BoxCollider2D)
-
+    manager.start()
 # Fill the screen with a background color
-background_color = (0, 0, 0) # white
-if screen is  not None:
+background_color = (0, 0, 0)  # black
+if screen is not None:
     screen.fill(background_color)
 # Main game loop
 running = True
 while running:
-    print(starting_area)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
     game_time.tick()
-    event_dispatcher.process_events()
+
+    Constants.EVENT_DISPATCHER.process_events()
+
     for manager in managers:
         manager.update(game_time)
 
     if screen is not None:
         screen.fill(background_color)
 
-    # for tiles in map_tiles:
-    #     for tile in tiles:
-    #         if tile.get_component(BoxCollider2D):
-    #             tile.get_component(BoxCollider2D).draw(screen , cameraManager)
     #
-    # player.get_component(BoxCollider2D).draw(screen, cameraManager)
-    # enemy.get_component(BoxCollider2D).draw(screen, cameraManager)
-    #enemy2.get_component(BoxCollider2D).draw(screen, cameraManager)
-    # text.get_component(BoxCollider2D).draw(screen, cameraManager)
+    # if player.lives == 0:
+    #     sceneManager.set_active_scene("Test")
 
+    #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
-    renderManager.draw(game_time)
-
+    render_manager.draw()
 
     pygame.display.update()
     game_time.limit_fps(60)
 
 pygame.quit()
-
-
-
-
-
-
-
-

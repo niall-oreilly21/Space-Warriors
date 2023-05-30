@@ -15,11 +15,10 @@ class Manager(IUpdateable, IStartable, ABC):
 
     @abstractmethod
     def _handle_events(self, event_data):
-        print("EVENT EVNET")
         pass
 
     def update(self, game_time):
         pass
 
-    def start(self, game_time):
+    def start(self):
         pass

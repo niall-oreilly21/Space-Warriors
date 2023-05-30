@@ -1,12 +1,17 @@
 from Engine.GameObjects.GameObject import GameObjectType
 
+
 class Scene:
     def __init__(self, name):
         self.__name = name
         self.__game_object_list = {
             GameObjectType.Static: {},
             GameObjectType.Dynamic: {},
-            }
+        }
+
+    @property
+    def name(self):
+        return self.__name
 
     def add(self, game_object):
         if game_object.game_object_category not in self.__game_object_list[game_object.game_object_type]:
@@ -16,10 +21,10 @@ class Scene:
 
     def remove(self, game_object):
         if game_object.game_object_category in self.__game_object_list[game_object.game_object_type]:
-            return self.__game_object_list[game_object.game_object_type][game_object.game_object_category].remove(game_object)
+            return self.__game_object_list[game_object.game_object_type][game_object.game_object_category].remove(
+                game_object)
         else:
             return False
-
 
     def find_all_by_type(self, game_object_type):
         result = []
@@ -59,7 +64,3 @@ class Scene:
             for game_object_category in game_object_type.values():
                 for game_object in game_object_category:
                     game_object.start()
-
-
-
-

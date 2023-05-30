@@ -2,13 +2,12 @@ from typing import Dict
 
 import pygame
 
+from App.Constants.Application import Application
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObject
 from Engine.Managers.Manager import Manager
-from Engine.Other.Enums.EventEnums import EventCategoryType
-from Engine.Other.Interfaces.IStartable import IStartable
-from Engine.Other.Interfaces.IUpdateable import IUpdateable
-from Engine.Other.Enums.GameObjectEnums import GameObjectType
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 class CameraManager(Manager):
@@ -17,7 +16,7 @@ class CameraManager(Manager):
         self.__screen = screen
         self.__active_camera = None
         self.__active_game_object = None
-        self.__cameras: Dict[str, GameObject] = {}
+        self.__cameras = {}
         self.__needs_redraw = True
         self.__sceneManager = sceneManager
         self.player_is_moving = False
@@ -26,7 +25,13 @@ class CameraManager(Manager):
         self._event_dispatcher.add_listener(EventCategoryType.CameraManager, self._handle_events)
 
     def _handle_events(self, event_data):
-        pass
+        if event_data.event_action_type == EventActionType.MenuCamera:
+            self.set_active_camera(Constants.Camera.MENU_CAMERA)
+            Application.ActiveCamera = self.__active_camera
+
+        elif event_data.event_action_type == EventActionType.GameCamera:
+            self.set_active_camera(Constants.Camera.GAME_CAMERA)
+            Application.ActiveCamera = self.__active_camera
 
 
     @property
@@ -70,6 +75,9 @@ class CameraManager(Manager):
         if self.__active_camera:
             self.__set_viewport()
 
+    def get_active_camera_position(self):
+        return self.__active_camera.parent.position
+
     def __set_viewport(self):
         self.__screen = pygame.display.set_mode((self.__active_camera.viewport.x, self.__active_camera.viewport.y))
         self.__needs_redraw = True
@@ -79,5 +87,3 @@ class CameraManager(Manager):
 
     def update(self, game_time):
         self.__active_game_object.update(game_time)
-
-

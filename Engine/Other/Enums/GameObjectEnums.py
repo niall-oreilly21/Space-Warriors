@@ -13,7 +13,8 @@ class GameObjectCategory(Enum):
     Rat = 3
     Alien = 4
     Tile = 5
-    Environment = 6
+    Menu = 6
+    UI = 7
 
 
 class GameObjectDirection(Enum):

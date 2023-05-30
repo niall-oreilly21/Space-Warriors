@@ -15,6 +15,10 @@ class Renderer2D(Component):
         def material(self):
             return self._material
 
+        @material.setter
+        def material(self, material):
+            self._material = material
+
         @property
         def layer(self):
             return self._layer
