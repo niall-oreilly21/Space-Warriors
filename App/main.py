@@ -249,7 +249,7 @@ map_data = []
 
 
 #load map data
-file_path = "Assets/SpriteSheets/Tilesets/PlanetA.json"
+file_path = "Assets/SpriteSheets/Tilesets/PlanetB.json"
 
 with open(file_path, "r") as file:
     json_data = json.load(file)
