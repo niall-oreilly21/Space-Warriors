@@ -239,3 +239,7 @@ class Constants:
         PAUSE_MENU = "PauseMenuScene"
         LEVEL_MENU = "LevelMenuScene"
         GAME = "GameScene"
+
+    class Camera:
+        GAME_CAMERA = "GameCamera"
+        MENU_CAMERA = "MenuCamera"

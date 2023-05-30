@@ -118,7 +118,17 @@ class PlayerController(Component, IMoveable):
                 self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
 
     def _attack(self):
-        if pygame.mouse.get_pressed()[0]:
+        attack_key = None
+        if self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
+            attack_key = pygame.K_UP
+        elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
+            attack_key = pygame.K_DOWN
+        elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Left:
+            attack_key = pygame.K_LEFT
+        else:
+            attack_key = pygame.K_RIGHT
+
+        if self.__input_handler.is_tap(attack_key, self.__tap_threshold):
             self.parent.remove_component(BoxCollider2D)
 
             self.__is_attacking = True
