@@ -11,7 +11,7 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 from Engine.Other.Transform2D import Transform2D
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
-tp_image = pygame.image.load("Assets\SpriteSheets\Tilesets/portal_site.png")
+tp_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Obelisk.png")
 image = pygame.image.load("Assets\SpriteSheets\Tilesets/plain_tileset.png")
 ruins_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Assets_source.png")
 rocks_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Rocks_source.png")
@@ -21,10 +21,10 @@ bushes_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Bushes_source.png
 class GameObjectConstants:
     layer = RendererLayers.WorldObjects
 
-
     TELEPORTER = GameObject("Teleporter", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Dynamic,
-                            GameObjectCategory.Tile)
-    texture_material = TextureMaterial2D(tp_image, None, Vector2(0, 0), None)
+                             GameObjectCategory.Player)
+    object_frame = tp_image.subsurface(pygame.Rect(52, 23, 79, 204))
+    texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     TELEPORTER.add_component(Renderer2D("Renderer-2", texture_material, layer))
     # TELEPORTER.add_component(BoxCollider2D("Box-3"))
 

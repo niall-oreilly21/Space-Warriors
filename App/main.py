@@ -66,14 +66,14 @@ screen_height = 1
 screen_info = pygame.display.Info()
 screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 
-starting_area = Vector2(2050, 5300)
+starting_area = Vector2(2600,4900)
 
 # Set the environment variable to center the window
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((500, 500))
 
-cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(2050, 5300), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Dynamic, GameObjectCategory.Player)
+cameraGameObject = GameObject("MainCamera", Transform2D(Vector2(2600,4900), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Dynamic, GameObjectCategory.Player)
 camera = Camera("MainCamera", 1500, 750)
 cameraGameObject.add_component(camera)
 managers = []
@@ -231,37 +231,6 @@ tileset.add_tile(Tile("Sand", 6, Vector2(216, 156)))
 tileset.add_tile(Tile("Dirt", 7, Vector2(216, 156)))
 tileset.add_tile(Tile("CoarseDirt", 9, Vector2(216, 108)))
 
-
-
-# Add more tiles as needed
-
-# Define map data
-# map_data = [
-#     [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-# [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)],
-#     [TileAttributes(1, False, None, 10), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)]
-#
-#
-#     # More map data rows
-# ]
-
     # map_data.append([TileAttributes(1, True, None), TileAttributes(1, False), TileAttributes(1, False, None), TileAttributes(1, False)])
 #
 # for row in map_data:
@@ -323,36 +292,28 @@ for object in object_data:
 
             scene.add(tree_object)
 
-ruin = GameObjectConstants.RUIN_ONE.clone()
-ruin.transform.position = Vector2(2000,5000)
-scene.add(ruin)
-
-ruin = GameObjectConstants.RUIN_TWO.clone()
-ruin.transform.position = Vector2(1800,5000)
-scene.add(ruin)
-
-boulder = GameObjectConstants.BOULDER_TWO.clone()
-boulder.transform.position = Vector2(2200,5000)
-scene.add(boulder)
+# ruin = GameObjectConstants.RUIN_ONE.clone()
+# ruin.transform.position = Vector2(2000,5000)
+# scene.add(ruin)
+#
+# ruin = GameObjectConstants.RUIN_TWO.clone()
+# ruin.transform.position = Vector2(1800,5000)
+# scene.add(ruin)
+#
+# boulder = GameObjectConstants.BOULDER_TWO.clone()
+# boulder.transform.position = Vector2(2200,5000)
+# scene.add(boulder)
 
 statue = GameObjectConstants.STATUE.clone()
-statue.transform.position = Vector2(2000,5400)
+statue.transform.position = Vector2(2900,4700)
 scene.add(statue)
 
+planet_a_first_house = Vector2(2200,2000)
+first_boss_coords = Vector2(6000,1500)
 
-
-# # Add the modified tree objects back to the scene
-# for tree_object in tree_objects:
-#     scene.add(tree_object)
-
-# tree_object = GameObjects.GameObjects.TALL_TREE.clone()
-# tree_object2 = GameObjects.GameObjects.TALL_TREE.clone()
-#
-# tree_object.transform.position = Vector2(2300,5000) #starting area forces every tree to one point
-# scene.add(tree_object)
-#
-# tree_object2.transform.position = Vector2(2350,5000) #starting area forces every tree to one point
-# scene.add(tree_object2)
+teleporter = GameObjectConstants.TELEPORTER.clone()
+teleporter.transform.position = Vector2(2500,5000)
+scene.add(teleporter)
 
 
 # Create the map using the tileset and map data
@@ -386,6 +347,7 @@ if screen is  not None:
 # Main game loop
 running = True
 while running:
+    print(starting_area)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
