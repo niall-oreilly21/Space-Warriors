@@ -52,8 +52,7 @@ class RendererManager(Manager, IDrawable):
         for renderer in renderers:
             object_position = renderer.transform.position
 
-            if renderer.parent.game_object_category == GameObjectCategory.UI or \
-                    renderer.parent.game_object_category == GameObjectCategory.Menu:
+            if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu:
                 renderer.draw(self.__surface,Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
             else:
@@ -70,7 +69,7 @@ class RendererManager(Manager, IDrawable):
 
                     if self.__is_debug_mode:
                         if renderer.parent.get_component(BoxCollider2D):
-                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager)
+                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager.active_camera.transform.position)
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
