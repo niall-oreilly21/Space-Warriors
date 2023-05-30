@@ -15,6 +15,7 @@ class GameObjectCategory(Enum):
     Tile = 5
     Menu = 6
     UI = 7
+    Environment = 8
 
 
 class GameObjectDirection(Enum):

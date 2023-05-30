@@ -1,3 +1,4 @@
+import json
 import os
 import pygame
 from pygame import Vector2, Rect
@@ -7,9 +8,13 @@ from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.GameObjects.Tiles.Tile import Tile
+from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
+from Engine.GameObjects.Tiles.Tileset import Tileset
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
@@ -18,8 +23,11 @@ from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.GameStateManager import GameStateManager
+from Engine.Managers.SoundManager import SoundManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
@@ -33,6 +41,12 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
+from Engine.GameObjects.Tiles.MapLoading import map_load
+def load_sound():
+    soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
+    soundManager.set_sound_volume("backgroundmusic", .05)
+    Constants.EVENT_DISPATCHER.dispatch_event(
+        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
 
 
 def initialise_menu_scene(scene_name):
@@ -64,8 +78,9 @@ def initialise_level_menu(menu_scene):
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
-    earth = GameObject(Constants.Button.EARTH_BUTTON, Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
-                       0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
+    earth = GameObject(Constants.Button.EARTH_BUTTON,
+                       Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
+                                   0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
     earth_texture_material = TextureMaterial2D(Constants.Menu.EARTH_IMAGE, None,
                                                Vector2(0, 0), None)
     earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
@@ -173,18 +188,19 @@ camera = Camera("MainCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGH
 camera_game_object.add_component(camera)
 managers = []
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
+soundManager = SoundManager(Constants.EVENT_DISPATCHER)
+
 
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
 
 camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
-camera_main_menu_game_object = GameObject(Constants.Camera.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+camera_main_menu_game_object = GameObject(Constants.Camera.MENU_CAMERA,
+                                          Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
                                           GameObjectType.Static, GameObjectCategory.Menu)
 camera_main_menu_game_object.add_component(camera_main_menu)
 
 third_person_camera_game_object = camera_main_menu_game_object.clone()
 third_person_camera_game_object.name = Constants.Camera.GAME_CAMERA
-
-
 
 camera_manager.add(camera_main_menu_game_object)
 camera_manager.add(third_person_camera_game_object)
@@ -201,7 +217,7 @@ sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene(Constants.Scene.GAME)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(300, 300), 0, Vector2(1, 1)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600,4900), 0, Vector2(1, 1)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
@@ -313,11 +329,8 @@ managers.append(scene_manager)
 
 game_time = GameTime()
 
-
 collider_system = CollisionManager(200, scene_manager, camera_manager)
 managers.append(collider_system)
-
-
 
 pause_menu_scene = initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = initialise_menu_scene(Constants.Scene.MAIN_MENU)
@@ -340,6 +353,12 @@ managers.append(game_state_manager)
 
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
+
+# Load Map + objects
+map_load(scene)
+
+load_sound()
+
 
 for manager in managers:
     manager.start()
