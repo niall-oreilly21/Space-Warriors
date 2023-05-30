@@ -224,3 +224,18 @@ class Constants:
         EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
         MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
         SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
+
+    class Button:
+        START_BUTTON = "StartButton"
+        QUIT_BUTTON = "QuitButton"
+        RESUME_BUTTON = "ResumeButton"
+        MAIN_MENU_BUTTON = "MainMenuButton"
+        EARTH_BUTTON = "EarthButton"
+        MARS_BUTTON = "MarsButton"
+        SATURN_BUTTON = "SaturnButton"
+
+    class Scene:
+        MAIN_MENU = "MainMenuScene"
+        PAUSE_MENU = "PauseMenuScene"
+        LEVEL_MENU = "LevelMenuScene"
+        GAME = "GameScene"
