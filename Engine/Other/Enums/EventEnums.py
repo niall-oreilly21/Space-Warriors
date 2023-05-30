@@ -18,3 +18,4 @@ class EventActionType:
     ExitGame = 9
     DebugModeOn = 10
     DebugModeOff = 11
+    LevelScene = 12
