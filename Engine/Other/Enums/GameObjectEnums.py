@@ -12,7 +12,10 @@ class GameObjectCategory(Enum):
     Wolf = 2
     Rat = 3
     Alien = 4
-    UI = 5
+    Tile = 5
+    Menu = 6
+    UI = 7
+
 
 class GameObjectDirection(Enum):
     Up = 0

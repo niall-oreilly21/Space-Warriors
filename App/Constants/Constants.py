@@ -3,10 +3,18 @@ from pygame import Vector2
 
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
+from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
 class Constants:
+    GAME_NAME = "Space Warriors"
+
+    EVENT_DISPATCHER = EventDispatcher()
+
+    VIEWPORT_WIDTH = 1500
+    VIEWPORT_HEIGHT = 750
+
     CHARACTER_MOVE_SPEED = 5
 
     class Player:
@@ -114,7 +122,7 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class EnemyRat:
-        MOVE_SPEED = 0.75
+        MOVE_SPEED = 3
 
         __MOVE_X_Y = 715
         __MOVE_X_HEIGHT = 51
@@ -197,3 +205,37 @@ class Constants:
         __PET_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/pet_dog.png")
 
         MATERIAL_PET = TextureMaterial2D(__PET_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+    class Menu:
+        __MAIN_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/main_menu.png")
+        MATERIAL_MAIN_MENU = TextureMaterial2D(__MAIN_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
+        __PAUSE_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/pause_menu.png")
+        MATERIAL_PAUSE_MENU = TextureMaterial2D(__PAUSE_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
+        TITLE_FONT_SIZE = 45
+        TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
+
+        TEXT_FONT_SIZE = 40
+        TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
+
+        MENU_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/menu_button.png")
+
+        EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
+        MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
+        SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
+
+    class Button:
+        START_BUTTON = "StartButton"
+        QUIT_BUTTON = "QuitButton"
+        RESUME_BUTTON = "ResumeButton"
+        MAIN_MENU_BUTTON = "MainMenuButton"
+        EARTH_BUTTON = "EarthButton"
+        MARS_BUTTON = "MarsButton"
+        SATURN_BUTTON = "SaturnButton"
+
+    class Scene:
+        MAIN_MENU = "MainMenuScene"
+        PAUSE_MENU = "PauseMenuScene"
+        LEVEL_MENU = "LevelMenuScene"
+        GAME = "GameScene"

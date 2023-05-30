@@ -1,10 +1,9 @@
 import pygame
 
+from App.Constants.Constants import Constants
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
-from Engine.Other.Interfaces.IStartable import IStartable
-from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
 class SceneManager(Manager):
@@ -19,11 +18,19 @@ class SceneManager(Manager):
 
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MainMenuScene:
-            self.set_active_scene("Main Menu")
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
-
+            self.set_active_scene(Constants.Scene.MAIN_MENU)
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
+        elif event_data.event_action_type == EventActionType.GameScene:
+            self.set_active_scene(Constants.Scene.GAME)
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        elif event_data.event_action_type == EventActionType.LevelScene:
+            self.set_active_scene(Constants.Scene.LEVEL_MENU)
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
 
     @property
     def active_scene(self):
@@ -43,7 +50,7 @@ class SceneManager(Manager):
         return True
 
     def update(self, game_time):
-        if  self.__active_scene is not None:
+        if self.__active_scene is not None:
             self.__active_scene.update(game_time)
 
     def start(self):

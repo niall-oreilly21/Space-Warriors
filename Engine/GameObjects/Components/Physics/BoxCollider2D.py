@@ -58,7 +58,6 @@ class BoxCollider2D(Component):
 
         return displacement
 
-
     @property
     def bounds(self):
 
@@ -82,7 +81,6 @@ class BoxCollider2D(Component):
 
     def update(self, game_time):
         pass
-
 
      # Calculate the distance between two colliders
     def distance_to(self, other_collider):

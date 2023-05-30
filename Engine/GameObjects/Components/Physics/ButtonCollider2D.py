@@ -1,6 +1,6 @@
 import pygame
 
-from App.Constants import Constants
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.Managers.EventSystem.EventData import EventData
@@ -24,13 +24,22 @@ class ButtonCollider2D(BoxCollider2D):
         if self.bounds.collidepoint(self._mouse_position) and mouse_buttons[0]:
             self.button_pressed()
 
-
     def draw(self, screen, camera_manager):
         super().draw(screen, camera_manager)
 
     def button_pressed(self):
-        Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SceneManager, EventActionType.MainMenuScene))
-
-        if self._parent.name.lower() == "main menu button":
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.MainMenuScene))
+        if self._parent.name == Constants.Button.START_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
+        elif self._parent.name == Constants.Button.QUIT_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.ExitGame))
+        elif self._parent.name == Constants.Button.RESUME_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.GameScene))
+        elif self._parent.name == Constants.Button.MAIN_MENU_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.MainMenuScene))
+        elif self._parent.name == Constants.Button.EARTH_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.GameScene))

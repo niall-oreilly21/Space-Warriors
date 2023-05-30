@@ -38,3 +38,6 @@ class ButtonColliderHover2D(ButtonCollider2D):
 
     def draw(self, screen, camera_manager):
         super().draw(screen, camera_manager)
+
+    def clone(self):
+        return ButtonColliderHover2D(self._name, self.event_handler, self.camera_manager, self.__scale_factor)

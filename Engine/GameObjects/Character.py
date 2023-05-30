@@ -42,9 +42,6 @@ class Character(GameObject, IDamageable, ICloneable):
     def attack_damage(self):
         return self.__attack_damage
 
-    def clone(self):
-        pass
-
     @property
     def is_damaged(self):
         return self.__is_damaged
@@ -64,3 +61,12 @@ class Character(GameObject, IDamageable, ICloneable):
     @property
     def damage_cooldown(self):
         return self.__damage_cooldown
+
+    def clone(self):
+        character = Character(self.name, self.health, self.transform.clone(), self.game_object_type, self.game_object_category)
+
+        for component in self._components:
+            cloned_component = component.clone()
+            character.add_component(cloned_component)
+
+        return character

@@ -52,7 +52,8 @@ class RendererManager(Manager, IDrawable):
         for renderer in renderers:
             object_position = renderer.transform.position
 
-            if renderer.parent.game_object_category == GameObjectCategory.UI:
+            if renderer.parent.game_object_category == GameObjectCategory.UI or \
+                    renderer.parent.game_object_category == GameObjectCategory.Menu:
                 renderer.draw(self.__surface,Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
             else:
