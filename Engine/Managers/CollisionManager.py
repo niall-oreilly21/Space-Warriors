@@ -77,9 +77,6 @@ class CollisionManager(IUpdateable):
                     collider1_rigidbody.velocity += impulse_vector
 
 
-
-
-
                 elif is_collider1_static and collider2_rigidbody:
                     # Handle collision with a static object
                     collision_normal = displacement.normalize()
@@ -90,27 +87,10 @@ class CollisionManager(IUpdateable):
 
                     collider2_rigidbody.velocity += impulse_vector
 
-                    if collider2_rigidbody.parent.get_component(EnemyController):
-                        enemy_controller = collider2_rigidbody.parent.get_component(EnemyController)
 
-                        # Check the magnitude of the impulse vector
-                        if impulse_vector.length() < 8:  # Adjust the threshold as needed
-                            # Set the enemy's velocity to (0, 0)
-                            collider2_rigidbody.velocity = pygame.Vector2(0, 0)
-                            print("yes")
+                if collider1_entity.get_component(Collider2D):
+                    collider1_entity.get_component(Collider2D).handle_response(collider2_entity)
 
-                        # Adjust the position of the enemy to prevent it from going through static objects
-                        max_correction_distance = 100  # Adjust this value based on the desired correction distance
-                        penetration_correction = max(max_correction_distance - displacement.length(), 0.0)
-                        correction_vector = penetration_correction * collision_normal
-
-                        # Determine the direction to add the position
-                        if collider2_rigidbody.parent.transform.position.x < collider1_entity.transform.position.x:
-                            correction_vector.x = -correction_vector.x
-                        if collider2_rigidbody.parent.transform.position.y < collider1_entity.transform.position.y:
-                            correction_vector.y = -correction_vector.y
-
-                        collider2_rigidbody.parent.transform.position += correction_vector
 
     def start(self):
         pass
