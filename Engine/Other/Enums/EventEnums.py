@@ -3,6 +3,7 @@ class EventCategoryType:
     CameraManager = 1
     SoundManager = 2
     RendererManager = 3
+    GameStateManager = 4
 
 
 class EventActionType:
