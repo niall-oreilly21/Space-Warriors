@@ -47,4 +47,5 @@ class SceneManager(Manager):
             self.__active_scene.update(game_time)
 
     def start(self):
-        self.__active_scene.start()
+        for active_scene in self.__scenes:
+            self.__scenes[active_scene].start()
