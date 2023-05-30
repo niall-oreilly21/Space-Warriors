@@ -69,7 +69,7 @@ def initialise_level_menu(menu_scene):
     earth_texture_material = TextureMaterial2D(Constants.Menu.EARTH_IMAGE, None,
                                                Vector2(0, 0), None)
     earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
-    earth.add_component(ButtonColliderHover2D("ButtonCollider", Constants.EVENT_DISPATCHER, camera_manager, 0.05))
+    earth.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
 
     earth_text = GameObject("EarthText", Transform2D(Vector2(earth.transform.position.x + 130,
                                                              earth.transform.position.y + 330), 0, Vector2(1, 1)),
@@ -129,7 +129,7 @@ def initialise_menu(menu_scene, background_material, title_text, menu_button_tex
                                                 Vector2(150, 27), (0, 0, 0))
     start_button.add_component(Renderer2D("StartButtonRenderer", start_button_texture_material, 1))
     start_button.add_component(Renderer2D("StartButtonTextRenderer", start_button_text_material, 2))
-    start_button.add_component(ButtonColliderHover2D("ButtonCollider", Constants.EVENT_DISPATCHER, camera_manager, 0.05))
+    start_button.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
 
     end_button = start_button.clone()
     end_button.name = bottom_button_name

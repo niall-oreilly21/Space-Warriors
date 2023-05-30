@@ -2,15 +2,14 @@ import pygame
 from pygame import Vector2
 from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
 
+
 class ButtonColliderHover2D(ButtonCollider2D):
-    def __init__(self, name, event_handler, camera_manager, scale_factor, anchor=pygame.Vector2(0, 0)):
-        super().__init__(name, event_handler, camera_manager, anchor)
+    def __init__(self, name, scale_factor, anchor=pygame.Vector2(0, 0)):
+        super().__init__(name, anchor)
         self.__old_scale = None
         self.__x_original_position = None
         self.__y_original_position = None
         self.__new_scale = None
-        self.event_handler = event_handler
-        self.camera_manager = camera_manager
         self.__scale_factor = scale_factor
 
     def start(self):
@@ -36,8 +35,8 @@ class ButtonColliderHover2D(ButtonCollider2D):
         super().update(game_time)
         self.mouse_hover()
 
-    def draw(self, screen, camera_manager):
-        super().draw(screen, camera_manager)
+    def draw(self, screen, camera_position):
+        super().draw(screen, camera_position)
 
     def clone(self):
-        return ButtonColliderHover2D(self._name, self.event_handler, self.camera_manager, self.__scale_factor)
+        return ButtonColliderHover2D(self._name, self.__scale_factor)

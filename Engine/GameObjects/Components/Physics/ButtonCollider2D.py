@@ -8,10 +8,8 @@ from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 class ButtonCollider2D(BoxCollider2D):
-    def __init__(self, name, event_handler, camera_manager, anchor=pygame.Vector2(0, 0)):
+    def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name, anchor)
-        self.event_handler = event_handler
-        self.camera_manager = camera_manager
         self._mouse_position = None
 
     def start(self):
@@ -24,8 +22,8 @@ class ButtonCollider2D(BoxCollider2D):
         if self.bounds.collidepoint(self._mouse_position) and mouse_buttons[0]:
             self.button_pressed()
 
-    def draw(self, screen, camera_manager):
-        super().draw(screen, camera_manager)
+    def draw(self, screen, camera_position):
+        super().draw(screen, camera_position)
 
     def button_pressed(self):
         if self._parent.name == Constants.Button.START_BUTTON:
@@ -43,3 +41,7 @@ class ButtonCollider2D(BoxCollider2D):
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.GameScene))
+
+
+    def clone(self):
+        return ButtonCollider2D(self._name)
