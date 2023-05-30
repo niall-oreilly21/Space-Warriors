@@ -279,9 +279,9 @@ scene.add(enemy)
 
 scene_manager.add(Constants.Scene.GAME, scene)
 scene_manager.set_active_scene(Constants.Scene.GAME)
-renderManager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
+render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
 
-renderManager.is_debug_mode = True
+# render_manager.is_debug_mode = True
 
 scene.add(enemy2)
 scene.add(enemy3)
@@ -350,7 +350,7 @@ while running:
 
     #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
 
-    renderManager.draw(game_time)
+    render_manager.draw()
 
     pygame.display.update()
     game_time.limit_fps(60)

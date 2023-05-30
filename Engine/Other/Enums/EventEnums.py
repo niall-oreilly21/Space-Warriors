@@ -7,7 +7,7 @@ class EventCategoryType:
 
 class EventActionType:
     MainMenuScene = 0
-    GameMenuScene = 1
+    GameScene = 1
     MenuCamera = 2
     GameCamera = 3
     PlaySound = 4
