@@ -5,6 +5,7 @@ from pygame import Vector2, Rect
 from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
@@ -17,7 +18,9 @@ from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
 from App.Components.Controllers.PlayerController import PlayerController
@@ -172,9 +175,21 @@ managers = []
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
 
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
-camera_manager.add(camera_game_object)
 
-camera_manager.set_active_camera("MainCamera")
+camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+camera_main_menu_game_object = GameObject(Constants.Camera.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
+                                          GameObjectType.Static, GameObjectCategory.Menu)
+camera_main_menu_game_object.add_component(camera_main_menu)
+
+third_person_camera_game_object = camera_main_menu_game_object.clone()
+third_person_camera_game_object.name = Constants.Camera.GAME_CAMERA
+
+
+
+camera_manager.add(camera_main_menu_game_object)
+camera_manager.add(third_person_camera_game_object)
+
+camera_manager.set_active_camera(camera_main_menu_game_object.name)
 
 # Create a font object
 font_path = "Assets/Fonts/Starjedi.ttf"
@@ -188,6 +203,8 @@ scene = Scene(Constants.Scene.GAME)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
                    Constants.Player.TOTAL_LIVES, Transform2D(Vector2(300, 300), 0, Vector2(1, 1)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
+
+third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
 player.add_component(player_box_collider)
@@ -295,15 +312,12 @@ managers.append(scene_manager)
 # sceneManager.add("Test", scene2)
 
 game_time = GameTime()
-# camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
+
 
 collider_system = CollisionManager(200, scene_manager, camera_manager)
 managers.append(collider_system)
 
-camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
-camera_main_menu_game_object = GameObject("MenuCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
-                                          GameObjectType.Static, GameObjectCategory.Menu)
-camera_main_menu_game_object.add_component(camera_main_menu)
+
 
 pause_menu_scene = initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = initialise_menu_scene(Constants.Scene.MAIN_MENU)
@@ -320,6 +334,12 @@ initialise_level_menu(level_menu_scene)
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 # initialise_level_menu()
+
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
+managers.append(game_state_manager)
+
+Application.ActiveScene = main_menu_scene
+Application.ActiveCamera = camera_manager.active_camera
 
 for manager in managers:
     manager.start()

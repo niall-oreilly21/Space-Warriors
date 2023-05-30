@@ -1,7 +1,10 @@
 import pygame
 
+from App.Constants.Application import Application
+from App.Constants.Constants import Constants
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
-from Engine.Other.Enums.EventEnums import EventCategoryType
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 class GameStateManager(Manager):
@@ -16,9 +19,9 @@ class GameStateManager(Manager):
         pass
 
     def __check_pause_menu(self):
-        if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
-            pass
-            # self._event_dispatcher.dispatch(EventData(EventCategoryType.SceneManager, Event))
+        if Application.ActiveScene.name == Constants.Scene.GAME:
+            if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
+                self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
 
     def update(self, game_time):
         self.__check_pause_menu()

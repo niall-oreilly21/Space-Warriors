@@ -20,3 +20,4 @@ class EventActionType:
     DebugModeOn = 10
     DebugModeOff = 11
     LevelScene = 12
+    PauseMenuScene = 13
