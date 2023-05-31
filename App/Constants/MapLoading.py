@@ -2,13 +2,14 @@ import json
 
 from pygame import Vector2
 
+from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
 
 
-def map_load(scene):
+def map_load(scene, planet_json):
     tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
 
     # Add tiles to the tileset
@@ -23,7 +24,7 @@ def map_load(scene):
     map_data = []
 
     # load map data
-    file_path = "Assets/SpriteSheets/Tilesets/PlanetA.json"
+    file_path = planet_json
 
     with open(file_path, "r") as file:
         json_data = json.load(file)

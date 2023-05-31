@@ -11,11 +11,11 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 from Engine.Other.Transform2D import Transform2D
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
-tp_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Obelisk.png")
-image = pygame.image.load("Assets\SpriteSheets\Tilesets/plain_tileset.png")
-ruins_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Assets_source.png")
-rocks_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Rocks_source.png")
-bushes_image = pygame.image.load("Assets\SpriteSheets\Tilesets/Bushes_source.png")
+tp_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Obelisk.png")
+image = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset.png")
+ruins_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Assets_source.png")
+rocks_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Rocks_source.png")
+bushes_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Bushes_source.png")
 
 
 class GameObjectConstants:

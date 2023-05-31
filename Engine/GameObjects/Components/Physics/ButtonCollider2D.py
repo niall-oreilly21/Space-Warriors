@@ -1,5 +1,6 @@
 import pygame
 
+from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -33,15 +34,27 @@ class ButtonCollider2D(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.ExitGame))
         elif self._parent.name == Constants.Button.RESUME_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.GameScene))
+            if Application.CurrentLevel == Constants.Scene.EARTH:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.SceneManager, EventActionType.EarthScene))
+            elif Application.CurrentLevel == Constants.Scene.MARS:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.SceneManager, EventActionType.MarsScene))
+            elif Application.CurrentLevel == Constants.Scene.SATURN:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.SceneManager, EventActionType.SaturnScene))
         elif self._parent.name == Constants.Button.MAIN_MENU_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.MainMenuScene))
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.GameScene))
-
+                                                                EventActionType.EarthScene))
+        elif self._parent.name == Constants.Button.MARS_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.MarsScene))
+        elif self._parent.name == Constants.Button.SATURN_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.SaturnScene))
 
     def clone(self):
         return ButtonCollider2D(self._name)

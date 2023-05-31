@@ -238,8 +238,15 @@ class Constants:
         MAIN_MENU = "MainMenuScene"
         PAUSE_MENU = "PauseMenuScene"
         LEVEL_MENU = "LevelMenuScene"
-        GAME = "GameScene"
+        EARTH = "EarthScene"
+        MARS = "MarsScene"
+        SATURN = "SaturnScene"
 
     class Camera:
         GAME_CAMERA = "GameCamera"
         MENU_CAMERA = "MenuCamera"
+
+    class Map:
+        PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetA.json"
+        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetB.json"
+        PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"

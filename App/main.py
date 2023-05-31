@@ -1,21 +1,13 @@
-import json
 import os
 import pygame
-from pygame import Vector2, Rect
+from pygame import Vector2
 
-from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
-from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
-from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
-from Engine.GameObjects.Tiles.Tile import Tile
-from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
-from Engine.GameObjects.Tiles.Tileset import Tileset
-from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -29,7 +21,6 @@ from Engine.Managers.SoundManager import SoundManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.InputHandler import InputHandler
-from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Time.GameTime import GameTime
 from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
@@ -41,7 +32,9 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-from Engine.GameObjects.Tiles.MapLoading import map_load
+from App.Constants.MapLoading import map_load
+
+
 def load_sound():
     soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
     soundManager.set_sound_volume("backgroundmusic", .05)
@@ -162,7 +155,7 @@ def initialise_menu(menu_scene, background_material, title_text, menu_button_tex
 
 
 def update(game_time):
-    scene.update(game_time)
+    earth_scene.update(game_time)
 
 
 # Initialize Pygame
@@ -190,7 +183,6 @@ managers = []
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
 soundManager = SoundManager(Constants.EVENT_DISPATCHER)
 
-
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
 
 camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
@@ -215,9 +207,9 @@ font_name = font_path
 text_material = TextMaterial2D(font, font_name, "Hello, World!", Vector2(150, 40), (255, 0, 0))
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
-scene = Scene(Constants.Scene.GAME)
+earth_scene = Scene(Constants.Scene.EARTH)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600,4900), 0, Vector2(1, 1)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600, 4900), 0, Vector2(1, 1)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
@@ -296,9 +288,6 @@ enemy3.add_component(enemy_controller2)
 # scene.add(enemy5)
 # scene.add(enemy6)
 
-test_scene = Scene("Test")
-scene_manager.add("Test", test_scene)
-
 text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
                   GameObjectCategory.Player)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
@@ -307,17 +296,22 @@ text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 text.add_component(BoxCollider2D("Box-2"))
 
-scene.add(player)
-scene.add(enemy)
+earth_scene.add(player)
+earth_scene.add(enemy)
 
-scene_manager.add(Constants.Scene.GAME, scene)
-scene_manager.set_active_scene(Constants.Scene.GAME)
+mars_scene = Scene(Constants.Scene.MARS)
+saturn_scene = Scene(Constants.Scene.SATURN)
+
+
+scene_manager.add(Constants.Scene.EARTH, earth_scene)
+scene_manager.set_active_scene(Constants.Scene.EARTH)
 render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
 
-# render_manager.is_debug_mode = True
+scene_manager.add(Constants.Scene.MARS, mars_scene)
+scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
-scene.add(enemy2)
-scene.add(enemy3)
+earth_scene.add(enemy2)
+earth_scene.add(enemy3)
 # scene.add(enemy4)
 # scene.add(text)
 managers.append(camera_manager)
@@ -354,11 +348,13 @@ managers.append(game_state_manager)
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 
-# Load Map + objects
-map_load(scene)
+#
+# # Load Map + objects
+map_load(earth_scene, Constants.Map.PLANET_A_JSON)
+map_load(mars_scene, Constants.Map.PLANET_B_JSON)
+map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
 
 load_sound()
-
 
 for manager in managers:
     manager.start()
