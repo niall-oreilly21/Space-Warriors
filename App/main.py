@@ -4,8 +4,10 @@ from pygame import Vector2
 
 from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
 from Engine.Managers.CollisionManager import CollisionManager
@@ -32,7 +34,7 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-from App.Constants.MapLoading import map_load
+from App.Constants.MapLoader import map_load
 
 
 def load_sound():
@@ -40,118 +42,6 @@ def load_sound():
     soundManager.set_sound_volume("backgroundmusic", .05)
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
-
-
-def initialise_menu_scene(scene_name):
-    camera_manager.set_active_camera("MenuCamera")
-
-    menu_scene = Scene(scene_name)
-    menu_scene.add(camera_main_menu_game_object)
-    scene_manager.add(scene_name, menu_scene)
-
-    return menu_scene
-
-
-def initialise_menu_background(background_material):
-    background = GameObject("MenuBackground", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)))
-    background.add_component(Renderer2D("MenuRenderer", background_material))
-
-    return background
-
-
-def initialise_level_menu(menu_scene):
-    background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
-
-    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, 30)
-    text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, 40)
-
-    title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
-    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, "Land on...",
-                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
-    title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
-
-    earth = GameObject(Constants.Button.EARTH_BUTTON,
-                       Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
-                                   0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
-    earth_texture_material = TextureMaterial2D(Constants.Menu.EARTH_IMAGE, None,
-                                               Vector2(0, 0), None)
-    earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
-    earth.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
-
-    earth_text = GameObject("EarthText", Transform2D(Vector2(earth.transform.position.x + 130,
-                                                             earth.transform.position.y + 330), 0, Vector2(1, 1)),
-                            GameObjectType.Static, GameObjectCategory.Menu)
-    earth_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, "Earth",
-                                         Vector2(0, 0), (255, 255, 255))
-    earth_text.add_component(Renderer2D("EarthTextRenderer", earth_text_material, 2))
-
-    mars = earth.clone()
-    mars.name = Constants.Button.MARS_BUTTON
-    mars.transform.position.x = earth.transform.position.x + 883 * 0.3 + 150
-    mars.get_component(Renderer2D).material.texture = Constants.Menu.MARS_IMAGE
-
-    mars_text = earth_text.clone()
-    mars_text.transform.position.x = mars.transform.position.x + 135
-    mars_text.get_component(Renderer2D).material.text = "Mars"
-
-    saturn = earth.clone()
-    saturn.name = Constants.Button.SATURN_BUTTON
-    saturn.transform.position.x = mars.transform.position.x + 883 * 0.3 + 100
-    saturn_texture_material = TextureMaterial2D(Constants.Menu.SATURN_IMAGE, None,
-                                                Vector2(0, 0), None)
-    saturn.get_component(Renderer2D).material = saturn_texture_material
-
-    saturn_text = earth_text.clone()
-    saturn_text.transform.position.x = saturn.transform.position.x + 240
-    saturn_text.get_component(Renderer2D).material.text = "Saturn"
-
-    menu_scene.add(background)
-    menu_scene.add(title)
-    menu_scene.add(earth)
-    menu_scene.add(earth_text)
-    menu_scene.add(mars)
-    menu_scene.add(mars_text)
-    menu_scene.add(saturn)
-    menu_scene.add(saturn_text)
-
-
-def initialise_menu(menu_scene, background_material, title_text, menu_button_text_top, menu_button_text_bottom,
-                    top_button_name, bottom_button_name):
-    background = initialise_menu_background(background_material)
-
-    title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
-    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE)
-    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, title_text,
-                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 200), (255, 255, 255))
-    title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
-
-    start_button = GameObject(top_button_name,
-                              Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 330), 0, Vector2(1, 1)),
-                              GameObjectType.Static, GameObjectCategory.Menu)
-    start_button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None,
-                                                      Vector2(0, 0), None)
-    text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE)
-    start_button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, menu_button_text_top,
-                                                Vector2(150, 27), (0, 0, 0))
-    start_button.add_component(Renderer2D("StartButtonRenderer", start_button_texture_material, 1))
-    start_button.add_component(Renderer2D("StartButtonTextRenderer", start_button_text_material, 2))
-    start_button.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
-
-    end_button = start_button.clone()
-    end_button.name = bottom_button_name
-    end_button.transform.position.y = 440
-    renderers = end_button.get_components(Renderer2D)
-
-    for renderer in renderers:
-        if isinstance(renderer.material, TextMaterial2D):
-            renderer.material.text = menu_button_text_bottom
-
-    menu_scene.add(background)
-    menu_scene.add(title)
-    menu_scene.add(start_button)
-    menu_scene.add(end_button)
 
 
 def update(game_time):
@@ -209,7 +99,7 @@ sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 earth_scene = Scene(Constants.Scene.EARTH)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600, 4900), 0, Vector2(1, 1)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
@@ -249,8 +139,7 @@ enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyW
 enemy2.add_component(enemy_controller2)
 
 enemy3 = Character("Enemy3", 50, 2, 1, 1, Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
-                   GameObjectType.Dynamic,
-                   GameObjectCategory.Wolf)
+                   GameObjectType.Dynamic, GameObjectCategory.Wolf)
 enemy3.add_component(BoxCollider2D("Box-3"))
 # enemy.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
@@ -288,6 +177,16 @@ enemy3.add_component(enemy_controller2)
 # scene.add(enemy5)
 # scene.add(enemy6)
 
+pet = GameObject("PetDog", Transform2D(Vector2(2500, 4800), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
+                 GameObjectCategory.Pet)
+material_pet = Constants.PetDog.MATERIAL_PET
+pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, 5))
+pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
+                                   ActiveTake.PET_DOG_WALK, Constants.CHARACTER_MOVE_SPEED))
+pet.add_component(Rigidbody2D("PetRigidbody"))
+pet.add_component(PetController("PetMovement", player, 10))
+pet.add_component(BoxCollider2D("PetCollider"))
+
 text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
                   GameObjectCategory.Player)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
@@ -298,10 +197,10 @@ text.add_component(BoxCollider2D("Box-2"))
 
 earth_scene.add(player)
 earth_scene.add(enemy)
+earth_scene.add(pet)
 
 mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
-
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
 scene_manager.set_active_scene(Constants.Scene.EARTH)
@@ -326,15 +225,17 @@ game_time = GameTime()
 collider_system = CollisionManager(200, scene_manager, camera_manager)
 managers.append(collider_system)
 
-pause_menu_scene = initialise_menu_scene(Constants.Scene.PAUSE_MENU)
-main_menu_scene = initialise_menu_scene(Constants.Scene.MAIN_MENU)
-level_menu_scene = initialise_menu_scene(Constants.Scene.LEVEL_MENU)
+scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_manager)
+
+pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
+main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
+level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 
 initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit",
                 Constants.Button.START_BUTTON, Constants.Button.QUIT_BUTTON)
 initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu",
                 Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON)
-initialise_level_menu(level_menu_scene)
+scene_loader.initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 

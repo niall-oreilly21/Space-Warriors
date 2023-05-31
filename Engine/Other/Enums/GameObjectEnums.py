@@ -16,6 +16,7 @@ class GameObjectCategory(Enum):
     Menu = 6
     UI = 7
     Environment = 8
+    Pet = 9
 
 
 class GameObjectDirection(Enum):
