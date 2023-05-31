@@ -47,12 +47,12 @@ class AttackBoxCollider2D(BoxCollider2D):
 
         return self.__bounds
 
-    def draw(self, screen, camera_manager):
+    def draw(self, screen, camera_position):
         pass
         bounds = self.bounds
 
-        bounds.x -= camera_manager.active_camera.transform.position.x
-        bounds.y -= camera_manager.active_camera.transform.position.y
+        bounds.x -= camera_position.x
+        bounds.y -= camera_position.y
 
         rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
                                                   -self._transform.rotation)
