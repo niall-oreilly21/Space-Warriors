@@ -2,7 +2,6 @@ import json
 
 from pygame import Vector2
 
-from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
