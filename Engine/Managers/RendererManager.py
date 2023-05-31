@@ -69,7 +69,7 @@ class RendererManager(Manager, IDrawable):
 
                     if self.__is_debug_mode:
                         if renderer.parent.get_component(BoxCollider2D):
-                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager.active_camera.transform.position)
+                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, camera_component.transform.position)
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
