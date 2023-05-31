@@ -200,7 +200,26 @@ class Constants:
         ]
         __PET_WALK = Take(ActiveTake.PET_DOG_WALK, __PET_WALK_FRAME_RECTS)
 
-        PET_ANIMATOR_INFO = [__PET_WALK]
+        __PET_RUN_FRAME_RECTS = [
+            pygame.Rect(111, 343, 37, 23), pygame.Rect(175, 343, 36, 25), pygame.Rect(240, 342, 35, 26),
+            pygame.Rect(305, 340, 34, 28), pygame.Rect(373, 339, 32, 28), pygame.Rect(438, 339, 32, 29),
+            pygame.Rect(503, 339, 32, 29), pygame.Rect(565, 342, 36, 26),
+        ]
+        __PET_RUN = Take(ActiveTake.PET_DOG_RUN, __PET_RUN_FRAME_RECTS)
+
+        __PET_SIT_FRAME_RECT = [
+            pygame.Rect(304, 211, 30, 29), pygame.Rect(368, 211, 30, 29), pygame.Rect(432, 211, 30, 29),
+            pygame.Rect(496, 211, 30, 29), pygame.Rect(560, 211, 30, 29), pygame.Rect(624, 211, 30, 29)
+        ]
+        __PET_SIT = Take(ActiveTake.PET_DOG_SIT, __PET_SIT_FRAME_RECT)
+
+        __PET_IDLE_FRAME_RECT = [
+            pygame.Rect(112, 84, 32, 28), pygame.Rect(176, 83, 32, 29), pygame.Rect(240, 84, 32, 28),
+            pygame.Rect(304, 83, 32, 29), pygame.Rect(368, 85, 32, 27)
+        ]
+        __PET_IDLE = Take(ActiveTake.PET_DOG_IDLE, __PET_IDLE_FRAME_RECT)
+
+        PET_ANIMATOR_INFO = [__PET_WALK, __PET_SIT, __PET_RUN]
 
         __PET_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/pet_dog.png")
 

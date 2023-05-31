@@ -1,7 +1,13 @@
+import pygame
+from pygame import Vector2
+
+from App.Components.Controllers.PlayerController import PlayerController
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.GameObjectEnums import GameObjectDirection
 
 
 class PetController(Component):
@@ -12,6 +18,14 @@ class PetController(Component):
         self.__target_object = target_object
         self.__speed = speed
         self.__rigidbody = None
+        self.__adopted = False
+
+    @property
+    def adopted(self):
+        return self.__adopted
+
+    def __adopt(self):
+            self.__adopted = True
 
     def start(self):
         self.__rend = self._parent.get_component(SpriteRenderer2D)
@@ -29,18 +43,41 @@ class PetController(Component):
         if direction.length() > 0:
             direction.normalize()
 
-        desired_position = target_position - direction * 20
+        if direction.length() <= 70:
+            if self.__target_object.get_component(PlayerController).input_handler.is_tap(pygame.K_e, 200):
+                self.__adopt()
 
-        # Calculate the movement amount based on speed and elapsed time
-        movement_amount = self.__rigidbody.velocity = direction * self.__speed * 0.0001
+        if self.__adopted:
+            self.__rigidbody.velocity = direction * self.__speed * 0.0001
 
-        # Calculate the distance to the desired position
-        distance_to_desired = desired_position - current_position
+            target_previous_direction = self.__target_object.get_component(PlayerController).previous_direction
+            if target_previous_direction == GameObjectDirection.Left:
+                self.__rend.flip_x = True
+            elif target_previous_direction == GameObjectDirection.Right:
+                self.__rend.flip_x = False
 
-        # Check if the pet is already at the desired position or too close
-        if distance_to_desired.length() <= movement_amount.length():
-            # Move the pet directly to the desired position
-            self._transform.position = desired_position
-        else:
-            # Move the pet by the movement amount
-            self._transform.position += movement_amount
+            self.__animator.set_active_take(ActiveTake.PET_DOG_WALK)
+
+            distance_from_target = 65
+
+            target_active_take = self.__target_object.get_component(SpriteAnimator2D).active_take
+
+            if target_active_take == ActiveTake.PLAYER_ATTACK_X and \
+                    target_previous_direction == GameObjectDirection.Left:
+                distance_from_target = 150
+            elif target_active_take == ActiveTake.PLAYER_ATTACK_UP:
+                distance_from_target = 100
+
+            if direction.length() <= distance_from_target:
+                self.__rigidbody.velocity = Vector2(0, 0)
+                if target_active_take == ActiveTake.PLAYER_ATTACK_X or target_active_take == ActiveTake.PLAYER_ATTACK_UP \
+                        or target_active_take == ActiveTake.PLAYER_ATTACK_DOWN:
+                    self.__animator.set_active_take(ActiveTake.PET_DOG_IDLE)
+                else:
+                    self.__animator.set_active_take(ActiveTake.PET_DOG_SIT)
+            else:
+                # Calculate the movement amount based on speed and elapsed time
+                movement_amount = self.__rigidbody.velocity = direction * self.__speed * 0.0001
+
+                # Update the position
+                self._transform.position += movement_amount

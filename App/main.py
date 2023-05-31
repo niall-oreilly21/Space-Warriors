@@ -63,6 +63,7 @@ screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((400, 400))
+pygame.display.set_caption(Constants.GAME_NAME)
 
 camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
                                 GameObjectType.Dynamic, GameObjectCategory.Player)
@@ -182,9 +183,10 @@ pet = GameObject("PetDog", Transform2D(Vector2(2500, 4800), 0, Vector2(1.2, 1.2)
 material_pet = Constants.PetDog.MATERIAL_PET
 pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, 5))
 pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                   ActiveTake.PET_DOG_WALK, Constants.CHARACTER_MOVE_SPEED))
+                                   ActiveTake.PET_DOG_SIT, Constants.CHARACTER_MOVE_SPEED))
+pet.get_component(SpriteAnimator2D).is_infinite = True
 pet.add_component(Rigidbody2D("PetRigidbody"))
-pet.add_component(PetController("PetMovement", player, 10))
+pet.add_component(PetController("PetMovement", player, 20))
 pet.add_component(BoxCollider2D("PetCollider"))
 
 text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
@@ -240,7 +242,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
-scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
@@ -289,6 +291,6 @@ while running:
     render_manager.draw()
 
     pygame.display.update()
-    game_time.limit_fps(60)
+    game_time.limit_fps(80)
 
 pygame.quit()
