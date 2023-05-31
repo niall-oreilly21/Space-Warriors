@@ -5,11 +5,13 @@ from pygame import Vector2, Rect
 from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonCollider2D import ButtonCollider2D
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
@@ -152,6 +154,7 @@ def update(game_time):
 
 # Initialize Pygame
 pygame.init()
+pygame.display.set_caption("SPACE WARRIORS")
 
 # Set up the display window
 screen_width = 1
@@ -217,7 +220,7 @@ player.add_component(player_controller)
 player_collider = PlayerAttackCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+enemy = Character("Enemy", 50,25, 1, 1, Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
                   GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
@@ -283,16 +286,18 @@ enemy3.add_component(enemy_controller2)
 test_scene = Scene("Test")
 scene_manager.add("Test", test_scene)
 
-text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
-                  GameObjectCategory.Player)
+text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Dynamic,
+                  GameObjectCategory.UI)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 texture_material = TextureMaterial2D(image, None, Vector2(0.1, 0.1), None)
-text.add_component(Renderer2D("Renderer-2", texture_material, 1))
-text.add_component(Renderer2D("Renderer-1", text_material, 2))
-text.add_component(BoxCollider2D("Box-2"))
+text.add_component(Renderer2D("Renderer-2", RectMaterial2D(800, 300, (0,0,255), 255), 1))
+text.add_component(HealthBarController("Health Bar"))
+text.add_component(Renderer2D("Renderer-1", text_material, 0))
+# text.add_component(BoxCollider2D("Box-2"))
 
 scene.add(player)
 scene.add(enemy)
+scene.add(text)
 
 scene_manager.add(Constants.Scene.GAME, scene)
 scene_manager.set_active_scene(Constants.Scene.GAME)
@@ -332,14 +337,15 @@ initialise_level_menu(level_menu_scene)
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
-scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+scene_manager.set_active_scene(Constants.Scene.GAME)
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
 managers.append(game_state_manager)
 
-Application.ActiveScene = main_menu_scene
+Application.ActiveScene = scene
 Application.ActiveCamera = camera_manager.active_camera
+Application.Player = player
 
 for manager in managers:
     manager.start()
