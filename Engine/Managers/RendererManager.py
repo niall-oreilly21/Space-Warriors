@@ -73,7 +73,7 @@ class RendererManager(Manager, IDrawable):
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
-        camera_rect = Rect(0, 0, viewport.x + 100, viewport.y + 100)
+        camera_rect = Rect(0, 0, viewport.x + 60, viewport.y + 60)
         camera_rect.center = (viewport.x // 2, viewport.y // 2)
 
         # Check if the object's rect intersects with or is contained within the camera's viewport
