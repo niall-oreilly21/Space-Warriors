@@ -9,7 +9,7 @@ from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 def load_scene():
-    load_time = .5  # Adjust this value as needed
+    load_time = .4  # Adjust this value as needed
     time.sleep(load_time)
 
 
@@ -75,17 +75,17 @@ class SceneManager(Manager):
     def active_scene(self):
         return self.__active_scene
 
-    def set_active_scene(self, id):
-        id = id.strip().lower()
-        if id in self.__scenes:
-            self.__active_scene = self.__scenes[id]
+    def set_active_scene(self, name):
+        name = name.strip().lower()
+        if name in self.__scenes:
+            self.__active_scene = self.__scenes[name]
         return self.__active_scene
 
-    def add(self, id, scene):
-        id = id.strip().lower()
-        if id in self.__scenes:
+    def add(self, name, scene):
+        name = name.strip().lower()
+        if name in self.__scenes:
             return False
-        self.__scenes[id] = scene
+        self.__scenes[name] = scene
         return True
 
     def update(self, game_time):

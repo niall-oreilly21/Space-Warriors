@@ -24,4 +24,7 @@ class ActiveTake(Enum):
     PLAYER_ATTACK_DOWN = 19,
     PLAYER_ATTACK_UP = 20,
     COOK = 21,
-    TELEPORT = 22
+    TELEPORT = 22,
+    PET_DOG_SIT = 23,
+    PET_DOG_RUN = 24,
+    PET_DOG_IDLE = 25

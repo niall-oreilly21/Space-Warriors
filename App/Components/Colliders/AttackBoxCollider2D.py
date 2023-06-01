@@ -7,9 +7,8 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectDirection
 
 
 class AttackBoxCollider2D(BoxCollider2D):
-    def __init__(self, name, box_collider, player_controller):
+    def __init__(self, name, player_controller):
         super().__init__(name)
-        self.__box_collider = box_collider
         self.__player_controller = player_controller
 
     @property
@@ -48,7 +47,6 @@ class AttackBoxCollider2D(BoxCollider2D):
         return self.__bounds
 
     def draw(self, screen, camera_position):
-        pass
         bounds = self.bounds
 
         bounds.x -= camera_position.x
@@ -61,7 +59,7 @@ class AttackBoxCollider2D(BoxCollider2D):
         # print(self.__width)
         self.__height = rotated_bounds.height
 
-        pygame.draw.rect(screen, (0,255,0), bounds, 4)
-    #
+        pygame.draw.rect(screen, (0, 255, 0), bounds, 4)
+
     def clone(self):
         return AttackBoxCollider2D(self._name, self.anchor.copy())

@@ -23,6 +23,10 @@ class Renderer2D(Component):
         def layer(self):
             return self._layer
 
+        @layer.setter
+        def layer(self, layer):
+            self._layer = layer
+
         def draw(self, surface, transform):
             self._material.draw(surface, transform)
 

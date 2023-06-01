@@ -22,6 +22,7 @@ from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Managers.SoundManager import SoundManager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
 from App.Components.Controllers.PlayerController import PlayerController
@@ -63,6 +64,7 @@ screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((400, 400))
+pygame.display.set_caption(Constants.GAME_NAME)
 
 camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
                                 GameObjectType.Dynamic, GameObjectCategory.Player)
@@ -107,7 +109,7 @@ player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
 player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
-player.add_component(SpriteRenderer2D("player", material_player, 5))
+player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
 player_controller = PlayerController("Player movement", 0.3, 0.3, player_box_collider)
@@ -115,7 +117,7 @@ player.add_component(player_controller)
 player_collider = PlayerAttackCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
                   GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
@@ -177,14 +179,16 @@ enemy3.add_component(enemy_controller2)
 # scene.add(enemy5)
 # scene.add(enemy6)
 
-pet = GameObject("PetDog", Transform2D(Vector2(2500, 4800), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
+pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
                  GameObjectCategory.Pet)
 material_pet = Constants.PetDog.MATERIAL_PET
-pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, 5))
+pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
+pet.get_component(SpriteRenderer2D).flip_x = True
 pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                   ActiveTake.PET_DOG_WALK, Constants.CHARACTER_MOVE_SPEED))
+                                   ActiveTake.PET_DOG_SIT, Constants.CHARACTER_MOVE_SPEED))
+pet.get_component(SpriteAnimator2D).is_infinite = True
 pet.add_component(Rigidbody2D("PetRigidbody"))
-pet.add_component(PetController("PetMovement", player, 10))
+pet.add_component(PetController("PetMovement", player, 20))
 pet.add_component(BoxCollider2D("PetCollider"))
 
 text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
@@ -222,7 +226,7 @@ managers.append(scene_manager)
 
 game_time = GameTime()
 
-collider_system = CollisionManager(200, scene_manager, camera_manager)
+collider_system = CollisionManager(100, scene_manager, camera_manager)
 managers.append(collider_system)
 
 scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_manager)
@@ -240,7 +244,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
-scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
@@ -255,7 +259,7 @@ map_load(earth_scene, Constants.Map.PLANET_A_JSON)
 map_load(mars_scene, Constants.Map.PLANET_B_JSON)
 map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
 
-load_sound()
+# load_sound()
 
 for manager in managers:
     manager.start()

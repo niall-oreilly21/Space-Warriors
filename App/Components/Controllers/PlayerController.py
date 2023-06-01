@@ -34,6 +34,10 @@ class PlayerController(Component, IMoveable):
     def previous_direction(self):
         return self.__previous_direction
 
+    @property
+    def input_handler(self):
+        return self.__input_handler
+
     def start(self):
         self.__rb = self._parent.get_component(Rigidbody2D)
         self.__rend = self._parent.get_component(SpriteRenderer2D)
@@ -118,7 +122,6 @@ class PlayerController(Component, IMoveable):
                 self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
 
     def _attack(self):
-        attack_key = None
         if self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
             attack_key = pygame.K_UP
         elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
@@ -132,7 +135,7 @@ class PlayerController(Component, IMoveable):
             self.parent.remove_component(BoxCollider2D)
 
             self.__is_attacking = True
-            attack_collider = AttackBoxCollider2D("Attack box collider", self.__box_collider, self)
+            attack_collider = AttackBoxCollider2D("Attack box collider", self)
             self.parent.add_component(attack_collider)
 
             if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \

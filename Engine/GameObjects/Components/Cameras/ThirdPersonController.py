@@ -9,7 +9,7 @@ class ThirdPersonController(Component):
     def __init__(self, name, target):
         super().__init__(name)
         self.__target = target
-        self.__smoothness = 1  # Adjust the smoothness factor (0.0 to 1.0)
+        self.__smoothness = 0.5  # Adjust the smoothness factor (0.0 to 1.0)
         self.__smooth_position = None
         self.__camera = None
 
