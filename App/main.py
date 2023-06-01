@@ -2,7 +2,7 @@ import os
 import pygame
 from pygame import Vector2
 
-from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
+from App.Components.Colliders.PlayerAttackCollider import PlayerAttackCollider
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
@@ -10,6 +10,7 @@ from App.Constants.Constants import Constants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -125,8 +126,9 @@ material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
 enemy.add_component(SpriteRenderer2D("enemy", material_enemy, 0))
 enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_INFO, material_enemy,
                                      ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED)
+enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200)
 enemy.add_component(enemy_controller)
+enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000,4500), Vector2(2200 ,4500), Vector2(2400, 4500), Vector2(2800, 4500)]))
 
 enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
                    GameObjectType.Dynamic,
@@ -137,7 +139,7 @@ material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY1
 enemy2.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
 enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
                                       ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED)
+enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
 enemy2.add_component(enemy_controller2)
 
 enemy3 = Character("Enemy3", 50, 2, 1, 1, Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
@@ -148,39 +150,13 @@ material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
 enemy3.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
 enemy3.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
                                       ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED)
+enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED,600)
 enemy3.add_component(enemy_controller2)
 # enemy4 = enemy.clone()
 
-# enemy3 = GameObject("Enemy3", Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
-#                     GameObjectCategory.Alien)
-# enemy3.add_component(BoxCollider2D("Box-4"))
-# # enemy.add_component(Rigidbody2D("Rigid"))
-# material_enemy = Constants.EnemyAlien.MATERIAL_ENEMY1
-# enemy3.add_component(SpriteRenderer2D("enemy3", material_enemy, 1))
-# enemy3.add_component(SpriteAnimator2D("enemy3", Constants.EnemyAlien.ENEMY_ANIMATOR_INFO, material_enemy,
-#                                       ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-# enemy_controller3 = EnemyController("Enemy movement 3", player, Constants.EnemyAlien.MOVE_SPEED)
-# enemy3.add_component(enemy_controller3)
-#
-# enemy4 = GameObject("Enemy4", Transform2D(Vector2(750, 0), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
-#                     GameObjectCategory.Alien)
-# enemy4.add_component(BoxCollider2D("Box-5"))
-# # enemy.add_component(Rigidbody2D("Rigid"))
-# material_enemy = Constants.EnemyAlien.MATERIAL_ENEMY3
-# enemy4.add_component(SpriteRenderer2D("enemy4", material_enemy, 1))
-# enemy4.add_component(SpriteAnimator2D("enemy4", Constants.EnemyAlien.ENEMY_ANIMATOR_INFO, material_enemy,
-#                                       ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-# enemy_controller4 = EnemyController("Enemy movement 4", player, Constants.EnemyAlien.MOVE_SPEED)
-# enemy4.add_component(enemy_controller4)
-# enemy5 = enemy4.clone()
-# enemy6 = enemy4.clone()
-# enemy6.transform.translate(20, 20)
-# scene.add(enemy5)
-# scene.add(enemy6)
-
 pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
                  GameObjectCategory.Pet)
+
 material_pet = Constants.PetDog.MATERIAL_PET
 pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
 pet.get_component(SpriteRenderer2D).flip_x = True

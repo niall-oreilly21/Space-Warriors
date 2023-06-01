@@ -2,7 +2,7 @@ from Engine.GameObjects.Components.Component import Component
 import math
 
 
-class WaypointSystem(Component):
+class WaypointFinder(Component):
     def __init__(self, name, waypoints):
         super().__init__(name)
         self.waypoints = waypoints
@@ -24,10 +24,13 @@ class WaypointSystem(Component):
             self.current_waypoint = 1
             self.direction = 1
 
-    def has_reached_waypoint(self, enemy_position, distance_threshold=2):
+    def has_reached_waypoint(self, enemy_position, distance_threshold=10):
         current_waypoint = self.get_current_waypoint()
         distance = math.sqrt(
             (current_waypoint[0] - enemy_position[0]) ** 2 + (current_waypoint[1] - enemy_position[1]) ** 2)
+
+
+        print(distance)
         return distance <= distance_threshold
 
     def lerp(self, start, end, t):
