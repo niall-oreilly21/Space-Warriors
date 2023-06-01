@@ -56,7 +56,6 @@ class AttackBoxCollider2D(BoxCollider2D):
                                                   -self._transform.rotation)
         rotated_bounds = rotated_surface.get_rect(center=bounds.center)
         self.__width = rotated_bounds.width
-        # print(self.__width)
         self.__height = rotated_bounds.height
 
         pygame.draw.rect(screen, (0, 255, 0), bounds, 4)

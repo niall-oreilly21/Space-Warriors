@@ -3,7 +3,7 @@ import random
 
 from pygame import Vector2
 
-from App.Components.Colliders.TreeCollider2D import TreeCollider
+from App.Components.Colliders.TreeBoxCollider2D import TreeBoxCollider2D
 from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -42,6 +42,7 @@ def map_load(scene, planet_json):
             tile = TileAttributes(Constants.Tile.WATER, False, None)
             row.append(tile)
         map_data.append(row)
+
     # More map data rows
 
     # update tiles that are available, everything else default
@@ -52,7 +53,7 @@ def map_load(scene, planet_json):
             c_value = ground["c"]
             s_id = ground["s"]["id"]
             if s_id == Constants.Tile.WATER:
-                map_data[y][x] = TileAttributes(s_id, True, c_value)
+                map_data[y][x] = TileAttributes(s_id, False, c_value)
             else:
                 map_data[y][x] = TileAttributes(s_id, False, c_value)
 
@@ -66,7 +67,7 @@ def map_load(scene, planet_json):
             if id == 5:
                 tree_object = random.choice(
                     [GameObjectConstants.TALL_TREE.clone(), GameObjectConstants.LOW_TREE.clone()])
-                tree_collider = TreeCollider("TreeCollider")
+                tree_collider = TreeBoxCollider2D("TreeCollider")
                 tree_object.add_component(tree_collider)
                 tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
                 scene.add(tree_object)

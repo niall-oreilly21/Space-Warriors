@@ -2,14 +2,14 @@ import os
 import pygame
 from pygame import Vector2
 
-from App.Components.Colliders.PlayerAttackCollider2D import PlayerAttackCollider
+from App.Components.Colliders.PlayerBoxCollider2D import CharacterBoxCollider2D
+from App.Components.Colliders.PlayerCollider2D import PlayerCollider2D
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
-from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -106,15 +106,15 @@ player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.D
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 player.add_component(Rigidbody2D("Rigid"))
-player_box_collider = BoxCollider2D("Box")
+player_box_collider = CharacterBoxCollider2D("Box")
 player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
 player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-player_controller = PlayerController("Player movement", 0.3, 0.3, player_box_collider)
+player_controller = PlayerController("Player movement", 0.17, 0.17, player_box_collider)
 player.add_component(player_controller)
-player_collider = PlayerAttackCollider("Players attack collider")
+player_collider = PlayerCollider2D("Players attack collider")
 player.add_component(player_collider)
 
 enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
