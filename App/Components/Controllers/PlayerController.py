@@ -135,7 +135,7 @@ class PlayerController(Component, IMoveable):
             self.parent.remove_component(BoxCollider2D)
 
             self.__is_attacking = True
-            attack_collider = AttackBoxCollider2D("Attack box collider", self.__box_collider, self)
+            attack_collider = AttackBoxCollider2D("Attack box collider", self)
             self.parent.add_component(attack_collider)
 
             if self.__previous_direction == GameObjectEnums.GameObjectDirection.Left \

@@ -35,8 +35,8 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.EarthScene:
             load_scene()
-            self.__event_dispatcher.dispatch_event(
-                EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            # self.__event_dispatcher.dispatch_event(
+            #     EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
             self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene

@@ -15,7 +15,7 @@ class Constants:
     VIEWPORT_WIDTH = 1500
     VIEWPORT_HEIGHT = 750
 
-    CHARACTER_MOVE_SPEED = 5
+    CHARACTER_MOVE_SPEED = 4
 
     class Player:
         WIDTH = 29
@@ -266,6 +266,14 @@ class Constants:
         MENU_CAMERA = "MenuCamera"
 
     class Map:
-        PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetA.json"
+        PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
         PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetB.json"
         PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
+
+    class Tile:
+        GRASS = 1
+        WATER = 2
+        DARK_GRASS = 3
+        DIRT = 5
+        SAND = 6
+        COARSE_DIRT = 9

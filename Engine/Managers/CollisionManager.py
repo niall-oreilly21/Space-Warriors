@@ -3,19 +3,23 @@ import math
 import pygame
 from pygame import Rect
 
+from App.Components.Colliders.TreeCollider2D import TreeCollider
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PlayerController import PlayerController
+from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
 from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
 class CollisionManager(IUpdateable):
     def __init__(self, collision_range, scene_manager, camera_manager):
-        self.__collision_range = 200
+        self.__collision_range = collision_range
         self.__scene_manager = scene_manager
         self.__camera_manager = camera_manager
         self.collision_area = CollisionArea(self.__camera_manager.active_camera.parent.transform.position.x,
@@ -24,13 +28,17 @@ class CollisionManager(IUpdateable):
                                             self.__camera_manager.active_camera.viewport.y)
 
     def check_collision(self, collider1, collider2, game_time):
+        # pass
+        collider1_entity = collider1.parent
+        collider2_entity = collider2.parent
         if collider1.collides_with(collider2):
-            collider1_entity = collider1.parent
-            collider2_entity = collider2.parent
+            if isinstance(collider1, TreeCollider) and isinstance(collider2_entity, Character):
+                collider1_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
+            elif isinstance(collider2, TreeCollider) and isinstance(collider1_entity, Character):
+                collider2_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
 
             collider1_rigidbody = collider1_entity.get_component(Rigidbody2D)
             collider2_rigidbody = collider2_entity.get_component(Rigidbody2D)
-
 
             is_collider1_static = collider1_entity.game_object_type.Static
             is_collider2_static = collider2_entity.game_object_type.Static
@@ -39,58 +47,88 @@ class CollisionManager(IUpdateable):
 
             if displacement.length_squared() != 0:  # Check for non-zero length
                 if collider1_rigidbody and collider2_rigidbody:
-                    total_mass = collider1_rigidbody.mass + collider2_rigidbody.mass
-
-                    # Calculate the relative velocity between the colliders
-                    relative_velocity = collider2_rigidbody.velocity - collider1_rigidbody.velocity
-
-                    # Calculate the impulse
-                    impulse = (-(1 + 0.4) * relative_velocity.dot(displacement)) / (
-                            displacement.length_squared() * (
-                            1 / collider1_rigidbody.mass + 1 / collider2_rigidbody.mass)
-                    )
-
-                    # Adjust the impulse magnitude for a smoother result
-                    impulse *= 35  # Adjust this factor as needed
-
-                    # Apply the impulse to the velocities if the relative velocity is below a threshold
-                    velocity_threshold = 0.6  # Adjust this threshold as needed
-                    if relative_velocity.length() < velocity_threshold:
-                        collider1_rigidbody.velocity -= impulse * (
-                                displacement / displacement.length()) / collider1_rigidbody.mass
-                        collider2_rigidbody.velocity += impulse * (
-                                displacement / displacement.length()) / collider2_rigidbody.mass
-
+                    pass
                 elif collider1_rigidbody and is_collider2_static:
+                    overlap_x = min(collider1.bounds.right - collider2.bounds.left,
+                                    collider2.bounds.right - collider1.bounds.left)
+                    overlap_y = min(collider1.bounds.bottom - collider2.bounds.top,
+                                    collider2.bounds.bottom - collider1.bounds.top)
 
-                    # Handle collision with a static object
-                    collision_normal = displacement.normalize()
-
-                    relative_velocity = collider2_rigidbody.velocity
-
-                    impulse_magnitude = (-(1 + 20) * relative_velocity.dot(collision_normal))
-
-                    impulse_vector = impulse_magnitude * collision_normal
-
-                    impulse_vector *= 90
-
-                    collider1_rigidbody.velocity += impulse_vector
-
+                    if overlap_x < overlap_y:
+                        if overlap_x == collider1.bounds.right - collider2.bounds.left:
+                            # Check if it's a corner collision
+                            if collider1.bounds.bottom == collider2.bounds.top:
+                                collider1_entity.transform.position.x = collider2.bounds.left - collider1.bounds.width
+                                collider1_entity.transform.position.y = collider2.bounds.top - collider1.bounds.height
+                            else:
+                                collider1_entity.transform.position.x -= overlap_x
+                        else:
+                            # Check if it's a corner collision
+                            if collider1.bounds.bottom == collider2.bounds.top:
+                                collider1_entity.transform.position.x = collider2.bounds.right
+                                collider1_entity.transform.position.y = collider2.bounds.top - collider1.bounds.height
+                            else:
+                                collider1_entity.transform.position.x += overlap_x
+                    else:
+                        if overlap_y == collider1.bounds.bottom - collider2.bounds.top:
+                            # Check if it's a corner collision
+                            if collider1.bounds.right == collider2.bounds.left:
+                                collider1_entity.transform.position.y = collider2.bounds.top - collider1.bounds.height
+                                collider1_entity.transform.position.x = collider2.bounds.left - collider1.bounds.width
+                            else:
+                                collider1_entity.transform.position.y -= overlap_y
+                        else:
+                            # Check if it's a corner collision
+                            if collider1.bounds.right == collider2.bounds.left:
+                                collider1_entity.transform.position.y = collider2.bounds.bottom
+                                collider1_entity.transform.position.x = collider2.bounds.left - collider1.bounds.width
+                            else:
+                                collider1_entity.transform.position.y += overlap_y
 
                 elif is_collider1_static and collider2_rigidbody:
-                    # Handle collision with a static object
-                    collision_normal = displacement.normalize()
-                    relative_velocity = collider2_rigidbody.velocity
-                    impulse_magnitude = (-(1 + 0.8) * relative_velocity.dot(collision_normal))
-                    impulse_vector = impulse_magnitude * collision_normal
-                    impulse_vector *= 20
+                    overlap_x = min(collider2.bounds.right - collider1.bounds.left,
+                                    collider1.bounds.right - collider2.bounds.left)
+                    overlap_y = min(collider2.bounds.bottom - collider1.bounds.top,
+                                    collider1.bounds.bottom - collider2.bounds.top)
 
-                    collider2_rigidbody.velocity += impulse_vector
+                    if overlap_x < overlap_y:
+                        if overlap_x == collider2.bounds.right - collider1.bounds.left:
+                            # Check if it's a corner collision
+                            if collider2.bounds.bottom == collider1.bounds.top:
+                                collider2_entity.transform.position.x = collider1.bounds.left - collider2.bounds.width
+                                collider2_entity.transform.position.y = collider1.bounds.top - collider2.bounds.height
+                            else:
+                                collider2_entity.transform.position.x -= overlap_x
+                        else:
+                            # Check if it's a corner collision
+                            if collider2.bounds.bottom == collider1.bounds.top:
+                                collider2_entity.transform.position.x = collider1.bounds.right
+                                collider2_entity.transform.position.y = collider1.bounds.top - collider2.bounds.height
+                            else:
+                                collider2_entity.transform.position.x += overlap_x
+                    else:
+                        if overlap_y == collider2.bounds.bottom - collider1.bounds.top:
+                            # Check if it's a corner collision
+                            if collider2.bounds.right == collider1.bounds.left:
+                                collider2_entity.transform.position.y = collider1.bounds.top - collider2.bounds.height
+                                collider2_entity.transform.position.x = collider1.bounds.left - collider2.bounds.width
+                            else:
+                                collider2_entity.transform.position.y -= overlap_y
+                        else:
+                            # Check if it's a corner collision
+                            if collider2.bounds.right == collider1.bounds.left:
+                                collider2_entity.transform.position.y = collider1.bounds.bottom
+                                collider2_entity.transform.position.x = collider1.bounds.left - collider2.bounds.width
+                            else:
+                                collider2_entity.transform.position.y += overlap_y
 
-
-                if collider1_entity.get_component(Collider2D):
-                    collider1_entity.get_component(Collider2D).handle_response(collider2_entity)
-
+            if collider1_entity.get_component(Collider2D):
+                collider1_entity.get_component(Collider2D).handle_response(collider2_entity)
+        else:
+            if isinstance(collider1, TreeCollider) and isinstance(collider2_entity, Character):
+                collider1_entity.get_component(Renderer2D).layer = RendererLayers.Tree
+            elif isinstance(collider2, TreeCollider) and isinstance(collider1_entity, Character):
+                collider2_entity.get_component(Renderer2D).layer = RendererLayers.Tree
 
     def start(self):
         pass
