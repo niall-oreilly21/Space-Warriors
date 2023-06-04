@@ -123,8 +123,7 @@ def initialise_level_menu(menu_scene):
     menu_scene.add(saturn_text)
 
 
-def initialise_menu(menu_scene, background_material, title_text, menu_button_text_top, menu_button_text_bottom,
-                    top_button_name, bottom_button_name):
+def initialise_menu(menu_scene, background_material, title_text, button_texts, button_names):
     background = initialise_menu_background(background_material)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
@@ -134,32 +133,35 @@ def initialise_menu(menu_scene, background_material, title_text, menu_button_tex
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 200), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
-    start_button = GameObject(top_button_name,
-                              Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 330), 0, Vector2(1, 1)),
-                              GameObjectType.Static, GameObjectCategory.Menu)
-    start_button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None,
-                                                      Vector2(0, 0), None)
+    button_positions = [
+        Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 330),
+        Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 440),
+        Vector2(Constants.VIEWPORT_WIDTH / 2 - 150, 550)
+    ]
+
     text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE)
-    start_button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, menu_button_text_top,
-                                                Vector2(150, 27), (0, 0, 0))
-    start_button.add_component(Renderer2D("StartButtonRenderer", start_button_texture_material, 1))
-    start_button.add_component(Renderer2D("StartButtonTextRenderer", start_button_text_material, 2))
-    start_button.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
 
-    end_button = start_button.clone()
-    end_button.name = bottom_button_name
-    end_button.transform.position.y = 440
-    renderers = end_button.get_components(Renderer2D)
+    for i in range(len(button_texts)):
+        button_name = button_names[i]
+        button_text = button_texts[i]
+        button_position = button_positions[i]
 
-    for renderer in renderers:
-        if isinstance(renderer.material, TextMaterial2D):
-            renderer.material.text = menu_button_text_bottom
+        button = GameObject(button_name,
+                            Transform2D(button_position, 0, Vector2(1, 1)),
+                            GameObjectType.Static, GameObjectCategory.Menu)
+
+        button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None, Vector2(0, 0), None)
+        button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, button_text,
+                                              Vector2(150, 27), (0, 0, 0))
+
+        button.add_component(Renderer2D(f"{button_name}Renderer", button_texture_material, 1))
+        button.add_component(Renderer2D(f"{button_name}TextRenderer", button_text_material, 2))
+        button.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
+
+        menu_scene.add(button)
 
     menu_scene.add(background)
     menu_scene.add(title)
-    menu_scene.add(start_button)
-    menu_scene.add(end_button)
-
 
 def update(game_time):
     scene.update(game_time)
@@ -217,7 +219,7 @@ sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 scene = Scene(Constants.Scene.GAME)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600,4900), 0, Vector2(1, 1)),
+                   Constants.Player.TOTAL_LIVES, Transform2D(Vector2(2600,4900), 0, Vector2(1.5,1.5)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
@@ -299,6 +301,7 @@ enemy3.add_component(enemy_controller2)
 test_scene = Scene("Test")
 scene_manager.add("Test", test_scene)
 
+
 text = GameObject("Text", Transform2D(Vector2(0, 0), 0, Vector2(0.2, 0.1)), GameObjectType.Dynamic,
                   GameObjectCategory.Player)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
@@ -335,17 +338,21 @@ managers.append(collider_system)
 pause_menu_scene = initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = initialise_menu_scene(Constants.Scene.LEVEL_MENU)
+sound_menu_scene = initialise_menu_scene(Constants.Scene.SOUND_MENU)
 
-initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit",
-                Constants.Button.START_BUTTON, Constants.Button.QUIT_BUTTON)
-initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu",
-                Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON)
+initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, ["Start", "Sound", "Quit"],
+                [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
+initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", ["Resume", "Main Menu"],
+                [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound", ["Mute", "Unmute","Main Menu"],
+                [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())

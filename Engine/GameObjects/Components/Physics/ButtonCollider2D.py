@@ -38,6 +38,15 @@ class ButtonCollider2D(BoxCollider2D):
         elif self._parent.name == Constants.Button.MAIN_MENU_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.MainMenuScene))
+        elif self._parent.name == Constants.Button.SOUND_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.SoundMenuScene))
+        elif self._parent.name == Constants.Button.MUTE_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
+                                                                EventActionType.SetSoundMasterVolume, [0]))
+        elif self._parent.name == Constants.Button.UNMUTE_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
+                                                                EventActionType.SetSoundMasterVolume, [0.7]))
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.GameScene))
