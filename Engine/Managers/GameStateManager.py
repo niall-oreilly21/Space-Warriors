@@ -2,11 +2,15 @@ import pygame
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from Engine.GameObjects.Character import Character
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
+from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 
 
 class GameStateManager(Manager):
@@ -33,7 +37,18 @@ class GameStateManager(Manager):
         self.__ui_helper_text.get_component(Renderer2D).material.text = ui_text
 
     def __set_up_level(self):
-        pass
+        if not Application.ActiveScene.contains(Application.Player):
+            Application.ActiveScene.add(Application.Player)
+
+        dynamic_game_object_list = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
+
+        for game_object in dynamic_game_object_list:
+            if isinstance(game_object, Character):
+                game_object.transform.position = game_object.initial_position
+
+        teleporter = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)[0]
+        teleporter.get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
+
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
