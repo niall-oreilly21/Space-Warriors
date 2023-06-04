@@ -13,9 +13,18 @@ class BoxCollider2D(Component):
         self.__anchor = anchor
         self.__color = (255, 0, 0)
         self.__rend = None
+        self.__scale = Vector2(1,1)
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
+
+    @property
+    def scale(self):
+        return self.__scale
+
+    @scale.setter
+    def scale(self, scale):
+        self.__scale = scale
 
     @property
     def width(self):
@@ -67,9 +76,9 @@ class BoxCollider2D(Component):
         rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
                                                   -self._transform.rotation)
         rotated_bounds = rotated_surface.get_rect(center=bounds.center)
-        self.__bounds = rotated_bounds
+        rotated_bounds.scale_by_ip(self.__scale.x, self.__scale.y)
 
-        return self.__bounds
+        return rotated_bounds
 
     @property
     def size(self):
