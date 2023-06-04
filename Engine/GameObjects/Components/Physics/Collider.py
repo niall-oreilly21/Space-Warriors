@@ -15,6 +15,10 @@ class Collider(Component, ABC):
     @abstractmethod
     def handle_response(self, colliding_game_object):
         pass
+
+    def handle_collision_exit(self):
+        pass
+
     def clone(self):
         pass
 
