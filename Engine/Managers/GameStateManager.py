@@ -2,21 +2,41 @@ import pygame
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 class GameStateManager(Manager):
-    def __init__(self, event_dispatcher, input_handler):
+    def __init__(self, event_dispatcher, input_handler, ui_helper_text):
         super().__init__(event_dispatcher)
         self.__input_handler = input_handler
+        self.__ui_helper_text = ui_helper_text
 
     def _subscribe_to_events(self):
-        self._event_dispatcher.add_listener(EventCategoryType.CameraManager, self._handle_events)
+        self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
 
     def _handle_events(self, event_data):
+        if event_data.event_action_type == EventActionType.SetUITextHelper:
+            ui_text = event_data.parameters[0]
+            self.__set_ui_text(ui_text)
+
+        elif event_data.event_action_type == EventActionType.TurnOnTeleporter:
+            self.__set_up_teleporter()
+
+        elif event_data.event_action_type == EventActionType.SetUpLevel:
+            self.__set_up_level()
+
+    def __set_ui_text(self, ui_text):
+        self.__ui_helper_text.get_component(Renderer2D).material.text = ui_text
+
+    def __set_up_level(self):
         pass
+
+    def __set_up_teleporter(self):
+        Application.ActiveScene.remove(Application.Player)
 
     def __check_pause_menu(self):
         if Application.ActiveScene.name == Constants.Scene.EARTH \
@@ -24,6 +44,7 @@ class GameStateManager(Manager):
                 or Application.ActiveScene.name == Constants.Scene.SATURN:
             if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
                 self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
+
 
     def update(self, game_time):
         self.__check_pause_menu()
