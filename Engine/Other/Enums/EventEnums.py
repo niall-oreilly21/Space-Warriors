@@ -23,3 +23,6 @@ class EventActionType:
     PauseMenuScene = 13
     MarsScene = 14
     SaturnScene = 15
+    SetUITextHelper = 16
+    TurnOnTeleporter = 17
+    SetUpLevel = 18

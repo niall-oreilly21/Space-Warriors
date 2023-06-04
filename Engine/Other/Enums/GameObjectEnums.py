@@ -17,6 +17,7 @@ class GameObjectCategory(Enum):
     UI = 7
     Environment = 8
     Pet = 9
+    Teleporter = 10
 
 
 class GameObjectDirection(Enum):
