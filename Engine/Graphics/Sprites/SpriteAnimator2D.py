@@ -29,11 +29,20 @@ class SpriteAnimator2D(Component):
     def is_animation_complete(self):
         return self.__is_animation_complete
 
+    @property
+    def is_infinite(self):
+        return self.__is_infinite
+
+    @is_infinite.setter
+    def is_infinite(self, is_infinite):
+        self.__is_infinite = is_infinite
+
     def get_current_sprite(self):
         if self.__current_frame < len(self.__current_frames):
             return Sprite(self.__material.texture, self.__current_frames[self.__current_frame], self.__material.color)
         else:
             return Sprite(self.__material.texture, self.__current_frames[0], self.__material.color)
+
     def set_active_take(self, active_take):
         for animator_info in self.__animator_info:
             if animator_info.active_take == active_take:
@@ -65,7 +74,6 @@ class SpriteAnimator2D(Component):
             self.__current_frame = (self.__current_frame + 1) % len(self.__current_frames)
             self.__elapsed_time -= frame_duration
 
-
             # Check if the animation has reached the end
             if self.__current_frame == 0:
                 if not self.__is_infinite:
@@ -80,10 +88,6 @@ class SpriteAnimator2D(Component):
                         self.__repeat_count -= 1
                         self.__current_frame = 0
                         self.__elapsed_time = 0
-                else:
-                    # Animation completed, set the animation complete flag
-                    self.__is_animation_complete = True
-                    self.__active_take = None
 
     def clone(self):
         clone_animator_info = [take.clone() for take in self.__animator_info]

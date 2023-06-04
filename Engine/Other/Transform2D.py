@@ -39,7 +39,8 @@ class Transform2D(ICloneable):
     def translate(self, x, y):
         self.__position += Vector2(x, y)
 
-    def rotate(self, angle):
+    @rotation.setter
+    def rotation(self, angle):
         self.__rotation += angle
 
     @scale.setter

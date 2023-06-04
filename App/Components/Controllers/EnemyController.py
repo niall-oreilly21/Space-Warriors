@@ -1,4 +1,3 @@
-from pygame import Vector2
 import math
 
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection

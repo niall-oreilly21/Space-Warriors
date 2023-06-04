@@ -9,7 +9,7 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
 
 
-class PlayerAttackCollider(Collider2D):
+class PlayerCollider2D(Collider2D):
 
     def __init__(self, name):
         super().__init__(name)

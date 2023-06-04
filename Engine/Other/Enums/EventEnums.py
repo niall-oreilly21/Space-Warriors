@@ -8,7 +8,7 @@ class EventCategoryType:
 
 class EventActionType:
     MainMenuScene = 0
-    GameScene = 1
+    EarthScene = 1
     MenuCamera = 2
     GameCamera = 3
     PlaySound = 4
@@ -22,3 +22,5 @@ class EventActionType:
     LevelScene = 12
     PauseMenuScene = 13
     SoundMenuScene = 14
+    MarsScene = 14
+    SaturnScene = 15

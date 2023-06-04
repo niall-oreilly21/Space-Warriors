@@ -69,11 +69,11 @@ class RendererManager(Manager, IDrawable):
 
                     if self.__is_debug_mode:
                         if renderer.parent.get_component(BoxCollider2D):
-                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, self.__camera_manager.active_camera.transform.position)
+                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, camera_component.transform.position)
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
-        camera_rect = Rect(0, 0, viewport.x + 100, viewport.y + 100)
+        camera_rect = Rect(0, 0, viewport.x + 60, viewport.y + 70)
         camera_rect.center = (viewport.x // 2, viewport.y // 2)
 
         # Check if the object's rect intersects with or is contained within the camera's viewport

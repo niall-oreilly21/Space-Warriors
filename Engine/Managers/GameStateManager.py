@@ -19,7 +19,9 @@ class GameStateManager(Manager):
         pass
 
     def __check_pause_menu(self):
-        if Application.ActiveScene.name == Constants.Scene.GAME:
+        if Application.ActiveScene.name == Constants.Scene.EARTH \
+                or Application.ActiveScene.name == Constants.Scene.MARS \
+                or Application.ActiveScene.name == Constants.Scene.SATURN:
             if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
                 self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
 

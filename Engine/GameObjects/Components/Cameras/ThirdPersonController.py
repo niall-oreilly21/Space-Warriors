@@ -4,14 +4,15 @@ from App.Constants.Application import Application
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Component import Component
 
+
 class ThirdPersonController(Component):
     def __init__(self, name, target):
         super().__init__(name)
         self.__target = target
-        self.__transition_speed = 0.01  # Adjust the speed of the transition as desired
+        self.__smoothness = 0.5  # Adjust the smoothness factor (0.0 to 1.0)
         self.__smooth_position = None
         self.__camera = None
-        
+
     def start(self):
         self.__camera = self.parent.get_component(Camera)
 
@@ -26,17 +27,14 @@ class ThirdPersonController(Component):
                     # Start the smooth transition from the current camera position
                     self.__smooth_position = self._transform.position
 
-                # Calculate the transition distance based on elapsed time
-                transition_distance = target_position - self.__smooth_position
-                transition_speed = transition_distance * self.__transition_speed * game_time.elapsed_time
+                # Calculate the interpolation factor based on smoothness and elapsed time
+                smoothness_factor = 1 - pow(1 - self.__smoothness, game_time.elapsed_time)
 
-                # Apply smooth transition using lerp
-                self.__smooth_position += transition_speed
+                # Interpolate between the current camera position and the target position
+                self.__smooth_position = Vector2.lerp(self.__smooth_position, target_position, smoothness_factor)
 
                 # Update the camera position
                 self._transform.position = self.__smooth_position
 
     def clone(self):
         return ThirdPersonController(self._name, self.__target)
-
-

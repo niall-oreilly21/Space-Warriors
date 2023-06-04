@@ -17,7 +17,6 @@ class BoxCollider2D(Component):
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
 
-
     @property
     def width(self):
         return self.__width
@@ -60,9 +59,9 @@ class BoxCollider2D(Component):
 
     @property
     def bounds(self):
-
         material_source_rect = self.__rend.material.source_rect
-        bounds = Rect(self._transform.position.x, self._transform.position.y, material_source_rect.width * self.transform.scale.x,
+        bounds = Rect(self._transform.position.x, self._transform.position.y,
+                      material_source_rect.width * self.transform.scale.x,
                       material_source_rect.height * self.transform.scale.y)
 
         rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
@@ -82,7 +81,7 @@ class BoxCollider2D(Component):
     def update(self, game_time):
         pass
 
-     # Calculate the distance between two colliders
+    # Calculate the distance between two colliders
     def distance_to(self, other_collider):
         self_center = Vector2(self.bounds.centerx, self.bounds.centery)
         other_center = Vector2(other_collider.bounds.centerx, other_collider.bounds.centery)

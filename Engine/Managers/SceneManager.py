@@ -1,10 +1,16 @@
 import pygame
+import time
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+
+
+def load_scene():
+    load_time = .4  # Adjust this value as needed
+    time.sleep(load_time)
 
 
 class SceneManager(Manager):
@@ -19,33 +25,51 @@ class SceneManager(Manager):
 
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MainMenuScene:
+            load_scene()
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.MAIN_MENU)
             Application.ActiveScene = self.__active_scene
-            self.__set_mouse_position()
 
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
 
-        elif event_data.event_action_type == EventActionType.GameScene:
+        elif event_data.event_action_type == EventActionType.EarthScene:
+            load_scene()
             self.__event_dispatcher.dispatch_event(
                 EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
-            self.set_active_scene(Constants.Scene.GAME)
+            self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
-            self.__set_mouse_position()
+            Application.CurrentLevel = Constants.Scene.EARTH
 
         elif event_data.event_action_type == EventActionType.LevelScene:
+            load_scene()
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.LEVEL_MENU)
             Application.ActiveScene = self.__active_scene
-            self.__set_mouse_position()
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.PAUSE_MENU)
             Application.ActiveScene = self.__active_scene
-            self.__set_mouse_position()
+
+        elif event_data.event_action_type == EventActionType.MarsScene:
+            load_scene()
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.set_active_scene(Constants.Scene.MARS)
+            Application.ActiveScene = self.__active_scene
+            Application.CurrentLevel = Constants.Scene.MARS
+
+        elif event_data.event_action_type == EventActionType.SaturnScene:
+            load_scene()
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.set_active_scene(Constants.Scene.SATURN)
+            Application.ActiveScene = self.__active_scene
+            Application.CurrentLevel = Constants.Scene.SATURN
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
@@ -58,21 +82,17 @@ class SceneManager(Manager):
     def active_scene(self):
         return self.__active_scene
 
-    def __set_mouse_position(self):
-        pygame.mouse.set_pos(Application.ActiveCamera.viewport.x / 2 - 100,
-                             Application.ActiveCamera.viewport.y / 2 - 100)
-
-    def set_active_scene(self, id):
-        id = id.strip().lower()
-        if id in self.__scenes:
-            self.__active_scene = self.__scenes[id]
+    def set_active_scene(self, name):
+        name = name.strip().lower()
+        if name in self.__scenes:
+            self.__active_scene = self.__scenes[name]
         return self.__active_scene
 
-    def add(self, id, scene):
-        id = id.strip().lower()
-        if id in self.__scenes:
+    def add(self, name, scene):
+        name = name.strip().lower()
+        if name in self.__scenes:
             return False
-        self.__scenes[id] = scene
+        self.__scenes[name] = scene
         return True
 
     def update(self, game_time):

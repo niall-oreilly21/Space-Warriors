@@ -6,9 +6,9 @@ class Rigidbody2D(Component):
         super().__init__(name)
         self.__mass = mass
         self.__drag = drag
-        self.__velocity = Vector2(0,0)
-        self.__acceleration = Vector2(0,0)
-        self.__time_scale = 0.01  # Time scaling factor for velocity and acceleration
+        self.__velocity = Vector2(0, 0)
+        self.__acceleration = Vector2(0, 0)
+        self.__time_scale = 0.001  # Time scaling factor for velocity and acceleration
 
     @property
     def mass(self):
