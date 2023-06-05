@@ -3,7 +3,7 @@ import pygame
 from pygame import Vector2
 
 from App.Components.Colliders.PlayerBoxCollider2D import CharacterBoxCollider2D
-from App.Components.Colliders.PlayerCollider import PlayerCollider2D
+from App.Components.Colliders.PlayerCollider import PlayerCollider
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
@@ -114,7 +114,7 @@ player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
 player_controller = PlayerController("Player movement", 0.17, 0.17, player_box_collider)
 player.add_component(player_controller)
-player_collider = PlayerCollider2D("Players attack collider")
+player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
 enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
