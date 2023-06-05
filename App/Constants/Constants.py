@@ -251,16 +251,16 @@ class Constants:
         UNMUTE_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
 
     class Button:
-        START_BUTTON = "StartButton"
-        QUIT_BUTTON = "QuitButton"
-        RESUME_BUTTON = "ResumeButton"
-        MAIN_MENU_BUTTON = "MainMenuButton"
-        EARTH_BUTTON = "EarthButton"
-        MARS_BUTTON = "MarsButton"
-        SATURN_BUTTON = "SaturnButton"
-        SOUND_BUTTON = "SoundButton"
-        MUTE_BUTTON = "MuteButton"
-        UNMUTE_BUTTON = "UnmuteButton"
+        START_BUTTON = "Start"
+        QUIT_BUTTON = "Quit"
+        RESUME_BUTTON = "Resume"
+        MAIN_MENU_BUTTON = "Main Menu"
+        EARTH_BUTTON = "Earth"
+        MARS_BUTTON = "Mars"
+        SATURN_BUTTON = "Saturn"
+        SOUND_BUTTON = "Sound"
+        MUTE_BUTTON = "Mute"
+        UNMUTE_BUTTON = "Unmute"
 
     class Scene:
         MAIN_MENU = "MainMenuScene"
@@ -277,7 +277,7 @@ class Constants:
 
     class Map:
         PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
-        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetB.json"
+        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
         PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
 
     class Tile:

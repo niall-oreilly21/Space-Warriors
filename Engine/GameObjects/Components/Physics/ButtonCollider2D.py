@@ -27,6 +27,8 @@ class ButtonCollider2D(BoxCollider2D):
         super().draw(screen, camera_position)
 
     def button_pressed(self):
+        Constants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["buttonsound"]))
         if self._parent.name == Constants.Button.START_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
@@ -54,7 +56,7 @@ class ButtonCollider2D(BoxCollider2D):
                                                                 EventActionType.SetSoundMasterVolume, [0]))
         elif self._parent.name == Constants.Button.UNMUTE_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
-                                                                EventActionType.SetSoundMasterVolume, [0.7]))
+                                                                EventActionType.SetSoundMasterVolume, [0.05]))
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.EarthScene))

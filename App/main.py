@@ -40,7 +40,14 @@ from App.Constants.MapLoader import map_load
 
 def load_sound():
     soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
+    soundManager.load_sound("TeleportSound", "Assets/Sounds/teleport.wav")
+    soundManager.load_sound("DeathMusic", "Assets/Sounds/death.wav")
+    soundManager.load_sound("AttackSound", "Assets/Sounds/sword_swish.wav")
+    soundManager.load_sound("BossMusic", "Assets/Sounds/planet_c_music.mp3")
+    soundManager.load_sound("ButtonSound", "Assets/Sounds/button.wav")
+
     soundManager.set_sound_volume("backgroundmusic", .05)
+    soundManager.set_sound_volume("attacksound", .05)
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
 
@@ -234,11 +241,12 @@ scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_m
 pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
+sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
 
-initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit",
-                Constants.Button.START_BUTTON, Constants.Button.QUIT_BUTTON)
-initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu",
-                Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON)
+
+initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
+initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound", [Constants.Button.MUTE_BUTTON,Constants.Button.UNMUTE_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
 scene_loader.initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
@@ -253,13 +261,16 @@ managers.append(game_state_manager)
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 
-#
 # # Load Map + objects
 map_load(earth_scene, Constants.Map.PLANET_A_JSON)
 map_load(mars_scene, Constants.Map.PLANET_B_JSON)
 map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
 
 # load_sound()
+load_sound()
+
+
+
 
 for manager in managers:
     manager.start()
@@ -284,12 +295,12 @@ while running:
     if screen is not None:
         screen.fill(background_color)
 
-    #
+
     # if player.lives == 0:
     #     sceneManager.set_active_scene("Test")
 
     #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
-
+    print(player.transform.position)
     render_manager.draw()
 
     pygame.display.update()

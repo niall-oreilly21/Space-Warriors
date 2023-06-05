@@ -1,14 +1,17 @@
 from pygame import Vector2
 
 from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums import GameObjectEnums
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.InputHandler import InputHandler
 from Engine.Other.Interfaces.IMoveable import IMoveable
 import pygame
@@ -122,6 +125,7 @@ class PlayerController(Component, IMoveable):
                 self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
 
     def _attack(self):
+
         if self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
             attack_key = pygame.K_UP
         elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
@@ -135,6 +139,8 @@ class PlayerController(Component, IMoveable):
             self.parent.remove_component(BoxCollider2D)
 
             self.__is_attacking = True
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["AttackSound"]))
             attack_collider = AttackBoxCollider2D("Attack box collider", self)
             self.parent.add_component(attack_collider)
 

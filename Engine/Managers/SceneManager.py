@@ -75,7 +75,6 @@ class SceneManager(Manager):
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.SOUND_MENU)
             Application.ActiveScene = self.__active_scene
-            self.__set_mouse_position()
 
 
     @property

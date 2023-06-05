@@ -1,6 +1,9 @@
 class RendererLayers:
     Background = 0
-    UI = 1
+    WorldObjects = 1
     Enemy = 2
-    Player = 3
-    WorldObjects = 4
+    AbovePlayer = 3
+    Player = 4
+    BelowPlayer = 5
+    Tree = 6
+    UI = 7

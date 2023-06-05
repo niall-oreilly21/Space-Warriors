@@ -67,15 +67,12 @@ def map_load(scene, planet_json):
             if id == 5:
                 tree_object = random.choice(
                     [GameObjectConstants.TALL_TREE.clone(), GameObjectConstants.LOW_TREE.clone()])
-                tree_collider = TreeBoxCollider2D("TreeCollider")
-                tree_object.add_component(tree_collider)
                 tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
                 scene.add(tree_object)
             elif id == 15:
                 bush_object = random.choice([GameObjectConstants.BUSH_ONE.clone(), GameObjectConstants.BUSH_TWO.clone(),
                                              GameObjectConstants.BUSH_FOUR.clone(),
                                              GameObjectConstants.ROCK_ONE.clone()])
-                bush_object.add_component(BoxCollider2D("BushCollider"))
                 if bush_object.name == "RockOne":
                     scale = random.uniform(0.7, 2)
                     bush_object.transform.scale = Vector2(scale, scale)
@@ -150,3 +147,4 @@ def map_load(scene, planet_json):
             # random_translation = Vector2(random.randint(1000, 2000), random.randint(10, 10))
             # tile.transform.translate_by(random_translation)
             scene.add(tile)
+

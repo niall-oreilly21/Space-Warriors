@@ -22,5 +22,5 @@ class EventActionType:
     LevelScene = 12
     PauseMenuScene = 13
     SoundMenuScene = 14
-    MarsScene = 14
-    SaturnScene = 15
+    MarsScene = 15
+    SaturnScene = 16
