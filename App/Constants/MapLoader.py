@@ -109,8 +109,8 @@ def map_load(scene, planet_json):
     planet_a_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.TELEPORTER.clone()
-    teleporter.transform.position = Vector2(2500, 5000)
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER
+    teleporter.transform.position = Vector2(2500, 4800)
     scene.add(teleporter)
 
     bridge_x = 6406
