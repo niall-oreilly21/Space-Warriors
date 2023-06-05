@@ -4,6 +4,7 @@ class EventCategoryType:
     SoundManager = 2
     RendererManager = 3
     GameStateManager = 4
+    CollisionManager = 5
 
 
 class EventActionType:
@@ -26,3 +27,5 @@ class EventActionType:
     SetUITextHelper = 16
     TurnOnTeleporter = 17
     SetUpLevel = 18
+    SetCameraTarget = 19
+    SetUpColliders = 20

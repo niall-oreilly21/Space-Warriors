@@ -3,5 +3,7 @@ class RendererLayers:
     WorldObjects = 1
     Enemy = 2
     Player = 3
-    UI = 4
-    Tree = 5
+    Tree = 4
+    UIBackground = 5
+    UI = 6
+    UIHealthBar = 7
