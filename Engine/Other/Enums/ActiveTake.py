@@ -28,3 +28,4 @@ class ActiveTake(Enum):
     PET_DOG_SIT = 23,
     PET_DOG_RUN = 24,
     PET_DOG_IDLE = 25
+    TELEPORT_IDLE = 26
