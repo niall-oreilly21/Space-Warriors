@@ -31,11 +31,11 @@ class Material2D(ICloneable, ABC):
 
     @property
     def origin(self):
-        return self.__origin
+        return self._origin
 
     @origin.setter
     def origin(self, origin):
-        self.__origin = origin
+        self._origin = origin
 
     @property
     def flip_x(self):

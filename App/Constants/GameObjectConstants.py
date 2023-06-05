@@ -4,8 +4,10 @@ import pygame
 from pygame import Vector2
 
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
+from App.Components.Controllers.HealthBarController import HealthBarController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
@@ -146,6 +148,22 @@ class GameObjectConstants:
     object_frame = image2.subsurface(pygame.Rect(217, 292, 47, 31))
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     BRIDGE.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+    class HealthBar:
+        HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
+                                GameObjectCategory.UI)
+
+        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
+
+        __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+
+        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50,(0,224, 79), 255, Vector2(135, 63))
+        __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
+
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        HEALTH_BAR.add_component(HealthBarController("Health Bar Controller"))
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368
