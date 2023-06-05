@@ -33,15 +33,6 @@ class SceneManager(Manager):
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
 
-        elif event_data.event_action_type == EventActionType.EarthScene:
-            load_scene()
-            # self.__event_dispatcher.dispatch_event(
-            #     EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
-            self.set_active_scene(Constants.Scene.EARTH)
-            Application.ActiveScene = self.__active_scene
-            Application.CurrentLevel = Constants.Scene.EARTH
-
         elif event_data.event_action_type == EventActionType.LevelScene:
             load_scene()
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
@@ -52,6 +43,18 @@ class SceneManager(Manager):
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.PAUSE_MENU)
             Application.ActiveScene = self.__active_scene
+
+        elif event_data.event_action_type == EventActionType.EarthScene:
+            load_scene()
+            # self.__event_dispatcher.dispatch_event(
+            #     EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.set_active_scene(Constants.Scene.EARTH)
+            Application.ActiveScene = self.__active_scene
+            Application.CurrentLevel = Constants.Scene.EARTH
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.SetUpColliders))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+
 
         elif event_data.event_action_type == EventActionType.MarsScene:
             load_scene()
