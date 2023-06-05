@@ -28,7 +28,6 @@ class EnemyController(Component):
         self.__rigidbody = self._parent.get_component(Rigidbody2D)
         self.__waypoint_finder = self._parent.get_component(WaypointFinder)
 
-
     def update(self, game_time):
         target_position = self.__target_object.transform.position
         enemy_position = self.transform.position
@@ -37,7 +36,7 @@ class EnemyController(Component):
 
         if distance <= 10:
             pass
-            #self.calculate_movement_direction(target_position,enemy_position)
+            # self.calculate_movement_direction(target_position,enemy_position)
         else:
             if self.__waypoint_finder is not None:
                 # Enemy is outside the desired range, so it remains stationary
@@ -52,7 +51,6 @@ class EnemyController(Component):
         current_waypoint = self.__waypoint_finder.get_current_waypoint()
         total_distance = math.sqrt(
             (current_waypoint[0] - enemy_position.x) ** 2 + (current_waypoint[1] - enemy_position.y) ** 2)
-
 
         t = min(1, self.__speed * game_time.elapsed_time * 0.009 / total_distance)
 

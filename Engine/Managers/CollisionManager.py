@@ -12,13 +12,15 @@ from Engine.GameObjects.Components.Physics.Collider import Collider
 from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Interfaces.IStartable import IStartable
 from Engine.Other.Interfaces.IUpdateable import IUpdateable
 
 
-class CollisionManager(IUpdateable):
-    def __init__(self, collision_range, scene_manager, camera_manager):
+class CollisionManager(Manager):
+    def __init__(self, collision_range, scene_manager, camera_manager, event_dispatcher):
+        super().__init__(event_dispatcher)
         self.__collision_range = collision_range
         self.__scene_manager = scene_manager
         self.__camera_manager = camera_manager
@@ -26,6 +28,12 @@ class CollisionManager(IUpdateable):
                                             self.__camera_manager.active_camera.parent.transform.position.y,
                                             self.__camera_manager.active_camera.viewport.x,
                                             self.__camera_manager.active_camera.viewport.y)
+
+    def _subscribe_to_events(self):
+        pass
+
+    def _handle_events(self, event_data):
+        pass
 
     def check_collision(self, collider1, collider2, game_time):
         # pass

@@ -17,7 +17,7 @@ class Constants:
     VIEWPORT_WIDTH = 1500
     VIEWPORT_HEIGHT = 750
 
-    CHARACTER_MOVE_SPEED = 10
+    CHARACTER_MOVE_SPEED = 3
 
     class Player:
         WIDTH = 29

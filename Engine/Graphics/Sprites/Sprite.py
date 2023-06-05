@@ -31,7 +31,6 @@ class Sprite:
     @property
     def center(self):
         rect = self.__source_rect
-        print(rect)
         center_x = rect.x + rect.width * self.__pivot[0]
         center_y = rect.y + rect.height * self.__pivot[1]
         return pygame.Vector2(center_x, center_y)
