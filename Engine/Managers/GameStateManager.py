@@ -40,6 +40,8 @@ class GameStateManager(Manager):
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
 
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
+
         dynamic_game_object_list = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
 
         for game_object in dynamic_game_object_list:
