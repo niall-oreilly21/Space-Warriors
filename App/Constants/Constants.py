@@ -5,12 +5,14 @@ from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.InputHandler import InputHandler
 
 
 class Constants:
     GAME_NAME = "Space Warriors"
 
     EVENT_DISPATCHER = EventDispatcher()
+    INPUT_HANDLER = None
 
     VIEWPORT_WIDTH = 1500
     VIEWPORT_HEIGHT = 750

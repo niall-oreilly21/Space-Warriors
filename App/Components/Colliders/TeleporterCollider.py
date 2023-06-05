@@ -43,6 +43,7 @@ class TeleporterCollider(Collider):
                 or Application.ActiveScene.name == Constants.Scene.SATURN:
             if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                 Application.ActiveScene.remove(Application.Player)
+                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
                 self.__animator.set_active_take(ActiveTake.TELEPORT)
 
 
