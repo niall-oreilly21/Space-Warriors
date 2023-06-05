@@ -3,7 +3,7 @@ import pygame
 from pygame import Vector2
 
 from App.Components.Colliders.PlayerBoxCollider2D import CharacterBoxCollider2D
-from App.Components.Colliders.PlayerCollider2D import PlayerCollider2D
+from App.Components.Colliders.PlayerCollider import PlayerCollider2D
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
