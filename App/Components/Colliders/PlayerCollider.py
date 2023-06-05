@@ -2,14 +2,14 @@ import time
 
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
+from Engine.GameObjects.Components.Physics.Collider import Collider
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
 
 
-class PlayerCollider(Collider2D):
+class PlayerCollider(Collider):
 
     def __init__(self, name):
         super().__init__(name)

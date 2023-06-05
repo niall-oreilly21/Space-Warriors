@@ -8,7 +8,7 @@ from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PlayerController import PlayerController
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.Collider2D import Collider2D
+from Engine.GameObjects.Components.Physics.Collider import Collider
 from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -122,8 +122,8 @@ class CollisionManager(IUpdateable):
                             else:
                                 collider2_entity.transform.position.y += overlap_y
 
-            if collider1_entity.get_component(Collider2D):
-                collider1_entity.get_component(Collider2D).handle_response(collider2_entity)
+            if collider1_entity.get_component(Collider):
+                collider1_entity.get_component(Collider).handle_response(collider2_entity)
         else:
             if isinstance(collider1, TreeBoxCollider2D) and isinstance(collider2_entity, Character):
                 collider1_entity.get_component(Renderer2D).layer = RendererLayers.Tree
