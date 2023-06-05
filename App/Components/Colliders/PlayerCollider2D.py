@@ -45,9 +45,10 @@ class PlayerCollider2D(Collider2D):
                 else:
                     parent_game_object.is_damaged = False
 
-            if self.parent.health == 0:
-                self.parent.health = Constants.Player.DEFAULT_HEALTH
-                self.parent.lose_live()
+            #if self.parent.health == 0:
+
+                # self.parent.health = Constants.Player.DEFAULT_HEALTH
+                # self.parent.lose_live()
 
             if parent_game_object.health == 0:
                 print("Enemy dead")

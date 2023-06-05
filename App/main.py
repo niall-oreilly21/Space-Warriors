@@ -6,17 +6,18 @@ from App.Components.Colliders.PlayerBoxCollider2D import CharacterBoxCollider2D
 from App.Components.Colliders.PlayerCollider2D import PlayerCollider2D
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
+from App.Components.Controllers.PlayerController import PlayerController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
-from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
+from Engine.Managers.CollisionManager import CollisionManager
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Managers.SoundManager import SoundManager
@@ -25,7 +26,6 @@ from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
-from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
@@ -39,18 +39,21 @@ from App.Constants.MapLoader import map_load
 
 
 def load_sound():
-    soundManager.load_sound("BackgroundMusic", "Assets/Sounds/background_music.mp3")
+    soundManager.load_sound("BackgroundMusicA", "Assets/Sounds/background_music.mp3")
+    soundManager.load_sound("BackgroundMusicB", "Assets/Sounds/planet_b_music.wav")
+    soundManager.load_sound("BackgroundMusicC", "Assets/Sounds/planet_c_music.mp3")
     soundManager.load_sound("TeleportSound", "Assets/Sounds/teleport.wav")
     soundManager.load_sound("DeathMusic", "Assets/Sounds/death.wav")
     soundManager.load_sound("AttackSound", "Assets/Sounds/sword_swish.wav")
     soundManager.load_sound("BossMusic", "Assets/Sounds/planet_c_music.mp3")
     soundManager.load_sound("ButtonSound", "Assets/Sounds/button.wav")
 
-    soundManager.set_sound_volume("backgroundmusic", .05)
+    soundManager.set_sound_volume("backgroundmusica", .05)
+    soundManager.set_sound_volume("backgroundmusicb", .05)
+    soundManager.set_sound_volume("backgroundmusicc", .05)
     soundManager.set_sound_volume("attacksound", .05)
     Constants.EVENT_DISPATCHER.dispatch_event(
-        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusic"]))
-
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
 
 def update(game_time):
     earth_scene.update(game_time)
@@ -124,7 +127,7 @@ player.add_component(player_controller)
 player_collider = PlayerCollider2D("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 1, 1, 1, Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+enemy = Character("Enemy", 70, 100, 1, 1, Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
                   GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
@@ -242,11 +245,13 @@ pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU
 main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
+death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
 
 
 initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
 initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound", [Constants.Button.MUTE_BUTTON,Constants.Button.UNMUTE_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died", [Constants.Button.RESTART_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
 scene_loader.initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
@@ -300,7 +305,7 @@ while running:
     #     sceneManager.set_active_scene("Test")
 
     #   text.get_component(BoxCollider2D).draw(screen, cameraManager)
-    print(player.transform.position)
+    #print(player.transform.position)
     render_manager.draw()
 
     pygame.display.update()

@@ -235,6 +235,9 @@ class Constants:
         __SOUND_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
         MATERIAL_SOUND_MENU = TextureMaterial2D(__SOUND_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
+        __DEATH_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
+        MATERIAL_DEATH_MENU = TextureMaterial2D(__DEATH_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
         TITLE_FONT_SIZE = 45
         TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
 
@@ -247,8 +250,6 @@ class Constants:
         MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
         SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
 
-        MUTE_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
-        UNMUTE_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
 
     class Button:
         START_BUTTON = "Start"
@@ -261,10 +262,12 @@ class Constants:
         SOUND_BUTTON = "Sound"
         MUTE_BUTTON = "Mute"
         UNMUTE_BUTTON = "Unmute"
+        RESTART_BUTTON = "Restart"
 
     class Scene:
         MAIN_MENU = "MainMenuScene"
         PAUSE_MENU = "PauseMenuScene"
+        DEATH_MENU = "DeathMenuScene"
         SOUND_MENU = "SoundMenuScene"
         LEVEL_MENU = "LevelMenuScene"
         EARTH = "EarthScene"

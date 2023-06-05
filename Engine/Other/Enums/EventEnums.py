@@ -24,3 +24,4 @@ class EventActionType:
     SoundMenuScene = 14
     MarsScene = 15
     SaturnScene = 16
+    DeathScene = 17

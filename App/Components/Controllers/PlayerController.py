@@ -9,6 +9,7 @@ from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
+from Engine.Managers.SceneManager import SceneManager
 from Engine.Other.Enums import GameObjectEnums
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
@@ -158,5 +159,10 @@ class PlayerController(Component, IMoveable):
                 self.parent.add_component(self.__box_collider)
 
     def _faint(self):
-        if self.parent.health == 0:
+
+        if self.parent.health <= 0:
+            print("FAINT")
             self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SceneManager, EventActionType.DeathScene))
+
