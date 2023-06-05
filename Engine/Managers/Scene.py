@@ -53,6 +53,13 @@ class Scene:
                     all_components_by_type.extend(components)
         return all_components_by_type
 
+    def contains(self, game_object):
+        for game_object_type in self.__game_object_list.values():
+            for game_object_category in game_object_type.values():
+                if game_object in game_object_category:
+                    return True
+        return False
+
     def update(self, game_time):
         for game_object_type in self.__game_object_list.values():
             for game_object_category in game_object_type.values():
