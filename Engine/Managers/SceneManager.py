@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import time
 
@@ -32,6 +34,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
+            sys.exit()
 
         elif event_data.event_action_type == EventActionType.LevelScene:
             load_scene()
