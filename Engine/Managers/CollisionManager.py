@@ -46,12 +46,13 @@ class CollisionManager(Manager):
         camera_position = camera.parent.transform.position
 
         self.collision_area = CollisionArea(
-            100,
-            100,
-            viewport.x,
+            Application.Player.transform.position.x,
+            Application.Player.transform.position.y,
+            400,
             viewport.y
-
         )
+
+        print(self.collision_area.boundary)
 
         #print("Camera", camera_position.x)
         #print((Application.Player.transform.position.x - camera.viewport.x // 2) - camera_position.x)
@@ -64,7 +65,7 @@ class CollisionManager(Manager):
         scene_bounds = Rect(0, 0, 120 * 36, 110 * 36)
 
 
-        self.quad_tree = QuadTree(pygame.Rect(0,0, 1100 * 72, 1100 * 72), 4)
+        self.quad_tree = QuadTree(pygame.Rect(0,0, 110 * 72, 110 * 72), 4)
 
         #print(len(self.__colliders))
         # Insert colliders into the Quadtree
@@ -90,7 +91,6 @@ class CollisionManager(Manager):
         #print(self.collision_area.boundary)
         potential_colliders = self.quad_tree.query(self.collision_area.boundary)
 
-        print(len(self.quad_tree.objects))
 
         #print(len(potential_colliders))
 

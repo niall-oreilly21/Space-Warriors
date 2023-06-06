@@ -57,10 +57,6 @@ class QuadTree:
     def query(self, range_boundary):
         result = []
 
-        range_boundary = pygame.Rect(Application.ActiveCamera.transform.position.x,Application.ActiveCamera.transform.position.y, 1500, 750)
-
-        #print(range_boundary)
-
         if not self.boundary.colliderect(range_boundary):
             return result  # No overlap between the quadtree and the range boundary
 

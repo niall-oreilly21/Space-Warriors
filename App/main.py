@@ -11,6 +11,7 @@ from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.GameObjects.Components.UI.UITextHelper import UITextHelper
 from Engine.Managers.CollisionManager import CollisionManager
@@ -260,6 +261,32 @@ if screen is not None:
     screen.fill(background_color)
 
 render_manager.is_debug_mode = True
+
+
+# Grid dimensions
+grid_size = 110
+grid_width = 72
+grid_height = 72
+
+# Create the grid
+# grid = {}
+# for row in range(grid_size):
+#     for col in range(grid_size):
+#         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
+#         grid[(row, col)] = rect
+
+
+def update_collision_area():
+    camera = camera_manager.active_camera
+
+    viewport = camera.viewport
+    camera_position = camera.parent.transform.position
+
+    return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500,750)
+
+
+
+
 # Main game loop
 running = True
 while running:
@@ -279,6 +306,19 @@ while running:
         screen.fill(background_color)
 
     render_manager.draw()
+
+    colision_area = update_collision_area()
+
+
+
+    #print(colision_area.boundary)
+    #pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
+
+    pygame.draw.rect(screen, (255, 255, 255), collider_system.collision_area.boundary)
+
+    # # Draw the grid
+    # for rect in grid.values():
+    #     pygame.draw.rect(screen, (255, 255, 255), rect, 1)
 
     pygame.display.update()
     game_time.limit_fps(60)
