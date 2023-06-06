@@ -29,7 +29,6 @@ class GameObjectConstants:
     layer = RendererLayers.WorldObjects
     tree_layer = RendererLayers.Tree
 
-
     # TELEPORTER.add_component(BoxCollider2D("Box-3"))
 
     TALL_TREE = GameObject("Tree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
@@ -149,6 +148,38 @@ class GameObjectConstants:
     texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
     BRIDGE.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
+    __POTION_SCALE = 0.4
+
+    POTION_SPEED = GameObject("PotionSpeed", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                              GameObjectType.Static, GameObjectCategory.Environment)
+    power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
+    texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
+    POTION_SPEED.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+    POTION_ATTACK = GameObject("PotionAttack", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                               GameObjectType.Static, GameObjectCategory.Environment)
+    power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_attack.png")
+    texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
+    POTION_ATTACK.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+    POTION_DEFENSE = GameObject("PotionDefense", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                                GameObjectType.Static, GameObjectCategory.Environment)
+    power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_defense.png")
+    texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
+    POTION_DEFENSE.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+    POTION_HEAL = GameObject("PotionHeal", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                             GameObjectType.Static, GameObjectCategory.Environment)
+    power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_heal.png")
+    texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
+    POTION_HEAL.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+    RANDOM_POWER_UP = GameObject("RandomPowerUp", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                                 GameObjectType.Static, GameObjectCategory.Environment)
+    power_up_image = pygame.image.load("Assets/UI/PowerUps/random.png")
+    texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
+    RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
     class HealthBar:
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
                                 GameObjectCategory.UI)
@@ -157,11 +188,14 @@ class GameObjectConstants:
 
         __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
 
-        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50,(0,224, 79), 255, Vector2(135, 63))
+        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(135, 63))
         __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
 
-        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
-        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
+        HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+                       RendererLayers.UIBackground))
         HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
         HEALTH_BAR.add_component(HealthBarController("Health Bar Controller"))
 
@@ -171,11 +205,20 @@ class GameObjectConstants:
         __TELEPORTER_Y = 1
 
         __TELEPORTER_FRAME_RECTS = [
-            pygame.Rect(52 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(231 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(421 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
-            pygame.Rect(611 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),pygame.Rect(812 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(1002 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
-            pygame.Rect(1192 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(1380 - 17, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(1553, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
-            pygame.Rect(1744 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(1934 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(2124 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
-            pygame.Rect(2314 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT), pygame.Rect(2522 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT)
+            pygame.Rect(52 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(231 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(421 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(611 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(812 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1002 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1192 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1380 - 17, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1553, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1744 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(1934 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(2124 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(2314 - 1, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
+            pygame.Rect(2522 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT)
         ]
         __TELEPORTER = Take(ActiveTake.TELEPORT, __TELEPORTER_FRAME_RECTS, False, 1)
 
@@ -192,8 +235,9 @@ class GameObjectConstants:
         TELEPORTER = GameObject("Teleporter", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                                 GameObjectCategory.Teleporter)
 
-
-        TELEPORTER.add_component(SpriteAnimator2D("Teleporter Sprite Animator", TELEPORTER_ANIMATION_INFO, MATERIAL_TELEPORTER, ActiveTake.TELEPORT_IDLE, 4))
+        TELEPORTER.add_component(
+            SpriteAnimator2D("Teleporter Sprite Animator", TELEPORTER_ANIMATION_INFO, MATERIAL_TELEPORTER,
+                             ActiveTake.TELEPORT_IDLE, 4))
         TELEPORTER.add_component(SpriteRenderer2D("Renderer-2", MATERIAL_TELEPORTER, RendererLayers.WorldObjects))
         teleporter_box_collider = BoxCollider2D("Teleporter Box Collider")
         teleporter_box_collider.scale = Vector2(4, 1)

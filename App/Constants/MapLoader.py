@@ -3,7 +3,6 @@ import random
 
 from pygame import Vector2
 
-from App.Components.Colliders.TreeBoxCollider2D import TreeBoxCollider2D
 from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -67,7 +66,13 @@ def map_load(scene, planet_json):
             if id == 5:
                 tree_object = random.choice(
                     [GameObjectConstants.TALL_TREE.clone(), GameObjectConstants.LOW_TREE.clone()])
-                tree_collider = TreeBoxCollider2D("TreeCollider")
+                tree_collider = BoxCollider2D("TreeCollider")
+                if tree_object.name == "Tree":
+                    tree_collider.scale = Vector2(0.3, 0.15)
+                    tree_collider.offset = Vector2(3, 72)
+                else:
+                    tree_collider.scale = Vector2(0.5, 0.25)
+                    tree_collider.offset = Vector2(0, 32)
                 tree_object.add_component(tree_collider)
                 tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
                 scene.add(tree_object)
@@ -89,6 +94,15 @@ def map_load(scene, planet_json):
                 lilypad_object.transform.position = Vector2(x * 72.5, y * 72.5)
 
                 scene.add(lilypad_object)
+            elif id == 1:
+                power_up_object = random.choice([GameObjectConstants.POTION_SPEED.clone(),
+                                                 GameObjectConstants.POTION_HEAL.clone(),
+                                                 GameObjectConstants.POTION_ATTACK.clone(),
+                                                 GameObjectConstants.POTION_DEFENSE.clone(),
+                                                 GameObjectConstants.RANDOM_POWER_UP.clone()])
+                power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
+
+                scene.add(power_up_object)
 
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
