@@ -30,7 +30,7 @@ class QuadTree:
         self.subdivided = True
 
     def insert(self, obj):
-        if not self.boundary.contains(obj.bounds):
+        if not self.boundary.colliderect(obj.bounds):
             return False  # Object is outside the quadtree's boundary
 
         if len(self.objects) < self.capacity:
@@ -69,6 +69,23 @@ class QuadTree:
                 result.extend(child.query(range_boundary))
 
         return result
+
+    def print_quadtree(self):
+        all_objects = self.get_all_objects()
+        total_objects = len(all_objects)
+
+        print("Total number of objects in the quadtree: ", total_objects)
+        return total_objects
+
+    def get_all_objects(self):
+        all_objects = self.objects.copy()
+
+        if self.subdivided:
+            for child in self.children:
+                if child is not None:
+                    all_objects.extend(child.get_all_objects())
+
+        return all_objects
 
 
 
