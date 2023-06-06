@@ -93,19 +93,19 @@ camera_manager.add(third_person_camera_game_object)
 
 camera_manager.set_active_camera(camera_main_menu_game_object.name)
 
-
-
-
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 earth_scene = Scene(Constants.Scene.EARTH)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Vector2(2900, 4900), Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
+                   Constants.Player.TOTAL_LIVES, Vector2(2900, 4900),
+                   Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
+player_box_collider.scale = Vector2(1, 0.5)
+player_box_collider.offset = Vector2(0, 20)
 player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
 player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
@@ -116,7 +116,8 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 10, 1, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)), GameObjectType.Dynamic,
+enemy = Character("Enemy", 70, 10, 1, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
+                  GameObjectType.Dynamic,
                   GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
@@ -126,7 +127,8 @@ enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_
                                      ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
 enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200)
 enemy.add_component(enemy_controller)
-enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000,4500), Vector2(2200 ,4500), Vector2(2400, 4500), Vector2(2800, 4500)]))
+enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000, 4500), Vector2(2200, 4500), Vector2(2400, 4500),
+                                                       Vector2(2800, 4500)]))
 
 enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
                    GameObjectType.Dynamic,
@@ -148,14 +150,12 @@ material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
 enemy3.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
 enemy3.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
                                       ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED,600)
+enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
 enemy3.add_component(enemy_controller2)
 # enemy4 = enemy.clone()
 
 pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
                  GameObjectCategory.Pet)
-
-
 
 material_pet = Constants.PetDog.MATERIAL_PET
 pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
@@ -167,19 +167,17 @@ pet.add_component(Rigidbody2D("PetRigidbody"))
 pet.add_component(PetController("PetMovement", player, 20))
 pet.add_component(BoxCollider2D("PetCollider"))
 
-
 # Create a font object
 font_path = "Assets/Fonts/Starjedi.ttf"
 
 text_material = TextMaterial2D(font_path, 30, "Hello World!", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 0, 0))
 ui_text_helper = GameObject("UI Text Helper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                  GameObjectCategory.UI)
+                            GameObjectCategory.UI)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, 2))
 
 # ui_text_helper_component = UITextHelper("UI text helper")
 # ui_text_helper.add_component(ui_text_helper_component)
-
 
 
 earth_scene.add(enemy)
@@ -245,7 +243,6 @@ Constants.INPUT_HANDLER = InputHandler()
 map_load(earth_scene, Constants.Map.PLANET_A_JSON)
 # map_load(mars_scene, Constants.Map.PLANET_B_JSON)
 # map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
-
 
 
 # load_sound()

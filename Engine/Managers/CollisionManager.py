@@ -3,7 +3,6 @@ import math
 import pygame
 from pygame import Rect
 
-from App.Components.Colliders.TreeBoxCollider2D import TreeBoxCollider2D
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PlayerController import PlayerController
 from Engine.GameObjects.Character import Character
@@ -40,9 +39,11 @@ class CollisionManager(Manager):
         collider1_entity = collider1.parent
         collider2_entity = collider2.parent
         if collider1.collides_with(collider2):
-            if isinstance(collider1, TreeBoxCollider2D) and isinstance(collider2_entity, Character):
+            if (collider1_entity.name == "Tree" or collider1_entity.name == "LowTree") \
+                    and isinstance(collider2_entity, Character):
                 collider1_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
-            elif isinstance(collider2, TreeBoxCollider2D) and isinstance(collider1_entity, Character):
+            elif (collider2_entity.name == "Tree" or collider2_entity.name == "LowTree") \
+                    and isinstance(collider1_entity, Character):
                 collider2_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
 
             collider1_rigidbody = collider1_entity.get_component(Rigidbody2D)
@@ -133,9 +134,11 @@ class CollisionManager(Manager):
             if collider1_entity.get_component(Collider):
                 collider1_entity.get_component(Collider).handle_response(collider2_entity)
         else:
-            if isinstance(collider1, TreeBoxCollider2D) and isinstance(collider2_entity, Character):
+            if (collider1_entity.name == "Tree" or collider1_entity.name == "LowTree") \
+                    and isinstance(collider2_entity, Character):
                 collider1_entity.get_component(Renderer2D).layer = RendererLayers.Tree
-            elif isinstance(collider2, TreeBoxCollider2D) and isinstance(collider1_entity, Character):
+            elif (collider2_entity.name == "Tree" or collider2_entity.name == "LowTree") \
+                    and isinstance(collider1_entity, Character):
                 collider2_entity.get_component(Renderer2D).layer = RendererLayers.Tree
 
     def start(self):

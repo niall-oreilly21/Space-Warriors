@@ -13,7 +13,8 @@ class BoxCollider2D(Component):
         self.__anchor = anchor
         self.__color = (255, 0, 0)
         self.__rend = None
-        self.__scale = Vector2(1,1)
+        self.__scale = Vector2(1, 1)
+        self.__offset = Vector2(0, 0)
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
@@ -25,6 +26,14 @@ class BoxCollider2D(Component):
     @scale.setter
     def scale(self, scale):
         self.__scale = scale
+
+    @property
+    def offset(self):
+        return self.__offset
+
+    @offset.setter
+    def offset(self, offset):
+        self.__offset = offset
 
     @property
     def width(self):
@@ -77,6 +86,7 @@ class BoxCollider2D(Component):
                                                   -self._transform.rotation)
         rotated_bounds = rotated_surface.get_rect(center=bounds.center)
         rotated_bounds.scale_by_ip(self.__scale.x, self.__scale.y)
+        rotated_bounds.move_ip(self.__offset.x, self.__offset.y)
 
         return rotated_bounds
 
