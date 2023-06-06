@@ -52,7 +52,7 @@ def map_load(scene, planet_json):
             c_value = ground["c"]
             s_id = ground["s"]["id"]
             if s_id == Constants.Tile.WATER:
-                map_data[y][x] = TileAttributes(s_id, False, c_value)
+                map_data[y][x] = TileAttributes(s_id, True, c_value)
             else:
                 map_data[y][x] = TileAttributes(s_id, False, c_value)
 
