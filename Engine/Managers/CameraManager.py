@@ -89,7 +89,7 @@ class CameraManager(Manager):
             self.__set_viewport()
 
     def get_active_camera_position(self):
-        return self.__active_camera.parent.position
+        return self.__active_camera.transform.position
 
     def __set_viewport(self):
         self.__screen = pygame.display.set_mode((self.__active_camera.viewport.x, self.__active_camera.viewport.y))
