@@ -3,11 +3,14 @@ from pygame import Rect, draw, Vector2
 from Engine.GameObjects.Components.Component import Component
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 
 
 class BoxCollider2D(Component):
     def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name)
+        self.__animator = None
         self.__width = None
         self.__height = None
         self.__anchor = anchor
@@ -17,6 +20,7 @@ class BoxCollider2D(Component):
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
+        self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     @property
     def scale(self):
@@ -68,7 +72,19 @@ class BoxCollider2D(Component):
 
     @property
     def bounds(self):
-        material_source_rect = self.__rend.material.source_rect
+        material_source_rect = None
+
+        if isinstance(self.__rend, SpriteRenderer2D):
+
+            if self.__animator:
+                material_source_rect = self.__animator.get_current_sprite().source_rect
+            if self.__rend.sprite:
+                material_source_rect = self.__rend.sprite.source_rect
+
+        if material_source_rect is None:
+            material_source_rect = self.__rend.material.source_rect
+
+
         bounds = Rect(self._transform.position.x, self._transform.position.y,
                       material_source_rect.width * self.transform.scale.x,
                       material_source_rect.height * self.transform.scale.y)
