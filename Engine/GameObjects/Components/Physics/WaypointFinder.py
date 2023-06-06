@@ -29,7 +29,6 @@ class WaypointFinder(Component):
         distance = math.sqrt(
             (current_waypoint[0] - enemy_position[0]) ** 2 + (current_waypoint[1] - enemy_position[1]) ** 2)
 
-
         return distance <= distance_threshold
 
     def lerp(self, start, end, t):

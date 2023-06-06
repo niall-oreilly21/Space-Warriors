@@ -11,6 +11,7 @@ from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
@@ -254,6 +255,34 @@ if screen is not None:
     screen.fill(background_color)
 
 render_manager.is_debug_mode = True
+
+
+# Grid dimensions
+grid_size = 110
+grid_width = 72
+grid_height = 72
+
+# Create the grid
+# grid = {}
+# for row in range(grid_size):
+#     for col in range(grid_size):
+#         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
+#         grid[(row, col)] = rect
+
+
+def update_collision_area():
+    camera = camera_manager.active_camera
+
+    viewport = camera.viewport
+    camera_position = camera.parent.transform.position
+
+    return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500,750)
+
+
+water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
+
+print("Colliders", len(water_collsion_boxes))
+
 # Main game loop
 running = True
 while running:
@@ -277,6 +306,33 @@ while running:
         screen.fill(background_color)
 
     render_manager.draw()
+
+    colision_area = update_collision_area()
+
+    colliders = earth_scene.get_all_components_by_type(BoxCollider2D)
+
+    # for collider in colliders:
+    #     if collider.parent.name == "Player":
+    #         print(collider.bounds)
+    #
+    # print()
+    # print()
+
+
+    #print(colision_area.boundary)
+    #pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
+    #print("player: ", player.transform.position.x, ", ", player.transform.position.y )
+
+    draw_x = collider_system.collision_area.boundary.x - Application.ActiveCamera.transform.position.x
+    draw_y = collider_system.collision_area.boundary.y - Application.ActiveCamera.transform.position.y
+
+    rect = pygame.Rect(draw_x, draw_y, collider_system.collision_area.boundary.width, collider_system.collision_area.boundary.height)
+
+    pygame.draw.rect(screen, (255, 255, 255), rect, 5)
+
+    # # Draw the grid
+    # for rect in grid.values():
+    #     pygame.draw.rect(screen, (255, 255, 255), rect, 1)
 
     pygame.display.update()
     game_time.limit_fps(60)
