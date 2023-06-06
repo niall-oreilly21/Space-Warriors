@@ -18,6 +18,7 @@ class GameObjectCategory(Enum):
     Environment = 8
     Pet = 9
     Teleporter = 10
+    PowerUp = 11
 
 
 class GameObjectDirection(Enum):
@@ -25,3 +26,11 @@ class GameObjectDirection(Enum):
     Down = 1
     Left = 2
     Right = 3
+
+
+class PowerUpType(Enum):
+    Speed = 0
+    Defense = 1
+    Heal = 2
+    Attack = 3
+    Random = 4

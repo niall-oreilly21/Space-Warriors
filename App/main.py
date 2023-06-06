@@ -96,8 +96,7 @@ camera_manager.set_active_camera(camera_main_menu_game_object.name)
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 earth_scene = Scene(Constants.Scene.EARTH)
-player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2,
-                   Constants.Player.TOTAL_LIVES, Vector2(2900, 4900),
+player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2, Vector2(2900, 4900),
                    Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
@@ -116,9 +115,8 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 10, 1, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
-                  GameObjectType.Dynamic,
-                  GameObjectCategory.Rat)
+enemy = Character("Enemy", 70, 10, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
+                  GameObjectType.Dynamic, GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
@@ -130,7 +128,7 @@ enemy.add_component(enemy_controller)
 enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000, 4500), Vector2(2200, 4500), Vector2(2400, 4500),
                                                        Vector2(2800, 4500)]))
 
-enemy2 = Character("Enemy2", 50, 2, 1, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
+enemy2 = Character("Enemy2", 50, 2, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
                    GameObjectType.Dynamic,
                    GameObjectCategory.Wolf)
 enemy2.add_component(BoxCollider2D("Box-3"))
@@ -142,7 +140,7 @@ enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMAT
 enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
 enemy2.add_component(enemy_controller2)
 
-enemy3 = Character("Enemy3", 50, 2, 1, 1, Vector2(1000, -1000), Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
+enemy3 = Character("Enemy3", 50, 2, 1, Vector2(1000, -1000), Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
                    GameObjectType.Dynamic, GameObjectCategory.Wolf)
 enemy3.add_component(BoxCollider2D("Box-3"))
 # enemy.add_component(Rigidbody2D("Rigid"))
@@ -168,13 +166,13 @@ pet.add_component(PetController("PetMovement", player, 20))
 pet.add_component(BoxCollider2D("PetCollider"))
 
 # Create a font object
-font_path = "Assets/Fonts/Starjedi.ttf"
+font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
-text_material = TextMaterial2D(font_path, 30, "Hello World!", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 0, 0))
+text_material = TextMaterial2D(font_path, 35, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
 ui_text_helper = GameObject("UI Text Helper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                             GameObjectCategory.UI)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
-ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, 2))
+ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
 
 # ui_text_helper_component = UITextHelper("UI text helper")
 # ui_text_helper.add_component(ui_text_helper_component)
@@ -267,6 +265,10 @@ while running:
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()
+
+    Constants.EVENT_DISPATCHER.dispatch_event(
+        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                  [""]))
 
     for manager in managers:
         manager.update(game_time)

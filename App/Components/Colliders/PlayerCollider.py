@@ -1,12 +1,19 @@
+import random
 import time
 
+import pygame
+
+from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider import Collider
+from Engine.GameObjects.PowerUp import PowerUp
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, PowerUpType
 
 
 class PlayerCollider(Collider):
@@ -47,11 +54,71 @@ class PlayerCollider(Collider):
 
             if self.parent.health == 0:
                 self.parent.health = Constants.Player.DEFAULT_HEALTH
-                self.parent.lose_live()
 
             if colliding_game_object.health == 0:
                 print("Enemy dead")
-                # TODO: this is a temporary fix for testing purposes
-                colliding_game_object.remove_component(SpriteRenderer2D)
-                colliding_game_object.remove_component(BoxCollider2D)
-                colliding_game_object.remove_component(SpriteAnimator2D)
+                Application.ActiveScene.remove(colliding_game_object)
+
+        # Player and power up collide
+        if isinstance(colliding_game_object, PowerUp):
+            if colliding_game_object.power_up_type == PowerUpType.Heal:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Press E to heal"]))
+                colliding_game_object.power_up_value = random.randint(5, 15)
+                if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                    print("Player healed by ", colliding_game_object.power_up_value)
+                    Application.ActiveScene.remove(colliding_game_object)
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                                  [""]))
+            elif colliding_game_object.power_up_type == PowerUpType.Attack:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Press E to increase attack damage"]))
+                colliding_game_object.power_up_value = random.randint(1, 5)
+                if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                    print("Player attack increased by ", colliding_game_object.power_up_value)
+                    Application.ActiveScene.remove(colliding_game_object)
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                                  [""]))
+            elif colliding_game_object.power_up_type == PowerUpType.Defense:
+                colliding_game_object.power_up_value = random.randint(1, 5)
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Press E to increase defense"]))
+                if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                    print("Player defense increased by ", colliding_game_object.power_up_value)
+                    Application.ActiveScene.remove(colliding_game_object)
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                                  [""]))
+            elif colliding_game_object.power_up_type == PowerUpType.Speed:
+                colliding_game_object.power_up_value = random.randint(1, 5)
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Press E to increase speed"]))
+                if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                    print("Player speed increased by ", colliding_game_object.power_up_value)
+                    Application.ActiveScene.remove(colliding_game_object)
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                                  [""]))
+            else:
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Press E to get a random power up"]))
+                random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack,
+                                             PowerUpType.Defense])
+                if random_type == PowerUpType.Heal:
+                    colliding_game_object.power_up_value = min(random.randint(-8, 10), random.randint(-8, 10))
+                else:
+                    colliding_game_object.power_up_value = min(random.randint(-3, 3), random.randint(-3, 3))
+
+                if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                    print(random_type, ": ", colliding_game_object.power_up_value)
+                    Application.ActiveScene.remove(colliding_game_object)
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                                  [""]))

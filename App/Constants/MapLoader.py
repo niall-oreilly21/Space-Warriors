@@ -101,7 +101,7 @@ def map_load(scene, planet_json):
                                                  GameObjectConstants.POTION_DEFENSE.clone(),
                                                  GameObjectConstants.RANDOM_POWER_UP.clone()])
                 power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
-
+                power_up_object.add_component(BoxCollider2D("PowerUpCollider"))
                 scene.add(power_up_object)
 
 

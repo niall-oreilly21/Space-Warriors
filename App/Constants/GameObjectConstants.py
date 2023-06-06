@@ -7,6 +7,7 @@ from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
+from Engine.GameObjects.PowerUp import PowerUp
 from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -14,7 +15,7 @@ from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory, PowerUpType
 from Engine.Other.Transform2D import Transform2D
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
@@ -150,32 +151,33 @@ class GameObjectConstants:
 
     __POTION_SCALE = 0.4
 
-    POTION_SPEED = GameObject("PotionSpeed", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+    POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
+                           Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
                               GameObjectType.Static, GameObjectCategory.Environment)
     power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
     texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
     POTION_SPEED.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
-    POTION_ATTACK = GameObject("PotionAttack", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                               GameObjectType.Static, GameObjectCategory.Environment)
+    POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
+                            Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
     power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_attack.png")
     texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
     POTION_ATTACK.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
-    POTION_DEFENSE = GameObject("PotionDefense", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                                GameObjectType.Static, GameObjectCategory.Environment)
+    POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
+                             Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
     power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_defense.png")
     texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
     POTION_DEFENSE.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
-    POTION_HEAL = GameObject("PotionHeal", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                             GameObjectType.Static, GameObjectCategory.Environment)
+    POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
+                          Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
     power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_heal.png")
     texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
     POTION_HEAL.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
-    RANDOM_POWER_UP = GameObject("RandomPowerUp", Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                                 GameObjectType.Static, GameObjectCategory.Environment)
+    RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
+                              Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
     power_up_image = pygame.image.load("Assets/UI/PowerUps/random.png")
     texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
     RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
