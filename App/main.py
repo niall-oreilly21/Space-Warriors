@@ -285,7 +285,9 @@ def update_collision_area():
     return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500,750)
 
 
+water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
 
+print("Colliders", len(water_collsion_boxes))
 
 # Main game loop
 running = True
@@ -309,12 +311,26 @@ while running:
 
     colision_area = update_collision_area()
 
+    colliders = earth_scene.get_all_components_by_type(BoxCollider2D)
+
+    # for collider in colliders:
+    #     if collider.parent.name == "Player":
+    #         print(collider.bounds)
+    #
+    # print()
+    # print()
 
 
     #print(colision_area.boundary)
     #pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
+    #print("player: ", player.transform.position.x, ", ", player.transform.position.y )
 
-    pygame.draw.rect(screen, (255, 255, 255), collider_system.collision_area.boundary)
+    draw_x = collider_system.collision_area.boundary.x - Application.ActiveCamera.transform.position.x
+    draw_y = collider_system.collision_area.boundary.y - Application.ActiveCamera.transform.position.y
+
+    rect = pygame.Rect(draw_x, draw_y, collider_system.collision_area.boundary.width, collider_system.collision_area.boundary.height)
+
+    pygame.draw.rect(screen, (255, 255, 255), rect, 5)
 
     # # Draw the grid
     # for rect in grid.values():
