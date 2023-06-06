@@ -48,20 +48,20 @@ class QuadTree:
         return False  # Object does not fit entirely within any child quadtree
 
     def remove(self, obj):
-        for object in self.objects:
-            if object == obj:
-                self.objects.remove(object)
+        if obj in self.objects:
+            self.objects.remove(obj)
+            # Remove the object from the current quadtree
 
-
+        if self.subdivided:
+            for child in self.children:
+                child.remove(obj)
+            # Recursively remove the object from the child quadtrees if they exist
 
     def query(self, range_boundary):
         result = []
 
-        if not self.boundary.colliderect(range_boundary):
-            return result  # No overlap between the quadtree and the range boundary
-
         for obj in self.objects:
-            if range_boundary.colliderect(obj.bounds):
+            if range_boundary.colliderect(obj.bounds) or obj.bounds.contains(range_boundary):
                 result.append(obj)
 
         if self.subdivided:
@@ -69,5 +69,6 @@ class QuadTree:
                 result.extend(child.query(range_boundary))
 
         return result
+
 
 
