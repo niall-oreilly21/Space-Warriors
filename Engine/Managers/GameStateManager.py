@@ -42,6 +42,8 @@ class GameStateManager(Manager):
 
         Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
 
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
+
         dynamic_game_object_list = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
 
         for game_object in dynamic_game_object_list:

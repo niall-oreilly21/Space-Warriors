@@ -30,3 +30,5 @@ class EventActionType:
     SetCameraTarget = 19
     SetUpColliders = 20
     RemoveCollliderFromQuadTree = 21
+    TurnSpotLightOn = 22
+    DrawCollisionRange = 23
