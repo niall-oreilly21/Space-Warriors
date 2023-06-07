@@ -3,7 +3,7 @@ from App.Constants.Application import Application
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider import Collider
-from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
+from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
 from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -14,17 +14,16 @@ from Engine.Other.Enums.RendererLayers import RendererLayers
 
 
 class CollisionManager(Manager):
-    def __init__(self, collision_range, scene_manager, camera_manager, event_dispatcher):
+    def __init__(self, map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, event_dispatcher):
         super().__init__(event_dispatcher)
+        self.__map_dimensions = map_dimensions
+        self.__quad_tree_capacity = quad_tree_capacity
+        self.__collision_range = CollisionRange(0, 0, collision_range_width, collision_range_height)
+        self.__dynamic_objects_colliders = []
+        self.__collision_range_target = collision_range_target
+        self.__collision_range_target_box_collider = None
         self.__colliders = None
-        self.__collision_range = collision_range
-        self.__scene_manager = scene_manager
-        self.__camera_manager = camera_manager
-        self.collision_area = CollisionArea(0, 0, 500, 500)
-
-        self.quad_tree = QuadTree(self.collision_area.boundary, 4)
-        self.dynamic_objects_colliders = []
-        self.__player_box_collider = None
+        self.__quad_tree = None
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.CollisionManager, self._handle_events)
@@ -35,48 +34,51 @@ class CollisionManager(Manager):
 
         elif event_data.event_action_type == EventActionType.RemoveCollliderFromQuadTree:
             collider = event_data.parameters[0]
-            self.quad_tree.remove(collider)
+            self.__quad_tree.remove(collider)
+
+        elif event_data.event_action_type == EventActionType.DrawCollisionRange:
+            screen = event_data.parameters[0]
+            camera_position = event_data.parameters[1]
+            self.__collision_range.draw(screen, camera_position)
+
+    @property
+    def collision_range(self):
+        return self.__collision_range
+
 
     def start(self):
-        self.__colliders = self.__scene_manager.active_scene.get_all_components_by_type(BoxCollider2D)
-        dynamic_objects = self.__scene_manager.active_scene.find_all_by_type(GameObjectType.Dynamic)
+        self.__colliders = Application.ActiveScene.get_all_components_by_type(BoxCollider2D)
+        dynamic_objects = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
 
         for object in dynamic_objects:
-            self.dynamic_objects_colliders.append(object.get_component(BoxCollider2D))
+            self.__dynamic_objects_colliders.append(object.get_component(BoxCollider2D))
 
-        self.quad_tree = QuadTree(pygame.Rect(0, 0, 110 * 72, 120 * 72), 4)
+        self.__quad_tree = QuadTree(self.__map_dimensions, self.__quad_tree_capacity)
 
         for collider in self.__colliders:
-            self.quad_tree.insert(collider)
+            self.__quad_tree.insert(collider)
 
-        self.quad_tree.print_quadtree()
+        self.__quad_tree.print_quadtree()
 
-        self.__player_box_collider = Application.Player.get_component(BoxCollider2D)
+        self.__collision_range_target_box_collider = self.__collision_range_target.get_component(BoxCollider2D)
 
     def update_collision_area(self):
-        camera = self.__camera_manager.active_camera
-        viewport = camera.viewport
-        target_position = Application.Player.transform.position
-
-        player_bounds = self.__player_box_collider.bounds
+        player_bounds = self.__collision_range_target_box_collider.bounds
 
         # Calculate the top-left coordinates to center the collision area
-        self.collision_area.x = player_bounds.centerx - self.collision_area.width / 2
-        self.collision_area.y = player_bounds.centery - self.collision_area.height / 2
-
-    def collision_area(self):
-        return self.collision_area
+        self.__collision_range.x = player_bounds.centerx - self.__collision_range.width / 2
+        self.__collision_range.y = player_bounds.centery - self.__collision_range.height / 2
 
     def update(self, game_time):
         self.update_collision_area()
 
-        for collider in self.dynamic_objects_colliders:
-            self.quad_tree.remove(collider)
+        for collider in self.__dynamic_objects_colliders:
+            self.__quad_tree.remove(collider)
 
-        for collider in self.dynamic_objects_colliders:
-            self.quad_tree.insert(collider)
+        for collider in self.__dynamic_objects_colliders:
+            self.__quad_tree.insert(collider)
 
-        potential_colliders = list(self.quad_tree.query(self.collision_area.boundary))
+        potential_colliders = list(self.__quad_tree.query(self.__collision_range.bounds))
 
         for i in range(len(potential_colliders)):
             box_collider_one = potential_colliders[i]
