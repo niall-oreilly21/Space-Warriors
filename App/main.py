@@ -256,7 +256,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
 # initialise_level_menu()
 
-game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), ui_text_helper)
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
 managers.append(game_state_manager)
 
 Application.ActiveScene = main_menu_scene
@@ -310,7 +310,7 @@ while running:
 
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  [""]))
+                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)

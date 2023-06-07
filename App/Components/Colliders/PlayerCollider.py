@@ -24,10 +24,10 @@ def handle_power_up_collision(colliding_game_object: PowerUp, min_value, max_val
     colliding_game_object.power_up_value = random.randint(min_value, max_value)
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  [prompt_text]))
+                  [prompt_text, Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+
 
 class PlayerCollider(Collider):
-
     def __init__(self, name):
         super().__init__(name)
         self.__current_speed_time = 0
@@ -109,7 +109,7 @@ class PlayerCollider(Collider):
         if colliding_game_object.game_object_category == GameObjectCategory.Pet:
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          ["You found a stranded dog! Press E to adopt"]))
+                          ["You found a stranded dog! Press E to adopt", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
             if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                 colliding_game_object.get_component(PetController).adopt()
                 Constants.EVENT_DISPATCHER.dispatch_event(
@@ -138,7 +138,7 @@ class PlayerCollider(Collider):
             Application.ActiveScene.remove(colliding_game_object)
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          [""]))
+                          ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                           [colliding_game_object.get_component(BoxCollider2D)]))

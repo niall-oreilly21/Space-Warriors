@@ -293,3 +293,7 @@ class Constants:
         DIRT = 5
         SAND = 6
         COARSE_DIRT = 9
+
+    class UITextPrompts:
+        UI_TEXT_BOTTOM = "UI Text Bottom"
+        UI_TEXT_RIGHT = "UI Text Right"

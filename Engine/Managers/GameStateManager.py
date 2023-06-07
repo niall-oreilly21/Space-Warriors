@@ -14,10 +14,10 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 
 
 class GameStateManager(Manager):
-    def __init__(self, event_dispatcher, input_handler, ui_helper_text):
+    def __init__(self, event_dispatcher, input_handler):
         super().__init__(event_dispatcher)
         self.__input_handler = input_handler
-        self.__ui_helper_text = ui_helper_text
+        self.__ui_helper_texts = []
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
@@ -25,7 +25,8 @@ class GameStateManager(Manager):
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.SetUITextHelper:
             ui_text = event_data.parameters[0]
-            self.__set_ui_text(ui_text)
+            ui_text_game_object_name = event_data.parameters[1]
+            self.__set_ui_text(ui_text, ui_text_game_object_name)
 
         elif event_data.event_action_type == EventActionType.TurnOnTeleporter:
             self.__set_up_teleporter()
@@ -33,26 +34,40 @@ class GameStateManager(Manager):
         elif event_data.event_action_type == EventActionType.SetUpLevel:
             self.__set_up_level()
 
-    def __set_ui_text(self, ui_text):
-        self.__ui_helper_text.get_component(Renderer2D).material.text = ui_text
+    def __set_ui_text(self, ui_text, ui_text_game_object_name):
+
+        for ui_text_game_object in self.__ui_helper_texts:
+            if ui_text_game_object.name == ui_text_game_object_name:
+                ui_text_game_object.get_component(Renderer2D).material.text = ui_text
 
     def __set_up_level(self):
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
 
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
+        self.__dispatch_events_for_set_up_level()
+        self.__position_characters_for_level()
+        self.__set_up_teleporter_for_level()
+        self.__get_ui_text_helpers()
 
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
 
+    def __set_up_teleporter_for_level(self):
+        teleporter = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)[0]
+        teleporter.get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
+
+    def __position_characters_for_level(self):
         dynamic_game_object_list = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
 
         for game_object in dynamic_game_object_list:
             if isinstance(game_object, Character):
                 game_object.transform.position = game_object.initial_position
 
-        teleporter = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)[0]
-        teleporter.get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
+    def __get_ui_text_helpers(self):
+        self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
+    def __dispatch_events_for_set_up_level(self):
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
+
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
@@ -68,3 +83,5 @@ class GameStateManager(Manager):
     def update(self, game_time):
         self.__check_pause_menu()
         self.__input_handler.update()
+
+
