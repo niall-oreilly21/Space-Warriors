@@ -170,14 +170,10 @@ pet.add_component(BoxCollider2D("PetCollider"))
 font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
 text_material = TextMaterial2D(font_path, 35, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
-ui_text_helper = GameObject("UI Text Helper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                            GameObjectCategory.UI)
+ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                            GameObjectCategory.UIPrompts)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
-
-# ui_text_helper_component = UITextHelper("UI text helper")
-# ui_text_helper.add_component(ui_text_helper_component)
-
 
 earth_scene.add(enemy)
 earth_scene.add(pet)
@@ -229,7 +225,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
 # initialise_level_menu()
 
-game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), ui_text_helper)
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
 managers.append(game_state_manager)
 
 Application.ActiveScene = main_menu_scene
@@ -268,7 +264,7 @@ while running:
 
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  [""]))
+                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)
