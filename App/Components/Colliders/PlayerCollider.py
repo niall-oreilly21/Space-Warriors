@@ -64,14 +64,14 @@ class PlayerCollider(Collider):
             if colliding_game_object.power_up_type == PowerUpType.Heal:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to heal"]))
+                              ["Press E to heal", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 colliding_game_object.power_up_value = random.randint(5, 15)
                 if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                     print("Player healed by ", colliding_game_object.power_up_value)
                     Application.ActiveScene.remove(colliding_game_object)
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                                  [""]))
+                                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                                   [colliding_game_object.get_component(BoxCollider2D)]))
@@ -79,7 +79,7 @@ class PlayerCollider(Collider):
             elif colliding_game_object.power_up_type == PowerUpType.Attack:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to increase attack damage"]))
+                              ["Press E to increase attack damage", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 colliding_game_object.power_up_value = random.randint(1, 5)
                 if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                     print("Player attack increased by ", colliding_game_object.power_up_value)
@@ -91,18 +91,18 @@ class PlayerCollider(Collider):
 
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                                  [""]))
+                                  ["",Constants.UITextPrompts.UI_TEXT_BOTTOM]))
             elif colliding_game_object.power_up_type == PowerUpType.Defense:
                 colliding_game_object.power_up_value = random.randint(1, 5)
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to increase defense"]))
+                              ["Press E to increase defense", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                     print("Player defense increased by ", colliding_game_object.power_up_value)
                     Application.ActiveScene.remove(colliding_game_object)
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                                  [""]))
+                                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                                   [colliding_game_object.get_component(BoxCollider2D)]))
@@ -111,13 +111,13 @@ class PlayerCollider(Collider):
                 colliding_game_object.power_up_value = random.randint(1, 5)
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to increase speed"]))
+                              ["Press E to increase speed", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                     print("Player speed increased by ", colliding_game_object.power_up_value)
                     Application.ActiveScene.remove(colliding_game_object)
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                                  [""]))
+                                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                                   [colliding_game_object.get_component(BoxCollider2D)]))
@@ -125,7 +125,7 @@ class PlayerCollider(Collider):
             else:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to get a random power up"]))
+                              ["Press E to get a random power up", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack,
                                              PowerUpType.Defense])
                 if random_type == PowerUpType.Heal:
@@ -138,7 +138,7 @@ class PlayerCollider(Collider):
                     Application.ActiveScene.remove(colliding_game_object)
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                                  [""]))
+                                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                                   [colliding_game_object.get_component(BoxCollider2D)]))
