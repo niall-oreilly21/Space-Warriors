@@ -29,3 +29,4 @@ class EventActionType:
     SetUpLevel = 18
     SetCameraTarget = 19
     SetUpColliders = 20
+    RemoveCollliderFromQuadTree = 21
