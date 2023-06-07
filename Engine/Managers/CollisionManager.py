@@ -9,7 +9,7 @@ from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
-from Engine.Other.Enums.GameObjectEnums import GameObjectType
+from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
 
@@ -78,11 +78,8 @@ class CollisionManager(Manager):
 
 
     def update_collision_area(self):
-        player_bounds = self.__collision_range_target_box_collider.bounds
-
-        # Calculate the top-left coordinates to center the collision area
-        self.__collision_range.x = player_bounds.centerx - self.__collision_range.width / 2
-        self.__collision_range.y = player_bounds.centery - self.__collision_range.height / 2
+        self.__collision_range.x = self.__collision_range_target_box_collider.bounds.centerx - self.__collision_range.width / 2
+        self.__collision_range.y = self.__collision_range_target_box_collider.bounds.centery - self.__collision_range.height / 2
 
     def update(self, game_time):
         self.update_collision_area()
@@ -126,12 +123,20 @@ class CollisionManager(Manager):
         if collider_two:
             collider_two.handle_collision_exit()
 
+    def __ignore_physics_collisions(self, collider_one_entity, collider_two_entity):
+        return collider_one_entity.game_object_category is GameObjectCategory.Teleporter or collider_two_entity.game_object_category is GameObjectCategory.Teleporter \
+        or collider_one_entity.game_object_category is GameObjectCategory.PowerUp or collider_two_entity.game_object_category is GameObjectCategory.PowerUp
+
+
     def __handle_collision_physics(self, collider_one_entity, collider_two_entity):
         collider_one_rigidbody = collider_one_entity.get_component(Rigidbody2D)
         collider_two_rigidbody = collider_two_entity.get_component(Rigidbody2D)
 
         is_collider1_static = collider_one_entity.game_object_type.Static
         is_collider2_static = collider_two_entity.game_object_type.Static
+
+        if self.__ignore_physics_collisions(collider_one_entity, collider_two_entity):
+            return
 
         if collider_one_rigidbody and collider_two_rigidbody:
             pass
