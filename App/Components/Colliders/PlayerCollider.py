@@ -72,6 +72,10 @@ class PlayerCollider(Collider):
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                                   [""]))
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                                  [colliding_game_object.get_component(BoxCollider2D)]))
+
             elif colliding_game_object.power_up_type == PowerUpType.Attack:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
@@ -80,6 +84,11 @@ class PlayerCollider(Collider):
                 if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                     print("Player attack increased by ", colliding_game_object.power_up_value)
                     Application.ActiveScene.remove(colliding_game_object)
+
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                                  [colliding_game_object.get_component(BoxCollider2D)]))
+
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                                   [""]))
@@ -94,6 +103,10 @@ class PlayerCollider(Collider):
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                                   [""]))
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                                  [colliding_game_object.get_component(BoxCollider2D)]))
+
             elif colliding_game_object.power_up_type == PowerUpType.Speed:
                 colliding_game_object.power_up_value = random.randint(1, 5)
                 Constants.EVENT_DISPATCHER.dispatch_event(
@@ -105,6 +118,10 @@ class PlayerCollider(Collider):
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                                   [""]))
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                                  [colliding_game_object.get_component(BoxCollider2D)]))
+
             else:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
@@ -122,3 +139,6 @@ class PlayerCollider(Collider):
                     Constants.EVENT_DISPATCHER.dispatch_event(
                         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                                   [""]))
+                    Constants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                                  [colliding_game_object.get_component(BoxCollider2D)]))
