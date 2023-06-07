@@ -3,7 +3,7 @@ from Engine.GameObjects.Components.Component import Component
 
 
 class Rigidbody2D(Component):
-    def __init__(self, name, max_speed= 20, mass=1.0, drag=0.0):
+    def __init__(self, name, max_speed=50, mass=1.0, drag=0.0):
         super().__init__(name)
         self.__mass = mass
         self.__drag = drag

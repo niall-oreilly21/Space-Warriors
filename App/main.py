@@ -11,7 +11,6 @@ from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
-from Engine.GameObjects.Components.Physics.CollisionArea import CollisionArea
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
@@ -230,7 +229,7 @@ managers.append(scene_manager)
 
 game_time = GameTime()
 
-collider_system = CollisionManager(100, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
+collider_system = CollisionManager(pygame.Rect(0, 0, 110 * 72, 120 * 72), player, 400, 400, 4, Constants.EVENT_DISPATCHER)
 managers.append(collider_system)
 
 scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_manager)
@@ -296,16 +295,6 @@ grid_height = 72
 #         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
 #         grid[(row, col)] = rect
 
-
-def update_collision_area():
-    camera = camera_manager.active_camera
-
-    viewport = camera.viewport
-    camera_position = camera.parent.transform.position
-
-    return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500, 750)
-
-
 water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
 
 print("Colliders", len(water_collsion_boxes))
@@ -330,6 +319,9 @@ while running:
         screen.fill(background_color)
 
     render_manager.draw()
+
+    print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
+          ", Attack damage: ", player.attack_damage)
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

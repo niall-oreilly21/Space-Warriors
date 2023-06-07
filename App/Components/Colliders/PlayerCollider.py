@@ -90,7 +90,7 @@ class PlayerCollider(Collider):
                 handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase defense")
                 self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Defense)
             elif colliding_game_object.power_up_type == PowerUpType.Speed:
-                handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase speed")
+                handle_power_up_collision(colliding_game_object, 10, 15, "Press E to increase speed")
                 self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Speed)
             else:
                 Constants.EVENT_DISPATCHER.dispatch_event(

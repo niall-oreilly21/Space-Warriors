@@ -40,7 +40,6 @@ class CollisionRange:
         def draw(self, screen, camera_position):
             self.x -=  camera_position.x
             self.y -=  camera_position.y
-            print(camera_position.x)
             pygame.draw.rect(screen, (255, 255, 255), self.__bounds, 5)
 
 

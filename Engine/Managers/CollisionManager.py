@@ -129,7 +129,6 @@ class CollisionManager(Manager):
             self.calculate_offset(collider_two_entity, collider_one_entity)
 
     def calculate_offset(self, collider_one_entity_dynamic, collider_two_entity_static):
-
         rect_one = collider_one_entity_dynamic.get_component(BoxCollider2D).bounds
         rect_two = collider_two_entity_static.get_component(BoxCollider2D).bounds
 
