@@ -210,6 +210,8 @@ text.add_component(Renderer2D("Renderer-2", texture_material, 1))
 text.add_component(Renderer2D("Renderer-1", text_material, 2))
 text.add_component(BoxCollider2D("Box-2"))
 
+
+
 earth_scene.add(player)
 earth_scene.add(enemy)
 earth_scene.add(pet)
@@ -268,9 +270,9 @@ Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 
 # # Load Map + objects
-map_load(earth_scene, Constants.Map.PLANET_A_JSON)
-map_load(mars_scene, Constants.Map.PLANET_B_JSON)
-map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
+map_load(earth_scene, Constants.Map.PLANET_A_JSON, player)
+map_load(mars_scene, Constants.Map.PLANET_B_JSON, player)
+map_load(saturn_scene, Constants.Map.PLANET_C_JSON, player)
 
 # load_sound()
 load_sound()

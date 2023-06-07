@@ -28,7 +28,6 @@ class ButtonCollider2D(BoxCollider2D):
         super().draw(screen, camera_position)
 
     def button_pressed(self):
-
         Constants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["buttonsound"]))
         if self._parent.name == Constants.Button.START_BUTTON:
@@ -70,9 +69,6 @@ class ButtonCollider2D(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.SaturnScene))
         elif self._parent.name == Constants.Button.RESTART_BUTTON:
-            print("Restart")
-            print(Application.LastActiveScene)
-
             if Application.LastActiveScene.name == Constants.Scene.EARTH:
                 print("EARTH RESTART")
                 Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,

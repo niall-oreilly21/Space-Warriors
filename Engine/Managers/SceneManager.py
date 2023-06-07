@@ -82,6 +82,14 @@ class SceneManager(Manager):
                 EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.DEATH_MENU)
             Application.ActiveScene = self.__active_scene
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusica"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicb"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicc"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["menumusic"]))
 
         elif event_data.event_action_type == EventActionType.MarsScene:
             load_scene()
