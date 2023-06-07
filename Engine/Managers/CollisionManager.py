@@ -33,8 +33,9 @@ class CollisionManager(Manager):
             self.start()
 
         elif event_data.event_action_type == EventActionType.RemoveCollliderFromQuadTree:
-            collider = event_data.parameters[0]
-            self.__quad_tree.remove(collider)
+            box_collider = event_data.parameters[0]
+            self.__remove_box_collider(box_collider)
+
 
         elif event_data.event_action_type == EventActionType.DrawCollisionRange:
             screen = event_data.parameters[0]
@@ -44,6 +45,14 @@ class CollisionManager(Manager):
     @property
     def collision_range(self):
         return self.__collision_range
+
+    def __remove_box_collider(self, box_collider):
+
+        if box_collider.parent.game_object_type.Dynamic:
+            self.__dynamic_objects_colliders.remove(box_collider)
+
+        self.__quad_tree.remove(box_collider)
+
 
 
     def start(self):

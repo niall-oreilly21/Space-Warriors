@@ -117,6 +117,8 @@ class PlayerCollider(Collider):
                               [colliding_game_object.get_component(BoxCollider2D)]))
                 colliding_game_object.remove_component(BoxCollider2D)
 
+
+
     def handle_power_up_selected(self, player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
         if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
             if power_up_type == PowerUpType.Heal:
