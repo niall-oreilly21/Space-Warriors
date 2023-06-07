@@ -17,7 +17,7 @@ class Constants:
     VIEWPORT_WIDTH = 1500
     VIEWPORT_HEIGHT = 750
 
-    CHARACTER_MOVE_SPEED = 3
+    CHARACTER_ANIMATOR_MOVE_SPEED = 3
 
     class Player:
         WIDTH = 29
@@ -25,7 +25,8 @@ class Constants:
         DEFAULT_HEALTH = 200
         DEFAULT_ATTACK_DAMAGE = 5
 
-        TOTAL_LIVES = 5
+        MOVE_SPEED = 0.2
+        DAMAGE_COOLDOWN = 1
 
         __MOVE_X_Y = 712
         __MOVE_X_HEIGHT = 54

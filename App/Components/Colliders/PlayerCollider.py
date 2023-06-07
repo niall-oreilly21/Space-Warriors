@@ -26,32 +26,19 @@ def handle_power_up_collision(colliding_game_object: PowerUp, min_value, max_val
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                   [prompt_text]))
 
-
-def handle_power_up_selected(player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
-    if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
-        if power_up_type == PowerUpType.Heal:
-            player.health += colliding_game_object.power_up_value
-        elif power_up_type == PowerUpType.Defense:
-            player.damage_cooldown += colliding_game_object.power_up_value
-        elif power_up_type == PowerUpType.Attack:
-            player.attack_damage += colliding_game_object.power_up_value
-        elif power_up_type == PowerUpType.Speed:
-            player.get_component(PlayerController).speed = Vector2(colliding_game_object.power_up_value * 0.1,
-                                                                   colliding_game_object.power_up_value * 0.1)
-
-        Application.ActiveScene.remove(colliding_game_object)
-        Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      [""]))
-        Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
-                      [colliding_game_object.get_component(BoxCollider2D)]))
-
-
 class PlayerCollider(Collider):
 
     def __init__(self, name):
         super().__init__(name)
+        self.__current_speed_time = 0
+        self.__current_attack_time = 0
+        self.__current_defense_time = 0
+
+        self.__speed_activated = False
+        self.__attack_activated = False
+        self.__defense_activated = False
+
+        self.__total_time = 10000
 
     def handle_response(self, colliding_game_object):
         current_time = time.time()
@@ -95,16 +82,16 @@ class PlayerCollider(Collider):
         if isinstance(colliding_game_object, PowerUp):
             if colliding_game_object.power_up_type == PowerUpType.Heal:
                 handle_power_up_collision(colliding_game_object, 5, 15, "Press E to heal")
-                handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Heal)
+                self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Heal)
             elif colliding_game_object.power_up_type == PowerUpType.Attack:
                 handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase attack damage")
-                handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Attack)
+                self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Attack)
             elif colliding_game_object.power_up_type == PowerUpType.Defense:
                 handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase defense")
-                handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Defense)
+                self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Defense)
             elif colliding_game_object.power_up_type == PowerUpType.Speed:
                 handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase speed")
-                handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Speed)
+                self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Speed)
             else:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
@@ -116,7 +103,7 @@ class PlayerCollider(Collider):
                 else:
                     colliding_game_object.power_up_value = min(random.randint(-3, 3), random.randint(-3, 3))
 
-                handle_power_up_selected(self.parent, colliding_game_object, random_type)
+                self.handle_power_up_selected(self.parent, colliding_game_object, random_type)
 
         # Player and pet collide
         if colliding_game_object.game_object_category == GameObjectCategory.Pet:
@@ -129,3 +116,52 @@ class PlayerCollider(Collider):
                     EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                               [colliding_game_object.get_component(BoxCollider2D)]))
                 colliding_game_object.remove_component(BoxCollider2D)
+
+    def handle_power_up_selected(self, player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
+        if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+            if power_up_type == PowerUpType.Heal:
+                player.health += colliding_game_object.power_up_value
+            elif power_up_type == PowerUpType.Defense:
+                player.damage_cooldown += colliding_game_object.power_up_value
+                self.__defense_activated = True
+            elif power_up_type == PowerUpType.Attack:
+                player.attack_damage += colliding_game_object.power_up_value
+                self.__attack_activated = True
+            elif power_up_type == PowerUpType.Speed:
+                player_speed_x = player.get_component(PlayerController).speed.x
+                player_speed_y = player.get_component(PlayerController).speed.y
+                player.get_component(PlayerController).speed = Vector2(
+                    player_speed_x + colliding_game_object.power_up_value * 0.1,
+                    player_speed_y + colliding_game_object.power_up_value * 0.1)
+                self.__speed_activated = True
+
+            Application.ActiveScene.remove(colliding_game_object)
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                          [""]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
+                          [colliding_game_object.get_component(BoxCollider2D)]))
+
+    def update(self, game_time):
+        if self.__attack_activated:
+            self.__current_attack_time += game_time.elapsed_time
+            if self.__current_attack_time >= self.__total_time:
+                self.__current_attack_time = 0
+                self.__attack_activated = False
+                self.parent.attack_damage = Constants.Player.DEFAULT_ATTACK_DAMAGE
+
+        if self.__defense_activated:
+            self.__current_defense_time += game_time.elapsed_time
+            if self.__current_defense_time >= self.__total_time:
+                self.__current_defense_time = 0
+                self.__defense_activated = False
+                self.parent.damage_cooldown = Constants.Player.DAMAGE_COOLDOWN
+
+        if self.__speed_activated:
+            self.__current_speed_time += game_time.elapsed_time
+            if self.__current_speed_time >= self.__total_time:
+                self.__current_speed_time = 0
+                self.__speed_activated = False
+                self.parent.get_component(PlayerController).speed = Vector2(Constants.Player.MOVE_SPEED,
+                                                                            Constants.Player.MOVE_SPEED)

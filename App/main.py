@@ -108,7 +108,8 @@ camera_manager.set_active_camera(camera_main_menu_game_object.name)
 sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 
 earth_scene = Scene(Constants.Scene.EARTH)
-player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE, 2, Vector2(2900, 4900),
+player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE,
+                   Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
                    Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
@@ -121,8 +122,9 @@ player.add_component(player_box_collider)
 material_player = Constants.Player.MATERIAL_GIRL
 player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                      ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-player_controller = PlayerController("Player movement", 0.2, 0.2, player_box_collider)
+                                      ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED, Constants.Player.MOVE_SPEED,
+                                     player_box_collider)
 player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
@@ -134,7 +136,7 @@ enemy.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
 enemy.add_component(SpriteRenderer2D("enemy", material_enemy, 0))
 enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_INFO, material_enemy,
-                                     ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+                                     ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
 enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200)
 enemy.add_component(enemy_controller)
 enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000, 4500), Vector2(2200, 4500), Vector2(2400, 4500),
@@ -148,7 +150,7 @@ enemy2.add_component(Rigidbody2D("Rigid"))
 material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY1
 enemy2.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
 enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
-                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
 enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
 enemy2.add_component(enemy_controller2)
 
@@ -159,7 +161,7 @@ enemy3.add_component(BoxCollider2D("Box-3"))
 material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
 enemy3.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
 enemy3.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
-                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
+                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
 enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
 enemy3.add_component(enemy_controller2)
 # enemy4 = enemy.clone()
@@ -171,7 +173,7 @@ material_pet = Constants.PetDog.MATERIAL_PET
 pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
 pet.get_component(SpriteRenderer2D).flip_x = True
 pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                   ActiveTake.PET_DOG_SIT, Constants.CHARACTER_MOVE_SPEED))
+                                   ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
 pet.get_component(SpriteAnimator2D).is_infinite = True
 pet.add_component(Rigidbody2D("PetRigidbody"))
 pet.add_component(PetController("PetMovement", player, 25))
@@ -183,10 +185,16 @@ pet.add_component(pet_collider)
 font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
 text_material = TextMaterial2D(font_path, 40, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
-ui_text_helper = GameObject("UI Text Helper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+ui_text_helper = GameObject("UITextHelper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                             GameObjectCategory.UI)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
+
+text_material_top_right = TextMaterial2D(font_path, 30, "Hello", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
+                                         (255, 255, 255))
+ui_text_helper_top_right = GameObject("UITextHelperTopRight", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
+                                      GameObjectType.Static, GameObjectCategory.UI)
+ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_top_right, RendererLayers.UI))
 
 # ui_text_helper_component = UITextHelper("UI text helper")
 # ui_text_helper.add_component(ui_text_helper_component)
@@ -195,6 +203,7 @@ ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLay
 earth_scene.add(enemy)
 earth_scene.add(pet)
 earth_scene.add(ui_text_helper)
+earth_scene.add(ui_text_helper_top_right)
 
 mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
@@ -232,10 +241,14 @@ level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU
 sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
 death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
 
-initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
-initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound", [Constants.Button.MUTE_BUTTON,Constants.Button.UNMUTE_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
-initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died", [Constants.Button.RESTART_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME,
+                [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
+initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused",
+                [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound",
+                [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
+                [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 scene_loader.initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
@@ -258,8 +271,7 @@ map_load(earth_scene, Constants.Map.PLANET_A_JSON)
 # map_load(mars_scene, Constants.Map.PLANET_B_JSON)
 # map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
 
-
-# load_sound()
+load_sound()
 
 for manager in managers:
     manager.start()
@@ -271,11 +283,11 @@ if screen is not None:
 
 render_manager.is_debug_mode = True
 
-
 # Grid dimensions
 grid_size = 110
 grid_width = 72
 grid_height = 72
+
 
 # Create the grid
 # grid = {}
@@ -291,7 +303,7 @@ def update_collision_area():
     viewport = camera.viewport
     camera_position = camera.parent.transform.position
 
-    return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500,750)
+    return CollisionArea(2150 - camera_position.x, 4525 - camera_position.y, 1500, 750)
 
 
 water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
@@ -333,17 +345,20 @@ while running:
     # print()
     # print()
 
-
-    #print(colision_area.boundary)
-    #pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
-    #print("player: ", player.transform.position.x, ", ", player.transform.position.y )
+    # print(colision_area.boundary)
+    # pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
+    # print("player: ", player.transform.position.x, ", ", player.transform.position.y )
 
     draw_x = collider_system.collision_area.boundary.x - Application.ActiveCamera.transform.position.x
     draw_y = collider_system.collision_area.boundary.y - Application.ActiveCamera.transform.position.y
 
-    rect = pygame.Rect(draw_x, draw_y, collider_system.collision_area.boundary.width, collider_system.collision_area.boundary.height)
+    rect = pygame.Rect(draw_x, draw_y, collider_system.collision_area.boundary.width,
+                       collider_system.collision_area.boundary.height)
 
     pygame.draw.rect(screen, (255, 255, 255), rect, 5)
+
+    print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
+          ", Attack damage: ", player.attack_damage)
 
     # # Draw the grid
     # for rect in grid.values():
