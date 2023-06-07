@@ -19,6 +19,7 @@ class GameObjectCategory(Enum):
     Pet = 9
     Teleporter = 10
     PowerUp = 11
+    UIPrompts = 12
 
 
 class GameObjectDirection(Enum):
