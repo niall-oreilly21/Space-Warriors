@@ -36,6 +36,10 @@ class Character(GameObject, IDamageable, ICloneable):
     def attack_damage(self):
         return self.__attack_damage
 
+    @attack_damage.setter
+    def attack_damage(self, damage):
+        self.__attack_damage = damage
+
     @property
     def is_damaged(self):
         return self.__is_damaged
@@ -55,6 +59,10 @@ class Character(GameObject, IDamageable, ICloneable):
     @property
     def damage_cooldown(self):
         return self.__damage_cooldown
+
+    @damage_cooldown.setter
+    def damage_cooldown(self, cooldown):
+        self.__damage_cooldown = cooldown
 
     @property
     def initial_position(self):

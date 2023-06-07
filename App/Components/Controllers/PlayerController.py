@@ -38,6 +38,15 @@ class PlayerController(Component, IMoveable):
     def input_handler(self):
         return self.__input_handler
 
+    @property
+    def speed(self):
+        return Vector2(self.__speed_x, self.__speed_y)
+
+    @speed.setter
+    def speed(self, speed):
+        self.__speed_x = speed.x
+        self.__speed_y = speed.y
+
     def start(self):
         self.__rb = self._parent.get_component(Rigidbody2D)
         self.__rend = self._parent.get_component(SpriteRenderer2D)

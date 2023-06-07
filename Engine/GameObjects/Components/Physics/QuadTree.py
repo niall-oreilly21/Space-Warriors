@@ -74,7 +74,6 @@ class QuadTree:
         all_objects = self.get_all_objects()
         total_objects = len(all_objects)
 
-        print("Total number of objects in the quadtree: ", total_objects)
         return total_objects
 
     def get_all_objects(self):

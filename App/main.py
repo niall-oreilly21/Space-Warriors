@@ -111,7 +111,7 @@ material_player = Constants.Player.MATERIAL_GIRL
 player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
 player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
                                       ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-player_controller = PlayerController("Player movement", 0.3, 0.3, player_box_collider)
+player_controller = PlayerController("Player movement", 0.2, 0.2, player_box_collider)
 player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
@@ -163,13 +163,15 @@ pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_
                                    ActiveTake.PET_DOG_SIT, Constants.CHARACTER_MOVE_SPEED))
 pet.get_component(SpriteAnimator2D).is_infinite = True
 pet.add_component(Rigidbody2D("PetRigidbody"))
-pet.add_component(PetController("PetMovement", player, 20))
-pet.add_component(BoxCollider2D("PetCollider"))
+pet.add_component(PetController("PetMovement", player, 25))
+pet_collider = BoxCollider2D("PetCollider")
+pet_collider.scale = Vector2(2.5, 2.5)
+pet.add_component(pet_collider)
 
 # Create a font object
 font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
-text_material = TextMaterial2D(font_path, 35, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
+text_material = TextMaterial2D(font_path, 40, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
 ui_text_helper = GameObject("UI Text Helper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                             GameObjectCategory.UI)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")

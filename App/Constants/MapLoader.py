@@ -46,7 +46,7 @@ def map_load(scene, planet_json):
 
     # update tiles that are available, everything else default
     for ground in tile_data:
-        if ground["x"] < 100 and ground["y"] < 100:
+        if ground["x"] < 110 and ground["y"] < 120:
             x = ground["x"]
             y = ground["y"]
             c_value = ground["c"]
@@ -101,7 +101,9 @@ def map_load(scene, planet_json):
                                                  GameObjectConstants.POTION_DEFENSE.clone(),
                                                  GameObjectConstants.RANDOM_POWER_UP.clone()])
                 power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
-                power_up_object.add_component(BoxCollider2D("PowerUpCollider"))
+                power_up_collider = BoxCollider2D("PowerUpCollider")
+                power_up_collider.scale = Vector2(2.5, 2.5)
+                power_up_object.add_component(power_up_collider)
                 scene.add(power_up_object)
 
 
@@ -129,7 +131,7 @@ def map_load(scene, planet_json):
     scene.add(teleporter)
 
     bridge_x = 6406
-    bridge_y = 5475
+    bridge_y = 5463
 
     island = GameObjectConstants.ISLAND.clone()
     island.transform.position = Vector2(bridge_x + 47 * 7 + 22, bridge_y - 45)

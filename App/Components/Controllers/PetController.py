@@ -24,7 +24,7 @@ class PetController(Component):
     def adopted(self):
         return self.__adopted
 
-    def __adopt(self):
+    def adopt(self):
             self.__adopted = True
 
     def start(self):
@@ -42,10 +42,6 @@ class PetController(Component):
         # Normalize the direction vector
         if direction.length() > 0:
             direction.normalize()
-
-        if direction.length() <= 70:
-            if self.__target_object.get_component(PlayerController).input_handler.is_tap(pygame.K_e, 200):
-                self.__adopt()
 
         if self.__adopted:
             self.__rigidbody.velocity = direction * self.__speed * 0.0001

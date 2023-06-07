@@ -46,6 +46,8 @@ class CollisionManager(Manager):
             collider = event_data.parameters[0]
             self.quad_tree.remove(collider)
 
+            if collider.parent.game_object_type == GameObjectType.Dynamic:
+                self.dynamic_objects_colliders.remove(collider)
 
     def start(self):
         self.__colliders = self.__scene_manager.active_scene.get_all_components_by_type(BoxCollider2D)
