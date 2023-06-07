@@ -319,9 +319,6 @@ while running:
 
     game_time.tick()
 
-    Constants.INPUT_HANDLER.update()
-    Constants.EVENT_DISPATCHER.process_events()
-
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                   [""]))
@@ -334,35 +331,8 @@ while running:
 
     render_manager.draw()
 
-    colision_area = update_collision_area()
-
-    colliders = earth_scene.get_all_components_by_type(BoxCollider2D)
-
-    # for collider in colliders:
-    #     if collider.parent.name == "Player":
-    #         print(collider.bounds)
-    #
-    # print()
-    # print()
-
-    # print(colision_area.boundary)
-    # pygame.draw.rect(screen, (255, 255, 255), colision_area.boundary)
-    # print("player: ", player.transform.position.x, ", ", player.transform.position.y )
-
-    draw_x = collider_system.collision_area.boundary.x - Application.ActiveCamera.transform.position.x
-    draw_y = collider_system.collision_area.boundary.y - Application.ActiveCamera.transform.position.y
-
-    rect = pygame.Rect(draw_x, draw_y, collider_system.collision_area.boundary.width,
-                       collider_system.collision_area.boundary.height)
-
-    pygame.draw.rect(screen, (255, 255, 255), rect, 5)
-
-    print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
-          ", Attack damage: ", player.attack_damage)
-
-    # # Draw the grid
-    # for rect in grid.values():
-    #     pygame.draw.rect(screen, (255, 255, 255), rect, 1)
+    Constants.INPUT_HANDLER.update()
+    Constants.EVENT_DISPATCHER.process_events()
 
     pygame.display.update()
     game_time.limit_fps(60)

@@ -32,3 +32,5 @@ class EventActionType:
     RemoveCollliderFromQuadTree = 21
     SoundMenuScene = 22
     DeathScene = 23
+    TurnSpotLightOn = 24
+    DrawCollisionRange = 25

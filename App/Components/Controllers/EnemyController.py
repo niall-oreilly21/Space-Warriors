@@ -34,9 +34,9 @@ class EnemyController(Component):
 
         distance = math.sqrt((target_position.x - enemy_position.x) ** 2 + (target_position.y - enemy_position.y) ** 2)
 
-        if distance <= 10:
-            pass
-            # self.calculate_movement_direction(target_position,enemy_position)
+        if distance <= self.__min_distance:
+            self.calculate_movement_direction(target_position,enemy_position)
+
         else:
             if self.__waypoint_finder is not None:
                 # Enemy is outside the desired range, so it remains stationary
@@ -91,7 +91,7 @@ class EnemyController(Component):
         else:
             movement_direction = GameObjectDirection.Right
 
-        self.__rigidbody.velocity = self.__speed * 0.0001
+        self.__rigidbody.velocity = direction * self.__speed * 0.0001
 
         if movement_direction == GameObjectDirection.Right:
             self.__rend.flip_x = False
@@ -129,4 +129,4 @@ class EnemyController(Component):
             return ActiveTake.ENEMY_ALIEN_MOVE_DOWN
 
     def clone(self):
-        return EnemyController(self.name, self.__target_object, self.__speed)
+        return EnemyController(self.name, self.__target_object, self.__speed, self.__min_distance)
