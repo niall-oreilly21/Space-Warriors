@@ -310,7 +310,7 @@ while running:
 
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  ["Test", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)
