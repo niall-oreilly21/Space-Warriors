@@ -38,6 +38,7 @@ class GameStateManager(Manager):
 
         for ui_text_game_object in self.__ui_helper_texts:
             if ui_text_game_object.name == ui_text_game_object_name:
+
                 ui_text_game_object.get_component(Renderer2D).material.text = ui_text
 
     def __set_up_level(self):

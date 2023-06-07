@@ -184,15 +184,15 @@ pet.add_component(pet_collider)
 font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
 text_material = TextMaterial2D(font_path, 40, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
-ui_text_helper = GameObject("UITextHelper", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                            GameObjectCategory.UI)
+ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                            GameObjectCategory.UIPrompts)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
 
 text_material_top_right = TextMaterial2D(font_path, 30, "Hello", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
                                          (255, 255, 255))
-ui_text_helper_top_right = GameObject("UITextHelperTopRight", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
-                                      GameObjectType.Static, GameObjectCategory.UI)
+ui_text_helper_top_right = GameObject(Constants.UITextPrompts.UI_TEXT_RIGHT, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
+                                      GameObjectType.Static, GameObjectCategory.UIPrompts)
 ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_top_right, RendererLayers.UI))
 
 # ui_text_helper_component = UITextHelper("UI text helper")
@@ -310,7 +310,7 @@ while running:
 
     Constants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+                  ["Test", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)
@@ -320,8 +320,8 @@ while running:
 
     render_manager.draw()
 
-    print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
-          ", Attack damage: ", player.attack_damage)
+    # print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
+    #       ", Attack damage: ", player.attack_damage)
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

@@ -46,6 +46,8 @@ class SceneManager(Manager):
                 EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,
                                                              EventActionType.SetUpColliders))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.EARTH

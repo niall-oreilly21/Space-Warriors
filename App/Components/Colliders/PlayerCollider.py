@@ -95,7 +95,7 @@ class PlayerCollider(Collider):
             else:
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to get a random power up"]))
+                              ["Press E to get a random power up", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
                 random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack,
                                              PowerUpType.Defense])
                 if random_type == PowerUpType.Heal:
