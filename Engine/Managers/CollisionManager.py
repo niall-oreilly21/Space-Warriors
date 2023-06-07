@@ -48,7 +48,7 @@ class CollisionManager(Manager):
 
     def __remove_box_collider(self, box_collider):
 
-        if box_collider.parent.game_object_type.Dynamic:
+        if box_collider.parent.game_object_type is GameObjectType.Dynamic:
             self.__dynamic_objects_colliders.remove(box_collider)
 
         self.__quad_tree.remove(box_collider)
