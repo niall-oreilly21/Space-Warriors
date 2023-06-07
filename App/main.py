@@ -189,7 +189,7 @@ ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
 
-text_material_top_right = TextMaterial2D(font_path, 30, "Hello", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
+text_material_top_right = TextMaterial2D(font_path, 30, "", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
                                          (255, 255, 255))
 ui_text_helper_top_right = GameObject(Constants.UITextPrompts.UI_TEXT_RIGHT, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
                                       GameObjectType.Static, GameObjectCategory.UIPrompts)
