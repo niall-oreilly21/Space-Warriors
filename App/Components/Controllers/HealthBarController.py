@@ -1,5 +1,8 @@
+from pygame import Vector2
+
 from App.Constants.Application import Application
 from Engine.GameObjects.Components.Component import Component
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 
 class HealthBarController(Component):
@@ -11,9 +14,12 @@ class HealthBarController(Component):
         self.__current_width = 0
 
     def start(self):
-        self.__material = self._parent.get_component(Renderer2D).material
-        self.__initial_width = self.__material.width
-        self.__current_width = self.__initial_width
+        for renderer in self._parent.get_components(Renderer2D):
+            if isinstance(renderer.material, RectMaterial2D):
+                if renderer.name == "Health Bar Renderer Rect":
+                    self.__material = renderer.material
+                    self.__initial_width = self.__material.width
+                    self.__current_width = self.__initial_width
 
     def change_colour(self):
         if self.__current_width <= 0.25 * self.__initial_width:

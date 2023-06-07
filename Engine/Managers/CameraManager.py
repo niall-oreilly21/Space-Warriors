@@ -5,6 +5,7 @@ import pygame
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Cameras.Camera import Camera
+from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.GameObject import GameObject
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
@@ -33,6 +34,10 @@ class CameraManager(Manager):
             self.set_active_camera(Constants.Camera.GAME_CAMERA)
             Application.ActiveCamera = self.__active_camera
 
+        elif event_data.event_action_type == EventActionType.SetCameraTarget:
+            target = event_data.parameters[0]
+            self.__set_active_camera_target(target)
+
 
     @property
     def active_camera_transform(self):
@@ -51,6 +56,14 @@ class CameraManager(Manager):
         if self.__active_camera is None:
             raise ValueError("ActiveCamera not set! Call SetActiveCamera()")
         return self.__active_camera
+
+    def __set_active_camera_target(self, target):
+
+        third_person_controller = self.__active_game_object.get_component(ThirdPersonController)
+
+        if third_person_controller:
+            third_person_controller.target = target
+
 
     def add(self, camera):
         id = camera.name.strip().lower()
@@ -76,7 +89,7 @@ class CameraManager(Manager):
             self.__set_viewport()
 
     def get_active_camera_position(self):
-        return self.__active_camera.parent.position
+        return self.__active_camera.transform.position
 
     def __set_viewport(self):
         self.__screen = pygame.display.set_mode((self.__active_camera.viewport.x, self.__active_camera.viewport.y))

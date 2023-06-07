@@ -16,6 +16,13 @@ class ThirdPersonController(Component):
     def start(self):
         self.__camera = self.parent.get_component(Camera)
 
+    @property
+    def target(self):
+        return self.__target
+    @target.setter
+    def target(self, target):
+        self.__target = target
+
     def update(self, game_time):
         if self.__target is not None:
             camera_component = self.parent.get_component(Camera)

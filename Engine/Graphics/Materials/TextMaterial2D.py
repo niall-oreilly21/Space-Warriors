@@ -6,12 +6,13 @@ from Engine.Graphics.Materials.Material2D import Material2D
 
 
 class TextMaterial2D(Material2D):
-    def __init__(self, sprite_font, font_name, text, text_offset, color, alpha=255, origin=Vector2(0, 0)):
+    def __init__(self, sprite_font_file_path, font_size, text, text_offset, color, alpha=255, origin=Vector2(0, 0)):
         super().__init__(color, alpha, origin)
-        self.__sprite_font = sprite_font
+        self.__sprite_font = pygame.font.Font(sprite_font_file_path, font_size)
         self.__text = text
         self.__text_offset = text_offset
-        self.__font_name = font_name
+        self.__font_name = sprite_font_file_path
+        self.__font_size = font_size
 
     @property
     def text(self):
@@ -38,5 +39,5 @@ class TextMaterial2D(Material2D):
         self._blits(surface, text_surface, transform)
 
     def clone(self):
-        return TextMaterial2D(self.__sprite_font, self.__font_name, self.__text, self.__text_offset, self._color,
+        return TextMaterial2D(self.__font_name, self.__font_size, self.__text, self.__text_offset, self._color,
                               self._alpha, self._origin.copy())

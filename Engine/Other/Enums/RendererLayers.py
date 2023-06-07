@@ -6,4 +6,6 @@ class RendererLayers:
     Player = 4
     BelowPlayer = 5
     Tree = 6
-    UI = 7
+    UIBackground = 7
+    UI = 8
+    UIHealthBar = 9

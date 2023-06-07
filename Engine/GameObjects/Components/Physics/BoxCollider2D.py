@@ -3,19 +3,41 @@ from pygame import Rect, draw, Vector2
 from Engine.GameObjects.Components.Component import Component
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 
 
 class BoxCollider2D(Component):
     def __init__(self, name, anchor=pygame.Vector2(0, 0)):
         super().__init__(name)
+        self.__animator = None
         self.__width = None
         self.__height = None
         self.__anchor = anchor
         self.__color = (255, 0, 0)
         self.__rend = None
+        self.__scale = Vector2(1, 1)
+        self.__offset = Vector2(0, 0)
 
     def start(self):
         self.__rend = self._parent.get_component(Renderer2D)
+        self.__animator = self._parent.get_component(SpriteAnimator2D)
+
+    @property
+    def scale(self):
+        return self.__scale
+
+    @scale.setter
+    def scale(self, scale):
+        self.__scale = scale
+
+    @property
+    def offset(self):
+        return self.__offset
+
+    @offset.setter
+    def offset(self, offset):
+        self.__offset = offset
 
     @property
     def width(self):
@@ -59,7 +81,19 @@ class BoxCollider2D(Component):
 
     @property
     def bounds(self):
-        material_source_rect = self.__rend.material.source_rect
+        material_source_rect = None
+
+        if isinstance(self.__rend, SpriteRenderer2D):
+
+            if self.__animator:
+                material_source_rect = self.__animator.get_current_sprite().source_rect
+            if self.__rend.sprite:
+                material_source_rect = self.__rend.sprite.source_rect
+
+        if material_source_rect is None:
+            material_source_rect = self.__rend.material.source_rect
+
+
         bounds = Rect(self._transform.position.x, self._transform.position.y,
                       material_source_rect.width * self.transform.scale.x,
                       material_source_rect.height * self.transform.scale.y)
@@ -67,9 +101,10 @@ class BoxCollider2D(Component):
         rotated_surface = pygame.transform.rotate(pygame.Surface((bounds.width, bounds.height)),
                                                   -self._transform.rotation)
         rotated_bounds = rotated_surface.get_rect(center=bounds.center)
-        self.__bounds = rotated_bounds
+        rotated_bounds.scale_by_ip(self.__scale.x, self.__scale.y)
+        rotated_bounds.move_ip(self.__offset.x, self.__offset.y)
 
-        return self.__bounds
+        return rotated_bounds
 
     @property
     def size(self):

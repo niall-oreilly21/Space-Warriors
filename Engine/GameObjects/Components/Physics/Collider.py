@@ -7,7 +7,7 @@ from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 
 
-class Collider2D(Component, ABC):
+class Collider(Component, ABC):
 
     def __init__(self, name):
         super().__init__(name)
@@ -15,6 +15,10 @@ class Collider2D(Component, ABC):
     @abstractmethod
     def handle_response(self, colliding_game_object):
         pass
+
+    def handle_collision_exit(self):
+        pass
+
     def clone(self):
         pass
 

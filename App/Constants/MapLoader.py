@@ -66,16 +66,20 @@ def map_load(scene, planet_json,player):
         if object["x"] < width and object["y"] < height:
             x = object["x"]
             y = object["y"]
+            c_value = object["c"]
             id = object["t"]["id"]
             if id == 5:
                 tree_object = random.choice(
                     [GameObjectConstants.TALL_TREE.clone(), GameObjectConstants.LOW_TREE.clone()])
+                tree_collider = TreeBoxCollider2D("TreeCollider")
+                tree_object.add_component(tree_collider)
                 tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
                 scene.add(tree_object)
             elif id == 15:
                 bush_object = random.choice([GameObjectConstants.BUSH_ONE.clone(), GameObjectConstants.BUSH_TWO.clone(),
                                              GameObjectConstants.BUSH_FOUR.clone(),
                                              GameObjectConstants.ROCK_ONE.clone()])
+                bush_object.add_component(BoxCollider2D("BushCollider"))
                 if bush_object.name == "RockOne":
                     scale = random.uniform(0.7, 2)
                     bush_object.transform.scale = Vector2(scale, scale)
@@ -89,6 +93,15 @@ def map_load(scene, planet_json,player):
                 lilypad_object.transform.position = Vector2(x * 72.5, y * 72.5)
 
                 scene.add(lilypad_object)
+            elif id == 1:
+                power_up_object = random.choice([GameObjectConstants.POTION_SPEED.clone(),
+                                                 GameObjectConstants.POTION_HEAL.clone(),
+                                                 GameObjectConstants.POTION_ATTACK.clone(),
+                                                 GameObjectConstants.POTION_DEFENSE.clone(),
+                                                 GameObjectConstants.RANDOM_POWER_UP.clone()])
+                power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
+                power_up_object.add_component(BoxCollider2D("PowerUpCollider"))
+                scene.add(power_up_object)
 
 
 
@@ -159,8 +172,8 @@ def load_planet_a_specifics(scene):
     planet_a_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.TELEPORTER.clone()
-    teleporter.transform.position = Vector2(2500, 5000)
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER
+    teleporter.transform.position = Vector2(2500, 4800)
     scene.add(teleporter)
 
     bridge_x = 6406
@@ -206,7 +219,7 @@ def load_planet_b_specifics(scene):
     planet_a_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.TELEPORTER.clone()
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
     teleporter.transform.position = Vector2(2500, 5000)
     scene.add(teleporter)
 
@@ -230,7 +243,7 @@ def load_planet_c_specifics(scene):
     planet_a_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.TELEPORTER.clone()
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
     teleporter.transform.position = Vector2(2500, 5000)
     scene.add(teleporter)
 

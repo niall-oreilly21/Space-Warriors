@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import time
 
@@ -11,8 +13,6 @@ from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 def load_scene():
     load_time = .4  # Adjust this value as needed
     time.sleep(load_time)
-
-
 
 
 class SceneManager(Manager):
@@ -44,6 +44,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
+            sys.exit()
 
         elif event_data.event_action_type == EventActionType.EarthScene:
             load_scene()
@@ -65,8 +66,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.LevelScene:
             load_scene()
-            self.__event_dispatcher.dispatch_event(
-                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.LEVEL_MENU)
             Application.ActiveScene = self.__active_scene
 
@@ -90,6 +90,18 @@ class SceneManager(Manager):
                 EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicc"]))
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["menumusic"]))
+
+        elif event_data.event_action_type == EventActionType.EarthScene:
+            load_scene()
+            # self.__event_dispatcher.dispatch_event(
+            #     EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.set_active_scene(Constants.Scene.EARTH)
+            Application.ActiveScene = self.__active_scene
+            Application.CurrentLevel = Constants.Scene.EARTH
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.SetUpColliders))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+
 
         elif event_data.event_action_type == EventActionType.MarsScene:
             load_scene()

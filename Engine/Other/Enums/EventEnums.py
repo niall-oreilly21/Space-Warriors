@@ -25,3 +25,9 @@ class EventActionType:
     MarsScene = 15
     SaturnScene = 16
     DeathScene = 17
+    SetUITextHelper = 18
+    TurnOnTeleporter = 19
+    SetUpLevel = 20
+    SetCameraTarget = 21
+    SetUpColliders = 22
+    RemoveCollliderFromQuadTree = 23

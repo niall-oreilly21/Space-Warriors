@@ -20,15 +20,16 @@ class RectMaterial2D(Material2D):
         self.__width = width
 
     def _transform_material(self, surface, transform):
-        transformed_surface = pygame.transform.scale(surface, (int(surface.get_width() * transform.scale.x),
-                                                                int(surface.get_height() * transform.scale.y)))
+        rotated_surface = self._rotate_surface(surface, transform.rotation)
+        transformed_surface = pygame.transform.scale(rotated_surface,
+                                                     (int(rotated_surface.get_width() * transform.scale.x),
+                                                      int(rotated_surface.get_height() * transform.scale.y)))
 
+        left_position = transform.position.x + self._origin.x
+        top_position = transform.position.y + self._origin.y
+        shape_position = (left_position, top_position)
 
-        rotated_surface = self._rotate_surface(transformed_surface, transform.rotation)
-
-        shape_position = tuple(transform.position - Vector2(rotated_surface.get_size()) / 2)
-
-        return rotated_surface, shape_position
+        return transformed_surface, shape_position
 
     def draw(self, surface, transform):
         rect_surface = Surface((self.__width, self.__height))

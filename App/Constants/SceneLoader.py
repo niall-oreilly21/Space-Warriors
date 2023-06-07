@@ -76,12 +76,10 @@ class SceneLoader:
     def initialise_level_menu(self, menu_scene):
         background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
 
-        title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, 30)
-        text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, 40)
 
         title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                            GameObjectCategory.Menu)
-        title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, "Land on...",
+        title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Land on...",
                                              Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
         title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
@@ -96,7 +94,7 @@ class SceneLoader:
         earth_text = GameObject("EarthText", Transform2D(Vector2(earth.transform.position.x + 130,
                                                                  earth.transform.position.y + 330), 0, Vector2(1, 1)),
                                 GameObjectType.Static, GameObjectCategory.Menu)
-        earth_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, "Earth",
+        earth_text_material = TextMaterial2D(Constants.Menu.TEXT_FONT_PATH, 40, "Earth",
                                              Vector2(0, 0), (255, 255, 255))
         earth_text.add_component(Renderer2D("EarthTextRenderer", earth_text_material, 2))
 

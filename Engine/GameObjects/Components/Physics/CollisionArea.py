@@ -1,29 +1,45 @@
 import math
 
+import pygame
+
 
 class CollisionArea:
         def __init__(self, x, y, width, height):
-            self.x = x
-            self.y = y
-            self.width = width
-            self.height = height
+            self.__x = x
+            self.__y = y
+            self.__width = width
+            self.__height = height
 
-        def set_x(self, x):
-            self.x = x
+        @property
+        def x(self):
+            return self.__x
 
-        def set_y(self, y):
-            self.y = y
+        @property
+        def y(self):
+            return self.__y
 
-        def intersects_screen(self, range_rect):
-            return (
-                    self.x + self.width > range_rect.x - range_rect.width
-                    and self.x < range_rect.x + range_rect.width
-                    and self.y + self.height > range_rect.y - range_rect.height
-                    and self.y < range_rect.y + range_rect.height
-            )
+        @x.setter
+        def x(self, x):
+            self.__x = x
 
-        def is_in_range(self, rect_one, rect_two, range_distance):
-            center1 = rect_one.center
-            center2 = rect_two.center
-            distance = math.hypot(center2[0] - center1[0], center2[1] - center1[1])
-            return distance <= range_distance
+        @y.setter
+        def y(self, y):
+            self.__y = y
+
+        @property
+        def width(self):
+            return self.__width
+
+        @property
+        def height(self):
+            return self.__height
+
+        @property
+        def boundary(self):
+            return pygame.Rect(self.__x, self.__y, self.__width, self.__height)
+
+
+
+
+
+

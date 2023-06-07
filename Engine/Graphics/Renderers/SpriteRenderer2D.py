@@ -19,7 +19,9 @@ class SpriteRenderer2D(Renderer2D):
     def flip_x(self):
         return self.__flip_x
 
-
+    @property
+    def sprite(self):
+        return self.__sprite
 
     @property
     def flip_y(self):
