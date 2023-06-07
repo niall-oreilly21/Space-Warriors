@@ -24,8 +24,7 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                        GameObjectCategory.Menu)
-    title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE)
-    title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, title_text,
+    title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE, title_text,
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 200), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
@@ -46,7 +45,7 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
                             GameObjectType.Static, GameObjectCategory.Menu)
 
         button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None, Vector2(0, 0), None)
-        button_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, button_text,
+        button_text_material = TextMaterial2D(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE, button_text,
                                               Vector2(150, 27), (0, 0, 0))
 
         button.add_component(Renderer2D(f"{button_text}Renderer", button_texture_material, 1))
@@ -76,12 +75,9 @@ class SceneLoader:
     def initialise_level_menu(self, menu_scene):
         background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
 
-        title_font = pygame.font.Font(Constants.Menu.TITLE_FONT_PATH, 30)
-        text_font = pygame.font.Font(Constants.Menu.TEXT_FONT_PATH, 40)
-
         title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                            GameObjectCategory.Menu)
-        title_text_material = TextMaterial2D(title_font, Constants.Menu.TITLE_FONT_PATH, "Land on...",
+        title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Land on...",
                                              Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
         title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
@@ -96,7 +92,7 @@ class SceneLoader:
         earth_text = GameObject("EarthText", Transform2D(Vector2(earth.transform.position.x + 130,
                                                                  earth.transform.position.y + 330), 0, Vector2(1, 1)),
                                 GameObjectType.Static, GameObjectCategory.Menu)
-        earth_text_material = TextMaterial2D(text_font, Constants.Menu.TEXT_FONT_PATH, "Earth",
+        earth_text_material = TextMaterial2D(Constants.Menu.TEXT_FONT_PATH, 40, "Earth",
                                              Vector2(0, 0), (255, 255, 255))
         earth_text.add_component(Renderer2D("EarthTextRenderer", earth_text_material, 2))
 

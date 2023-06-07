@@ -29,7 +29,8 @@ class SceneManager(Manager):
         Application.LastActiveScene = self.__active_scene
         if event_data.event_action_type == EventActionType.MainMenuScene:
             load_scene()
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.MAIN_MENU)
             Application.ActiveScene = self.__active_scene
 
@@ -37,34 +38,43 @@ class SceneManager(Manager):
             pygame.quit()
             sys.exit()
 
+        elif event_data.event_action_type == EventActionType.EarthScene:
+            load_scene()
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,
+                                                             EventActionType.SetUpColliders))
+            self.set_active_scene(Constants.Scene.EARTH)
+            Application.ActiveScene = self.__active_scene
+            Application.CurrentLevel = Constants.Scene.EARTH
+
         elif event_data.event_action_type == EventActionType.LevelScene:
             load_scene()
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.LEVEL_MENU)
             Application.ActiveScene = self.__active_scene
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.PAUSE_MENU)
             Application.ActiveScene = self.__active_scene
 
-        elif event_data.event_action_type == EventActionType.EarthScene:
-            load_scene()
-            # self.__event_dispatcher.dispatch_event(
-            #     EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
-            self.set_active_scene(Constants.Scene.EARTH)
+        elif event_data.event_action_type == EventActionType.DeathScene:
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.set_active_scene(Constants.Scene.DEATH_MENU)
             Application.ActiveScene = self.__active_scene
-            Application.CurrentLevel = Constants.Scene.EARTH
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.SetUpColliders))
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
-
 
         elif event_data.event_action_type == EventActionType.MarsScene:
             load_scene()
             self.__event_dispatcher.dispatch_event(
                 EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
             self.set_active_scene(Constants.Scene.MARS)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.MARS
@@ -73,7 +83,8 @@ class SceneManager(Manager):
             load_scene()
             self.__event_dispatcher.dispatch_event(
                 EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
             self.set_active_scene(Constants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.SATURN

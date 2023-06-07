@@ -84,8 +84,8 @@ class PlayerCollider(Collider):
                 else:
                     colliding_game_object.is_damaged = False
 
-            if self.parent.health == 0:
-                self.parent.health = Constants.Player.DEFAULT_HEALTH
+            # if self.parent.health == 0:
+            #     self.parent.health = Constants.Player.DEFAULT_HEALTH
 
             if colliding_game_object.health == 0:
                 print("Enemy dead")

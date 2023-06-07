@@ -127,7 +127,7 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 10, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
+enemy = Character("Enemy", 70, 100, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
                   GameObjectType.Dynamic, GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))
@@ -229,11 +229,13 @@ scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_m
 pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
+sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
+death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
 
-initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, "Start", "Quit",
-                Constants.Button.START_BUTTON, Constants.Button.QUIT_BUTTON)
-initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", "Resume", "Main Menu",
-                Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON)
+initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME, [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
+initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused", [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound", [Constants.Button.MUTE_BUTTON,Constants.Button.UNMUTE_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died", [Constants.Button.RESTART_BUTTON,Constants.Button.MAIN_MENU_BUTTON])
 scene_loader.initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)

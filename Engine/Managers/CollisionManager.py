@@ -106,10 +106,10 @@ class CollisionManager(Manager):
 
             if (collider1_entity.name == "Tree" or collider1_entity.name == "LowTree") \
                     and isinstance(collider2_entity, Character):
-                collider1_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
+                collider1_entity.get_component(Renderer2D).layer = RendererLayers.BelowPlayer
             elif (collider2_entity.name == "Tree" or collider2_entity.name == "LowTree") \
                     and isinstance(collider1_entity, Character):
-                collider2_entity.get_component(Renderer2D).layer = RendererLayers.WorldObjects
+                collider2_entity.get_component(Renderer2D).layer = RendererLayers.BelowPlayer
 
             collider1_rigidbody = collider1_entity.get_component(Rigidbody2D)
             collider2_rigidbody = collider2_entity.get_component(Rigidbody2D)
@@ -137,10 +137,10 @@ class CollisionManager(Manager):
         else:
             if (collider1_entity.name == "Tree" or collider1_entity.name == "LowTree") \
                     and isinstance(collider2_entity, Character):
-                collider1_entity.get_component(Renderer2D).layer = RendererLayers.Tree
+                collider1_entity.get_component(Renderer2D).layer = RendererLayers.AbovePlayer
             elif (collider2_entity.name == "Tree" or collider2_entity.name == "LowTree") \
                     and isinstance(collider1_entity, Character):
-                collider2_entity.get_component(Renderer2D).layer = RendererLayers.Tree
+                collider2_entity.get_component(Renderer2D).layer = RendererLayers.AbovePlayer
 
             if collider1_entity.get_component(Collider):
                 collider1_entity.get_component(Collider).handle_collision_exit()
