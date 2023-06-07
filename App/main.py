@@ -39,7 +39,8 @@ from App.Constants.MapLoader import map_load
 
 
 def load_sound():
-    soundManager.load_sound("BackgroundMusicA", "Assets/Sounds/background_music.mp3")
+    soundManager.load_sound("MenuMusic", "Assets/Sounds/background_music.mp3")
+    soundManager.load_sound("BackgroundMusicA", "Assets/Sounds/planet_a_music.mp3")
     soundManager.load_sound("BackgroundMusicB", "Assets/Sounds/planet_b_music.wav")
     soundManager.load_sound("BackgroundMusicC", "Assets/Sounds/planet_c_music.mp3")
     soundManager.load_sound("TeleportSound", "Assets/Sounds/teleport.wav")
@@ -48,12 +49,12 @@ def load_sound():
     soundManager.load_sound("BossMusic", "Assets/Sounds/planet_c_music.mp3")
     soundManager.load_sound("ButtonSound", "Assets/Sounds/button.wav")
 
-    soundManager.set_sound_volume("backgroundmusica", .05)
-    soundManager.set_sound_volume("backgroundmusicb", .05)
-    soundManager.set_sound_volume("backgroundmusicc", .05)
-    soundManager.set_sound_volume("attacksound", .05)
+    soundManager.set_sound_volume("backgroundmusica", .1)
+    soundManager.set_sound_volume("backgroundmusicb", .1)
+    soundManager.set_sound_volume("backgroundmusicc", .1)
+    soundManager.set_sound_volume("attacksound", .1)
     Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["menumusic"]))
 
 def update(game_time):
     earth_scene.update(game_time)

@@ -33,6 +33,14 @@ class SceneManager(Manager):
                 EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.MAIN_MENU)
             Application.ActiveScene = self.__active_scene
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusica"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicb"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicc"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["menumusic"]))
 
         elif event_data.event_action_type == EventActionType.ExitGame:
             pygame.quit()
@@ -46,6 +54,14 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.EARTH
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["menumusic"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicb"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicc"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
 
         elif event_data.event_action_type == EventActionType.LevelScene:
             load_scene()
@@ -53,6 +69,7 @@ class SceneManager(Manager):
                 EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
             self.set_active_scene(Constants.Scene.LEVEL_MENU)
             Application.ActiveScene = self.__active_scene
+
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
             self.__event_dispatcher.dispatch_event(
@@ -75,6 +92,14 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.MARS)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.MARS
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["menumusic"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusica"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicc"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicb"]))
 
         elif event_data.event_action_type == EventActionType.SaturnScene:
             load_scene()
@@ -85,6 +110,14 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.SATURN
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["menumusic"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusica"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.StopSound, ["backgroundmusicb"]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicc"]))
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
             self.__event_dispatcher.dispatch_event(
