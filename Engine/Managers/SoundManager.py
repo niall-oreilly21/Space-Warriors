@@ -66,7 +66,10 @@ class SoundManager(Manager):
 
     def set_master_volume(self, volume):
         for sound_name in self.__sounds:
-            self.__sounds[sound_name].set_volume(volume)
+            if sound_name == "buttonsound":
+                break
+            else:
+                self.__sounds[sound_name].set_volume(volume)
 
 
 

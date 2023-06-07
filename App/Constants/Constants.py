@@ -234,6 +234,12 @@ class Constants:
         __PAUSE_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/pause_menu.png")
         MATERIAL_PAUSE_MENU = TextureMaterial2D(__PAUSE_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
+        __SOUND_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
+        MATERIAL_SOUND_MENU = TextureMaterial2D(__SOUND_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
+        __DEATH_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
+        MATERIAL_DEATH_MENU = TextureMaterial2D(__DEATH_MENU_BACKGROUND, None, Vector2(0, 0), None)
+
         TITLE_FONT_SIZE = 45
         TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
 
@@ -246,18 +252,25 @@ class Constants:
         MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
         SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
 
+
     class Button:
-        START_BUTTON = "StartButton"
-        QUIT_BUTTON = "QuitButton"
-        RESUME_BUTTON = "ResumeButton"
-        MAIN_MENU_BUTTON = "MainMenuButton"
-        EARTH_BUTTON = "EarthButton"
-        MARS_BUTTON = "MarsButton"
-        SATURN_BUTTON = "SaturnButton"
+        START_BUTTON = "Start"
+        QUIT_BUTTON = "Quit"
+        RESUME_BUTTON = "Resume"
+        MAIN_MENU_BUTTON = "Main Menu"
+        EARTH_BUTTON = "Earth"
+        MARS_BUTTON = "Mars"
+        SATURN_BUTTON = "Saturn"
+        SOUND_BUTTON = "Sound"
+        MUTE_BUTTON = "Mute"
+        UNMUTE_BUTTON = "Unmute"
+        RESTART_BUTTON = "Restart"
 
     class Scene:
         MAIN_MENU = "MainMenuScene"
         PAUSE_MENU = "PauseMenuScene"
+        DEATH_MENU = "DeathMenuScene"
+        SOUND_MENU = "SoundMenuScene"
         LEVEL_MENU = "LevelMenuScene"
         EARTH = "EarthScene"
         MARS = "MarsScene"
@@ -269,7 +282,7 @@ class Constants:
 
     class Map:
         PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
-        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetB.json"
+        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
         PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
 
     class Tile:

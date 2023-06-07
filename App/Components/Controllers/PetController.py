@@ -1,7 +1,7 @@
 import pygame
 from pygame import Vector2
 
-from App.Components.Controllers.PlayerController import PlayerController
+from App.Components.Controllers import PlayerController
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D

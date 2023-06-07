@@ -26,6 +26,7 @@ class SceneManager(Manager):
         self._event_dispatcher.add_listener(EventCategoryType.SceneManager, self._handle_events)
 
     def _handle_events(self, event_data):
+        Application.LastActiveScene = self.__active_scene
         if event_data.event_action_type == EventActionType.MainMenuScene:
             load_scene()
             self.__event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
@@ -76,6 +77,12 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.SATURN
+
+        elif event_data.event_action_type == EventActionType.SoundMenuScene:
+            self.__event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+            self.set_active_scene(Constants.Scene.SOUND_MENU)
+            Application.ActiveScene = self.__active_scene
 
     @property
     def active_scene(self):

@@ -28,7 +28,8 @@ image2 = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset2.png")
 
 class GameObjectConstants:
     layer = RendererLayers.WorldObjects
-    tree_layer = RendererLayers.Tree
+    tree_layer = RendererLayers.AbovePlayer
+    structures_layer = RendererLayers.BelowPlayer
 
     # TELEPORTER.add_component(BoxCollider2D("Box-3"))
 
