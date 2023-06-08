@@ -24,6 +24,7 @@ class CollisionManager(Manager):
         self.__collision_range_target_box_collider = None
         self.__colliders = None
         self.__quad_tree = None
+        self.__update = False
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.CollisionManager, self._handle_events)
@@ -43,7 +44,14 @@ class CollisionManager(Manager):
         elif event_data.event_action_type == EventActionType.DrawCollisionRange:
             screen = event_data.parameters[0]
             camera_position = event_data.parameters[1]
-            self.__collision_range.draw(screen, camera_position)
+            if self.__update:
+                self.__collision_range.draw(screen, camera_position)
+
+        elif event_data.event_action_type == EventActionType.TurnOffCollisionDetection:
+            self.__update = False
+
+        elif event_data.event_action_type == EventActionType.TurnOnCollisionDetection:
+            self.__update = True
 
     @property
     def collision_range(self):
@@ -56,7 +64,6 @@ class CollisionManager(Manager):
             self.__quad_tree.insert(box_collider)
 
     def __remove_box_collider(self, box_collider):
-
         if box_collider.parent.game_object_type is GameObjectType.Dynamic:
             self.__dynamic_objects_colliders.remove(box_collider)
             self.__quad_tree.remove(box_collider)
@@ -91,16 +98,17 @@ class CollisionManager(Manager):
         self.__collision_range.y = self.__collision_range_target_box_collider.bounds.centery - self.__collision_range.height / 2
 
     def update(self, game_time):
-        self.update_collision_area()
-        self.__update_dynamic_game_objects_box_colliders_in_quad_tree()
+        if self.__update:
+            self.update_collision_area()
+            self.__update_dynamic_game_objects_box_colliders_in_quad_tree()
 
-        potential_colliders = self.__quad_tree.query(self.__collision_range.bounds)
+            potential_colliders = self.__quad_tree.query(self.__collision_range.bounds)
 
-        for i in range(len(potential_colliders)):
-            box_collider_one = potential_colliders[i]
-            for j in range(i + 1, len(potential_colliders)):
-                box_collider_two = potential_colliders[j]
-                self.__check_collision(box_collider_one, box_collider_two)
+            for i in range(len(potential_colliders)):
+                box_collider_one = potential_colliders[i]
+                for j in range(i + 1, len(potential_colliders)):
+                    box_collider_two = potential_colliders[j]
+                    self.__check_collision(box_collider_one, box_collider_two)
 
     def __update_dynamic_game_objects_box_colliders_in_quad_tree(self):
         for collider in self.__dynamic_objects_colliders:
