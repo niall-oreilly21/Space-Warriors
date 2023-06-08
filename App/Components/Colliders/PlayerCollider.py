@@ -54,7 +54,7 @@ class PlayerCollider(Collider):
         if power_up_type == PowerUpType.Speed:
             type_str = "Speed"
         elif power_up_type == PowerUpType.Attack:
-            type_str = "Attack"
+            type_str = "Attack damage"
         elif power_up_type == PowerUpType.Defense:
             type_str = "Defense"
 
@@ -141,8 +141,24 @@ class PlayerCollider(Collider):
                     EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
                               [colliding_game_object.get_component(BoxCollider2D)]))
                 colliding_game_object.remove_component(BoxCollider2D)
-
-
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Your dog loves you <3!",
+                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                self.__text_shown = True
+                self.__text_shown_time = 0
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["He will help you in battles and heal you every 30 secs!",
+                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                self.__text_shown = True
+                self.__text_shown_time = 0
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Attack damage +3",
+                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                self.__text_shown = True
+                self.__text_shown_time = 0
 
     def handle_power_up_selected(self, player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
         if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
