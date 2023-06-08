@@ -34,3 +34,4 @@ class EventActionType:
     DeathScene = 23
     TurnSpotLightOn = 24
     DrawCollisionRange = 25
+    AddColliderToQuadTree = 26

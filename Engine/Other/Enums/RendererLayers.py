@@ -8,3 +8,4 @@ class RendererLayers:
     UIBackground = 6
     UI = 7
     UIHealthBar = 8
+    Bullet = 9

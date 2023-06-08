@@ -21,6 +21,7 @@ class EnemyController(Component):
         self.__speed = speed
         self.__rigidbody = None
         self.__min_distance = min_distance
+        self._direction = 0
 
     def start(self):
         self.__rend = self._parent.get_component(SpriteRenderer2D)
@@ -61,9 +62,9 @@ class EnemyController(Component):
         self.calculate_movement_direction(current_waypoint, enemy_position)
 
         # Calculate the new velocity for the enemy
-        direction = current_waypoint - enemy_position
-        direction.normalize()
-        target_velocity = direction * self.__speed * 0.01
+        self._direction = current_waypoint - enemy_position
+        self._direction.normalize()
+        target_velocity = self._direction * self.__speed * 0.01
 
         # Convert self.__rigidbody.velocity to a Vector2 object
         current_velocity = Vector2(0, 0)
@@ -75,10 +76,10 @@ class EnemyController(Component):
         self.__rigidbody.velocity = new_velocity
 
     def calculate_movement_direction(self, target_position, enemy_position):
-        direction = target_position - enemy_position
-        direction.normalize()
+        self._direction = target_position - enemy_position
+        self._direction.normalize()
 
-        angle = math.degrees(math.atan2(direction.y, direction.x))
+        angle = math.degrees(math.atan2(self._direction.y, self._direction.x))
         if angle < 0:
             angle += 360
 
@@ -91,7 +92,7 @@ class EnemyController(Component):
         else:
             movement_direction = GameObjectDirection.Right
 
-        self.__rigidbody.velocity = direction * self.__speed * 0.0001
+        self.__rigidbody.velocity = self._direction * self.__speed * 0.0001
 
         if movement_direction == GameObjectDirection.Right:
             self.__rend.flip_x = False

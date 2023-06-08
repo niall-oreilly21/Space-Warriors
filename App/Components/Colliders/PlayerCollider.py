@@ -183,13 +183,14 @@ class PlayerCollider(Collider):
                 self.__speed_activated = True
                 self.show_text(colliding_game_object, PowerUpType.Speed)
 
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,[colliding_game_object.get_component(BoxCollider2D)]))
+
             Application.ActiveScene.remove(colliding_game_object)
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                           ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,
-                          [colliding_game_object.get_component(BoxCollider2D)]))
+
 
     def update(self, game_time):
         # Power up activation

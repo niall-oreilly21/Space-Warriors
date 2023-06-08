@@ -20,6 +20,8 @@ class GameObjectCategory(Enum):
     Teleporter = 10
     PowerUp = 11
     UIPrompts = 12
+    Bullet = 13
+    Gun = 14
 
 
 class GameObjectDirection(Enum):
