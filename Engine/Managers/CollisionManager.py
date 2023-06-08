@@ -36,6 +36,9 @@ class CollisionManager(Manager):
             box_collider = event_data.parameters[0]
             self.__remove_box_collider(box_collider)
 
+        elif event_data.event_action_type == EventActionType.AddColliderToQuadTree:
+            box_collider = event_data.parameters[0]
+            self.__add_box_collider(box_collider)
 
         elif event_data.event_action_type == EventActionType.DrawCollisionRange:
             screen = event_data.parameters[0]
@@ -45,6 +48,13 @@ class CollisionManager(Manager):
     @property
     def collision_range(self):
         return self.__collision_range
+
+
+    def __add_box_collider(self, box_collider):
+        if box_collider.parent.game_object_type is GameObjectType.Dynamic:
+            self.__dynamic_objects_colliders.append(box_collider)
+
+        self.__quad_tree.insert(box_collider)
 
     def __remove_box_collider(self, box_collider):
 
@@ -74,7 +84,8 @@ class CollisionManager(Manager):
         dynamic_game_objects = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
 
         for game_object in dynamic_game_objects:
-            self.__dynamic_objects_colliders.append(game_object.get_component(BoxCollider2D))
+            if game_object.get_component(BoxCollider2D):
+                self.__dynamic_objects_colliders.append(game_object.get_component(BoxCollider2D))
 
 
     def update_collision_area(self):
@@ -198,3 +209,5 @@ class CollisionManager(Manager):
         else:
             self.__handle_collision_exits(collider_one, collider_two)
             self.__change_collision_layers_for_trees(collider_one_entity, collider_two_entity, RendererLayers.AbovePlayer)
+
+

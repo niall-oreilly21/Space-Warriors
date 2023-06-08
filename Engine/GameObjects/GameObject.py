@@ -31,13 +31,25 @@ class GameObject(ICloneable):
     def transform(self):
         return self.__transform
 
+    @transform.setter
+    def transform(self, transform):
+        self.__transform = transform
+
     @property
     def game_object_type(self):
         return self.__game_object_type
 
+    @game_object_type.setter
+    def game_object_type(self, game_object_type):
+        self.__game_object_type = game_object_type
+
     @property
     def game_object_category(self):
         return self.__game_object_category
+
+    @game_object_category.setter
+    def game_object_category(self, game_object_category):
+        self.__game_object_category = game_object_category
 
     def get_components(self, component_type):
         components = []
