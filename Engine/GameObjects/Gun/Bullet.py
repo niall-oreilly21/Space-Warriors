@@ -24,24 +24,18 @@ class Bullet(GameObject):
         self.__material = material
 
     @property
-    def material(self):
-        return self.__material
-
-    @material.setter
-    def material(self, material):
-        self.__material = material
-
-    @property
     def bullet_damage(self):
         return self.__bullet_damage
 
-    def fire(self, direction):
+    def fire(self, direction, color):
+        self.__material.color = color
         self.add_component(BoxCollider2D("Bullet Box Collider"))
         self.add_component(Renderer2D("Bullet Renderer", self.__material, RendererLayers.Bullet))
         self.add_component(Rigidbody2D("Bullet Rigidbody"))
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree, [self.get_component(BoxCollider2D)]))
         self.add_component(BulletCollider("Bullet Collider"))
         self.add_component(BulletController("Bullet Controller", self.__bullet_speed, direction))
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree, [self.get_component(BoxCollider2D)]))
+
         super().start()
 
     def clone(self):
