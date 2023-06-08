@@ -19,10 +19,17 @@ class Character(GameObject, IDamageable, ICloneable):
         self.__damage_cooldown = damage_cooldown
         self.__last_damage_time = 0
         self.__initial_position = initial_position
+        self.__initial_health = health
 
     @property
     def health(self):
         return self.__health
+
+    def reset_health(self):
+        self.__health = self.__initial_health
+
+    def reset_position(self):
+        self.transform.position = self.__initial_position
 
     @health.setter
     def health(self, health):

@@ -35,3 +35,8 @@ class EventActionType:
     TurnSpotLightOn = 24
     DrawCollisionRange = 25
     AddColliderToQuadTree = 26
+    TurnOffCollisionDetection = 27
+    TurnOnCollisionDetection = 28
+    SetToLastActiveScene = 29
+    LoadLevel = 30
+    ResetLevelScene = 31
