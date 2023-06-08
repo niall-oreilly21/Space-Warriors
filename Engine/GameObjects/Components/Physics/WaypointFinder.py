@@ -33,3 +33,9 @@ class WaypointFinder(Component):
 
     def lerp(self, start, end, t):
         return start + (end - start) * t
+
+    def clone(self):
+        return WaypointFinder(self.name, self.waypoints)
+
+
+
