@@ -1,4 +1,5 @@
 import pygame
+from pygame import Vector2
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
@@ -34,6 +35,9 @@ class GameStateManager(Manager):
         elif event_data.event_action_type == EventActionType.SetUpLevel:
             self.__set_up_level()
 
+        elif event_data.event_action_type == EventActionType.LoadLevel:
+            self.__load_level()
+
     def __set_ui_text(self, ui_text, ui_text_game_object_name):
 
         for ui_text_game_object in self.__ui_helper_texts:
@@ -60,17 +64,18 @@ class GameStateManager(Manager):
 
         for game_object in dynamic_game_object_list:
             if isinstance(game_object, Character):
-                game_object.transform.position = game_object.initial_position
+                game_object.reset_position()
+                game_object.reset_health()
 
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
     def __dispatch_events_for_set_up_level(self):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
-
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
@@ -86,5 +91,8 @@ class GameStateManager(Manager):
     def update(self, game_time):
         self.__check_pause_menu()
         self.__input_handler.update()
+
+    def __load_level(self):
+        self.__dispatch_events_for_set_up_level()
 
 
