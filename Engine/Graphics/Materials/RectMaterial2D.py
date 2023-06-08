@@ -18,6 +18,11 @@ class RectMaterial2D(Material2D):
     @width.setter
     def width(self, width):
         self.__width = width
+    @property
+    def source_rect(self):
+        rect_surface = Surface((self.__width, self.__height))
+        return rect_surface.get_rect()
+
 
     def _transform_material(self, surface, transform):
         rotated_surface = self._rotate_surface(surface, transform.rotation)
