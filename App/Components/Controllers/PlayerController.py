@@ -57,7 +57,6 @@ class PlayerController(Component, IMoveable):
         self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     def update(self, game_time):
-        # self.transform.rotate(0.1 * game_time.elapsed_time)
         self.__rb.velocity = Vector2(0, 0)
 
         if self.__animator.active_take == ActiveTake.PLAYER_ATTACK_X \
