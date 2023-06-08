@@ -3,12 +3,12 @@ from pygame import Vector2
 from App.Constants.Application import Application
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Component import Component
+from Engine.GameObjects.Components.FollowController import FollowController
 
 
-class ThirdPersonController(Component):
+class ThirdPersonController(FollowController):
     def __init__(self, name, target):
-        super().__init__(name)
-        self.__target = target
+        super().__init__(name, target)
         self.__smoothness = 0.5  # Adjust the smoothness factor (0.0 to 1.0)
         self.__smooth_position = None
         self.__camera = None
@@ -16,19 +16,12 @@ class ThirdPersonController(Component):
     def start(self):
         self.__camera = self.parent.get_component(Camera)
 
-    @property
-    def target(self):
-        return self.__target
-    @target.setter
-    def target(self, target):
-        self.__target = target
-
     def update(self, game_time):
-        if self.__target is not None:
+        if self._target is not None:
             camera_component = self.parent.get_component(Camera)
             if camera_component is not None:
                 viewport_center = Vector2(Application.ActiveCamera.viewport.x / 2, Application.ActiveCamera.viewport.y / 2)
-                target_position = self.__target.transform.position - viewport_center
+                target_position = self._target.transform.position - viewport_center
 
                 if self.__smooth_position is None:
                     # Start the smooth transition from the current camera position
@@ -44,4 +37,4 @@ class ThirdPersonController(Component):
                 self._transform.position = self.__smooth_position
 
     def clone(self):
-        return ThirdPersonController(self._name, self.__target)
+        return ThirdPersonController(self._name, self._target)
