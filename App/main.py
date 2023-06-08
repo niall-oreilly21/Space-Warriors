@@ -266,7 +266,7 @@ Constants.INPUT_HANDLER = InputHandler()
 
 #
 # # Load Map + objects
-map_load(earth_scene, Constants.Map.PLANET_A_JSON)
+map_load(earth_scene, Constants.Map.PLANET_A_JSON, player)
 # map_load(mars_scene, Constants.Map.PLANET_B_JSON)
 # map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
 

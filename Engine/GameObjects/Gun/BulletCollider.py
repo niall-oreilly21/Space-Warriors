@@ -13,11 +13,16 @@ class BulletCollider(Collider):
         super().__init__(name)
 
     def handle_response(self, colliding_game_object):
-        if colliding_game_object.game_object_category is not GameObjectCategory.Rat:
+
+        if colliding_game_object.game_object_category is GameObjectCategory.Rat or colliding_game_object.game_object_category is GameObjectCategory.Bullet:
+            return
+
+        if isinstance(colliding_game_object, IDamageable):
+            colliding_game_object.damage(self._parent.bullet_damage)
+
+        if Application.ActiveScene.contains(self._parent):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree, [self._parent.get_component(BoxCollider2D)]))
             Application.ActiveScene.remove(self._parent)
-            if isinstance(colliding_game_object, IDamageable):
-                colliding_game_object.damage(self._parent.bullet_damage)
 
 
     def clone(self):

@@ -29,8 +29,6 @@ class ButtonCollider2D(BoxCollider2D):
 
     def button_pressed(self):
         Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SoundManager, EventActionType.StopAllSounds))
-        Constants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["buttonsound"]))
         if self._parent.name == Constants.Button.START_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(
@@ -41,17 +39,11 @@ class ButtonCollider2D(BoxCollider2D):
         elif self._parent.name == Constants.Button.RESUME_BUTTON:
             if Application.CurrentLevel == Constants.Scene.EARTH:
                 Constants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
-                Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.SceneManager, EventActionType.EarthScene))
             elif Application.CurrentLevel == Constants.Scene.MARS:
                 Constants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicb"]))
-                Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.SceneManager, EventActionType.MarsScene))
             elif Application.CurrentLevel == Constants.Scene.SATURN:
-                Constants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicc"]))
                 Constants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.SceneManager, EventActionType.SaturnScene))
         elif self._parent.name == Constants.Button.MAIN_MENU_BUTTON:
@@ -67,24 +59,16 @@ class ButtonCollider2D(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
                                                                 EventActionType.SetSoundMasterVolume, [0.05]))
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.EarthScene))
         elif self._parent.name == Constants.Button.MARS_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicb"]))
+
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.DeathScene))
+                                                                EventActionType.MarsScene))
         elif self._parent.name == Constants.Button.SATURN_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusicc"]))
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.SaturnScene))
         elif self._parent.name == Constants.Button.RESTART_BUTTON:
-            print("Restart")
-            print(Application.LastActiveScene)
-
             if Application.LastActiveScene.name == Constants.Scene.EARTH:
                 print("EARTH RESTART")
                 Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,

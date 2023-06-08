@@ -20,8 +20,7 @@ class RectMaterial2D(Material2D):
         self.__width = width
     @property
     def source_rect(self):
-        rect_surface = Surface((self.__width, self.__height))
-        return rect_surface.get_rect()
+        return pygame.Rect(0, 0, self.__width, self.__height)
 
 
     def _transform_material(self, surface, transform):

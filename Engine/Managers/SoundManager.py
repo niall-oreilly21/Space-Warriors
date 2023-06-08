@@ -1,5 +1,7 @@
 import pygame.mixer
 
+from App.Constants.Constants import Constants
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 

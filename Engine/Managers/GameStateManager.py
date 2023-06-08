@@ -66,9 +66,11 @@ class GameStateManager(Manager):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
     def __dispatch_events_for_set_up_level(self):
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
 
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
