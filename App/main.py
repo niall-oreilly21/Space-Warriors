@@ -50,12 +50,14 @@ def load_sound():
     soundManager.load_sound("BossMusic", "Assets/Sounds/planet_c_music.mp3")
     soundManager.load_sound("ButtonSound", "Assets/Sounds/button.wav")
 
+
+
     soundManager.set_sound_volume("backgroundmusica", .05)
     soundManager.set_sound_volume("backgroundmusicb", .05)
     soundManager.set_sound_volume("backgroundmusicc", .05)
     soundManager.set_sound_volume("attacksound", .05)
     Constants.EVENT_DISPATCHER.dispatch_event(
-        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
+        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["BackgroundmusicA"]))
 
 
 def update(game_time):
@@ -109,7 +111,7 @@ sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
 earth_scene = Scene(Constants.Scene.EARTH)
 player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE,
                    Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
-                   Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
+                   Transform2D(Vector2(4000, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
 
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
@@ -295,9 +297,6 @@ grid_height = 72
 #         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
 #         grid[(row, col)] = rect
 
-water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
-
-print("Colliders", len(water_collsion_boxes))
 
 # Main game loop
 running = True
@@ -320,8 +319,6 @@ while running:
 
     render_manager.draw()
 
-    # print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
-    #       ", Attack damage: ", player.attack_damage)
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()
