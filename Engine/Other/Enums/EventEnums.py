@@ -4,6 +4,7 @@ class EventCategoryType:
     SoundManager = 2
     RendererManager = 3
     GameStateManager = 4
+    CollisionManager = 5
 
 
 class EventActionType:

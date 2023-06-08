@@ -3,11 +3,8 @@ import random
 
 from pygame import Vector2
 
-from App.Components.Colliders.TreeBoxCollider2D import TreeBoxCollider2D
 from App.Components.Controllers.EnemyController import EnemyController
-from App.Constants.Application import Application
 from App.Constants.Constants import Constants
-from Engine.Other.Enums.RendererLayers import RendererLayers
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -20,6 +17,7 @@ from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Enums.MapID import MapID
+from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Transform2D import Transform2D
 
 
@@ -30,10 +28,13 @@ def map_load(scene, planet_json,player):
     tileset.add_tile(Tile("Grass", Constants.Tile.GRASS, Vector2(216, 12)))
     tileset.add_tile(Tile("Water", Constants.Tile.WATER, Vector2(264, 156)))
     tileset.add_tile(Tile("Dark Grass", Constants.Tile.DARK_GRASS, Vector2(216, 108)))
-    tileset.add_tile(Tile("Dirt", Constants.Tile.DIRT, Vector2(306, 12)))
+    tileset.add_tile(Tile("Dirt", Constants.Tile.DIRT, Vector2(308, 12)))
     tileset.add_tile(Tile("Sand", Constants.Tile.SAND, Vector2(216, 156)))
     # tileset.add_tile(Tile("Dirt", 7, Vector2(216, 156)))
     tileset.add_tile(Tile("CoarseDirt", Constants.Tile.COARSE_DIRT, Vector2(216, 108)))
+    tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308,12)))
+    tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
+    tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 108)))
 
     map_data = []
 
@@ -52,14 +53,14 @@ def map_load(scene, planet_json,player):
 
     # update tiles that are available, and color them, everything else default
     if scene.name == Constants.Scene.EARTH:
-        load_planet_a_specifics(scene)
-        color_tiles(map_data, tile_data, width, height, [255, 100, 0])
+        load_planet_a_specifics(scene, player)
+        color_tiles(map_data, tile_data, width, height, None, None)
     elif scene.name == Constants.Scene.MARS:
-        load_planet_b_specifics(scene)
-        color_tiles(map_data, tile_data, width, height, [255, 0, 0])
+        load_planet_b_specifics(scene,player)
+        color_tiles(map_data, tile_data, width, height, [200, 40, 40], 220)
     elif scene.name == Constants.Scene.SATURN:
-        load_planet_c_specifics(scene)
-        color_tiles(map_data, tile_data, width, height, [255, 0, 0])
+        load_planet_c_specifics(scene,player)
+        color_tiles(map_data, tile_data, width, height, [100,100,100], 200)
 
     # Object generation
     for object in object_data:
@@ -70,15 +71,21 @@ def map_load(scene, planet_json,player):
             id = object["t"]["id"]
             if id == 5:
                 tree_object = random.choice(
-                    [GameObjectConstants.TALL_TREE.clone(), GameObjectConstants.LOW_TREE.clone()])
-                tree_collider = TreeBoxCollider2D("TreeCollider")
+                    [GameObjectConstants.Foliage.TALL_TREE.clone(), GameObjectConstants.Foliage.LOW_TREE.clone()])
+                tree_collider = BoxCollider2D("TreeCollider")
+                if tree_object.name == "Tree":
+                    tree_collider.scale = Vector2(0.3, 0.15)
+                    tree_collider.offset = Vector2(3, 72)
+                else:
+                    tree_collider.scale = Vector2(0.5, 0.25)
+                    tree_collider.offset = Vector2(0, 32)
                 tree_object.add_component(tree_collider)
                 tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
                 scene.add(tree_object)
             elif id == 15:
-                bush_object = random.choice([GameObjectConstants.BUSH_ONE.clone(), GameObjectConstants.BUSH_TWO.clone(),
-                                             GameObjectConstants.BUSH_FOUR.clone(),
-                                             GameObjectConstants.ROCK_ONE.clone()])
+                bush_object = random.choice([GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
+                                             GameObjectConstants.Foliage.BUSH_FOUR.clone(),
+                                             GameObjectConstants.NaturalStructures.ROCK_ONE.clone()])
                 bush_object.add_component(BoxCollider2D("BushCollider"))
                 if bush_object.name == "RockOne":
                     scale = random.uniform(0.7, 2)
@@ -87,20 +94,22 @@ def map_load(scene, planet_json,player):
 
                 scene.add(bush_object)
             elif id == 11:
-                lilypad_object = random.choice([GameObjectConstants.LILYPAD_ONE.clone(),
-                                                GameObjectConstants.LILYPAD_TWO.clone()])
+                lilypad_object = random.choice([GameObjectConstants.Foliage.LILYPAD_ONE.clone(),
+                                                GameObjectConstants.Foliage.LILYPAD_TWO.clone()])
                 lilypad_object.transform.rotation = random.randint(0, 360)
                 lilypad_object.transform.position = Vector2(x * 72.5, y * 72.5)
 
                 scene.add(lilypad_object)
             elif id == 1:
-                power_up_object = random.choice([GameObjectConstants.POTION_SPEED.clone(),
-                                                 GameObjectConstants.POTION_HEAL.clone(),
-                                                 GameObjectConstants.POTION_ATTACK.clone(),
-                                                 GameObjectConstants.POTION_DEFENSE.clone(),
-                                                 GameObjectConstants.RANDOM_POWER_UP.clone()])
+                power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                 GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                 GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                 GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                 GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                 power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
-                power_up_object.add_component(BoxCollider2D("PowerUpCollider"))
+                power_up_collider = BoxCollider2D("PowerUpCollider")
+                power_up_collider.scale = Vector2(2.5, 2.5)
+                power_up_object.add_component(power_up_collider)
                 scene.add(power_up_object)
 
 
@@ -118,17 +127,17 @@ def map_load(scene, planet_json,player):
             # random_translation = Vector2(random.randint(1000, 2000), random.randint(10, 10))
             # tile.transform.translate_by(random_translation)
             scene.add(tile)
-    scene.add(player)
+
 
     # enemy_texture = Constants.EnemyRat.MATERIAL_ENEMY1
     # load_enemy_1(player, enemy_texture, 2400,3400)
 
-def color_tiles(map_data, tile_data, width, height, color):
+def color_tiles(map_data, tile_data, width, height, color, alpha):
     # Create Default Tiles
     for x in range(height):
         row = []
         for z in range(width):
-            tile = TileAttributes(Constants.Tile.WATER, False, color, None)
+            tile = TileAttributes(Constants.Tile.WATER, False, color, alpha)
             row.append(tile)
         map_data.append(row)
 
@@ -136,12 +145,13 @@ def color_tiles(map_data, tile_data, width, height, color):
         if ground["x"] < width and ground["y"] < height:
             x = ground["x"]
             y = ground["y"]
-            c_value = ground["c"]
             s_id = ground["s"]["id"]
             if s_id == Constants.Tile.WATER:
-                map_data[y][x] = TileAttributes(s_id, False, color, c_value)
+                map_data[y][x] = TileAttributes(s_id, False, color, alpha)
+            # elif s_id == Constants.Tile.SAND:
+            #     map_data[y][x] = TileAttributes(Constants.Tile.SAND, False, color, c_value)
             else:
-                map_data[y][x] = TileAttributes(s_id, False, color, c_value)
+                map_data[y][x] = TileAttributes(s_id, False, color, alpha)
 
 
 
@@ -150,7 +160,11 @@ def color_tiles(map_data, tile_data, width, height, color):
 
 
 
-def load_planet_a_specifics(scene):
+def load_planet_a_specifics(scene, player):
+    starting_pos = Vector2(2900, 4900)
+    player.transform.position = starting_pos
+    scene.add(player)
+
 
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
@@ -165,7 +179,7 @@ def load_planet_a_specifics(scene):
     # boulder.transform.position = Vector2(2200,5000)
     # scene.add(boulder)
 
-    statue = GameObjectConstants.STATUE.clone()
+    statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
     statue.transform.position = Vector2(2900, 4700)
     scene.add(statue)
 
@@ -177,29 +191,39 @@ def load_planet_a_specifics(scene):
     scene.add(teleporter)
 
     bridge_x = 6406
-    bridge_y = 5475
+    bridge_y = 5463
 
-    island = GameObjectConstants.ISLAND.clone()
+    island = GameObjectConstants.NaturalStructures.ISLAND.clone()
     island.transform.position = Vector2(bridge_x + 47 * 7 + 22, bridge_y - 45)
     scene.add(island)
 
-    bridge = GameObjectConstants.BRIDGE.clone()
+    bridge = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
     bridge.transform.position = Vector2(bridge_x, bridge_y)
     scene.add(bridge)
 
-    bridge2 = GameObjectConstants.BRIDGE.clone()
+    bridge2 = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
     bridge2.transform.position = Vector2(bridge_x + 47, bridge_y)
     scene.add(bridge2)
 
-    bridge3 = GameObjectConstants.BRIDGE.clone()
+    bridge3 = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
     bridge3.transform.position = Vector2(bridge_x + 47 * 3, bridge_y)
     scene.add(bridge3)
 
-    bridge4 = GameObjectConstants.BRIDGE.clone()
+    bridge4 = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
     bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
     scene.add(bridge4)
 
-def load_planet_b_specifics(scene):
+    # enemies
+    # load_enemy_1(player,Constants.E)
+
+
+
+
+def load_planet_b_specifics(scene,player):
+    starting_pos = Vector2(3639.8, 4705.6)
+    player.transform.position = starting_pos
+    scene.add(player)
+
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
     # scene.add(ruin)
@@ -212,18 +236,21 @@ def load_planet_b_specifics(scene):
     # boulder.transform.position = Vector2(2200,5000)
     # scene.add(boulder)
 
-    statue = GameObjectConstants.STATUE.clone()
+    statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
     statue.transform.position = Vector2(2900, 4700)
     scene.add(statue)
 
-    planet_a_first_house = Vector2(2200, 2000)
+    planet_b_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-    teleporter.transform.position = Vector2(2500, 5000)
-    scene.add(teleporter)
+    # teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
+    # teleporter.transform.position = Vector2(2500, 5000)
+    # scene.add(teleporter)
 
-def load_planet_c_specifics(scene):
+def load_planet_c_specifics(scene, player):
+    starting_pos = Vector2(919.8, 6298)
+    player.transform.position = starting_pos
+    scene.add(player)
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
     # scene.add(ruin)
@@ -236,30 +263,16 @@ def load_planet_c_specifics(scene):
     # boulder.transform.position = Vector2(2200,5000)
     # scene.add(boulder)
 
-    statue = GameObjectConstants.STATUE.clone()
+    statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
     statue.transform.position = Vector2(2900, 4700)
     scene.add(statue)
 
     planet_a_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-    teleporter.transform.position = Vector2(2500, 5000)
-    scene.add(teleporter)
-
-
-def load_enemy_1(player, texture, x, y):
-    enemy = Character("Enemy", 70, 100, 1, 1, Transform2D(Vector2(x, y), 0, Vector2(1.5, 1.5)),
-                      GameObjectType.Dynamic,
-                      GameObjectCategory.Rat)
-    enemy.add_component(BoxCollider2D("Box-1"))
-    enemy.add_component(Rigidbody2D("Rigid"))
-    material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
-    enemy.add_component(SpriteRenderer2D("enemy", material_enemy, RendererLayers.Enemy))
-    enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_INFO, material_enemy,
-                                         ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_MOVE_SPEED))
-    enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED)
-    enemy.add_component(enemy_controller)
+    # teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
+    # teleporter.transform.position = Vector2(2500, 5000)
+    # scene.add(teleporter)
 
 
 
