@@ -186,7 +186,9 @@ class PlayerCollider(Collider):
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,[colliding_game_object.get_component(BoxCollider2D)]))
 
-            Application.ActiveScene.remove(colliding_game_object)
+            if Application.ActiveScene.contains(colliding_game_object):
+                Application.ActiveScene.remove(colliding_game_object)
+
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                           ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
