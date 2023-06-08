@@ -36,5 +36,8 @@ class ThirdPersonController(FollowController):
                 # Update the camera position
                 self._transform.position = self.__smooth_position
 
+    def _follow_target(self):
+        pass
+
     def clone(self):
         return ThirdPersonController(self._name, self._target)

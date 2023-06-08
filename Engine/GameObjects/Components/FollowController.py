@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from Engine.GameObjects.Components.Component import Component
 
@@ -15,3 +15,7 @@ class FollowController(Component, ABC):
     @target.setter
     def target(self, target):
         self._target = target
+
+    @abstractmethod
+    def _follow_target(self):
+        pass

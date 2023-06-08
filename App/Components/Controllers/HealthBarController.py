@@ -34,5 +34,8 @@ class HealthBarController(FollowController):
         self._material.width = self.__current_width
         self.change_colour()
 
+    def follow_target(self):
+        pass
+
     def clone(self):
         return HealthBarController(self.name, self.target)

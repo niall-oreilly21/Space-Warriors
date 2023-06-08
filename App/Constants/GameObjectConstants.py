@@ -200,7 +200,6 @@ class GameObjectConstants:
             Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
                        RendererLayers.UIBackground))
         HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        HEALTH_BAR.add_component(HealthBarController("Health Bar Controller"))
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368
