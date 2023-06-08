@@ -61,9 +61,9 @@ class Scene:
         return False
 
     def update(self, game_time):
-        for game_object_type in self.__game_object_list.values():
-            for game_object_category in game_object_type.values():
-                for game_object in game_object_category:
+        for game_object_type in list(self.__game_object_list.values()):
+            for game_object_category in list(game_object_type.values()):
+                for game_object in list(game_object_category):
                     game_object.update(game_time)
 
     def start(self):

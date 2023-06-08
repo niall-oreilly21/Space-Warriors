@@ -1,5 +1,4 @@
-import pygame.math as pgmath
-from pygame import Vector3, Vector2
+from pygame import Vector2
 
 from Engine.Other.Interfaces.ICloneable import ICloneable
 
