@@ -25,7 +25,7 @@ class Constants:
         DEFAULT_HEALTH = 200
         DEFAULT_ATTACK_DAMAGE = 5
 
-        MOVE_SPEED = 0.2
+        MOVE_SPEED = 0.1
         DAMAGE_COOLDOWN = 1
 
         __MOVE_X_Y = 712

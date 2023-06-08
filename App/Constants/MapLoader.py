@@ -147,7 +147,7 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
             y = ground["y"]
             s_id = ground["s"]["id"]
             if s_id == Constants.Tile.WATER:
-                map_data[y][x] = TileAttributes(s_id, False, color, alpha)
+                map_data[y][x] = TileAttributes(s_id, True, color, alpha)
             # elif s_id == Constants.Tile.SAND:
             #     map_data[y][x] = TileAttributes(Constants.Tile.SAND, False, color, c_value)
             else:
