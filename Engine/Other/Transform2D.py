@@ -22,7 +22,8 @@ class Transform2D(ICloneable):
 
     @position.setter
     def position(self, position):
-        self.__position = position
+        self.__position.x = position.x
+        self.__position.y = position.y
 
     @property
     def rotation(self):
