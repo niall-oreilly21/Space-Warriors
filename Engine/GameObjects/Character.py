@@ -30,7 +30,6 @@ class Character(GameObject, IDamageable, ICloneable):
 
     def damage(self, damage):
         self.__health -= damage
-        pass
 
     @property
     def attack_damage(self):
