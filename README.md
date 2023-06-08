@@ -10,7 +10,7 @@ Find Pet (on 1st level - earth)
 
 
 ## Project Structure
-### This project is includes a game engine and a 2D game in Python using pygame interface. The classes are based on object-oriented principles. The game will incorporate objects from the game engine to define how they behave. The hierarchy of our classes is that objects in the scene are called GameObject and they have a list of Components, for example:
+### This project includes a game engine and a 2D game in Python using pygame interface. The classes are based on object-oriented principles. The game will incorporate objects from the game engine to define how they behave. The hierarchy of our classes is that objects in the scene are called GameObject and they have a list of Components, for example:
 · Animator
 · Renderer
 · MovementController
@@ -82,17 +82,22 @@ Level 3: Saturn - Hard
 
 + The player has to fight all enemies, including a boss.
 
-## This game was developed in python.
-
 # References to game assets below:
 
 
 ## Sprites References
 
+### Corgi:
+https://angryelk.itch.io/animated-corgi-sprite
 
 
 ## Texture References
 
+### Tilesets:
+https://itch.io/game-assets/tag-2d
+
+### Game Objects:
+https://craftpix.net/categorys/2d-game-objects/
 
 
 ## Map Editor Reference:
