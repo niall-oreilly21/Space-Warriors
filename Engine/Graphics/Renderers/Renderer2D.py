@@ -1,8 +1,11 @@
 from abc import abstractmethod
 
 import pygame
+from pygame import Rect
 
 from Engine.GameObjects.Components.Component import Component
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
+from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 
 
 class Renderer2D(Component):
@@ -10,6 +13,7 @@ class Renderer2D(Component):
             super().__init__(name)
             self._material = material
             self._layer = layer
+            self.__bounds = None
 
         @property
         def material(self):
@@ -29,6 +33,17 @@ class Renderer2D(Component):
 
         def draw(self, surface, transform):
             self._material.draw(surface, transform)
+
+        @property
+        def bounds(self):
+            return self.__bounds
+
+        @bounds.setter
+        def bounds(self, bounds):
+            self.__bounds = Rect(self._transform.position.x, self._transform.position.y,
+                          bounds.width * self.transform.scale.x,
+                          bounds.height * self.transform.scale.y)
+
 
         def get_bounding_rect(self, transform):
             sprite_rect = self._material.source_rect

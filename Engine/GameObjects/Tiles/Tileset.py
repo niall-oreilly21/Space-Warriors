@@ -12,9 +12,10 @@ from Engine.Other.Enums.RendererLayers import RendererLayers
 class Tileset:
     def __init__(self, sprite_sheet_path, tile_width, tile_height):
         self.tiles = []
-        self.sprite_sheet = pygame.image.load(sprite_sheet_path)
+        self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert()
         self.__tile_width = tile_width
         self.__tile_height = tile_height
+        self.__texture_material = TextureMaterial2D(self.sprite_sheet, None, Vector2(0, 0))
 
     def add_tile(self, tile):
         self.tiles.append(tile)
@@ -49,7 +50,7 @@ class Tileset:
                     ## Set sprite image for the cloned tile
                     tile_position = current_tile.position_on_sprite_sheet
 
-                    current_tile.add_component(SpriteRenderer2D("tile", TextureMaterial2D(self.sprite_sheet, None, Vector2(0, 0)), RendererLayers.Background,
+                    current_tile.add_component(SpriteRenderer2D("tile", self.__texture_material, RendererLayers.Background,
                                                                 Sprite(self.sprite_sheet, Rect(tile_position.x, tile_position.y ,self.__tile_width, self.__tile_height),
                                                                        current_tile_attributes.color, current_tile_attributes.alpha)))
                     if current_tile_attributes.is_collidable:

@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from App.Constants.Application import Application
 from Engine.GameObjects.Character import Character
@@ -69,7 +71,6 @@ class CollisionManager(Manager):
             self.__quad_tree.remove(box_collider)
 
 
-
     def start(self):
         self.__colliders = Application.ActiveScene.get_all_components_by_type(BoxCollider2D)
 
@@ -93,14 +94,15 @@ class CollisionManager(Manager):
                 self.__dynamic_objects_colliders.append(game_object.get_component(BoxCollider2D))
 
 
-    def update_collision_area(self):
+    def __update_collision_range(self):
         self.__collision_range.x = self.__collision_range_target_box_collider.bounds.centerx - self.__collision_range.width / 2
         self.__collision_range.y = self.__collision_range_target_box_collider.bounds.centery - self.__collision_range.height / 2
 
     def update(self, game_time):
         if self.__update:
-            self.update_collision_area()
+            self.__update_collision_range()
             self.__update_dynamic_game_objects_box_colliders_in_quad_tree()
+
 
             potential_colliders = self.__quad_tree.query(self.__collision_range.bounds)
 
@@ -110,11 +112,10 @@ class CollisionManager(Manager):
                     box_collider_two = potential_colliders[j]
                     self.__check_collision(box_collider_one, box_collider_two)
 
+
     def __update_dynamic_game_objects_box_colliders_in_quad_tree(self):
         for collider in self.__dynamic_objects_colliders:
             self.__quad_tree.remove(collider)
-
-        for collider in self.__dynamic_objects_colliders:
             self.__quad_tree.insert(collider)
 
     def __change_collision_layers_for_trees(self, collider_one_entity, collider_two_entity, renderer_layer):
