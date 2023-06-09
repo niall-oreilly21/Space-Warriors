@@ -18,11 +18,17 @@ class SceneManager(Manager):
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.SceneManager, self._handle_events)
 
+    def __play_music(self, previous_music, active_music):
+        Application.ActiveMusic = active_music
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.StopSound, [previous_music]))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [active_music]))
+
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MainMenuScene:
             self.__set_menu_scene(Constants.Scene.MAIN_MENU)
 
         elif event_data.event_action_type == EventActionType.ExitGame:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.StopAllSounds))
             pygame.quit()
             sys.exit()
 
@@ -31,7 +37,21 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
-            Application.CurrentLevel = Constants.Scene.EARTH
+            self.__play_music(Constants.Music.MENU_MUSIC, Constants.Music.BACKGROUND_MUSIC_EARTH)
+
+        elif event_data.event_action_type == EventActionType.MarsScene:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.set_active_scene(Constants.Scene.MARS)
+            Application.ActiveScene = self.__active_scene
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+            self.__play_music(Constants.Music.MENU_MUSIC, Constants.Music.BACKGROUND_MUSIC_MARS)
+
+        elif event_data.event_action_type == EventActionType.SaturnScene:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.set_active_scene(Constants.Scene.SATURN)
+            Application.ActiveScene = self.__active_scene
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+            self.__play_music(Constants.Music.MENU_MUSIC, Constants.Music.BACKGROUND_MUSIC_SATURN)
 
         elif event_data.event_action_type == EventActionType.LevelScene:
             self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
@@ -40,24 +60,12 @@ class SceneManager(Manager):
             self.__dispatch_menu_events()
             Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(Constants.Scene.PAUSE_MENU)
+            self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
 
         elif event_data.event_action_type == EventActionType.DeathScene:
             self.__dispatch_menu_events()
             self.__set_menu_scene(Constants.Scene.DEATH_MENU)
-
-        elif event_data.event_action_type == EventActionType.MarsScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.set_active_scene(Constants.Scene.MARS)
-            Application.ActiveScene = self.__active_scene
-            Application.CurrentLevel = Constants.Scene.MARS
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
-
-        elif event_data.event_action_type == EventActionType.SaturnScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.set_active_scene(Constants.Scene.SATURN)
-            Application.ActiveScene = self.__active_scene
-            Application.CurrentLevel = Constants.Scene.SATURN
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+            self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
             self.__set_menu_scene(Constants.Scene.SOUND_MENU)
@@ -65,6 +73,7 @@ class SceneManager(Manager):
         elif event_data.event_action_type == EventActionType.SetToLastActiveScene:
             self.__set_scenes()
             if self.__check_level_scene():
+                self.__set_level_music()
                 Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.LoadLevel))
 
         elif event_data.event_action_type == EventActionType.ResetLevelScene:
@@ -73,7 +82,7 @@ class SceneManager(Manager):
             Application.ActiveScene = self.__active_scene
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             if self.__check_level_scene():
-                pass
+                self.__set_level_music()
 
 
     @property
@@ -82,8 +91,21 @@ class SceneManager(Manager):
 
     def __dispatch_menu_events(self):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
-        self._event_dispatcher.dispatch_event(
-            EventData(EventCategoryType.CollisionManager, EventActionType.TurnOffCollisionDetection))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOffCollisionDetection))
+
+    def __set_level_music(self):
+        new_active_music = ""
+
+        if self.__active_scene.name is Constants.Scene.EARTH:
+            new_active_music = Constants.Music.BACKGROUND_MUSIC_EARTH
+
+        elif self.__active_scene.name is Constants.Scene.MARS:
+            new_active_music = Constants.Music.BACKGROUND_MUSIC_MARS
+
+        elif self.__active_scene.name is Constants.Scene.SATURN:
+            new_active_music = Constants.Music.BACKGROUND_MUSIC_SATURN
+
+        self.__play_music(Application.ActiveMusic, new_active_music)
 
     def __set_scenes(self):
         Application.ActiveScene = Application.LastActiveScene
@@ -91,9 +113,9 @@ class SceneManager(Manager):
         self.set_active_scene(Application.ActiveScene.name)
 
     def __set_menu_scene(self, next_scene_name):
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
-            self.set_active_scene(next_scene_name)
-            Application.ActiveScene = self.__active_scene
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+        self.set_active_scene(next_scene_name)
+        Application.ActiveScene = self.__active_scene
 
     def __check_level_scene(self):
         return self.__active_scene.name is Constants.Scene.EARTH or\
