@@ -158,7 +158,7 @@ def initialise_character_selection_menu(menu_scene):
     boy_text.add_component(Renderer2D("BoyTextRenderer", boy_text_material, 2))
 
     star = GameObject("Star", Transform2D(Vector2(70, 50), 0, Vector2(0.5, 0.5)), GameObjectType.Static,
-                      GameObjectCategory.Environment)
+                      GameObjectCategory.UI)
     material_star = Constants.Menu.MATERIAL_STARS
     star.add_component(SpriteRenderer2D("star", material_star, RendererLayers.WorldObjects))
     star.add_component(SpriteAnimator2D("star", Constants.Menu.STARS_ANIMATOR_INFO, material_star,
