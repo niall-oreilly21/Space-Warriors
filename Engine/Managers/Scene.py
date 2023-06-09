@@ -1,4 +1,9 @@
+from App.Constants.Constants import Constants
+from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObjectType
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Managers.EventSystem.EventData import EventData
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 
 class Scene:
@@ -19,10 +24,21 @@ class Scene:
 
         self.__game_object_list[game_object.game_object_type][game_object.game_object_category].append(game_object)
 
+    def _dispatch_quad_tree_events(self, game_object):
+        print(game_object.name)
+        if game_object.get_component(BoxCollider2D):
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
+
+        if game_object.get_component(Renderer2D):
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree, [game_object.get_component(Renderer2D)]))
+
+
     def remove(self, game_object):
         if game_object.game_object_category in self.__game_object_list[game_object.game_object_type]:
-            return self.__game_object_list[game_object.game_object_type][game_object.game_object_category].remove(
-                game_object)
+            self._dispatch_quad_tree_events(game_object)
+            return self.__game_object_list[game_object.game_object_type][game_object.game_object_category].remove(game_object)
         else:
             return False
 
@@ -59,6 +75,7 @@ class Scene:
                 if game_object in game_object_category:
                     return True
         return False
+
 
     def update(self, game_time):
         for game_object_type in list(self.__game_object_list.values()):

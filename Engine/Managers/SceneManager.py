@@ -5,6 +5,8 @@ import time
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
@@ -52,6 +54,7 @@ class SceneManager(Manager):
             self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__check_turn_off_spotlight()
             self.__dispatch_menu_events()
 
@@ -81,6 +84,18 @@ class SceneManager(Manager):
             if self.__check_level_scene():
                 self.__set_level_music()
 
+        elif event_data.event_action_type == EventActionType.CharacterSelectionMenuScene:
+            self.__set_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
+
+        elif event_data.event_action_type == EventActionType.GirlCharacterSelected:
+            Application.Player.get_component(Renderer2D).material = Constants.Player.MATERIAL_GIRL
+            Application.Player.get_component(SpriteAnimator2D).material = Constants.Player.MATERIAL_GIRL
+            self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
+
+        elif event_data.event_action_type == EventActionType.BoyCharacterSelected:
+            Application.Player.get_component(Renderer2D).material = Constants.Player.MATERIAL_BOY
+            Application.Player.get_component(SpriteAnimator2D).material = Constants.Player.MATERIAL_BOY
+            self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
 
     @property
     def active_scene(self):

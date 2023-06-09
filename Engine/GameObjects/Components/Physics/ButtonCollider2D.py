@@ -35,7 +35,7 @@ class ButtonCollider2D(BoxCollider2D):
             EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [Constants.Music.BUTTON_SOUND, False]))
         if self._parent.name == Constants.Button.START_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
+                EventData(EventCategoryType.SceneManager, EventActionType.CharacterSelectionMenuScene))
         elif self._parent.name == Constants.Button.QUIT_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.ExitGame))
@@ -64,8 +64,14 @@ class ButtonCollider2D(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.SaturnScene))
         elif self._parent.name == Constants.Button.RESTART_BUTTON:
-                print("HERE")
-                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,EventActionType.ResetLevelScene))
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.ResetLevelScene))
+        elif self._parent.name == Constants.Button.GIRL_PLAYER_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                      EventActionType.GirlCharacterSelected))
+        elif self._parent.name == Constants.Button.BOY_PLAYER_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                      EventActionType.BoyCharacterSelected))
 
     def __load_event(self):
         load_time = .4

@@ -1,27 +1,38 @@
+import time
+
 import pygame
 from pygame import Vector2, Rect
 
 from App.Constants.Application import Application
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
+from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
+from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
+from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
+from Engine.Managers.QuadTreeManager import QuadTreeManager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Interfaces.IDrawable import IDrawable
 from Engine.Other.Transform2D import Transform2D
 
 
-class RendererManager(Manager, IDrawable):
-    def __init__(self, surface, scene_manager, camera_manager, event_dispatcher):
-        super().__init__(event_dispatcher)
+class RendererManager(QuadTreeManager, IDrawable):
+    def __init__(self, surface, event_dispatcher, map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, component_type = Renderer2D):
+        super().__init__(map_dimensions, collision_range_target, collision_range_width, collision_range_height,quad_tree_capacity, event_dispatcher, component_type)
+        self.__is_menu = True
         self.__surface = surface
-        self.__scene_manager = scene_manager
-        self.__camera_manager = camera_manager
         self.__is_debug_mode = False
         self.__is_spotlight_on = False
+        self.__game_objects_rects = None
+        self.__text_renderers = []
+        self.__camera_position = None
 
     @property
     def is_debug_mode(self):
@@ -47,15 +58,160 @@ class RendererManager(Manager, IDrawable):
         elif event_data.event_action_type == EventActionType.TurnSpotLightOff:
             self.__is_spotlight_on = False
 
+        elif event_data.event_action_type == EventActionType.IsMenu:
+            self.__is_menu = True
+
+        elif event_data.event_action_type == EventActionType.IsGame:
+            self.__is_menu = False
+
+        elif event_data.event_action_type == EventActionType.SetUpRenderers:
+            self.start()
+
+        elif event_data.event_action_type == EventActionType.AddRendererToQuadTree:
+            renderer = event_data.parameters[0]
+            self._add_component(renderer)
+
+        elif event_data.event_action_type == EventActionType.RemoveRendererFromQuadTree:
+            renderer = event_data.parameters[0]
+            self._remove_component(renderer)
+
+    def start(self):
+        self._set_up_component_list_and_quad_tree()
+
+        for renderer in self._components:
+            if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
+                self.__text_renderers.append(renderer)
+
+            else:
+                self.__calculate_draw_position(renderer)
+                self._quad_tree.insert(renderer)
+
+                if renderer.parent.game_object_type is GameObjectType.Dynamic:
+                    self._dynamic_objects_components.append(renderer)
+
+        self.__text_renderers.sort(key=lambda renderer: renderer.layer)
+
+    def __calculate_draw_position(self, renderer):
+        material_source_rect = renderer.material.source_rect
+
+        if isinstance(renderer, SpriteRenderer2D):
+            if renderer.parent.get_component(SpriteAnimator2D):
+                material_source_rect = renderer.parent.get_component(SpriteAnimator2D).get_current_sprite().source_rect
+            elif renderer.sprite:
+                material_source_rect = renderer.sprite.source_rect
+
+        renderer.bounds = material_source_rect
+
+    def _update_dynamic_game_objects_in_quad_tree(self):
+        for renderer in self._dynamic_objects_components:
+            self._quad_tree.remove(renderer)
+            self.__calculate_draw_position(renderer)
+            self._quad_tree.insert(renderer)
+
+    def update(self, game_time):
+        super().update(game_time)
+
+
     def draw(self):
-        renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
+        self.__camera_position = Application.ActiveCamera.transform.position
+
+        if self.__is_menu:
+            self.__draw_menu()
+
+        else:
+            self.__draw_game()
+
+
+    def _batch_blit_tiles(self, renderers):
+        if not renderers:
+            return
+
+        renderer = renderers[0]
+        texture = renderer.material.texture
+        transform = renderer.parent.transform
+        source_rect = None
+        if isinstance(renderer, SpriteRenderer2D):
+            source_rect = renderer.sprite.source_rect
+
+        texture_surface = pygame.Surface(source_rect.size, pygame.SRCALPHA)
+        scaled_texture = pygame.transform.scale(texture, (transform.scale.x, transform.scale.y))
+        texture_surface.blit(texture, (0, 0), source_rect)
+        texture_surface.set_alpha(255)
+        rotated_surface = pygame.transform.rotate(texture_surface, transform.rotation)
+        scaled_surface = pygame.transform.scale(rotated_surface,
+                                                (int(rotated_surface.get_width() * transform.scale.x),
+                                                 int(rotated_surface.get_height() * transform.scale.y)))
+
+
+        for renderer in renderers:
+            position_to_render = renderer.parent.transform.position - self.__camera_position
+            position = (
+                int(position_to_render.x - scaled_texture.get_width() / 2),
+                int(position_to_render.y - scaled_texture.get_height() / 2)
+            )
+
+            # Blit the scaled and rotated surface onto the main surface
+            self.__surface.blit(scaled_surface, position)
+
+    def render_batch(self, batch_renderer):
+        renderer = batch_renderer[0]
+        texture_surface = pygame.Surface(renderer.material.source_rect.size, pygame.SRCALPHA)
+        texture = batch_renderer[0].material.texture
+
+        transform = batch_renderer[0].parent.transform
+
+        rotated_surface = pygame.transform.rotate(texture_surface, transform.rotation)
+
+        scaled_surface = pygame.transform.scale(rotated_surface,
+                                                (int(rotated_surface.get_width() * transform.scale.x),
+                                                 int(rotated_surface.get_height() * transform.scale.y)))
+
+        for renderer in batch_renderer:
+            texture_surface.blit(texture, (0, 0), renderer.material.source_rect)
+            self._blits(self.__surface, scaled_surface, renderer.parent.transform, renderer.material.source_rect)
+
+    def _blits(self, surface, material_surface, transform, source_rect):
+        material_surface.set_alpha(255)
+        surface.blit(self._transform_material(material_surface, transform, source_rect)[0],
+                     self._transform_material(material_surface, transform, source_rect)[1])
+
+    def _transform_material(self, surface, transform, source_rect):
+        position = (
+            int(transform.position.x - surface.get_width() / 2 + source_rect.width / 2 * transform.scale.x),
+            int(transform.position.y -surface.get_height() / 2 + source_rect.height / 2 * transform.scale.y))
+
+        return surface, position
+
+
+    def __draw_game(self):
+        self._update_quad_tree()
+        potential_renderers = self._get_potential_components()
+
+        # Sort the renderers based on their layer depth
+        potential_renderers.sort(key=lambda renderer: renderer.layer)
+
+        for renderer in potential_renderers:
+            renderer.draw(self.__surface, Transform2D(renderer.transform.position - self.__camera_position, renderer.transform.rotation, renderer.transform.scale))
+
+            if self.__is_debug_mode:
+                self._event_dispatcher.dispatch_event(
+                    EventData(EventCategoryType.CollisionManager, EventActionType.DrawCollisionRange, [self.__surface, Application.ActiveCamera.transform.position]))
+
+                if renderer.parent.get_component(BoxCollider2D):
+                    renderer.parent.get_component(BoxCollider2D).draw(self.__surface, Application.ActiveCamera.transform.position)
+
+        for renderer in self.__text_renderers:
+            renderer.draw(self.__surface, Transform2D(renderer.transform.position, renderer.transform.rotation, renderer.transform.scale))
+
+
+        if self.__is_spotlight_on:
+            self.draw_spotlight()
+
+    def __draw_menu(self):
+        renderers = Application.ActiveScene.get_all_components_by_type(Renderer2D)
 
         # Sort the renderers based on their layer depth
         renderers.sort(key=lambda renderer: renderer.layer)
-
-        camera_component = self.__camera_manager.active_camera
-        camera_position = camera_component.transform.position
-        viewport = camera_component.viewport
 
         for renderer in renderers:
             object_position = renderer.transform.position
@@ -63,25 +219,6 @@ class RendererManager(Manager, IDrawable):
             if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
                 renderer.draw(self.__surface, Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
-            else:
-                object_draw_position = object_position - camera_position
-
-                object_rect = renderer.get_bounding_rect(Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
-
-                # else:
-                if self.is_rect_visible(object_rect, viewport):
-                    renderer.draw(self.__surface, Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
-
-                    if self.__is_debug_mode:
-                        self._event_dispatcher.dispatch_event(
-                            EventData(EventCategoryType.CollisionManager, EventActionType.DrawCollisionRange, [self.__surface, camera_position]))
-
-                        if renderer.parent.get_component(BoxCollider2D):
-                            renderer.parent.get_component(BoxCollider2D).draw(self.__surface, camera_position)
-
-
-        if self.__is_spotlight_on:
-            self.draw_spotlight()
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
@@ -97,7 +234,7 @@ class RendererManager(Manager, IDrawable):
 
         # Create a mask for the spotlight
         spotlight_surface = pygame.Surface((self.__surface.get_width(), self.__surface.get_height()), pygame.SRCALPHA)
-        spotlight_surface.fill((0, 0, 0, 225))
+        spotlight_surface.fill((0, 0, 0, 175))
 
         screen_center = Vector2(self.__surface.get_width() / 2 + 10, self.__surface.get_height() / 2 + 40)
 
@@ -108,3 +245,4 @@ class RendererManager(Manager, IDrawable):
         spotlight_surface.blit(light, (blit_position.x, blit_position.y), special_flags=pygame.BLEND_RGBA_SUB)
 
         self.__surface.blit(spotlight_surface, (0, 0))
+

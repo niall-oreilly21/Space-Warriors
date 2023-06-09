@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from App.Constants.Application import Application
 from Engine.GameObjects.Character import Character
@@ -8,22 +10,16 @@ from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.Manager import Manager
+from Engine.Managers.QuadTreeManager import QuadTreeManager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
 
-class CollisionManager(Manager):
-    def __init__(self, map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, event_dispatcher):
-        super().__init__(event_dispatcher)
-        self.__map_dimensions = map_dimensions
-        self.__quad_tree_capacity = quad_tree_capacity
-        self.__collision_range = CollisionRange(0, 0, collision_range_width, collision_range_height)
-        self.__dynamic_objects_colliders = []
-        self.__collision_range_target = collision_range_target
+class CollisionManager(QuadTreeManager):
+    def __init__(self, map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, event_dispatcher, component_type = BoxCollider2D):
+        super().__init__( map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, event_dispatcher, component_type)
         self.__collision_range_target_box_collider = None
-        self.__colliders = None
-        self.__quad_tree = None
         self.__update = False
 
     def _subscribe_to_events(self):
@@ -33,19 +29,19 @@ class CollisionManager(Manager):
         if event_data.event_action_type == EventActionType.SetUpColliders:
             self.start()
 
-        elif event_data.event_action_type == EventActionType.RemoveCollliderFromQuadTree:
+        elif event_data.event_action_type == EventActionType.RemoveColliderFromQuadTree:
             box_collider = event_data.parameters[0]
-            self.__remove_box_collider(box_collider)
+            self._add_component(box_collider)
 
         elif event_data.event_action_type == EventActionType.AddColliderToQuadTree:
             box_collider = event_data.parameters[0]
-            self.__add_box_collider(box_collider)
+            self._add_component(box_collider)
 
         elif event_data.event_action_type == EventActionType.DrawCollisionRange:
             screen = event_data.parameters[0]
             camera_position = event_data.parameters[1]
             if self.__update:
-                self.__collision_range.draw(screen, camera_position)
+                self._collision_range.draw(screen, camera_position)
 
         elif event_data.event_action_type == EventActionType.TurnOffCollisionDetection:
             self.__update = False
@@ -53,56 +49,15 @@ class CollisionManager(Manager):
         elif event_data.event_action_type == EventActionType.TurnOnCollisionDetection:
             self.__update = True
 
-    @property
-    def collision_range(self):
-        return self.__collision_range
-
-
-    def __add_box_collider(self, box_collider):
-        if box_collider.parent.game_object_type is GameObjectType.Dynamic:
-            self.__dynamic_objects_colliders.append(box_collider)
-            self.__quad_tree.insert(box_collider)
-
-    def __remove_box_collider(self, box_collider):
-        if box_collider.parent.game_object_type is GameObjectType.Dynamic:
-            self.__dynamic_objects_colliders.remove(box_collider)
-            self.__quad_tree.remove(box_collider)
-
-
 
     def start(self):
-        self.__colliders = Application.ActiveScene.get_all_components_by_type(BoxCollider2D)
-
-        self.__set_up_dynamic_game_objects_list()
-        self.__set_up_quad_tree()
-
-        self.__collision_range_target_box_collider = self.__collision_range_target.get_component(BoxCollider2D)
-
-
-    def __set_up_quad_tree(self):
-        self.__quad_tree = QuadTree(self.__map_dimensions, self.__quad_tree_capacity)
-
-        for collider in self.__colliders:
-            self.__quad_tree.insert(collider)
-
-    def __set_up_dynamic_game_objects_list(self):
-        dynamic_game_objects = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)
-
-        for game_object in dynamic_game_objects:
-            if game_object.get_component(BoxCollider2D):
-                self.__dynamic_objects_colliders.append(game_object.get_component(BoxCollider2D))
-
-
-    def update_collision_area(self):
-        self.__collision_range.x = self.__collision_range_target_box_collider.bounds.centerx - self.__collision_range.width / 2
-        self.__collision_range.y = self.__collision_range_target_box_collider.bounds.centery - self.__collision_range.height / 2
+        super().start()
 
     def update(self, game_time):
         if self.__update:
-            self.update_collision_area()
-            self.__update_dynamic_game_objects_box_colliders_in_quad_tree()
+            super().update(game_time)
 
-            potential_colliders = self.__quad_tree.query(self.__collision_range.bounds)
+            potential_colliders = self._get_potential_components()
 
             for i in range(len(potential_colliders)):
                 box_collider_one = potential_colliders[i]
@@ -110,12 +65,6 @@ class CollisionManager(Manager):
                     box_collider_two = potential_colliders[j]
                     self.__check_collision(box_collider_one, box_collider_two)
 
-    def __update_dynamic_game_objects_box_colliders_in_quad_tree(self):
-        for collider in self.__dynamic_objects_colliders:
-            self.__quad_tree.remove(collider)
-
-        for collider in self.__dynamic_objects_colliders:
-            self.__quad_tree.insert(collider)
 
     def __change_collision_layers_for_trees(self, collider_one_entity, collider_two_entity, renderer_layer):
         if (collider_one_entity.name == "Tree" or collider_one_entity.name == "LowTree") and isinstance(
