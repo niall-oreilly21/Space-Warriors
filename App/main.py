@@ -224,6 +224,8 @@ map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
 map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
 load_planet_a_enemies(earth_scene,player)
+load_planet_b_enemies(mars_scene,player)
+load_planet_c_enemies(saturn_scene,player)
 
 
 

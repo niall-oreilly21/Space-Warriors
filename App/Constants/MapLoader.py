@@ -4,12 +4,14 @@ import random
 from pygame import Vector2
 
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
@@ -161,13 +163,50 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 
 
 def load_planet_a_enemies(scene, player):
-    enemy = EntityConstants.Enemy.WOLF_ENEMY
+    enemy = EntityConstants.Enemy.RAT_ENEMY
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200))
     scene.add(enemy)
-    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 200))
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(4000, 3000), Vector2(4500, 3000),
+                                                Vector2(4500, 3100), Vector2(3800, 3100)]
+    scene.add(enemy2)
+
+    enemy3 = enemy.clone()
+    enemy3.get_component(WaypointFinder).waypoints = [Vector2(4200, 3200), Vector2(4500, 3200),
+                                                      Vector2(4500, 3200), Vector2(3800, 3200)]
+    scene.add(enemy3)
+
+    enemy4 = enemy.clone()
+    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4700, 2300), Vector2(5300, 2300),
+                                                      Vector2(5300, 1800), Vector2(4700, 1800)]
+    scene.add(enemy4)
+
+    enemy4 = enemy.clone()
+    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4800, 2400), Vector2(5200, 2400),
+                                                      Vector2(5200, 1900), Vector2(4800, 1900)]
+    scene.add(enemy4)
+
+
+
+def load_planet_b_enemies(scene,player):
+    enemy = EntityConstants.Enemy.WOLF_ENEMY
+    enemy.add_component(ZapEnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 200, 1, 1))
+    scene.add(enemy)
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(2550, 3500), Vector2(3000, 3000),
+                                                      Vector2(2800, 3100), Vector2(3000, 2800)]
+    scene.add(enemy2)
+
+
+def load_planet_c_enemies(scene,player):
+    enemy = EntityConstants.Enemy.ALIEN_ENEMY
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 200))
+    scene.add(enemy)
 
 def load_planet_a_specifics(scene, player):
     starting_pos = Vector2(2900, 4900)
-
     player.initial_position = starting_pos
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
@@ -215,9 +254,6 @@ def load_planet_a_specifics(scene, player):
     bridge4 = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
     bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
     scene.add(bridge4)
-
-    # enemies
-    # load_enemy_1(player,Constants.E)
 
 
 
