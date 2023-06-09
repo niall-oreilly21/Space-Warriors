@@ -1,6 +1,7 @@
 from pygame import Vector2
 import math
 
+from Engine.GameObjects.Components.FollowController import FollowController
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
 from Engine.GameObjects.Components.Component import Component
@@ -10,14 +11,14 @@ from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
-class EnemyController(Component):
-    def __init__(self, name, target_object, speed, min_distance_to_target):
-        super().__init__(name)
+class EnemyController(FollowController):
+    def __init__(self, name, target, speed, min_distance_to_target):
+        super().__init__(name, target)
         self.__waypoint_finder = None
         self.__way_point_system = None
         self.__animator = None
         self.__rend = None
-        self.__target_object = target_object
+        self.__target = target
         self._speed = speed
         self.__rigidbody = None
         self._min_distance_to_target = min_distance_to_target
@@ -33,7 +34,7 @@ class EnemyController(Component):
         self.__waypoint_finder = self._parent.get_component(WaypointFinder)
 
     def update(self, game_time):
-        self.__target_position = self.__target_object.transform.position
+        self.__target_position = self.__target.transform.position
         self.__position = self.transform.position
 
         self._distance_from_target = math.sqrt((self.__target_position.x - self.__position.x) ** 2 + (self.__target_position.y - self.__position.y) ** 2)
@@ -46,7 +47,7 @@ class EnemyController(Component):
                 self.calculate_patrol_routes(game_time)
 
     def _follow_target(self):
-        self.calculate_movement_direction(self.__target_object.transform.position, self.transform.position)
+        self.calculate_movement_direction(self.__target.transform.position, self.transform.position)
 
     def calculate_patrol_routes(self, game_time):
 
@@ -131,4 +132,4 @@ class EnemyController(Component):
             return ActiveTake.ENEMY_ALIEN_MOVE_DOWN
 
     def clone(self):
-        return EnemyController(self.name, self.__target_object, self._speed, self._min_distance_to_target)
+        return EnemyController(self.name, self.__target, self._speed, self._min_distance_to_target)
