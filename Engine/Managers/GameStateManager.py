@@ -56,8 +56,12 @@ class GameStateManager(Manager):
 
 
     def __set_up_teleporter_for_level(self):
-        teleporter = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)[0]
-        teleporter.get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
+        teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
+
+        if len(teleporters) <= 0:
+            return
+
+        teleporters[0].get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
 
     def __position_characters_for_level(self):
         dynamic_game_object_list = Application.ActiveScene.find_all_by_type(GameObjectType.Dynamic)

@@ -57,6 +57,7 @@ class SceneManager(Manager):
             self.set_active_scene(Constants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
             Application.CurrentLevel = Constants.Scene.SATURN
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
             self.__set_menu_scene(Constants.Scene.SOUND_MENU)
