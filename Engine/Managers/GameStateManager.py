@@ -90,7 +90,6 @@ class GameStateManager(Manager):
 
     def __dispatch_events_for_set_up_level(self):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
@@ -115,7 +114,7 @@ class GameStateManager(Manager):
         self.__dispatch_events_for_set_up_level()
 
     def __check_turn_on_spotlight(self):
-        if Application.ActiveScene is Constants.Scene.MARS:
+        if Application.ActiveScene.name is Constants.Scene.MARS:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
 
 
