@@ -159,8 +159,8 @@ mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
-render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
-
+render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, pygame.Rect(0, 0, 110 * 72, 120 * 72), player,
+                                 Constants.VIEWPORT_WIDTH + 75, Constants.VIEWPORT_HEIGHT + 110, 4)
 scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
