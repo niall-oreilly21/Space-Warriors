@@ -32,7 +32,7 @@ class ButtonCollider2D(BoxCollider2D):
     def button_pressed(self):
         self.__load_event()
         Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["buttonsound"]))
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [Constants.Music.BUTTON_SOUND, False]))
         if self._parent.name == Constants.Button.START_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
