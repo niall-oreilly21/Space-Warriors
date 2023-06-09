@@ -39,7 +39,7 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-from App.Constants.MapLoader import map_load
+from App.Constants.MapLoader import *
 
 
 
@@ -222,6 +222,8 @@ Constants.INPUT_HANDLER = InputHandler()
 map_load(earth_scene, Constants.Map.PLANET_A_JSON, player)
 map_load(mars_scene, Constants.Map.PLANET_B_JSON, player)
 map_load(saturn_scene, Constants.Map.PLANET_C_JSON, player)
+
+load_planet_a_enemies(earth_scene,player)
 
 
 
