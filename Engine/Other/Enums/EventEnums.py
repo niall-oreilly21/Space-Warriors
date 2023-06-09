@@ -40,3 +40,4 @@ class EventActionType:
     SetToLastActiveScene = 29
     LoadLevel = 30
     ResetLevelScene = 31
+    TurnSpotLightOff = 32
