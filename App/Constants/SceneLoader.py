@@ -132,7 +132,7 @@ def initialise_character_selection_menu(menu_scene):
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                        GameObjectCategory.Menu)
-    title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Choose your player",
+    title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Choose your warrior",
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
 
