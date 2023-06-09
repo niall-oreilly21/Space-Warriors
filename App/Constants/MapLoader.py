@@ -1,18 +1,26 @@
 import json
 import random
 
+import pygame
 from pygame import Vector2
 
+from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.Gun.Bullet import Bullet
+from Engine.GameObjects.Gun.Gun import Gun
+from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
+from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -35,7 +43,7 @@ def map_load(scene, planet_json,player):
     tileset.add_tile(Tile("CoarseDirt", Constants.Tile.COARSE_DIRT, Vector2(216, 108)))
     tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308,12)))
     tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
-    tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 108)))
+    tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
 
     map_data = []
 
@@ -61,14 +69,13 @@ def map_load(scene, planet_json,player):
         color_tiles(map_data, tile_data, width, height, [200, 40, 40], 220)
     elif scene.name == Constants.Scene.SATURN:
         load_planet_c_specifics(scene,player)
-        color_tiles(map_data, tile_data, width, height, [100,100,100], 200)
+        color_tiles(map_data, tile_data, width, height, [255,255,0], 150)
 
     # Object generation
     for object in object_data:
         if object["x"] < width and object["y"] < height:
             x = object["x"]
             y = object["y"]
-            c_value = object["c"]
             id = object["t"]["id"]
             if id == 5:
                 tree_object = random.choice(
@@ -161,15 +168,64 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 
 
 def load_planet_a_enemies(scene, player):
-    enemy = EntityConstants.Enemy.WOLF_ENEMY
+    enemy = EntityConstants.Enemy.RAT_ENEMY
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 400))
     scene.add(enemy)
-    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 200))
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(4000, 3000), Vector2(4500, 3000),
+                                                Vector2(4500, 3100), Vector2(3800, 3100)]
+    scene.add(enemy2)
+
+    enemy3 = enemy.clone()
+    enemy3.get_component(WaypointFinder).waypoints = [Vector2(4200, 3200), Vector2(4500, 3200),
+                                                      Vector2(4500, 3200), Vector2(3800, 3200)]
+    scene.add(enemy3)
+
+    enemy4 = enemy.clone()
+    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4700, 2300), Vector2(5300, 2300),
+                                                      Vector2(5300, 1800), Vector2(4700, 1800)]
+    scene.add(enemy4)
+
+    enemy4 = enemy.clone()
+    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4800, 2400), Vector2(5200, 2400),
+                                                      Vector2(5200, 1900), Vector2(4800, 1900)]
+    scene.add(enemy4)
+
+
+
+def load_planet_b_enemies(scene,player):
+    enemy = EntityConstants.Enemy.WOLF_ENEMY
+    enemy.add_component(ZapEnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+    scene.add(enemy)
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(2550, 3500), Vector2(3000, 3000),
+                                                      Vector2(2800, 3100), Vector2(3000, 2800)]
+    scene.add(enemy2)
+
+
+def load_planet_c_enemies(scene,player):
+    gun = GameObjectConstants.Gun.Gun
+    scene.add(gun)
+    enemy = EntityConstants.Enemy.ALIEN_ENEMY
+    enemy.add_component(BossEnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+    scene.add(gun)
+    scene.add(enemy)
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(2550, 3500), Vector2(3000, 3000),
+                                                      Vector2(2800, 3100), Vector2(3000, 2800)]
+    scene.add(enemy2)
+
+    # Boss?
+
+
 
 def load_planet_a_specifics(scene, player):
-    starting_pos = Vector2(2900, 4900)
-
+    starting_pos = Vector2(3050, 4900)
     player.initial_position = starting_pos
-
+    scene.add(player)
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
     # scene.add(ruin)
@@ -190,7 +246,7 @@ def load_planet_a_specifics(scene, player):
     first_boss_coords = Vector2(6000, 1500)
 
     teleporter = GameObjectConstants.Teleporter.TELEPORTER
-    teleporter.transform.position = Vector2(2500, 4800)
+    teleporter.transform.position = Vector2(2550, 4800)
     scene.add(teleporter)
 
     bridge_x = 6406
@@ -216,14 +272,11 @@ def load_planet_a_specifics(scene, player):
     bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
     scene.add(bridge4)
 
-    # enemies
-    # load_enemy_1(player,Constants.E)
-
 
 
 
 def load_planet_b_specifics(scene,player):
-    starting_pos = Vector2(3639.8, 4705.6)
+    starting_pos = Vector2(3200, 4705.6)
     player.initial_position = starting_pos
     scene.add(player)
 
@@ -246,9 +299,9 @@ def load_planet_b_specifics(scene,player):
     planet_b_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    # teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-    # teleporter.transform.position = Vector2(2500, 5000)
-    # scene.add(teleporter)
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER
+    teleporter.transform.position = Vector2(3788.2, 4696)
+    scene.add(teleporter)
 
 def load_planet_c_specifics(scene, player):
     starting_pos = Vector2(919.8, 6298)

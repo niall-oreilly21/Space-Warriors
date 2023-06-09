@@ -5,8 +5,12 @@ from pygame import Vector2
 
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
+from App.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
+from Engine.GameObjects.Gun.Bullet import Bullet
+from Engine.GameObjects.Gun.Gun import Gun
+from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.PowerUp import PowerUp
 from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
@@ -203,6 +207,16 @@ class GameObjectConstants:
         RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
 
+    class Gun:
+        texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
+
+        material = TextureMaterial2D(texture, None, None, 255)
+
+        colors = [(0, 0, 255)]
+        bullet_prefab = Bullet("Bullet", material, 4, 8, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
+        Gun = Gun("Gun", bullet_prefab, 20, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
+
+        # Gun.add_component(GunController("Gun Controller", Constants.Constants.EnemyAlien))
 
 
     class HealthBar:
