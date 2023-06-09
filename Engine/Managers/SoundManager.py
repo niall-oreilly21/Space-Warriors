@@ -49,6 +49,8 @@ class SoundManager(Manager):
     def stop_sound(self, sound_name):
         sound_name = sound_name.lower()
         if sound_name in self.__sounds:
+            pygame.mixer.fadeout(1)
+            pygame.time.wait(100)
             self.__sounds[sound_name].stop()
 
     def stop_all_sounds(self):

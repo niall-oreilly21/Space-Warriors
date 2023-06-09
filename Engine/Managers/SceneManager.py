@@ -18,11 +18,6 @@ class SceneManager(Manager):
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.SceneManager, self._handle_events)
 
-    def __play_music(self, previous_music, active_music):
-        Application.ActiveMusic = active_music
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.StopSound, [previous_music]))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [active_music]))
-
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MainMenuScene:
             self.__set_menu_scene(Constants.Scene.MAIN_MENU)
@@ -92,6 +87,11 @@ class SceneManager(Manager):
     def __dispatch_menu_events(self):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOffCollisionDetection))
+
+    def __play_music(self, previous_music, active_music):
+        Application.ActiveMusic = active_music
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.StopSound, [previous_music]))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [active_music]))
 
     def __set_level_music(self):
         new_active_music = ""
