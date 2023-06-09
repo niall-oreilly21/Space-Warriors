@@ -168,7 +168,7 @@ def load_planet_a_enemies(scene, player):
 def load_planet_a_specifics(scene, player):
     starting_pos = Vector2(2900, 4900)
 
-    player.transform.position = starting_pos
+    player.initial_position = starting_pos
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
@@ -224,7 +224,7 @@ def load_planet_a_specifics(scene, player):
 
 def load_planet_b_specifics(scene,player):
     starting_pos = Vector2(3639.8, 4705.6)
-    player.transform.position = starting_pos
+    player.initial_position = starting_pos
     scene.add(player)
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
@@ -252,7 +252,7 @@ def load_planet_b_specifics(scene,player):
 
 def load_planet_c_specifics(scene, player):
     starting_pos = Vector2(919.8, 6298)
-    player.transform.position = starting_pos
+    player.initial_position = starting_pos
     scene.add(player)
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
