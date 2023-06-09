@@ -17,7 +17,7 @@ from Engine.Other.Transform2D import Transform2D
 
 
 def initialise_menu_background(background_material):
-    background = GameObject("MenuBackground", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)))
+    background = GameObject("MenuBackground", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UI)
     background.add_component(Renderer2D("MenuRenderer", background_material))
 
     return background
