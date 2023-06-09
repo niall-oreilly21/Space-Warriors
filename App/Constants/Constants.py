@@ -283,9 +283,9 @@ class Constants:
 
     class Music:
         MENU_MUSIC = "MenuMusic"
-        BACKGROUND_MUSIC_A = "BackgroundMusicA"
-        BACKGROUND_MUSIC_B = "BackgroundMusicB"
-        BACKGROUND_MUSIC_C = "BackgroundMusicC"
+        BACKGROUND_MUSIC_EARTH = "BackgroundMusicEarth"
+        BACKGROUND_MUSIC_MARS = "BackgroundMusicMars"
+        BACKGROUND_MUSIC_SATURN = "BackgroundMusicSaturn"
         TELEPORT_SOUND = "TeleportSound"
         PLAYER_DEATH_SOUND = "PlayerDeathSound"
         PLAYER_ATTACK_SOUND = "PlayerAttackSound"
@@ -293,18 +293,18 @@ class Constants:
 
     class MusicFilePath:
         MENU_MUSIC_FILEPATH = "Assets/Sounds/background_music.mp3"
-        BACKGROUND_MUSIC_A_FILEPATH = "Assets/Sounds/planet_a_music.mp3"
-        BACKGROUND_MUSIC_B_FILEPATH = "Assets/Sounds/planet_b_music.wav"
-        BACKGROUND_MUSIC_C_FILEPATH = "Assets/Sounds/planet_c_music.mp3"
+        BACKGROUND_MUSIC_EARTH_FILEPATH = "Assets/Sounds/planet_a_music.mp3"
+        BACKGROUND_MUSIC_MARS_FILEPATH = "Assets/Sounds/planet_b_music.wav"
+        BACKGROUND_MUSIC_SATURN_FILEPATH = "Assets/Sounds/planet_c_music.mp3"
         TELEPORT_SOUND_FILEPATH = "Assets/Sounds/teleport.wav"
         PLAYER_DEATH_SOUND_FILEPATH = "Assets/Sounds/death.wav"
         PLAYER_ATTACK_SOUND_FILEPATH = "Assets/Sounds/sword_swish.wav"
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 
     class Map:
-        PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
-        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
-        PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
+        PLANET_EARTH_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
+        PLANET_MARS_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
+        PLANET_SATURN_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
 
     class Tile:
         GRASS = 1
