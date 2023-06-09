@@ -52,6 +52,7 @@ class SceneManager(Manager):
             self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__check_turn_off_spotlight()
             self.__dispatch_menu_events()
 

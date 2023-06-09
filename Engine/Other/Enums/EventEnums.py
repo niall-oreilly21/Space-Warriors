@@ -29,7 +29,7 @@ class EventActionType:
     SetUpLevel = 18
     SetCameraTarget = 19
     SetUpColliders = 20
-    RemoveCollliderFromQuadTree = 21
+    RemoveColliderFromQuadTree = 21
     SoundMenuScene = 22
     DeathScene = 23
     TurnSpotLightOn = 24
@@ -41,3 +41,10 @@ class EventActionType:
     LoadLevel = 30
     ResetLevelScene = 31
     TurnSpotLightOff = 32
+    IsGame = 33
+    IsMenu = 34
+    SetUpRenderers = 35
+    AddRendererToQuadTree = 36
+    RemoveRendererFromQuadTree = 37
+
+

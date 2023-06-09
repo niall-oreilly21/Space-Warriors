@@ -47,9 +47,10 @@ from App.Constants.MapLoader import *
 def update(game_time):
     earth_scene.update(game_time)
 
-
 # Initialize Pygame
 pygame.init()
+
+
 
 # Set up the display window
 screen_width = 1
@@ -114,7 +115,12 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-
+EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png").convert()
+MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png").convert()
+SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png").convert()
+# Constants.Menu.EARTH_IMAGE =  EARTH_IMAGE
+# Constants.Menu.MARS_IMAGE =  MARS_IMAGE
+# Constants.Menu.SATURN_IMAGE =  SATURN_IMAGE
 
 # enemy4 = enemy.clone()
 
@@ -161,8 +167,7 @@ mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
-scene_manager.set_active_scene(Constants.Scene.EARTH)
-render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
+render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, pygame.Rect(0, 0, 110 * 72, 120 * 72), player, Constants.VIEWPORT_WIDTH + 75, Constants.VIEWPORT_HEIGHT + 110, 4)
 
 scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
@@ -203,8 +208,6 @@ initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died"
                 [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 scene_loader.initialise_level_menu(level_menu_scene)
 
-# scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
-
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 # initialise_level_menu()
@@ -232,13 +235,13 @@ load_sound(soundManager)
 for manager in managers:
     manager.start()
 
+
 # Fill the screen with a background color
 background_color = (0, 0, 0)  # black
 if screen is not None:
     screen.fill(background_color)
 
 render_manager.is_debug_mode = True
-
 
 # Main game loop
 running = True
@@ -261,6 +264,9 @@ while running:
 
     render_manager.draw()
 
+    elapsed_time = game_time.elapsed_time
+    fps = game_time.fps()
+    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

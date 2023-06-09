@@ -93,6 +93,8 @@ class GameStateManager(Manager):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsGame))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
         self.__check_turn_on_spotlight()
 
     def __set_up_teleporter(self):
