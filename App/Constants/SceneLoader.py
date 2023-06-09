@@ -48,7 +48,7 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
                             Transform2D(button_position, 0, Vector2(1, 1)),
                             GameObjectType.Static, GameObjectCategory.Menu)
 
-        button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None, Vector2(0, 0), None)
+        button_texture_material = TextureMaterial2D(Constants.Menu.MENU_BUTTON_IMAGE, None, Vector2(0, 0))
         button_text_material = TextMaterial2D(Constants.Menu.TEXT_FONT_PATH, Constants.Menu.TEXT_FONT_SIZE, button_text,
                                               Vector2(150, 27), (0, 0, 0))
 
@@ -75,7 +75,7 @@ def initialise_level_menu(menu_scene):
                        Transform2D(Vector2(Constants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
                                    0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
     earth_texture_material = TextureMaterial2D(Constants.Menu.EARTH_IMAGE, None,
-                                               Vector2(0, 0), None)
+                                               Vector2(0, 0))
     earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
     earth.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
 
@@ -99,7 +99,7 @@ def initialise_level_menu(menu_scene):
     saturn.name = Constants.Button.SATURN_BUTTON
     saturn.transform.position.x = mars.transform.position.x + 883 * 0.3 + 100
     saturn_texture_material = TextureMaterial2D(Constants.Menu.SATURN_IMAGE, None,
-                                                Vector2(0, 0), None)
+                                                Vector2(0, 0))
     saturn.get_component(Renderer2D).material = saturn_texture_material
 
     saturn_text = earth_text.clone()

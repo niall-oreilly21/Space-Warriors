@@ -32,17 +32,29 @@ class GameObjectConstants:
     class Foliage:
         layer = RendererLayers.WorldObjects
         tree_layer = RendererLayers.AbovePlayer
+
+        source_rect =  pygame.Rect(179, 98, 27, 60)
+
         TALL_TREE = GameObject("Tree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                                GameObjectCategory.Environment)
-        object_frame = image.subsurface(pygame.Rect(179, 98, 27, 60))
-        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        object_frame = image.subsurface(source_rect)
+
+        texture_surface = pygame.Surface(source_rect.size, pygame.SRCALPHA)
+        texture_surface.blit(image, (0, 0), source_rect)
+
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255, texture_surface)
         tree_renderer = Renderer2D("Renderer-2", texture_material, tree_layer)
         TALL_TREE.add_component(tree_renderer)
 
         LOW_TREE = GameObject("LowTree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                               GameObjectCategory.Player)
-        object_frame = image.subsurface(pygame.Rect(177, 65, 30, 30))
-        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+
+        source_rect =  pygame.Rect(177, 65, 30, 30)
+        texture_surface = pygame.Surface(source_rect.size, pygame.SRCALPHA)
+        texture_surface.blit(image, (0, 0), source_rect)
+
+        object_frame = image.subsurface(source_rect)
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255, texture_surface)
         LOW_TREE.add_component(Renderer2D("Renderer-2", texture_material, tree_layer))
 
         BUSH_ONE = GameObject("BushOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
