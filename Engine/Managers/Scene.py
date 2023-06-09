@@ -28,7 +28,7 @@ class Scene:
         print(game_object.name)
         if game_object.get_component(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
+                EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
 
         if game_object.get_component(Renderer2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
