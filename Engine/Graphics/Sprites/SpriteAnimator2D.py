@@ -18,6 +18,22 @@ class SpriteAnimator2D(Component):
         self.set_active_take(active_take)
 
     @property
+    def fps(self):
+        return self.__fps
+
+    @fps.setter
+    def fps(self, fps):
+        self.__fps = fps
+
+    @property
+    def material(self):
+        return self.__material
+
+    @material.setter
+    def material(self, material):
+        self.__material = material
+
+    @property
     def animator_info(self):
         return self.__animator_info
 

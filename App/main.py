@@ -9,7 +9,8 @@ from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
-from App.Constants.SceneLoader import SceneLoader, initialise_menu
+from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
+    initialise_character_selection_menu
 from App.Constants.SoundConstants import load_sound
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
@@ -97,7 +98,6 @@ player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.D
                    Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
                    Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
                    GameObjectType.Dynamic, GameObjectCategory.Player)
-
 third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
 player.add_component(Rigidbody2D("Rigid"))
 player_box_collider = BoxCollider2D("Box")
@@ -151,8 +151,6 @@ ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_to
 # ui_text_helper_component = UITextHelper("UI text helper")
 # ui_text_helper.add_component(ui_text_helper_component)
 
-
-
 earth_scene.add(pet)
 earth_scene.add(ui_text_helper)
 earth_scene.add(ui_text_helper_top_right)
@@ -161,7 +159,6 @@ mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
-scene_manager.set_active_scene(Constants.Scene.EARTH)
 render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
 
 scene_manager.add(Constants.Scene.MARS, mars_scene)
@@ -192,6 +189,7 @@ main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
 death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
+character_selection_menu = scene_loader.initialise_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
 
 initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME,
                 [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
@@ -201,7 +199,8 @@ initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound",
                 [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
                 [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-scene_loader.initialise_level_menu(level_menu_scene)
+initialise_character_selection_menu(character_selection_menu)
+initialise_level_menu(level_menu_scene)
 
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
@@ -224,8 +223,6 @@ map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
 map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
 load_planet_a_enemies(earth_scene,player)
-
-
 
 load_sound(soundManager)
 
@@ -260,7 +257,6 @@ while running:
         screen.fill(background_color)
 
     render_manager.draw()
-
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

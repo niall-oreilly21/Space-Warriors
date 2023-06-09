@@ -41,3 +41,6 @@ class EventActionType:
     LoadLevel = 30
     ResetLevelScene = 31
     TurnSpotLightOff = 32
+    GirlCharacterSelected = 33
+    BoyCharacterSelected = 34
+    CharacterSelectionMenuScene = 35

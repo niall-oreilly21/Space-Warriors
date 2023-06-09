@@ -241,6 +241,14 @@ class Constants:
         __DEATH_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
         MATERIAL_DEATH_MENU = TextureMaterial2D(__DEATH_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
+        __STARS_FRAME_RECT = [pygame.Rect(252, 14, 91, 119), pygame.Rect(154, 14, 91, 119), pygame.Rect(14, 14, 91, 119),
+                              pygame.Rect(154, 14, 91, 119), pygame.Rect(252, 14, 91, 119)]
+        __STARS = Take(ActiveTake.STAR, __STARS_FRAME_RECT)
+        STARS_ANIMATOR_INFO = [__STARS]
+
+        __STARS_SPRITE_SHEET = pygame.image.load("Assets/UI/stars.png")
+        MATERIAL_STARS = TextureMaterial2D(__STARS_SPRITE_SHEET, None, Vector2(0, 0), None)
+
         TITLE_FONT_SIZE = 45
         TITLE_FONT_PATH = "Assets/Fonts/Starjedi.ttf"
 
@@ -252,7 +260,6 @@ class Constants:
         EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
         MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
         SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
-
 
     class Button:
         START_BUTTON = "Start"
@@ -266,6 +273,8 @@ class Constants:
         MUTE_BUTTON = "Mute"
         UNMUTE_BUTTON = "Unmute"
         RESTART_BUTTON = "Restart"
+        GIRL_PLAYER_BUTTON = "GirlPlayer"
+        BOY_PLAYER_BUTTON = "BoyPlayer"
 
     class Scene:
         MAIN_MENU = "MainMenuScene"
@@ -276,6 +285,7 @@ class Constants:
         EARTH = "EarthScene"
         MARS = "MarsScene"
         SATURN = "SaturnScene"
+        CHARACTER_SELECTION_MENU = "CharacterSelectionMenuScene"
 
     class Camera:
         GAME_CAMERA = "GameCamera"
@@ -315,5 +325,5 @@ class Constants:
         COARSE_DIRT = 9
 
     class UITextPrompts:
-        UI_TEXT_BOTTOM = "UI Text Bottom"
-        UI_TEXT_RIGHT = "UI Text Right"
+        UI_TEXT_BOTTOM = "UITextBottom"
+        UI_TEXT_RIGHT = "UITextRight"
