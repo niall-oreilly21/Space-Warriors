@@ -25,7 +25,7 @@ class Constants:
         DEFAULT_HEALTH = 200
         DEFAULT_ATTACK_DAMAGE = 5
 
-        MOVE_SPEED = 0.1
+        MOVE_SPEED = 0.2
         DAMAGE_COOLDOWN = 1
 
         __MOVE_X_Y = 712
@@ -281,10 +281,30 @@ class Constants:
         GAME_CAMERA = "GameCamera"
         MENU_CAMERA = "MenuCamera"
 
+    class Music:
+        MENU_MUSIC = "MenuMusic"
+        BACKGROUND_MUSIC_EARTH = "BackgroundMusicEarth"
+        BACKGROUND_MUSIC_MARS = "BackgroundMusicMars"
+        BACKGROUND_MUSIC_SATURN = "BackgroundMusicSaturn"
+        TELEPORT_SOUND = "TeleportSound"
+        PLAYER_DEATH_SOUND = "PlayerDeathSound"
+        PLAYER_ATTACK_SOUND = "PlayerAttackSound"
+        BUTTON_SOUND = "ButtonSound"
+
+    class MusicFilePath:
+        MENU_MUSIC_FILEPATH = "Assets/Sounds/background_music.mp3"
+        BACKGROUND_MUSIC_EARTH_FILEPATH = "Assets/Sounds/planet_a_music.mp3"
+        BACKGROUND_MUSIC_MARS_FILEPATH = "Assets/Sounds/planet_b_music.wav"
+        BACKGROUND_MUSIC_SATURN_FILEPATH = "Assets/Sounds/planet_c_music.mp3"
+        TELEPORT_SOUND_FILEPATH = "Assets/Sounds/teleport.wav"
+        PLAYER_DEATH_SOUND_FILEPATH = "Assets/Sounds/death.wav"
+        PLAYER_ATTACK_SOUND_FILEPATH = "Assets/Sounds/sword_swish.wav"
+        BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
+
     class Map:
-        PLANET_A_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
-        PLANET_B_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
-        PLANET_C_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
+        PLANET_EARTH_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
+        PLANET_MARS_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
+        PLANET_SATURN_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
 
     class Tile:
         GRASS = 1

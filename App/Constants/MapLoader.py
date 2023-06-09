@@ -5,6 +5,7 @@ from pygame import Vector2
 
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Constants.Constants import Constants
+from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -159,13 +160,15 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 
 
 
+def load_planet_a_enemies(scene, player):
+    enemy = EntityConstants.Enemy.WOLF_ENEMY
+    scene.add(enemy)
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 200))
 
 def load_planet_a_specifics(scene, player):
     starting_pos = Vector2(2900, 4900)
-    player.transform.position = starting_pos
-    scene.add(player)
 
-
+    player.initial_position = starting_pos
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
@@ -221,7 +224,7 @@ def load_planet_a_specifics(scene, player):
 
 def load_planet_b_specifics(scene,player):
     starting_pos = Vector2(3639.8, 4705.6)
-    player.transform.position = starting_pos
+    player.initial_position = starting_pos
     scene.add(player)
 
     # ruin = GameObjectConstants.RUIN_ONE.clone()
@@ -249,7 +252,7 @@ def load_planet_b_specifics(scene,player):
 
 def load_planet_c_specifics(scene, player):
     starting_pos = Vector2(919.8, 6298)
-    player.transform.position = starting_pos
+    player.initial_position = starting_pos
     scene.add(player)
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)

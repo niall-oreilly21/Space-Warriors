@@ -7,8 +7,10 @@ from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu
+from App.Constants.SoundConstants import load_sound
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
@@ -37,25 +39,9 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Other.Transform2D import Transform2D
-from App.Constants.MapLoader import map_load
+from App.Constants.MapLoader import *
 
 
-def load_sound():
-    soundManager.load_sound("BackgroundMusicA", "Assets/Sounds/background_music.mp3")
-    soundManager.load_sound("BackgroundMusicB", "Assets/Sounds/planet_b_music.wav")
-    soundManager.load_sound("BackgroundMusicC", "Assets/Sounds/planet_c_music.mp3")
-    soundManager.load_sound("TeleportSound", "Assets/Sounds/teleport.wav")
-    soundManager.load_sound("DeathMusic", "Assets/Sounds/death.wav")
-    soundManager.load_sound("AttackSound", "Assets/Sounds/sword_swish.wav")
-    soundManager.load_sound("BossMusic", "Assets/Sounds/planet_c_music.mp3")
-    soundManager.load_sound("ButtonSound", "Assets/Sounds/button.wav")
-
-    soundManager.set_sound_volume("backgroundmusica", .05)
-    soundManager.set_sound_volume("backgroundmusicb", .05)
-    soundManager.set_sound_volume("backgroundmusicc", .05)
-    soundManager.set_sound_volume("attacksound", .05)
-    Constants.EVENT_DISPATCHER.dispatch_event(
-        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["backgroundmusica"]))
 
 
 def update(game_time):
@@ -128,41 +114,8 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 10, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
-                  GameObjectType.Dynamic, GameObjectCategory.Rat)
-enemy.add_component(BoxCollider2D("Box-1"))
-enemy.add_component(Rigidbody2D("Rigid"))
-material_enemy = Constants.EnemyRat.MATERIAL_ENEMY1
-enemy.add_component(SpriteRenderer2D("enemy", material_enemy, 0))
-enemy.add_component(SpriteAnimator2D("enemy", Constants.EnemyRat.ENEMY_ANIMATOR_INFO, material_enemy,
-                                     ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-enemy_controller = EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200)
-enemy.add_component(enemy_controller)
-enemy.add_component(WaypointFinder("Waypoint finder", [Vector2(2000, 4500), Vector2(2200, 4500), Vector2(2400, 4500),
-                                                       Vector2(2800, 4500)]))
 
-enemy2 = Character("Enemy2", 50, 2, 1, Transform2D(Vector2(-1000, -1000), 0, Vector2(1.5, 1.5)),
-                   GameObjectType.Dynamic,
-                   GameObjectCategory.Wolf)
-enemy2.add_component(BoxCollider2D("Box-3"))
-enemy2.add_component(Rigidbody2D("Rigid"))
-material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY1
-enemy2.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
-enemy2.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
-                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
-enemy2.add_component(enemy_controller2)
 
-enemy3 = Character("Enemy3", 50, 2, 1, Vector2(1000, -1000), Transform2D(Vector2(1000, -1000), 0, Vector2(1.5, 1.5)),
-                   GameObjectType.Dynamic, GameObjectCategory.Wolf)
-enemy3.add_component(BoxCollider2D("Box-3"))
-# enemy.add_component(Rigidbody2D("Rigid"))
-material_enemy = Constants.EnemyWolf.MATERIAL_ENEMY3
-enemy3.add_component(SpriteRenderer2D("enemy2", material_enemy, 1))
-enemy3.add_component(SpriteAnimator2D("enemy2", Constants.EnemyWolf.ENEMY_ANIMATOR_INFO, material_enemy,
-                                      ActiveTake.ENEMY_WOLF_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-enemy_controller2 = EnemyController("Enemy movement 2", player, Constants.EnemyWolf.MOVE_SPEED, 600)
-enemy3.add_component(enemy_controller2)
 # enemy4 = enemy.clone()
 
 pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
@@ -199,7 +152,7 @@ ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_to
 # ui_text_helper.add_component(ui_text_helper_component)
 
 
-earth_scene.add(enemy)
+
 earth_scene.add(pet)
 earth_scene.add(ui_text_helper)
 earth_scene.add(ui_text_helper_top_right)
@@ -253,7 +206,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
-scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
+scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
@@ -262,15 +215,19 @@ managers.append(game_state_manager)
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 Application.Player = player
+
 Constants.INPUT_HANDLER = InputHandler()
 
-#
 # # Load Map + objects
-map_load(earth_scene, Constants.Map.PLANET_A_JSON, player)
-# map_load(mars_scene, Constants.Map.PLANET_B_JSON)
-# map_load(saturn_scene, Constants.Map.PLANET_C_JSON)
+map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON, player)
+map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
+map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
-load_sound()
+load_planet_a_enemies(earth_scene,player)
+
+
+
+load_sound(soundManager)
 
 for manager in managers:
     manager.start()
@@ -282,22 +239,6 @@ if screen is not None:
 
 render_manager.is_debug_mode = True
 
-# Grid dimensions
-grid_size = 110
-grid_width = 72
-grid_height = 72
-
-
-# Create the grid
-# grid = {}
-# for row in range(grid_size):
-#     for col in range(grid_size):
-#         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
-#         grid[(row, col)] = rect
-
-water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
-
-print("Colliders", len(water_collsion_boxes))
 
 # Main game loop
 running = True
@@ -320,8 +261,6 @@ while running:
 
     render_manager.draw()
 
-    # print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
-    #       ", Attack damage: ", player.attack_damage)
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

@@ -19,10 +19,17 @@ class Character(GameObject, IDamageable, ICloneable):
         self.__damage_cooldown = damage_cooldown
         self.__last_damage_time = 0
         self.__initial_position = initial_position
+        self.__initial_health = health
 
     @property
     def health(self):
         return self.__health
+
+    def reset_health(self):
+        self.__health = self.__initial_health
+
+    def reset_position(self):
+        self.transform.position = self.__initial_position
 
     @health.setter
     def health(self, health):
@@ -67,8 +74,12 @@ class Character(GameObject, IDamageable, ICloneable):
     def initial_position(self):
         return self.__initial_position
 
+    @initial_position.setter
+    def initial_position(self, position):
+        self.__initial_position = position
+
     def clone(self):
-        character = Character(self.name, self.health, self.transform.clone(), self.game_object_type, self.game_object_category)
+        character = Character(self.name, self.health, self.attack_damage, self.damage_cooldown, self.initial_position, self.transform.clone(), self.game_object_type, self.game_object_category)
 
         for component in self._components:
             cloned_component = component.clone()
