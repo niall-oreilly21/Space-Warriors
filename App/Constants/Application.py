@@ -1,7 +1,6 @@
 class Application:
     ActiveScene = None
     LastActiveScene = None
-    LastActiveMusic = None
+    ActiveMusic = None
     ActiveCamera = None
     Player = None
-    CurrentLevel = None
