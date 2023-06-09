@@ -161,7 +161,7 @@ class GameObjectConstants:
 
         POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                               GameObjectType.Static, GameObjectCategory.Environment)
+                               GameObjectType.Static, GameObjectCategory.PowerUp)
         power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         POTION_SPEED.add_component(Renderer2D("Renderer-2", texture_material, layer))
