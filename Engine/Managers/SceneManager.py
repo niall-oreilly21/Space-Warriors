@@ -52,7 +52,9 @@ class SceneManager(Manager):
             self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
+            self.__check_turn_off_spotlight()
             self.__dispatch_menu_events()
+
             Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(Constants.Scene.PAUSE_MENU)
             self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
@@ -106,6 +108,10 @@ class SceneManager(Manager):
             new_active_music = Constants.Music.BACKGROUND_MUSIC_SATURN
 
         self.__play_music(Application.ActiveMusic, new_active_music)
+
+    def __check_turn_off_spotlight(self):
+        if self.__active_scene.name is Constants.Scene.MARS:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOff))
 
     def __set_scenes(self):
         Application.ActiveScene = Application.LastActiveScene

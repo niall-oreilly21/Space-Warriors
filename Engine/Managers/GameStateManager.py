@@ -55,7 +55,6 @@ class GameStateManager(Manager):
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
 
-
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
 
@@ -71,7 +70,7 @@ class GameStateManager(Manager):
             if isinstance(game_object, Character):
                 if game_object is Application.Player:
                     self.__reset_player_position()
-                    
+
                 game_object.reset_position()
                 game_object.reset_health()
 
@@ -95,6 +94,7 @@ class GameStateManager(Manager):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
+        self.__check_turn_on_spotlight()
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
@@ -113,5 +113,9 @@ class GameStateManager(Manager):
 
     def __load_level(self):
         self.__dispatch_events_for_set_up_level()
+
+    def __check_turn_on_spotlight(self):
+        if Application.ActiveScene is Constants.Scene.MARS:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
 
 

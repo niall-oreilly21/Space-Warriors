@@ -44,6 +44,9 @@ class RendererManager(Manager, IDrawable):
         elif event_data.event_action_type == EventActionType.TurnSpotLightOn:
             self.__is_spotlight_on = True
 
+        elif event_data.event_action_type == EventActionType.TurnSpotLightOff:
+            self.__is_spotlight_on = False
+
     def draw(self):
         renderers = self.__scene_manager.active_scene.get_all_components_by_type(Renderer2D)
 
@@ -53,61 +56,32 @@ class RendererManager(Manager, IDrawable):
         camera_component = self.__camera_manager.active_camera
         camera_position = camera_component.transform.position
         viewport = camera_component.viewport
-        masked_surface = pygame.Surface(self.__surface.get_size(), pygame.SRCALPHA)
 
         for renderer in renderers:
             object_position = renderer.transform.position
 
             if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
-                renderer.draw(self.__surface,
-                              Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
+                renderer.draw(self.__surface, Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
             else:
                 object_draw_position = object_position - camera_position
-                # Calculate the object's bounding rect in screen coordinates
-                object_rect = renderer.get_bounding_rect(
-                    Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
 
-                # Check if the object's rect intersects with the camera's viewport
-
-                if self.__is_spotlight_on:
-                    if self.is_within_circle(object_draw_position, (750, 350), 200):
-                        renderer.draw(self.__surface, Transform2D(object_draw_position, renderer.transform.rotation,
-                                                                  renderer.transform.scale))
+                object_rect = renderer.get_bounding_rect(Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
 
                 # else:
                 if self.is_rect_visible(object_rect, viewport):
-                    renderer.draw(self.__surface, Transform2D(object_draw_position, renderer.transform.rotation,
-                                                              renderer.transform.scale))
-
-                    # Create a black surface with the same size as the screen
-                    # overlay = pygame.Surface((1500, 750))
-                    # overlay.fill((0, 0, 0))
-                    #
-                    # # Set the transparency (alpha value) of the overlay
-                    # alpha = 128  # Range: 0 (fully transparent) to 255 (fully opaque)
-                    # overlay.set_alpha(alpha)
-                    # renderer.draw(overlay, Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
-                    # # Apply a dark mask to the game object's surface
-                    # dark_mask = pygame.Surface(renderer.material.texture.get_size(), pygame.SRCALPHA)
-                    # dark_mask.fill((0, 0, 0, 0))
-                    # self.__surface.blit(renderer.material.texture,
-                    #                    (object_draw_position.x, object_draw_position.y),
-                    #                    special_flags=pygame.BLEND_RGBA_MULT)
+                    renderer.draw(self.__surface, Transform2D(object_draw_position, renderer.transform.rotation, renderer.transform.scale))
 
                     if self.__is_debug_mode:
                         self._event_dispatcher.dispatch_event(
-                            EventData(EventCategoryType.CollisionManager, EventActionType.DrawCollisionRange,
-                                      [self.__surface, camera_position]))
+                            EventData(EventCategoryType.CollisionManager, EventActionType.DrawCollisionRange, [self.__surface, camera_position]))
 
                         if renderer.parent.get_component(BoxCollider2D):
                             renderer.parent.get_component(BoxCollider2D).draw(self.__surface, camera_position)
 
-        # Blit the masked game objects onto the game surface
-        # self.__surface.blit(masked_surface, (0, 0))
 
         if self.__is_spotlight_on:
-            self.draw_circle()
+            self.draw_spotlight()
 
     def is_rect_visible(self, rect, viewport):
         # Create a rectangle representing the camera's viewport
@@ -117,22 +91,16 @@ class RendererManager(Manager, IDrawable):
         # Check if the object's rect intersects with or is contained within the camera's viewport
         return rect.colliderect(camera_rect) or camera_rect.contains(rect)
 
-    def is_within_circle(self, position, center, radius):
-        distance_squared = (position[0] + 40 - center[0]) ** 2 + (position[1] - center[1]) ** 2
-        return distance_squared < radius ** 2
-
-    def draw_circle(self):
+    def draw_spotlight(self):
         # Calculate the spotlight circle around the player
-        spotlight_radius = 200  # Adjust the radius of the spotlight as desired
+        spotlight_radius = 200
 
         # Create a mask for the spotlight
         spotlight_surface = pygame.Surface((self.__surface.get_width(), self.__surface.get_height()), pygame.SRCALPHA)
         spotlight_surface.fill((0, 0, 0, 225))
 
-        # draw_position = Application.Player.transform.position - camera_position
         screen_center = Vector2(self.__surface.get_width() / 2 + 10, self.__surface.get_height() / 2 + 40)
 
-        # Calculate the position to blit the spotlight surface on the game surface
         blit_position = screen_center - Vector2(spotlight_radius, spotlight_radius)
 
         light = pygame.image.load("Assets/UI/circle.png")
