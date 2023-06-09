@@ -49,3 +49,4 @@ class EventActionType:
     GirlCharacterSelected = 38
     BoyCharacterSelected = 39
     CharacterSelectionMenuScene = 40
+    ControlsMenuScene = 41

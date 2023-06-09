@@ -256,10 +256,15 @@ class Constants:
         TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
         MENU_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/menu_button.png")
+        BACK_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/back_button.png")
 
         EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
         MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
         SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
+
+        MOVE_CONTROLS_IMAGE = pygame.image.load("Assets/UI/Menu/move_keys.png")
+        ATTACK_CONTROLS_IMAGE = pygame.image.load("Assets/UI/Menu/attack_keys.png")
+        ACTIVATE_CONTROL_IMAGE = pygame.image.load("Assets/UI/Menu/activate_key.png")
 
     class Button:
         START_BUTTON = "Start"
@@ -275,6 +280,9 @@ class Constants:
         RESTART_BUTTON = "Restart"
         GIRL_PLAYER_BUTTON = "GirlPlayer"
         BOY_PLAYER_BUTTON = "BoyPlayer"
+        CONTROLS_BUTTON = "Controls"
+        BACK_BUTTON = "Back"
+        LEVELS_BUTTON = "Levels"
 
     class Scene:
         MAIN_MENU = "MainMenuScene"
@@ -286,6 +294,7 @@ class Constants:
         MARS = "MarsScene"
         SATURN = "SaturnScene"
         CHARACTER_SELECTION_MENU = "CharacterSelectionMenuScene"
+        CONTROLS_MENU = "ControlsMenu"
 
     class Camera:
         GAME_CAMERA = "GameCamera"

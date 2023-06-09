@@ -72,6 +72,15 @@ class ButtonCollider2D(BoxCollider2D):
         elif self._parent.name == Constants.Button.BOY_PLAYER_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                       EventActionType.BoyCharacterSelected))
+        elif self._parent.name == Constants.Button.CONTROLS_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.ControlsMenuScene))
+        elif self._parent.name == Constants.Button.BACK_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.MainMenuScene))
+        elif self._parent.name == Constants.Button.LEVELS_BUTTON:
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                EventActionType.LevelScene))
 
     def __load_event(self):
         load_time = .4

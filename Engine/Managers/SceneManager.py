@@ -97,6 +97,9 @@ class SceneManager(Manager):
             Application.Player.get_component(SpriteAnimator2D).material = Constants.Player.MATERIAL_BOY
             self.__set_menu_scene(Constants.Scene.LEVEL_MENU)
 
+        elif event_data.event_action_type == EventActionType.ControlsMenuScene:
+            self.__set_menu_scene(Constants.Scene.CONTROLS_MENU)
+
     @property
     def active_scene(self):
         return self.__active_scene
