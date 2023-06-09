@@ -128,7 +128,7 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-enemy = Character("Enemy", 70, 100, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
+enemy = Character("Enemy", 70, 10, 1, Vector2(2400, 4500), Transform2D(Vector2(2400, 4500), 0, Vector2(1.5, 1.5)),
                   GameObjectType.Dynamic, GameObjectCategory.Rat)
 enemy.add_component(BoxCollider2D("Box-1"))
 enemy.add_component(Rigidbody2D("Rigid"))

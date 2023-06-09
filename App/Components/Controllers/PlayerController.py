@@ -25,13 +25,13 @@ class PlayerController(Component, IMoveable):
         self.__input_handler = InputHandler()
         self.__speed_x = speed_x
         self.__speed_y = speed_y
-        self.__tap_threshold = 200
+        self.__tap_threshold = 100
         self.__animator = None
         self.__rb = None
         self.__rend = None
         self.__is_moving = False
         self.__is_attacking = False
-        self.__previous_direction = None
+        self.__previous_direction = GameObjectEnums.GameObjectDirection.Down
         self.__box_collider = box_collider
 
     @property
@@ -134,7 +134,6 @@ class PlayerController(Component, IMoveable):
                 self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
 
     def _attack(self):
-
         if self.__previous_direction == GameObjectEnums.GameObjectDirection.Up:
             attack_key = pygame.K_UP
         elif self.__previous_direction == GameObjectEnums.GameObjectDirection.Down:
