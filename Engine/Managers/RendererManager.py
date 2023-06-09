@@ -97,7 +97,7 @@ class RendererManager(Manager, IDrawable):
 
         # Create a mask for the spotlight
         spotlight_surface = pygame.Surface((self.__surface.get_width(), self.__surface.get_height()), pygame.SRCALPHA)
-        spotlight_surface.fill((0, 0, 0, 225))
+        spotlight_surface.fill((0, 0, 0, 175))
 
         screen_center = Vector2(self.__surface.get_width() / 2 + 10, self.__surface.get_height() / 2 + 40)
 
