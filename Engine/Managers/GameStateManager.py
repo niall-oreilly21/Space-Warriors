@@ -50,6 +50,9 @@ class GameStateManager(Manager):
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
 
+        Application.RendererManager.start()
+        Application.RendererManager.is_menu = False
+
         self.__dispatch_events_for_set_up_level()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()

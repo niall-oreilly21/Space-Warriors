@@ -1,11 +1,11 @@
 import pygame
 from pygame import Vector2
 
+from App.Constants.Application import Application
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.InputHandler import InputHandler
 
 
 class Constants:
@@ -17,7 +17,7 @@ class Constants:
     VIEWPORT_WIDTH = 1500
     VIEWPORT_HEIGHT = 750
 
-    CHARACTER_ANIMATOR_MOVE_SPEED = 3
+    CHARACTER_ANIMATOR_MOVE_SPEED = 5
 
     class Player:
         WIDTH = 29
@@ -84,8 +84,8 @@ class Constants:
                                 __PLAYER_IDLE_DOWN, __PLAYER_IDLE_UP, __PLAYER_ATTACK_X, __PLAYER_ATTACK_UP,
                                 __PLAYER_ATTACK_DOWN]
 
-        __GIRL_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_girl.png")
-        __BOY_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_boy.png")
+        __GIRL_SPRITE_SHEET = Application.ImageLoader.get_image(Application.ImageLoader.PLAYER_GIRL)
+        __BOY_SPRITE_SHEET = Application.ImageLoader.get_image(Application.ImageLoader.PLAYER_BOY)
 
         MATERIAL_GIRL = TextureMaterial2D(__GIRL_SPRITE_SHEET, None, Vector2(0, 0), None)
         MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None,  Vector2(0, 0), None)
@@ -116,9 +116,9 @@ class Constants:
 
         ENEMY_ANIMATOR_INFO = [__ENEMY_MOVE_X, __ENEMY_MOVE_DOWN, __ENEMY_MOVE_UP]
 
-        __ENEMY_SPRITE_SHEET_1 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_wolf1.png")
-        __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_wolf2.png")
-        __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_wolf3.png")
+        __ENEMY_SPRITE_SHEET_1 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_WOLF1)
+        __ENEMY_SPRITE_SHEET_2 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_WOLF2)
+        __ENEMY_SPRITE_SHEET_3 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_WOLF3)
 
         MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
         MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
@@ -154,9 +154,9 @@ class Constants:
 
         ENEMY_ANIMATOR_INFO = [__ENEMY_MOVE_X, __ENEMY_MOVE_DOWN, __ENEMY_MOVE_UP]
 
-        __ENEMY_SPRITE_SHEET_1 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_rat1.png")
-        __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_rat2.png")
-        __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_rat3.png")
+        __ENEMY_SPRITE_SHEET_1 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_RAT1)
+        __ENEMY_SPRITE_SHEET_2 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_RAT2)
+        __ENEMY_SPRITE_SHEET_3 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_RAT3)
 
         MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
         MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
@@ -188,9 +188,9 @@ class Constants:
 
         ENEMY_ANIMATOR_INFO = [__ENEMY_MOVE_X, __ENEMY_MOVE_DOWN, __ENEMY_MOVE_UP]
 
-        __ENEMY_SPRITE_SHEET_1 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien1.png")
-        __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien2.png")
-        __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien3.png")
+        __ENEMY_SPRITE_SHEET_1 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_ALIEN1)
+        __ENEMY_SPRITE_SHEET_2 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_ALIEN2)
+        __ENEMY_SPRITE_SHEET_3 = Application.ImageLoader.get_image(Application.ImageLoader.ENEMY_ALIEN3)
 
         MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
         MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
@@ -224,15 +224,15 @@ class Constants:
 
         PET_ANIMATOR_INFO = [__PET_WALK, __PET_SIT, __PET_RUN]
 
-        __PET_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/pet_dog.png")
+        __PET_SPRITE_SHEET = Application.ImageLoader.get_image(Application.ImageLoader.PET_DOG)
 
         MATERIAL_PET = TextureMaterial2D(__PET_SPRITE_SHEET, None, Vector2(0, 0), None)
 
     class Menu:
-        __MAIN_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/main_menu.png")
+        __MAIN_MENU_BACKGROUND = Application.ImageLoader.get_image(Application.ImageLoader.MAIN_MENU_BACKGROUND)
         MATERIAL_MAIN_MENU = TextureMaterial2D(__MAIN_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
-        __PAUSE_MENU_BACKGROUND = pygame.image.load("Assets/UI/Menu/pause_menu.png")
+        __PAUSE_MENU_BACKGROUND = Application.ImageLoader.get_image(Application.ImageLoader.PLAIN_MENU_BACKGROUND)
         MATERIAL_PAUSE_MENU = TextureMaterial2D(__PAUSE_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
         __SOUND_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
@@ -246,7 +246,7 @@ class Constants:
         __STARS = Take(ActiveTake.STAR, __STARS_FRAME_RECT)
         STARS_ANIMATOR_INFO = [__STARS]
 
-        __STARS_SPRITE_SHEET = pygame.image.load("Assets/UI/stars.png")
+        __STARS_SPRITE_SHEET = Application.ImageLoader.get_image(Application.ImageLoader.STARS)
         MATERIAL_STARS = TextureMaterial2D(__STARS_SPRITE_SHEET, None, Vector2(0, 0), None)
 
         TITLE_FONT_SIZE = 45
@@ -255,11 +255,11 @@ class Constants:
         TEXT_FONT_SIZE = 40
         TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
-        MENU_BUTTON_IMAGE = pygame.image.load("Assets/UI/Menu/menu_button.png")
+        MENU_BUTTON_IMAGE = Application.ImageLoader.get_image(Application.ImageLoader.MENU_BUTTON)
 
-        EARTH_IMAGE = pygame.image.load("Assets/UI/Menu/earth.png")
-        MARS_IMAGE = pygame.image.load("Assets/UI/Menu/mars.png")
-        SATURN_IMAGE = pygame.image.load("Assets/UI/Menu/saturn.png")
+        EARTH_IMAGE = Application.ImageLoader.get_image(Application.ImageLoader.EARTH)
+        MARS_IMAGE = Application.ImageLoader.get_image(Application.ImageLoader.MARS)
+        SATURN_IMAGE = Application.ImageLoader.get_image(Application.ImageLoader.SATURN)
 
     class Button:
         START_BUTTON = "Start"

@@ -190,7 +190,7 @@ class RendererManager(Manager, IDrawable):
 
         blit_position = screen_center - Vector2(spotlight_radius, spotlight_radius)
 
-        light = pygame.image.load("Assets/UI/circle.png")
+        light = Application.ImageLoader.get_image(Application.ImageLoader.SPOTLIGHT)
 
         spotlight_surface.blit(light, (blit_position.x, blit_position.y), special_flags=pygame.BLEND_RGBA_SUB)
 
