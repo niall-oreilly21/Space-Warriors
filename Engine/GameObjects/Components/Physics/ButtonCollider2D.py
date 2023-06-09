@@ -53,7 +53,7 @@ class ButtonCollider2D(BoxCollider2D):
                                                                 EventActionType.SetSoundMasterVolume, [0]))
         elif self._parent.name == Constants.Button.UNMUTE_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
-                                                                EventActionType.SetSoundMasterVolume, [0.05]))
+                                                                EventActionType.SetSoundMasterVolume, [0.5]))
         elif self._parent.name == Constants.Button.EARTH_BUTTON:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                 EventActionType.EarthScene))

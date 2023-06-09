@@ -219,9 +219,9 @@ Application.Player = player
 Constants.INPUT_HANDLER = InputHandler()
 
 # # Load Map + objects
-map_load(earth_scene, Constants.Map.PLANET_A_JSON, player)
-map_load(mars_scene, Constants.Map.PLANET_B_JSON, player)
-map_load(saturn_scene, Constants.Map.PLANET_C_JSON, player)
+map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON, player)
+map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
+map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
 load_planet_a_enemies(earth_scene,player)
 
