@@ -43,7 +43,7 @@ def map_load(scene, planet_json,player):
     tileset.add_tile(Tile("CoarseDirt", Constants.Tile.COARSE_DIRT, Vector2(216, 108)))
     tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308,12)))
     tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
-    tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 108)))
+    tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
 
     map_data = []
 
@@ -69,14 +69,13 @@ def map_load(scene, planet_json,player):
         color_tiles(map_data, tile_data, width, height, [200, 40, 40], 220)
     elif scene.name == Constants.Scene.SATURN:
         load_planet_c_specifics(scene,player)
-        color_tiles(map_data, tile_data, width, height, [100,100,100], 200)
+        color_tiles(map_data, tile_data, width, height, [255,255,0], 150)
 
     # Object generation
     for object in object_data:
         if object["x"] < width and object["y"] < height:
             x = object["x"]
             y = object["y"]
-            c_value = object["c"]
             id = object["t"]["id"]
             if id == 5:
                 tree_object = random.choice(
@@ -224,9 +223,9 @@ def load_planet_c_enemies(scene,player):
 
 
 def load_planet_a_specifics(scene, player):
-    starting_pos = Vector2(2900, 4900)
+    starting_pos = Vector2(3050, 4900)
     player.initial_position = starting_pos
-
+    scene.add(player)
     # ruin = GameObjectConstants.RUIN_ONE.clone()
     # ruin.transform.position = Vector2(2000,5000)
     # scene.add(ruin)
@@ -247,7 +246,7 @@ def load_planet_a_specifics(scene, player):
     first_boss_coords = Vector2(6000, 1500)
 
     teleporter = GameObjectConstants.Teleporter.TELEPORTER
-    teleporter.transform.position = Vector2(2500, 4800)
+    teleporter.transform.position = Vector2(2550, 4800)
     scene.add(teleporter)
 
     bridge_x = 6406
@@ -277,7 +276,7 @@ def load_planet_a_specifics(scene, player):
 
 
 def load_planet_b_specifics(scene,player):
-    starting_pos = Vector2(3639.8, 4705.6)
+    starting_pos = Vector2(3200, 4705.6)
     player.initial_position = starting_pos
     scene.add(player)
 
@@ -300,9 +299,9 @@ def load_planet_b_specifics(scene,player):
     planet_b_first_house = Vector2(2200, 2000)
     first_boss_coords = Vector2(6000, 1500)
 
-    # teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-    # teleporter.transform.position = Vector2(2500, 5000)
-    # scene.add(teleporter)
+    teleporter = GameObjectConstants.Teleporter.TELEPORTER
+    teleporter.transform.position = Vector2(3788.2, 4696)
+    scene.add(teleporter)
 
 def load_planet_c_specifics(scene, player):
     starting_pos = Vector2(919.8, 6298)
