@@ -44,7 +44,7 @@ class SoundManager(Manager):
     def play_sound(self, sound_name):
         sound_name = sound_name.lower()
         if sound_name in self.__sounds:
-            self.__sounds[sound_name].play()
+            self.__sounds[sound_name].play(-1)
 
     def stop_sound(self, sound_name):
         sound_name = sound_name.lower()
