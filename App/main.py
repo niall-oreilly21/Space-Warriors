@@ -2,20 +2,52 @@ import os
 import pygame
 from pygame import Vector2
 
+from App.Components.Colliders.PlayerCollider import PlayerCollider
+from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
+from App.Constants.Constants import Constants
+from App.Constants.EntityConstants import EntityConstants
+from App.Constants.GameObjectConstants import GameObjectConstants
+from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
+    initialise_character_selection_menu
+from App.Constants.SoundConstants import load_sound
+from Engine.GameObjects.Character import Character
+from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
+from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
+from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
-from Engine.GameObjects.GameObject import GameObject
-from Engine.Other.Transform2D import Transform2D
-from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
+from Engine.Managers.GameStateManager import GameStateManager
+from Engine.Managers.SoundManager import SoundManager
+from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
+from App.Components.Controllers.PlayerController import PlayerController
+from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
+from Engine.Managers.SceneManager import SceneManager
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
+from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
+from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.Other.Transform2D import Transform2D
+from App.Constants.MapLoader import *
+
+
+
+
+def update(game_time):
+    earth_scene.update(game_time)
+
 
 # Initialize Pygame
 pygame.init()
@@ -32,59 +64,6 @@ screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 screen = pygame.display.set_mode((400, 400))
-
-
-
-def load_images():
-    Application.ImageLoader.load_image(Application.ImageLoader.RUINS)
-    Application.ImageLoader.load_image(Application.ImageLoader.TREES)
-    Application.ImageLoader.load_image(Application.ImageLoader.ROCKS)
-    Application.ImageLoader.load_image(Application.ImageLoader.BUSHES)
-    Application.ImageLoader.load_image(Application.ImageLoader.TILESETS)
-    Application.ImageLoader.load_image(Application.ImageLoader.POTION_SPEED)
-    Application.ImageLoader.load_image(Application.ImageLoader.POTION_DEFENSE)
-    Application.ImageLoader.load_image(Application.ImageLoader.POTION_HEAL)
-    Application.ImageLoader.load_image(Application.ImageLoader.POTION_ATTACK)
-    Application.ImageLoader.load_image(Application.ImageLoader.POTION_RANDOM)
-    Application.ImageLoader.load_image(Application.ImageLoader.HEALTH_BAR)
-    Application.ImageLoader.load_image(Application.ImageLoader.TELEPORTER)
-    Application.ImageLoader.load_image(Application.ImageLoader.PLAYER_GIRL)
-    Application.ImageLoader.load_image(Application.ImageLoader.PLAYER_BOY)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_RAT1)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_RAT2)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_RAT3)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_WOLF1)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_WOLF2)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_WOLF3)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_ALIEN1)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_ALIEN2)
-    Application.ImageLoader.load_image(Application.ImageLoader.ENEMY_ALIEN3)
-    Application.ImageLoader.load_image(Application.ImageLoader.PET_DOG)
-    Application.ImageLoader.load_image(Application.ImageLoader.MAIN_MENU_BACKGROUND)
-    Application.ImageLoader.load_image(Application.ImageLoader.PLAIN_MENU_BACKGROUND)
-    Application.ImageLoader.load_image(Application.ImageLoader.STARS)
-    Application.ImageLoader.load_image(Application.ImageLoader.MENU_BUTTON)
-    Application.ImageLoader.load_image(Application.ImageLoader.EARTH)
-    Application.ImageLoader.load_image(Application.ImageLoader.MARS)
-    Application.ImageLoader.load_image(Application.ImageLoader.SATURN)
-    Application.ImageLoader.load_image(Application.ImageLoader.SPOTLIGHT)
-
-
-load_images()
-
-from App.Components.Colliders.PlayerCollider import PlayerCollider
-from App.Components.Controllers.PetController import PetController
-from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
-    initialise_character_selection_menu
-from App.Constants.SoundConstants import load_sound
-from Engine.Managers.CameraManager import CameraManager
-from Engine.Managers.GameStateManager import GameStateManager
-from Engine.Managers.SoundManager import SoundManager
-from App.Components.Controllers.PlayerController import PlayerController
-from Engine.Managers.RendererManager import RendererManager
-from Engine.Managers.SceneManager import SceneManager
-from App.Constants.MapLoader import *
-
 pygame.display.set_caption(Constants.GAME_NAME)
 
 camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
@@ -135,6 +114,8 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
+
+
 # enemy4 = enemy.clone()
 
 pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
@@ -156,16 +137,14 @@ pet.add_component(pet_collider)
 font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
 
 text_material = TextMaterial2D(font_path, 40, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
-ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
-                            GameObjectType.Static,
+ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                             GameObjectCategory.UIPrompts)
-image = Application.ImageLoader.get_image(Application.ImageLoader.MENU_BUTTON)
+image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
 
 text_material_top_right = TextMaterial2D(font_path, 30, "", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
                                          (255, 255, 255))
-ui_text_helper_top_right = GameObject(Constants.UITextPrompts.UI_TEXT_RIGHT,
-                                      Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
+ui_text_helper_top_right = GameObject(Constants.UITextPrompts.UI_TEXT_RIGHT, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
                                       GameObjectType.Static, GameObjectCategory.UIPrompts)
 ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_top_right, RendererLayers.UI))
 
@@ -180,7 +159,7 @@ mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
-render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER)
+render_manager = RendererManager(screen, scene_manager, camera_manager, Constants.EVENT_DISPATCHER)
 
 scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
@@ -200,8 +179,7 @@ managers.append(scene_manager)
 
 game_time = GameTime()
 
-collider_system = CollisionManager(pygame.Rect(0, 0, 110 * 72, 120 * 72), player, 400, 400, 4,
-                                   Constants.EVENT_DISPATCHER)
+collider_system = CollisionManager(pygame.Rect(0, 0, 110 * 72, 120 * 72), player, 400, 400, 4, Constants.EVENT_DISPATCHER)
 managers.append(collider_system)
 
 scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_manager)
@@ -244,7 +222,7 @@ map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON, player)
 map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
 map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
-load_planet_a_enemies(earth_scene, player)
+load_planet_a_enemies(earth_scene,player)
 
 load_sound(soundManager)
 
@@ -258,7 +236,6 @@ if screen is not None:
 
 render_manager.is_debug_mode = True
 
-Application.RendererManager = render_manager
 
 # Main game loop
 running = True
@@ -286,9 +263,5 @@ while running:
 
     pygame.display.update()
     game_time.limit_fps(60)
-
-    elapsed_time = game_time.elapsed_time
-    fps = game_time.fps()
-    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
 pygame.quit()

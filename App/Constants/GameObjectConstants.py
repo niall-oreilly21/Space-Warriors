@@ -4,7 +4,7 @@ import pygame
 from pygame import Vector2
 
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
-from App.Constants.Application import Application
+from App.Components.Controllers.HealthBarController import HealthBarController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.PowerUp import PowerUp
@@ -19,11 +19,11 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 from Engine.Other.Transform2D import Transform2D
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
-image = Application.ImageLoader.get_image(Application.ImageLoader.TREES)
-ruins_image = Application.ImageLoader.get_image(Application.ImageLoader.RUINS)
-rocks_image = Application.ImageLoader.get_image(Application.ImageLoader.ROCKS)
-bushes_image = Application.ImageLoader.get_image(Application.ImageLoader.BUSHES)
-image2 = Application.ImageLoader.get_image(Application.ImageLoader.TILESETS)
+image = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset.png")
+ruins_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Assets_source.png")
+rocks_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Rocks_source.png")
+bushes_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Bushes_source.png")
+image2 = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset2.png")
 
 
 class GameObjectConstants:
@@ -162,31 +162,31 @@ class GameObjectConstants:
         POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
                                GameObjectType.Static, GameObjectCategory.PowerUp)
-        power_up_image = Application.ImageLoader.get_image(Application.ImageLoader.POTION_SPEED)
+        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         POTION_SPEED.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
         POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = Application.ImageLoader.get_image(Application.ImageLoader.POTION_ATTACK)
+        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_attack.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         POTION_ATTACK.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
         POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = Application.ImageLoader.get_image(Application.ImageLoader.POTION_DEFENSE)
+        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_defense.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         POTION_DEFENSE.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
         POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = Application.ImageLoader.get_image(Application.ImageLoader.POTION_HEAL)
+        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_heal.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         POTION_HEAL.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
         RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = Application.ImageLoader.get_image(Application.ImageLoader.POTION_RANDOM)
+        power_up_image = pygame.image.load("Assets/UI/PowerUps/random.png")
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
@@ -197,7 +197,7 @@ class GameObjectConstants:
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
                                 GameObjectCategory.UI)
 
-        __HEALTH_BAR_IMAGE = Application.ImageLoader.get_image(Application.ImageLoader.HEALTH_BAR)
+        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
         __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
 
@@ -242,7 +242,7 @@ class GameObjectConstants:
 
         TELEPORTER_ANIMATION_INFO = [__TELEPORTER, __TELEPORTER_IDLE]
 
-        __TELEPORTER_SPRITE_SHEET = Application.ImageLoader.get_image(Application.ImageLoader.TELEPORTER)
+        __TELEPORTER_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/teleporter.png")
 
         MATERIAL_TELEPORTER = TextureMaterial2D(__TELEPORTER_SPRITE_SHEET, None, Vector2(0, 0), None)
 
