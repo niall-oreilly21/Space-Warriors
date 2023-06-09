@@ -206,7 +206,7 @@ scene_loader.initialise_level_menu(level_menu_scene)
 # scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
 
 # scene_manager.add(Constants.Scene.MAIN_MENU, scene)
-scene_manager.set_active_scene(Constants.Scene.LEVEL_MENU)
+scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 # initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
@@ -239,22 +239,6 @@ if screen is not None:
 
 render_manager.is_debug_mode = True
 
-# Grid dimensions
-grid_size = 110
-grid_width = 72
-grid_height = 72
-
-
-# Create the grid
-# grid = {}
-# for row in range(grid_size):
-#     for col in range(grid_size):
-#         rect = pygame.Rect(col * grid_width, row * grid_height, grid_width, grid_height)
-#         grid[(row, col)] = rect
-
-water_collsion_boxes = earth_scene.get_all_components_by_type(BoxCollider2D)
-
-print("Colliders", len(water_collsion_boxes))
 
 # Main game loop
 running = True
@@ -277,8 +261,6 @@ while running:
 
     render_manager.draw()
 
-    # print("Speed: ", player.get_component(PlayerController).speed, ", Damage cooldown: ", player.damage_cooldown,
-    #       ", Attack damage: ", player.attack_damage)
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()

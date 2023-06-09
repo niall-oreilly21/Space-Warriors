@@ -17,7 +17,10 @@ from Engine.Other.Transform2D import Transform2D
 
 class EntityConstants:
 
-
+    class Player:
+        PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
+        PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
+        PLAYER_INITIAL_POSITION_SATURN = Vector2(920, 6300)
     class Enemy:
 
         WOLF_ENEMY_NAME = "wolf enemy"

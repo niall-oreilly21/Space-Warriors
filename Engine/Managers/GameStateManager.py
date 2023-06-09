@@ -3,6 +3,7 @@ from pygame import Vector2
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from App.Constants.EntityConstants import EntityConstants
 from Engine.GameObjects.Character import Character
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -68,8 +69,22 @@ class GameStateManager(Manager):
 
         for game_object in dynamic_game_object_list:
             if isinstance(game_object, Character):
+                if game_object is Application.Player:
+                    self.__reset_player_position()
+                    
                 game_object.reset_position()
                 game_object.reset_health()
+
+    def __reset_player_position(self):
+        if Application.ActiveScene.name is Constants.Scene.EARTH:
+            Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_EARTH
+
+        if Application.ActiveScene.name is Constants.Scene.MARS:
+            Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_MARS
+
+        if Application.ActiveScene.name is Constants.Scene.SATURN:
+            Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
+
 
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
