@@ -1,8 +1,10 @@
 import json
 import random
 
+import pygame
 from pygame import Vector2
 
+from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
@@ -12,9 +14,13 @@ from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.Gun.Bullet import Bullet
+from Engine.GameObjects.Gun.Gun import Gun
+from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
+from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -164,7 +170,7 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 
 def load_planet_a_enemies(scene, player):
     enemy = EntityConstants.Enemy.RAT_ENEMY
-    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 200))
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 400))
     scene.add(enemy)
 
     enemy2 = enemy.clone()
@@ -191,7 +197,7 @@ def load_planet_a_enemies(scene, player):
 
 def load_planet_b_enemies(scene,player):
     enemy = EntityConstants.Enemy.WOLF_ENEMY
-    enemy.add_component(ZapEnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 200, 1, 1))
+    enemy.add_component(ZapEnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
     scene.add(enemy)
 
     enemy2 = enemy.clone()
@@ -201,9 +207,21 @@ def load_planet_b_enemies(scene,player):
 
 
 def load_planet_c_enemies(scene,player):
+    gun = GameObjectConstants.Gun.Gun
+    scene.add(gun)
     enemy = EntityConstants.Enemy.ALIEN_ENEMY
-    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 200))
+    enemy.add_component(BossEnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+    scene.add(gun)
     scene.add(enemy)
+
+    enemy2 = enemy.clone()
+    enemy2.get_component(WaypointFinder).waypoints = [Vector2(2550, 3500), Vector2(3000, 3000),
+                                                      Vector2(2800, 3100), Vector2(3000, 2800)]
+    scene.add(enemy2)
+
+    # Boss?
+
+
 
 def load_planet_a_specifics(scene, player):
     starting_pos = Vector2(2900, 4900)

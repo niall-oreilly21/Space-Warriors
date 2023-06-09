@@ -18,6 +18,9 @@ class BulletController(Component):
         self.__total_elapsed_time = 0
 
     def start(self):
+        Constants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                      [Constants.Music.BULLET_SOUND, None]))
         self.__rb = self._parent.get_component(Rigidbody2D)
 
     def update(self, game_time):

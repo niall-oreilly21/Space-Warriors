@@ -1,8 +1,8 @@
 from App.Components.Controllers.EnemyController import EnemyController
 
 class BossEnemyController(EnemyController):
-    def __init__(self, name, target_object, speed, min_distance_to_target, min_distance_to_stop_firing, gun):
-        super().__init__(name, target_object, speed, min_distance_to_target)
+    def __init__(self, name, target, speed, min_distance_to_target, min_distance_to_stop_firing, gun):
+        super().__init__(name, target, speed, min_distance_to_target)
         self._gun = gun
         self.__min_distance_to_stop_firing = min_distance_to_stop_firing
 
@@ -20,4 +20,4 @@ class BossEnemyController(EnemyController):
 
 
     def clone(self):
-        return BossEnemyController(self.name, self.__target_object, self.__speed, self._min_distance_to_target, self.__min_distance_to_stop_firing, self._gun)
+        return BossEnemyController(self.name, self._target, self._speed, self._min_distance_to_target, self.__min_distance_to_stop_firing, self._gun)
