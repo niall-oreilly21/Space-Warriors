@@ -25,7 +25,6 @@ class Scene:
         self.__game_object_list[game_object.game_object_type][game_object.game_object_category].append(game_object)
 
     def _dispatch_quad_tree_events(self, game_object):
-        print(game_object.name)
         if game_object.get_component(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))

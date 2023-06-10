@@ -54,6 +54,9 @@ class Material2D(ICloneable, ABC):
         self._flip_y = flip_y
 
     def _rotate_surface(self, surface, rotation):
+        if rotation == 0:
+            return surface
+
         return pygame.transform.rotate(surface, rotation)
 
     @abstractmethod

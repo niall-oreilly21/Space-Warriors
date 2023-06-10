@@ -91,6 +91,7 @@ class RendererManager(QuadTreeManager, IDrawable):
 
         self.__text_renderers.sort(key=lambda renderer: renderer.layer)
 
+
     def __calculate_draw_position(self, renderer):
         material_source_rect = renderer.material.source_rect
 
@@ -120,67 +121,6 @@ class RendererManager(QuadTreeManager, IDrawable):
 
         else:
             self.__draw_game()
-
-
-    def _batch_blit_tiles(self, renderers):
-        if not renderers:
-            return
-
-        renderer = renderers[0]
-        texture = renderer.material.texture
-        transform = renderer.parent.transform
-        source_rect = None
-        if isinstance(renderer, SpriteRenderer2D):
-            source_rect = renderer.sprite.source_rect
-
-        texture_surface = pygame.Surface(source_rect.size, pygame.SRCALPHA)
-        scaled_texture = pygame.transform.scale(texture, (transform.scale.x, transform.scale.y))
-        texture_surface.blit(texture, (0, 0), source_rect)
-        texture_surface.set_alpha(255)
-        rotated_surface = pygame.transform.rotate(texture_surface, transform.rotation)
-        scaled_surface = pygame.transform.scale(rotated_surface,
-                                                (int(rotated_surface.get_width() * transform.scale.x),
-                                                 int(rotated_surface.get_height() * transform.scale.y)))
-
-
-        for renderer in renderers:
-            position_to_render = renderer.parent.transform.position - self.__camera_position
-            position = (
-                int(position_to_render.x - scaled_texture.get_width() / 2),
-                int(position_to_render.y - scaled_texture.get_height() / 2)
-            )
-
-            # Blit the scaled and rotated surface onto the main surface
-            self.__surface.blit(scaled_surface, position)
-
-    def render_batch(self, batch_renderer):
-        renderer = batch_renderer[0]
-        texture_surface = pygame.Surface(renderer.material.source_rect.size, pygame.SRCALPHA)
-        texture = batch_renderer[0].material.texture
-
-        transform = batch_renderer[0].parent.transform
-
-        rotated_surface = pygame.transform.rotate(texture_surface, transform.rotation)
-
-        scaled_surface = pygame.transform.scale(rotated_surface,
-                                                (int(rotated_surface.get_width() * transform.scale.x),
-                                                 int(rotated_surface.get_height() * transform.scale.y)))
-
-        for renderer in batch_renderer:
-            texture_surface.blit(texture, (0, 0), renderer.material.source_rect)
-            self._blits(self.__surface, scaled_surface, renderer.parent.transform, renderer.material.source_rect)
-
-    def _blits(self, surface, material_surface, transform, source_rect):
-        material_surface.set_alpha(255)
-        surface.blit(self._transform_material(material_surface, transform, source_rect)[0],
-                     self._transform_material(material_surface, transform, source_rect)[1])
-
-    def _transform_material(self, surface, transform, source_rect):
-        position = (
-            int(transform.position.x - surface.get_width() / 2 + source_rect.width / 2 * transform.scale.x),
-            int(transform.position.y -surface.get_height() / 2 + source_rect.height / 2 * transform.scale.y))
-
-        return surface, position
 
 
     def __draw_game(self):
@@ -215,9 +155,7 @@ class RendererManager(QuadTreeManager, IDrawable):
 
         for renderer in renderers:
             object_position = renderer.transform.position
-
-            if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
-                renderer.draw(self.__surface, Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
+            renderer.draw(self.__surface, Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
 
     def is_rect_visible(self, rect, viewport):

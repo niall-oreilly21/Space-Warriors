@@ -238,6 +238,10 @@ while running:
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()
 
+    # elapsed_time = game_time.elapsed_time
+    # fps = game_time.fps()
+    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+
     pygame.display.update()
     game_time.limit_fps(60)
 
