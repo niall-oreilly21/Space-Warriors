@@ -14,15 +14,17 @@ class BulletCollider(Collider):
 
     def handle_response(self, colliding_game_object):
 
-        if colliding_game_object.game_object_category is GameObjectCategory.Enemy or colliding_game_object.game_object_category is GameObjectCategory.Bullet:
+        if colliding_game_object.game_object_category is GameObjectCategory.Alien or \
+                colliding_game_object.game_object_category is GameObjectCategory.Rat or \
+                colliding_game_object.game_object_category is GameObjectCategory.Wolf or \
+                colliding_game_object.game_object_category is GameObjectCategory.Bullet:
             return
 
         if isinstance(colliding_game_object, IDamageable):
             colliding_game_object.damage(self._parent.bullet_damage)
 
         if Application.ActiveScene.contains(self._parent):
-             Application.ActiveScene.remove(self._parent)
-
+            Application.ActiveScene.remove(self._parent)
 
     def clone(self):
         return BulletCollider(self.name)
