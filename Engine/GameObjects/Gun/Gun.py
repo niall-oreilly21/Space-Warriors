@@ -25,7 +25,7 @@ class Gun(GameObject):
 
         self.__elapsed_time += game_time.elapsed_time
 
-        if self.__elapsed_time >= 1500:
+        if self.__elapsed_time >= 3000:
             self.__can_fire = True
             self.__elapsed_time = 0
 
@@ -38,12 +38,11 @@ class Gun(GameObject):
 
     def __create_bullet(self):
         bullet = self.__bullet_prefab.clone()
-        Application.ActiveScene.add(bullet)
         bullet.transform.position = self.transform.position
         return bullet
 
     def clone(self):
-        gun = Gun(self.name, self.__bullet_prefab, self.__fire_rate, self.__colors)
+        gun = Gun(self.name, self.__bullet_prefab.clone(), self.__fire_rate, self.__colors, self.transform.clone(), self.game_object_type, self.game_object_category)
 
         for component in self._components:
             cloned_component = component.clone()

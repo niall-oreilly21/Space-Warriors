@@ -5,8 +5,6 @@ from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.InputHandler import InputHandler
-
 
 class Constants:
     GAME_NAME = "Space Warriors"
@@ -22,7 +20,7 @@ class Constants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 200
+        DEFAULT_HEALTH = 4000
         DEFAULT_ATTACK_DAMAGE = 5
 
         MOVE_SPEED = 0.2
@@ -125,7 +123,7 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class EnemyRat:
-        MOVE_SPEED = 3
+        MOVE_SPEED = 2
 
         __MOVE_X_Y = 715
         __MOVE_X_HEIGHT = 51
@@ -163,7 +161,7 @@ class Constants:
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None,  Vector2(0, 0), None)
 
     class EnemyAlien:
-        MOVE_SPEED = 1.5
+        MOVE_SPEED = 6
 
         __ENEMY_MOVE_X_FRAME_RECTS = [
             pygame.Rect(84, 721, 35, 45), pygame.Rect(149, 720, 36, 45), pygame.Rect(211, 720, 36, 45),
@@ -305,8 +303,12 @@ class Constants:
         BACKGROUND_MUSIC_EARTH = "BackgroundMusicEarth"
         BACKGROUND_MUSIC_MARS = "BackgroundMusicMars"
         BACKGROUND_MUSIC_SATURN = "BackgroundMusicSaturn"
+        BULLET_SOUND = "BulletSound"
+        ZAP_SOUND = "ZapSound"
         TELEPORT_SOUND = "TeleportSound"
         PLAYER_DEATH_SOUND = "PlayerDeathSound"
+        ENEMY_DEATH_SOUND = "EnemyDeathSound"
+        POTION_DRINK_SOUND = "PotionDrinkSound"
         PLAYER_ATTACK_SOUND = "PlayerAttackSound"
         BUTTON_SOUND = "ButtonSound"
 
@@ -315,8 +317,12 @@ class Constants:
         BACKGROUND_MUSIC_EARTH_FILEPATH = "Assets/Sounds/planet_a_music.mp3"
         BACKGROUND_MUSIC_MARS_FILEPATH = "Assets/Sounds/planet_b_music.wav"
         BACKGROUND_MUSIC_SATURN_FILEPATH = "Assets/Sounds/planet_c_music.mp3"
+        BULLET_SOUND_FILEPATH = "Assets/Sounds/gun.wav"
+        ZAP_SOUND_FILEPATH = "Assets/Sounds/zap.wav"
         TELEPORT_SOUND_FILEPATH = "Assets/Sounds/teleport.wav"
         PLAYER_DEATH_SOUND_FILEPATH = "Assets/Sounds/death.wav"
+        ENEMY_DEATH_SOUND_FILEPATH ="Assets/Sounds/enemy_death.wav"
+        POTION_DRINK_SOUND_FILEPATH ="Assets/Sounds/potion.wav"
         PLAYER_ATTACK_SOUND_FILEPATH = "Assets/Sounds/sword_swish.wav"
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 

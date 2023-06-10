@@ -102,6 +102,9 @@ class PlayerCollider(Collider):
             if colliding_game_object.health == 0:
                 print("Enemy dead")
                 Application.ActiveScene.remove(colliding_game_object)
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                              [Constants.Music.ENEMY_DEATH_SOUND]))
 
         # Player and power up collide
         if isinstance(colliding_game_object, PowerUp):
@@ -162,6 +165,9 @@ class PlayerCollider(Collider):
 
     def handle_power_up_selected(self, player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
         if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                          [Constants.Music.POTION_DRINK_SOUND, None]))
             if power_up_type == PowerUpType.Heal:
                 player.health += colliding_game_object.power_up_value
                 self.show_text(colliding_game_object, PowerUpType.Heal)

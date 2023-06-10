@@ -4,3 +4,4 @@ class Application:
     ActiveMusic = None
     ActiveCamera = None
     Player = None
+    GameStarted = False
