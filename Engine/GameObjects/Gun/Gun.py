@@ -11,10 +11,10 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 
 
 class Gun(GameObject):
-    def __init__(self, name, bullet_prefab, fire_rate, colors, transform=None, game_object_type=GameObjectType.Dynamic, game_object_category=GameObjectCategory.Gun):
+    def __init__(self, name, bullet_prefab, fire_rate_per_sec, colors, transform=None, game_object_type=GameObjectType.Dynamic, game_object_category=GameObjectCategory.Gun):
         super().__init__(name, transform, game_object_type, game_object_category)
         self.__bullet_prefab = bullet_prefab
-        self.__fire_rate = fire_rate
+        self.__fire_rate_per_sec = fire_rate_per_sec * 1000
         self.__can_fire = True
         self.__colors = colors
         self.__elapsed_time = 0
@@ -25,7 +25,7 @@ class Gun(GameObject):
 
         self.__elapsed_time += game_time.elapsed_time
 
-        if self.__elapsed_time >= 3000:
+        if self.__elapsed_time >= self.__fire_rate_per_sec:
             self.__can_fire = True
             self.__elapsed_time = 0
 
@@ -42,7 +42,7 @@ class Gun(GameObject):
         return bullet
 
     def clone(self):
-        gun = Gun(self.name, self.__bullet_prefab.clone(), self.__fire_rate, self.__colors, self.transform.clone(), self.game_object_type, self.game_object_category)
+        gun = Gun(self.name, self.__bullet_prefab.clone(), self.__fire_rate_per_sec , self.__colors, self.transform.clone(), self.game_object_type, self.game_object_category)
 
         for component in self._components:
             cloned_component = component.clone()

@@ -50,3 +50,4 @@ class EventActionType:
     BoyCharacterSelected = 39
     CharacterSelectionMenuScene = 40
     ControlsMenuScene = 41
+    SetRendererQuadTreeTarget = 44

@@ -1,12 +1,18 @@
+import pygame
 from pygame import Vector2
 
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.GameObject import GameObject
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
+from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -18,8 +24,8 @@ from Engine.Other.Transform2D import Transform2D
 class EntityConstants:
     class Player:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
-        PLAYER_INITIAL_POSITION_MARS = Vector2(3200, 4705.6)
-        PLAYER_INITIAL_POSITION_SATURN = Vector2(2380.2, 4927.2)
+        PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
+        PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
 
     class Enemy:
         WOLF_ENEMY_NAME = "wolf enemy"
@@ -45,14 +51,16 @@ class EntityConstants:
                                  ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED)),
 
         }
+        #
 
-        enemy = Character("Enemy", 70, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
-                          GameObjectType.Dynamic, GameObjectCategory.Entity)
+        enemy = Character("Enemy", 20, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
+                          GameObjectType.Dynamic, GameObjectCategory.Rat)
         enemy.add_component(BoxCollider2D("Box-1"))
         enemy.add_component(Rigidbody2D("Rigid"))
         enemy.add_component(WaypointFinder("Waypoint finder",
                                            [Vector2(2000, 4500), Vector2(2200, 4500), Vector2(2400, 4500),
                                             Vector2(2800, 4500)]))
+
 
         RAT_ENEMY = enemy.clone()
 

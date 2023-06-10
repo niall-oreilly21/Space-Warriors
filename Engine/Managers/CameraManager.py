@@ -18,7 +18,6 @@ class CameraManager(Manager):
         self.__active_camera = None
         self.__active_game_object = None
         self.__cameras = {}
-        self.__needs_redraw = True
         self.__sceneManager = sceneManager
         self.player_is_moving = False
 
@@ -93,10 +92,10 @@ class CameraManager(Manager):
 
     def __set_viewport(self):
         self.__screen = pygame.display.set_mode((self.__active_camera.viewport.x, self.__active_camera.viewport.y))
-        self.__needs_redraw = True
 
     def start(self):
-        self.__active_game_object.start()
+        for camera in self.__cameras:
+            self.__cameras[camera].start()
 
     def update(self, game_time):
         self.__active_game_object.update(game_time)

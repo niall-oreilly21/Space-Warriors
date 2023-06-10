@@ -32,9 +32,10 @@ class Scene:
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
 
-        if game_object.get_component(Renderer2D):
+        for renderer in game_object.get_components(Renderer2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree, [game_object.get_component(Renderer2D)]))
+                EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree,
+                          [renderer]))
 
     def __dispatch_quad_tree_add_events(self, game_object):
         if game_object.get_component(BoxCollider2D):
@@ -42,10 +43,10 @@ class Scene:
                 EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree,
                           [game_object.get_component(BoxCollider2D)]))
 
-        if game_object.get_component(Renderer2D):
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.RendererManager, EventActionType.AddRendererToQuadTree,
-                          [game_object.get_component(Renderer2D)]))
+            for renderer in game_object.get_components(Renderer2D):
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.RendererManager, EventActionType.AddRendererToQuadTree,
+                              [renderer]))
 
 
     def remove(self, game_object):

@@ -51,6 +51,10 @@ class GameObject(ICloneable):
     def game_object_category(self, game_object_category):
         self.__game_object_category = game_object_category
 
+    @property
+    def components(self):
+        return self._components
+
     def get_components(self, component_type):
         components = []
         for component in self._components:

@@ -39,11 +39,12 @@ class TeleporterCollider(Collider):
             if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                 if Application.ActiveScene.contains(Application.Player):
                     Application.ActiveScene.remove(Application.Player)
+                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
                 Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
                 self.__animator.set_active_take(ActiveTake.TELEPORT)
 
     def clone(self):
-        return TeleporterCollider(self._name)
+        return TeleporterCollider(self.name)
 
 
 

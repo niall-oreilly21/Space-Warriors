@@ -18,6 +18,7 @@ class RectMaterial2D(Material2D):
     @width.setter
     def width(self, width):
         self.__width = width
+
     @property
     def source_rect(self):
         return pygame.Rect(0, 0, self.__width, self.__height)

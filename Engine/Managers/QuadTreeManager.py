@@ -19,7 +19,7 @@ class QuadTreeManager(Manager,  ABC):
         self._collision_range_target = collision_range_target
         self._quad_tree = None
         self.__component_type = component_type
-        self.__collision_range_target_box_collider = None
+        self._collision_range_target_box_collider = None
 
     @property
     def collision_range(self):
@@ -33,7 +33,7 @@ class QuadTreeManager(Manager,  ABC):
     def _set_up_component_list_and_quad_tree(self):
         self._components = Application.ActiveScene.get_all_components_by_type(self.__component_type)
         self._quad_tree = QuadTree(self.__map_dimensions, self.__quad_tree_capacity)
-        self.__collision_range_target_box_collider = self._collision_range_target.get_component(BoxCollider2D)
+        self._collision_range_target_box_collider = self._collision_range_target.get_component(BoxCollider2D)
 
     def __insert_into_quad_tree(self):
         for component in self._components:
@@ -50,13 +50,9 @@ class QuadTreeManager(Manager,  ABC):
     def update(self, game_time):
         self._update_quad_tree()
 
-
-
     def _update_quad_tree(self):
         self.__update_collision_range()
         self._update_dynamic_game_objects_in_quad_tree()
-
-
 
     def _get_potential_components(self):
         return self._quad_tree.query(self._collision_range.bounds)
@@ -68,8 +64,8 @@ class QuadTreeManager(Manager,  ABC):
             self._quad_tree.insert(game_object_component)
 
     def __update_collision_range(self):
-        self._collision_range.x = self.__collision_range_target_box_collider.bounds.centerx - self._collision_range.width / 2
-        self._collision_range.y = self.__collision_range_target_box_collider.bounds.centery - self._collision_range.height / 2
+        self._collision_range.x = self._collision_range_target_box_collider.bounds.centerx - self._collision_range.width / 2
+        self._collision_range.y = self._collision_range_target_box_collider.bounds.centery - self._collision_range.height / 2
 
 
     def _add_component(self, component):

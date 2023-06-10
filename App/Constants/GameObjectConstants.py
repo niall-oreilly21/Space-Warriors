@@ -6,6 +6,7 @@ from pygame import Vector2
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants import Constants
+from App.Constants.Application import Application
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
@@ -31,13 +32,11 @@ image2 = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset2.png")
 
 
 class GameObjectConstants:
-
-
     class Foliage:
         layer = RendererLayers.WorldObjects
         tree_layer = RendererLayers.AbovePlayer
 
-        source_rect =  pygame.Rect(179, 98, 27, 60)
+        source_rect = pygame.Rect(179, 98, 27, 60)
 
         TALL_TREE = GameObject("Tree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                                GameObjectCategory.Environment)
@@ -53,7 +52,7 @@ class GameObjectConstants:
         LOW_TREE = GameObject("LowTree", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                               GameObjectCategory.Player)
 
-        source_rect =  pygame.Rect(177, 65, 30, 30)
+        source_rect = pygame.Rect(177, 65, 30, 30)
         texture_surface = pygame.Surface(source_rect.size, pygame.SRCALPHA)
         texture_surface.blit(image, (0, 0), source_rect)
 
@@ -92,7 +91,7 @@ class GameObjectConstants:
         DEAD_BUSH.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
         CACTUS = GameObject("Cactus", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                               GameObjectCategory.Player)
+                            GameObjectCategory.Player)
         object_frame = bushes_image.subsurface(pygame.Rect(393, 10, 31, 31))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         CACTUS.add_component(Renderer2D("Renderer-2", texture_material, layer))
@@ -108,8 +107,6 @@ class GameObjectConstants:
         object_frame = image2.subsurface(pygame.Rect(156, 132, 11, 12))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         LILYPAD_TWO.add_component(Renderer2D("Renderer-2", texture_material, layer))
-
-
 
     class NaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
@@ -134,11 +131,11 @@ class GameObjectConstants:
         ROCK_ONE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         # ROCK_ONE.add_component(BoxCollider2D("Box-3"))
 
-        ROCK_TWO = GameObject("RockTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                              GameObjectCategory.Player)
-        object_frame = rocks_image.subsurface(pygame.Rect(67, 2, 58, 57))
-        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
-        ROCK_TWO.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        # ROCK_TWO = GameObject("RockTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+        #                       GameObjectCategory.Player)
+        # object_frame = rocks_image.subsurface(pygame.Rect(67, 2, 58, 57))
+        # texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        # ROCK_TWO.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         # ROCK_TWO.add_component(BoxCollider2D("Box-3"))
 
         ROCK_THREE = GameObject("RockThree", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
@@ -181,7 +178,7 @@ class GameObjectConstants:
         # Mars Ruins
 
         RUIN_FOUR = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                                GameObjectCategory.Player)
+                               GameObjectCategory.Player)
         object_frame = ruins_image.subsurface(pygame.Rect(388, 168, 54, 48))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_FOUR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
@@ -195,28 +192,28 @@ class GameObjectConstants:
         RUIN_FIVE.add_component(BoxCollider2D("Box-3"))
 
         RUIN_SIX = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                               GameObjectCategory.Player)
+                              GameObjectCategory.Player)
         object_frame = ruins_image.subsurface(pygame.Rect(91, 295, 99, 96))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_SIX.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         RUIN_SIX.add_component(BoxCollider2D("Box-3"))
 
-        #Saturn Ruins
+        # Saturn Ruins
 
         RUIN_SEVEN = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                              GameObjectCategory.Player)
+                                GameObjectCategory.Player)
         object_frame = ruins_image.subsurface(pygame.Rect(4, 3, 53, 57))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_SEVEN.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
         RUIN_EIGHT = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                                 GameObjectCategory.Player)
-        object_frame = ruins_image.subsurface(pygame.Rect(296,199, 82, 81))
+        object_frame = ruins_image.subsurface(pygame.Rect(296, 199, 82, 81))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_EIGHT.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
         RUIN_NINE = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-                                GameObjectCategory.Player)
+                               GameObjectCategory.Player)
         object_frame = ruins_image.subsurface(pygame.Rect(3, 368, 69, 64))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_NINE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
@@ -269,7 +266,6 @@ class GameObjectConstants:
         texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
         RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
-
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
 
@@ -277,9 +273,7 @@ class GameObjectConstants:
 
         colors = [None]
         bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
-        Gun = Gun("Gun", bullet_prefab, 0, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
-
-
+        Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
     class HealthBar:
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
@@ -292,14 +286,54 @@ class GameObjectConstants:
         __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(135, 63))
         __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
 
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-                       RendererLayers.UIBackground))
-        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #HEALTH_BAR.add_component(HealthBarController("Health Bar Controller"))
+        # HEALTH_BAR.add_component(
+        #     Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        # HEALTH_BAR.add_component(
+        #     Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+        #                RendererLayers.UIBackground))
+        # HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        #
+        # RAT_HEALTH_BAR = GameObject("Rat Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
+        #                             GameObjectType.Static,
+        #                             GameObjectCategory.UI)
+        # __RAT_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/rat_health_bar.png")
+        # __MATERIAL_RAT_HEALTH_BAR = TextureMaterial2D(__RAT_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+        #
+        # RAT_HEALTH_BAR.add_component(
+        #     Renderer2D("Rat Health Bar Renderer Texture", __MATERIAL_RAT_HEALTH_BAR, RendererLayers.UIHealthBar))
+        # RAT_HEALTH_BAR.add_component(
+        #     Renderer2D("Rat Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+        #                RendererLayers.UIBackground))
+        # RAT_HEALTH_BAR.add_component(
+        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
 
+        # WOLF_HEALTH_BAR = GameObject("Wolf Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
+        #                              GameObjectType.Static,
+        #                              GameObjectCategory.UI)
+        # __WOLF_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/wolf_health_bar.png")
+        # __MATERIAL_WOLF_HEALTH_BAR = TextureMaterial2D(__WOLF_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+        #
+        # WOLF_HEALTH_BAR.add_component(
+        #     Renderer2D("Wolf Health Bar Renderer Texture", __MATERIAL_WOLF_HEALTH_BAR, RendererLayers.UIHealthBar))
+        # WOLF_HEALTH_BAR.add_component(
+        #     Renderer2D("Wolf Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+        #                RendererLayers.UIBackground))
+        # WOLF_HEALTH_BAR.add_component(
+        #     Renderer2D("Wolf Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        #
+        # ALIEN_HEALTH_BAR = GameObject("Alien Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
+        #                               GameObjectType.Static,
+        #                               GameObjectCategory.UI)
+        # __ALIEN_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/alien_health_bar.png")
+        # __MATERIAL_ALIEN_HEALTH_BAR = TextureMaterial2D(__ALIEN_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+        #
+        # ALIEN_HEALTH_BAR.add_component(
+        #     Renderer2D("Alien Health Bar Renderer Texture", __MATERIAL_ALIEN_HEALTH_BAR, RendererLayers.UIHealthBar))
+        # ALIEN_HEALTH_BAR.add_component(
+        #     Renderer2D("Alien Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+        #                RendererLayers.UIBackground))
+        # ALIEN_HEALTH_BAR.add_component(
+        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368

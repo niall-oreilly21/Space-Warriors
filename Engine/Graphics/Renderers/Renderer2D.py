@@ -9,11 +9,12 @@ from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 
 
 class Renderer2D(Component):
-        def __init__(self, name, material, layer=0):
+        def __init__(self, name, material, layer=0, is_drawing = True):
             super().__init__(name)
             self._material = material
             self._layer = layer
             self.__bounds = None
+            self.__is_drawing = is_drawing
 
         @property
         def material(self):
@@ -31,8 +32,17 @@ class Renderer2D(Component):
         def layer(self, layer):
             self._layer = layer
 
+        @property
+        def is_drawing(self):
+            return  self.__is_drawing
+
+        @is_drawing.setter
+        def is_drawing(self, is_drawing):
+             self.__is_drawing = is_drawing
+
         def draw(self, surface, transform):
-            self._material.draw(surface, transform)
+            if self.__is_drawing:
+                self._material.draw(surface, transform)
 
         @property
         def bounds(self):

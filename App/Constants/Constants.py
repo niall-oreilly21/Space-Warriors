@@ -20,7 +20,7 @@ class Constants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 4000
+        DEFAULT_HEALTH = 200
         DEFAULT_ATTACK_DAMAGE = 5
 
         MOVE_SPEED = 0.2

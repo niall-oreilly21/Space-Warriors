@@ -1,8 +1,12 @@
 from pygame import Vector2
 import math
 
+from App.Constants.Application import Application
+from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.FollowController import FollowController
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.Managers.EventSystem.EventData import EventData
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
@@ -34,6 +38,7 @@ class EnemyController(FollowController):
         self.__waypoint_finder = self._parent.get_component(WaypointFinder)
 
     def update(self, game_time):
+        self.__check_enemy_health()
         self.__target_position = self.__target.transform.position
         self.__position = self.transform.position
 
@@ -45,6 +50,15 @@ class EnemyController(FollowController):
         else:
             if self.__waypoint_finder is not None:
                 self.calculate_patrol_routes(game_time)
+
+
+    def __check_enemy_health(self):
+        if self.parent.health <= 0:
+            #Application.ActiveScene.remove(self.parent.health_bar)
+            Application.ActiveScene.remove(self.parent)
+            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                          [Constants.Music.ENEMY_DEATH_SOUND, False]))
+
 
     def _follow_target(self):
         self.calculate_movement_direction(self.__target.transform.position, self.transform.position)

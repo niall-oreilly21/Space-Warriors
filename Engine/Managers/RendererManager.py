@@ -75,6 +75,12 @@ class RendererManager(QuadTreeManager, IDrawable):
             renderer = event_data.parameters[0]
             self._remove_component(renderer)
 
+        elif event_data.event_action_type == EventActionType.SetRendererQuadTreeTarget:
+            target = event_data.parameters[0]
+            self._collision_range_target = target
+            print(self._collision_range_target.name)
+            self._collision_range_target_box_collider = target.get_component(BoxCollider2D)
+
     def start(self):
         self._set_up_component_list_and_quad_tree()
 
