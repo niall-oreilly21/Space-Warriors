@@ -26,6 +26,8 @@ class HealthBarController(FollowController):
     def change_colour(self):
         if self.__current_width <= 0.25 * self.__initial_width:
             self._material.color = (255, 0, 0)
+        elif self.__current_width <= 0.5 * self.__initial_width:
+            self._material.color = (255, 221, 0)
 
     def update(self, game_time):
         self.__health = self._target.health

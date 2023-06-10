@@ -1,52 +1,30 @@
 import os
 import pygame
-from pygame import Vector2
 
 from App.Components.Colliders.PlayerCollider import PlayerCollider
-from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
-from App.Constants.EntityConstants import EntityConstants
-from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
-    initialise_character_selection_menu
+    initialise_character_selection_menu, initialise_controls_menu
 from App.Constants.SoundConstants import load_sound
-from Engine.GameObjects.Character import Character
-from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
-from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
-from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Cameras.Camera import Camera
-from Engine.GameObjects.GameObject import GameObjectType, GameObjectCategory, GameObject
+from Engine.GameObjects.GameObject import GameObject
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Managers.SoundManager import SoundManager
-from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
-from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
 from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
-from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
-from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
-from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
-from Engine.Other.Transform2D import Transform2D
 from App.Constants.MapLoader import *
-
-
-
-
-def update(game_time):
-    earth_scene.update(game_time)
 
 
 # Initialize Pygame
@@ -189,24 +167,23 @@ main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
 death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
-character_selection_menu = scene_loader.initialise_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
+character_selection_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
+controls_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CONTROLS_MENU)
 
 initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME,
-                [Constants.Button.START_BUTTON, Constants.Button.SOUND_BUTTON, Constants.Button.QUIT_BUTTON])
+                [Constants.Button.START_BUTTON, Constants.Button.CONTROLS_BUTTON, Constants.Button.SOUND_BUTTON,
+                 Constants.Button.QUIT_BUTTON])
 initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused",
-                [Constants.Button.RESUME_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+                [Constants.Button.RESUME_BUTTON, Constants.Button.LEVELS_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound",
                 [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
                 [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-initialise_character_selection_menu(character_selection_menu)
+initialise_character_selection_menu(character_selection_menu_scene)
 initialise_level_menu(level_menu_scene)
+initialise_controls_menu(controls_menu_scene)
 
-# scene_manager.set_active_scene(Constants.Scene.PAUSE_MENU)
-
-# scene_manager.add(Constants.Scene.MAIN_MENU, scene)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
-# initialise_level_menu()
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
 managers.append(game_state_manager)
