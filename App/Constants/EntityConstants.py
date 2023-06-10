@@ -18,8 +18,8 @@ from Engine.Other.Transform2D import Transform2D
 class EntityConstants:
     class Player:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
-        PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
-        PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
+        PLAYER_INITIAL_POSITION_MARS = Vector2(3200, 4705.6)
+        PLAYER_INITIAL_POSITION_SATURN = Vector2(2380.2, 4927.2)
 
     class Enemy:
         WOLF_ENEMY_NAME = "wolf enemy"
@@ -47,7 +47,7 @@ class EntityConstants:
         }
 
         enemy = Character("Enemy", 70, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
-                          GameObjectType.Dynamic, GameObjectCategory.Rat)
+                          GameObjectType.Dynamic, GameObjectCategory.Entity)
         enemy.add_component(BoxCollider2D("Box-1"))
         enemy.add_component(Rigidbody2D("Rigid"))
         enemy.add_component(WaypointFinder("Waypoint finder",
@@ -55,6 +55,7 @@ class EntityConstants:
                                             Vector2(2800, 4500)]))
 
         RAT_ENEMY = enemy.clone()
+
         RAT_ENEMY.name = RAT_ENEMY_NAME
         RAT_ENEMY.transform.position = Vector2(0, 0)
         RAT_ENEMY.initial_position = Vector2(4000, 3500)
@@ -66,7 +67,6 @@ class EntityConstants:
         WOLF_ENEMY = enemy.clone()
 
         WOLF_ENEMY.name = WOLF_ENEMY_NAME
-        WOLF_ENEMY.game_object_category = GameObjectCategory.Wolf
         WOLF_ENEMY.transform.position = Vector2(0, 0)
         WOLF_ENEMY.initial_position = Vector2(2470, 4065)
         WOLF_ENEMY.get_component(WaypointFinder).waypoints = [Vector2(2470, 4065), Vector2(2900, 3730), Vector2(2540, 3500)]
@@ -76,7 +76,6 @@ class EntityConstants:
         ALIEN_ENEMY = enemy.clone()
 
         ALIEN_ENEMY.name = ALIEN_ENEMY_NAME
-        ALIEN_ENEMY.game_object_category = GameObjectCategory.Alien
         ALIEN_ENEMY.transform.position = Vector2(2900, 4900)
         ALIEN_ENEMY.initial_position = Vector2(4110, 4366)
         ALIEN_ENEMY.get_component(WaypointFinder).waypoints = [Vector2(4110, 3666), Vector2(3185, 4136), Vector2(4110, 3050), Vector2(3580, 3050)]

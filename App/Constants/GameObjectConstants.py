@@ -85,6 +85,18 @@ class GameObjectConstants:
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         BUSH_FOUR.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
+        DEAD_BUSH = GameObject("BushFive", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                               GameObjectCategory.Player)
+        object_frame = bushes_image.subsurface(pygame.Rect(39, 50, 20, 26))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        DEAD_BUSH.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
+        CACTUS = GameObject("Cactus", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                               GameObjectCategory.Player)
+        object_frame = bushes_image.subsurface(pygame.Rect(393, 10, 31, 31))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        CACTUS.add_component(Renderer2D("Renderer-2", texture_material, layer))
+
         LILYPAD_ONE = GameObject("LilypadOne", Transform2D(Vector2(0, 0), 0, Vector2(2.5, 2.5)), GameObjectType.Static,
                                  GameObjectCategory.Environment)
         object_frame = image2.subsurface(pygame.Rect(173, 128, 15, 16))
@@ -144,19 +156,70 @@ class GameObjectConstants:
 
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
+        # Earth Ruins
         RUIN_ONE = GameObject("RuinOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                               GameObjectCategory.Player)
         object_frame = ruins_image.subsurface(pygame.Rect(307, 293, 97, 103))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_ONE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # RUIN_ONE.add_component(BoxCollider2D("Box-3"))
+        RUIN_ONE.add_component(BoxCollider2D("Box-3"))
 
         RUIN_TWO = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                               GameObjectCategory.Player)
-        object_frame = ruins_image.subsurface(pygame.Rect(9, 193, 67, 92))
+        object_frame = ruins_image.subsurface(pygame.Rect(202, 290, 101, 107))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         RUIN_TWO.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # RUIN_TWO.add_component(BoxCollider2D("Box-3"))
+        RUIN_TWO.add_component(BoxCollider2D("Box-3"))
+
+        RUIN_THREE = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                                GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(391, 2, 99, 118))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_THREE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        RUIN_THREE.add_component(BoxCollider2D("Box-3"))
+
+        # Mars Ruins
+
+        RUIN_FOUR = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                                GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(388, 168, 54, 48))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_FOUR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        RUIN_FOUR.add_component(BoxCollider2D("Box-3"))
+
+        RUIN_FIVE = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                               GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(226, 67, 73, 68))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_FIVE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        RUIN_FIVE.add_component(BoxCollider2D("Box-3"))
+
+        RUIN_SIX = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                               GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(91, 295, 99, 96))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_SIX.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        RUIN_SIX.add_component(BoxCollider2D("Box-3"))
+
+        #Saturn Ruins
+
+        RUIN_SEVEN = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                              GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(4, 3, 53, 57))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_SEVEN.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+
+        RUIN_EIGHT = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                                GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(296,199, 82, 81))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_EIGHT.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+
+        RUIN_NINE = GameObject("RuinTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
+                                GameObjectCategory.Player)
+        object_frame = ruins_image.subsurface(pygame.Rect(3, 368, 69, 64))
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        RUIN_NINE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
         STATUE = GameObject("Statue", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                             GameObjectCategory.Player)

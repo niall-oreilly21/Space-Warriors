@@ -327,9 +327,9 @@ class Constants:
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 
     class Map:
-        PLANET_EARTH_JSON = "Assets/SpriteSheets/Tilesets/PlanetAv2.json"
-        PLANET_MARS_JSON = "Assets/SpriteSheets/Tilesets/PlanetBAlternate.json"
-        PLANET_SATURN_JSON = "Assets/SpriteSheets/Tilesets/PlanetC.json"
+        PLANET_EARTH_JSON = "Constants/JSON/Earth.json"
+        PLANET_MARS_JSON = "Constants/JSON/Mars.json"
+        PLANET_SATURN_JSON = "Constants/JSON/Saturn.json"
 
     class Tile:
         GRASS = 1
