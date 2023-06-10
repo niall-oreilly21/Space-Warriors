@@ -25,6 +25,13 @@ class Character(GameObject, IDamageable, ICloneable):
     def health(self):
         return self.__health
 
+    def is_hit(self):
+        return self.__health < self.__initial_health
+
+    @property
+    def initial_health(self):
+        return self.__initial_health
+
     def reset_health(self):
         self.__health = self.__initial_health
 

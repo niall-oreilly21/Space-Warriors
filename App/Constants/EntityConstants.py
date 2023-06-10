@@ -46,8 +46,8 @@ class EntityConstants:
 
         }
 
-        enemy = Character("Enemy", 70, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
-                          GameObjectType.Dynamic, GameObjectCategory.Enemy)
+        enemy = Character("Enemy", 100, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
+                          GameObjectType.Dynamic, GameObjectCategory.Rat)
         enemy.add_component(BoxCollider2D("Box-1"))
         enemy.add_component(Rigidbody2D("Rigid"))
         enemy.add_component(WaypointFinder("Waypoint finder",

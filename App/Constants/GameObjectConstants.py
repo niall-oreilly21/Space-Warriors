@@ -6,6 +6,7 @@ from pygame import Vector2
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants import Constants
+from App.Constants.Application import Application
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
@@ -235,7 +236,8 @@ class GameObjectConstants:
             Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
                        RendererLayers.UIBackground))
         HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #HEALTH_BAR.add_component(HealthBarController("Health Bar Controller"))
+
+
 
 
     class Teleporter:
