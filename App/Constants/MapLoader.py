@@ -6,6 +6,7 @@ from pygame import Vector2
 
 from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
@@ -15,13 +16,16 @@ from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
 from Engine.GameObjects.Gun.Gun import Gun
 from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -185,6 +189,7 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 def __check_enemy_in_scene(enemy, scene):
     if not scene.contains(enemy):
         scene.add(enemy)
+
 def load_planet_earth_enemies():
 
     player = Application.Player
@@ -192,6 +197,26 @@ def load_planet_earth_enemies():
 
     enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
     enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 400))
+
+    HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
+                            GameObjectCategory.Enemy)
+
+    __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
+
+    __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+
+    __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
+    __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
+
+    HEALTH_BAR.add_component(
+        Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
+    HEALTH_BAR.add_component(
+        Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+                   RendererLayers.UIBackground, False))
+    HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
+    HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
+    enemy.health_bar = HEALTH_BAR
+    scene.add(HEALTH_BAR)
 
     init_pos = 2500, 4900
     enemy2 = enemy.clone()

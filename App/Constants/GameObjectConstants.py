@@ -340,6 +340,8 @@ class GameObjectConstants:
         __TELEPORTER_WIDTH = 117
         __TELEPORTER_Y = 1
 
+        TELEPORTER_NAME = "Teleporter"
+
         __TELEPORTER_FRAME_RECTS = [
             pygame.Rect(52 - 19, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
             pygame.Rect(231 - 8, __TELEPORTER_Y, __TELEPORTER_WIDTH, __TELEPORTER_HEIGHT),
@@ -368,7 +370,7 @@ class GameObjectConstants:
 
         MATERIAL_TELEPORTER = TextureMaterial2D(__TELEPORTER_SPRITE_SHEET, None, Vector2(0, 0), None)
 
-        TELEPORTER = GameObject("Teleporter", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+        TELEPORTER = GameObject(TELEPORTER_NAME, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                                 GameObjectCategory.Teleporter)
 
         TELEPORTER.add_component(

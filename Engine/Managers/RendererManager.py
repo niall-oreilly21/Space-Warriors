@@ -5,6 +5,7 @@ from pygame import Vector2, Rect
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
 from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
@@ -78,7 +79,12 @@ class RendererManager(QuadTreeManager, IDrawable):
         elif event_data.event_action_type == EventActionType.SetRendererQuadTreeTarget:
             target = event_data.parameters[0]
             self._collision_range_target = target
-            print(self._collision_range_target.name)
+
+            if self._collision_range_target.name == GameObjectConstants.Teleporter.TELEPORTER_NAME:
+                self._collision_range.width += Constants.VIEWPORT_WIDTH + 60
+            else:
+                self._collision_range.width = Constants.VIEWPORT_WIDTH + 10
+
             self._collision_range_target_box_collider = target.get_component(BoxCollider2D)
 
     def start(self):
