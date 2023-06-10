@@ -78,21 +78,26 @@ def map_load(scene, planet_json,player):
             y = object["y"]
             id = object["t"]["id"]
             if id == 5:
-                if planet_json == Constants.Map.PLANET_SATURN_JSON:
-                    tree_object = GameObjectConstants.NaturalStructures.ROCK_THREE.clone()
-                else:
+                if planet_json == Constants.Map.PLANET_EARTH_JSON:
                     tree_object = random.choice(
                         [GameObjectConstants.Foliage.TALL_TREE.clone(), GameObjectConstants.Foliage.LOW_TREE.clone()])
-                tree_collider = BoxCollider2D("TreeCollider")
-                if tree_object.name == "Tree":
-                    tree_collider.scale = Vector2(0.3, 0.15)
-                    tree_collider.offset = Vector2(3, 72)
-                else:
-                    tree_collider.scale = Vector2(0.5, 0.25)
-                    tree_collider.offset = Vector2(0, 32)
-
+                    tree_collider = BoxCollider2D("TreeCollider")
+                    if tree_object.name == "Tree":
+                        tree_collider.scale = Vector2(0.3, 0.15)
+                        tree_collider.offset = Vector2(3, 72)
+                    else:
+                        tree_collider.scale = Vector2(0.5, 0.25)
+                        tree_collider.offset = Vector2(0, 32)
+                    tree_object.add_component(tree_collider)
                     tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
-                scene.add(tree_object)
+                    scene.add(tree_object)
+                else:
+                    tree_object = GameObjectConstants.NaturalStructures.ROCK_THREE.clone()
+                    tree_collider = BoxCollider2D("TreeCollider")
+                    tree_object.add_component(tree_collider)
+                    tree_object.transform.position = Vector2(x * 71,
+                                                             y * 71)  # starting area forces every tree to one point
+                    scene.add(tree_object)
             elif id == 15:
                 if planet_json == Constants.Map.PLANET_EARTH_JSON:
                     bush_object = random.choice([GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
@@ -330,17 +335,18 @@ def load_planet_b_specifics(scene,player):
 
 def load_planet_c_specifics(scene, player):
     scene.add(player)
-    # ruin = GameObjectConstants.RUIN_ONE.clone()
-    # ruin.transform.position = Vector2(2000,5000)
-    # scene.add(ruin)
-    #
-    # ruin = GameObjectConstants.RUIN_TWO.clone()
-    # ruin.transform.position = Vector2(1800,5000)
-    # scene.add(ruin)
-    #
-    # boulder = GameObjectConstants.BOULDER_TWO.clone()
-    # boulder.transform.position = Vector2(2200,5000)
-    # scene.add(boulder)
+
+    ruin = GameObjectConstants.UnnaturalStructures.RUIN_SEVEN.clone()
+    ruin.transform.position = Vector2(2350, 3500)
+    scene.add(ruin)
+
+    ruin = GameObjectConstants.UnnaturalStructures.RUIN_EIGHT.clone()
+    ruin.transform.position = Vector2(2450, 3500)
+    scene.add(ruin)
+
+    ruin = GameObjectConstants.UnnaturalStructures.RUIN_NINE.clone()
+    ruin.transform.position = Vector2(2450, 3500)
+    scene.add(ruin)
 
     statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
     statue.transform.position = Vector2(2900, 4700)
