@@ -1,6 +1,7 @@
 import pygame
 from pygame import Vector2
 
+from App.Constants import MapLoader
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
@@ -54,11 +55,13 @@ class GameStateManager(Manager):
 
 
     def __set_up_level(self):
+        Application.GameStarted = False
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
+        self.__add_enemies()
+        Application.GameStarted = True
 
         self.__dispatch_events_for_set_up_level()
-        self.__add_enemies()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
@@ -97,11 +100,11 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name is Constants.Scene.EARTH:
             load_planet_earth_enemies()
 
-        if Application.ActiveScene.name is Constants.Scene.MARS:
-            load_planet_mars_enemies()
-
-        if Application.ActiveScene.name is Constants.Scene.SATURN:
-            load_planet_saturn_enemies()
+        # if Application.ActiveScene.name is Constants.Scene.MARS:
+        #     load_planet_mars_enemies()
+        #
+        # if Application.ActiveScene.name is Constants.Scene.SATURN:
+        #     load_planet_saturn_enemies()
 
 
     def __get_ui_text_helpers(self):
@@ -115,8 +118,8 @@ class GameStateManager(Manager):
         self.__check_turn_on_spotlight()
 
     def __dispatch_events_for_load_up_level(self):
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsGame))
 
