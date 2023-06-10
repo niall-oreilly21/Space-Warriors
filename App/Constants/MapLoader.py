@@ -6,6 +6,7 @@ from pygame import Vector2
 
 from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
@@ -14,13 +15,16 @@ from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
 from Engine.GameObjects.Gun.Gun import Gun
 from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
+from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
@@ -169,28 +173,51 @@ def color_tiles(map_data, tile_data, width, height, color, alpha):
 
 def load_planet_a_enemies(scene, player):
     enemy = EntityConstants.Enemy.RAT_ENEMY
-    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 400))
+    enemy.add_component(EnemyController("Enemy movement", player, Constants.EnemyRat.MOVE_SPEED, 800))
+    enemy.initial_position = Vector2(2000, 4900)
     scene.add(enemy)
 
-    enemy2 = enemy.clone()
-    enemy2.get_component(WaypointFinder).waypoints = [Vector2(4000, 3000), Vector2(4500, 3000),
-                                                Vector2(4500, 3100), Vector2(3800, 3100)]
-    scene.add(enemy2)
+    HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
+                            GameObjectCategory.Enemy)
 
-    enemy3 = enemy.clone()
-    enemy3.get_component(WaypointFinder).waypoints = [Vector2(4200, 3200), Vector2(4500, 3200),
-                                                      Vector2(4500, 3200), Vector2(3800, 3200)]
-    scene.add(enemy3)
+    __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
-    enemy4 = enemy.clone()
-    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4700, 2300), Vector2(5300, 2300),
-                                                      Vector2(5300, 1800), Vector2(4700, 1800)]
-    scene.add(enemy4)
+    __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
 
-    enemy4 = enemy.clone()
-    enemy4.get_component(WaypointFinder).waypoints = [Vector2(4800, 2400), Vector2(5200, 2400),
-                                                      Vector2(5200, 1900), Vector2(4800, 1900)]
-    scene.add(enemy4)
+    __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
+    __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
+
+    HEALTH_BAR.add_component(
+        Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
+    HEALTH_BAR.add_component(
+        Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+                   RendererLayers.UIBackground, False))
+    HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
+    HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
+
+    scene.add(HEALTH_BAR)
+
+
+    #
+    # enemy2 = enemy.clone()
+    # enemy2.get_component(WaypointFinder).waypoints = [Vector2(4000, 3000), Vector2(4500, 3000),
+    #                                             Vector2(4500, 3100), Vector2(3800, 3100)]
+    # scene.add(enemy2)
+    #
+    # enemy3 = enemy.clone()
+    # enemy3.get_component(WaypointFinder).waypoints = [Vector2(4200, 3200), Vector2(4500, 3200),
+    #                                                   Vector2(4500, 3200), Vector2(3800, 3200)]
+    # scene.add(enemy3)
+    #
+    # enemy4 = enemy.clone()
+    # enemy4.get_component(WaypointFinder).waypoints = [Vector2(4700, 2300), Vector2(5300, 2300),
+    #                                                   Vector2(5300, 1800), Vector2(4700, 1800)]
+    # scene.add(enemy4)
+    #
+    # enemy4 = enemy.clone()
+    # enemy4.get_component(WaypointFinder).waypoints = [Vector2(4800, 2400), Vector2(5200, 2400),
+    #                                                   Vector2(5200, 1900), Vector2(4800, 1900)]
+    # scene.add(enemy4)
 
 
 
