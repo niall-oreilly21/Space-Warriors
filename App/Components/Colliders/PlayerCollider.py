@@ -69,9 +69,7 @@ class PlayerCollider(Collider):
         current_time = time.time()
 
         # Player and enemy collide
-        if colliding_game_object.game_object_category == GameObjectCategory.Alien or \
-                colliding_game_object.game_object_category == GameObjectCategory.Wolf or \
-                colliding_game_object.game_object_category == GameObjectCategory.Rat:
+        if self._is_colliding_with_enemy(colliding_game_object):
 
             # Player take damage
             if current_time - self.parent.last_damage_time >= self.parent.damage_cooldown:

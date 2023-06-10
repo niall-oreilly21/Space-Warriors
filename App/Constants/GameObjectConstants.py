@@ -215,7 +215,7 @@ class GameObjectConstants:
 
         colors = [None]
         bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
-        Gun = Gun("Gun", bullet_prefab, 0, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
+        Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
 
 

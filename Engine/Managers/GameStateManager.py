@@ -46,6 +46,12 @@ class GameStateManager(Manager):
 
                 ui_text_game_object.get_component(Renderer2D).material.text = ui_text
 
+                if ui_text == "":
+                    ui_text_game_object.get_component(Renderer2D).is_drawing = False
+                else:
+                    ui_text_game_object.get_component(Renderer2D).is_drawing = True
+
+
     def __set_up_level(self):
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
@@ -89,13 +95,17 @@ class GameStateManager(Manager):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
     def __dispatch_events_for_set_up_level(self):
+        self.__dispatch_events_for_load_up_level()
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
+        self.__check_turn_on_spotlight()
+
+    def __dispatch_events_for_load_up_level(self):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsGame))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
-        self.__check_turn_on_spotlight()
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
@@ -113,7 +123,7 @@ class GameStateManager(Manager):
         self.__input_handler.update()
 
     def __load_level(self):
-        self.__dispatch_events_for_set_up_level()
+        self.__dispatch_events_for_load_up_level()
 
     def __check_turn_on_spotlight(self):
         if Application.ActiveScene.name is Constants.Scene.MARS:

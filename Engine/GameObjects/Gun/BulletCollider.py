@@ -14,7 +14,7 @@ class BulletCollider(Collider):
 
     def handle_response(self, colliding_game_object):
 
-        if colliding_game_object.game_object_category is GameObjectCategory.Enemy or colliding_game_object.game_object_category is GameObjectCategory.Bullet:
+        if self._is_colliding_with_enemy(colliding_game_object):
             return
 
         if isinstance(colliding_game_object, IDamageable):

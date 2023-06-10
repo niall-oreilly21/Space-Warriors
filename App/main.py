@@ -95,8 +95,6 @@ player.add_component(player_collider)
 
 GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
 
-
-
 # enemy4 = enemy.clone()
 
 pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
@@ -141,11 +139,10 @@ saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
 render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, pygame.Rect(0, 0, 110 * 72, 120 * 72), player,
-                                 Constants.VIEWPORT_WIDTH + 75, Constants.VIEWPORT_HEIGHT + 110, 4)
+                                 Constants.VIEWPORT_WIDTH + 10, Constants.VIEWPORT_HEIGHT + 10, 4)
 scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
-earth_scene.add(player)
 earth_scene.add(GameObjectConstants.HealthBar.HEALTH_BAR)
 # earth_scene.add(enemy2)
 # earth_scene.add(enemy3)
@@ -243,9 +240,9 @@ while running:
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()
 
-    # elapsed_time = game_time.elapsed_time
-    # fps = game_time.fps()
-    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+    elapsed_time = game_time.elapsed_time
+    fps = game_time.fps()
+    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     pygame.display.update()
     game_time.limit_fps(60)

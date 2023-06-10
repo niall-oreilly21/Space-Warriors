@@ -36,7 +36,6 @@ from Engine.Other.Transform2D import Transform2D
 
 def map_load(scene, planet_json,player):
     tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
-
     # Add tiles to the tileset
     tileset.add_tile(Tile("Grass", Constants.Tile.GRASS, Vector2(216, 12)))
     tileset.add_tile(Tile("Water", Constants.Tile.WATER, Vector2(264, 156)))
@@ -70,7 +69,7 @@ def map_load(scene, planet_json,player):
         color_tiles(map_data, tile_data, width, height, None, None)
     elif scene.name == Constants.Scene.MARS:
         load_planet_b_specifics(scene,player)
-        color_tiles(map_data, tile_data, width, height, [200, 40, 40], 220)
+        color_tiles(map_data, tile_data, width, height, [255, 20, 0], 255)
     elif scene.name == Constants.Scene.SATURN:
         load_planet_c_specifics(scene,player)
         color_tiles(map_data, tile_data, width, height, [255,255,0], 150)
