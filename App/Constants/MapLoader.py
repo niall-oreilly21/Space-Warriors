@@ -191,27 +191,31 @@ def load_planet_a_enemies(scene, player):
 
     init_pos = 4000, 3000
     enemy2 = enemy.clone()
+    enemy2.initial_position = Vector2(init_pos)
     enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3000),
                                                 Vector2(4500, 3100), Vector2(3800, 3100)]
     scene.add(enemy2)
 
     init_pos = 4200, 3200
     enemy3 = enemy.clone()
+    enemy3.initial_position = Vector2(init_pos)
     enemy3.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3200),
                                                       Vector2(4500, 3200), Vector2(3800, 3200)]
     scene.add(enemy3)
 
     init_pos = 4700, 2300
     enemy4 = enemy.clone()
+    enemy4.initial_position = Vector2(init_pos)
     enemy4.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5300, 2300),
                                                       Vector2(5300, 1800), Vector2(4700, 1800)]
     scene.add(enemy4)
 
     init_pos = 4800, 2400
-    enemy4 = enemy.clone()
-    enemy4.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5200, 2400),
+    enemy5 = enemy.clone()
+    enemy5.initial_position = Vector2(init_pos)
+    enemy5.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5200, 2400),
                                                       Vector2(5200, 1900), Vector2(4800, 1900)]
-    scene.add(enemy4)
+    scene.add(enemy5)
 
 
 
@@ -221,6 +225,7 @@ def load_planet_b_enemies(scene,player):
 
     init_pos = 2550, 3500
     enemy2 = enemy.clone()
+    enemy2.initial_position = Vector2(init_pos)
     enemy2.add_component(ZapEnemyController("Enemy movement", player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
     enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
                                                       Vector2(2800, 3100), Vector2(3000, 2800)]
@@ -236,6 +241,7 @@ def load_planet_c_enemies(scene,player):
 
     init_pos = 2550, 3500
     enemy2 = enemy.clone()
+    enemy2.initial_position = Vector2(init_pos)
     enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
                                                       Vector2(2800, 3100), Vector2(3000, 2800)]
     scene.add(enemy2)
@@ -243,6 +249,7 @@ def load_planet_c_enemies(scene,player):
     # Boss?
     init_pos = 3200, 4000
     boss = EntityConstants.Enemy.ALIEN_ENEMY
+    boss.initial_position = Vector2(init_pos)
     boss.transform.scale = Vector2(5,5)
     boss.transform.position = Vector2(3207.8, 4013)
     boss.add_component(BossEnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
