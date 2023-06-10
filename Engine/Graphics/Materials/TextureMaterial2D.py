@@ -66,7 +66,7 @@ class TextureMaterial2D(Material2D):
         else:
             texture_surface = pygame.Surface(self.source_rect.size, pygame.SRCALPHA)
             texture_surface.blit(self.__texture, (0, 0), self.source_rect)
-            self.fill_color(self._surface)
+            self.fill_color(texture_surface)
 
             if self._flip_x or self._flip_y:
                 texture_surface = pygame.transform.flip(texture_surface, self._flip_x, self._flip_y)
