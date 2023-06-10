@@ -137,6 +137,7 @@ def map_load(scene, planet_json,player):
                 power_up_collider = BoxCollider2D("PowerUpCollider")
                 power_up_collider.scale = Vector2(2.5, 2.5)
                 power_up_object.add_component(power_up_collider)
+                power_up_object.get_component(SpriteAnimator2D).fps = random.randrange(5, 8)
                 scene.add(power_up_object)
 
 

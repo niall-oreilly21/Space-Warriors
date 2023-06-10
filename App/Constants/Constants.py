@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from pygame import Vector2
 
@@ -342,3 +344,33 @@ class Constants:
     class UITextPrompts:
         UI_TEXT_BOTTOM = "UITextBottom"
         UI_TEXT_RIGHT = "UITextRight"
+
+    class PowerUp:
+        __POTION_FRAME_RECTS = [pygame.Rect(14, 0, 72, 84), pygame.Rect(103, 0, 60, 84), pygame.Rect(180, 0, 50, 84),
+                                pygame.Rect(247, 0, 41, 84), pygame.Rect(180, 0, 50, 84), pygame.Rect(103, 0, 60, 84),
+                                pygame.Rect(14, 0, 72, 84)]
+        __POTION = Take(ActiveTake.POTION, __POTION_FRAME_RECTS)
+
+        __POTION_SPEED_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
+        MATERIAL_POTION_SPEED = TextureMaterial2D(__POTION_SPEED_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+        __POTION_ATTACK_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/potion_attack.png")
+        MATERIAL_POTION_ATTACK = TextureMaterial2D(__POTION_ATTACK_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+        __POTION_DEFENSE_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/potion_defense.png")
+        MATERIAL_POTION_DEFENSE = TextureMaterial2D(__POTION_DEFENSE_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+        __POTION_HEAL_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/potion_heal.png")
+        MATERIAL_POTION_HEAL = TextureMaterial2D(__POTION_HEAL_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+        __RANDOM_FRAME_RECTS = [pygame.Rect(14, 7, 71, 71), pygame.Rect(104, 7, 59, 71), pygame.Rect(179, 7, 49, 71),
+                                pygame.Rect(246, 7, 39, 71), pygame.Rect(179, 7, 49, 71), pygame.Rect(104, 7, 59, 71),
+                                pygame.Rect(14, 7, 71, 71)]
+        __RANDOM = Take(ActiveTake.RANDOM, __RANDOM_FRAME_RECTS)
+
+        __RANDOM_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/random.png")
+        MATERIAL_RANDOM = TextureMaterial2D(__RANDOM_SPRITE_SHEET, None, Vector2(0, 0), None)
+
+        ANIMATION_SPEED = 5
+
+        POWER_UP_ANIMATOR_INFO = [__POTION, __RANDOM]

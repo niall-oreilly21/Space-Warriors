@@ -13,7 +13,7 @@ from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
-from App.Constants.MapLoader import load_planet_earth_enemies
+from App.Constants.MapLoader import load_planet_earth_enemies, load_planet_mars_enemies, load_planet_saturn_enemies
 
 
 class GameStateManager(Manager):
