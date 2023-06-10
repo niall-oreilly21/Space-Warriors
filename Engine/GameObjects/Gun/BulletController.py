@@ -37,7 +37,7 @@ class BulletController(Component):
 
 
     def __remove_bullet(self):
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveCollliderFromQuadTree,[self._parent.get_component(BoxCollider2D)]))
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree,[self._parent.get_component(BoxCollider2D)]))
         Application.ActiveScene.remove(self._parent)
 
     def clone(self):
