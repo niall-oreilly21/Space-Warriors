@@ -97,12 +97,6 @@ class PlayerCollider(Collider):
             # if self.parent.health == 0:
             #     self.parent.health = Constants.Player.DEFAULT_HEALTH
 
-            if colliding_game_object.health == 0:
-                print("Enemy dead")
-                Application.ActiveScene.remove(colliding_game_object)
-                Constants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                              [Constants.Music.ENEMY_DEATH_SOUND]))
 
         # Player and power up collide
         if isinstance(colliding_game_object, PowerUp):

@@ -193,7 +193,7 @@ def load_planet_a_enemies(scene, player):
                    RendererLayers.UIBackground, False))
     HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
     HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
-
+    enemy.health_bar = HEALTH_BAR
     scene.add(HEALTH_BAR)
 
 
