@@ -10,13 +10,14 @@ from Engine.Other.Transform2D import Transform2D
 
 
 class Character(GameObject, IDamageable, ICloneable):
-    def __init__(self, name, health, attack_damage, damage_cooldown, initial_position, transform=None,
+    def __init__(self, name, health, attack_damage, damage_cooldown, initial_position, health_bar=None, transform=None,
                  game_object_type=GameObjectType.Dynamic, game_object_category=GameObjectCategory.Entity):
         super().__init__(name, transform, game_object_type, game_object_category)
         self.__health = health
         self.__attack_damage = attack_damage
         self.__is_damaged = False
         self.__damage_cooldown = damage_cooldown
+        self.__health_bar = health_bar
         self.__last_damage_time = 0
         self.__initial_position = initial_position
         self.__initial_health = health
@@ -84,6 +85,14 @@ class Character(GameObject, IDamageable, ICloneable):
     @initial_position.setter
     def initial_position(self, position):
         self.__initial_position = position
+
+    @property
+    def health_bar(self):
+        return self.__health_bar
+
+    @health_bar.setter
+    def health_bar(self, health_bar):
+        self.__health_bar = health_bar
 
     def clone(self):
         character = Character(self.name, self.health, self.attack_damage, self.damage_cooldown, self.initial_position, self.transform.clone(), self.game_object_type, self.game_object_category)
