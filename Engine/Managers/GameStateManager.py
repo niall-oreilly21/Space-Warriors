@@ -13,6 +13,7 @@ from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from App.Constants.MapLoader import load_planet_earth_enemies
 
 
 class GameStateManager(Manager):
@@ -57,9 +58,11 @@ class GameStateManager(Manager):
             Application.ActiveScene.add(Application.Player)
 
         self.__dispatch_events_for_set_up_level()
+        self.__add_enemies()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
+
 
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
@@ -89,6 +92,16 @@ class GameStateManager(Manager):
 
         if Application.ActiveScene.name is Constants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
+
+    def __add_enemies(self):
+        if Application.ActiveScene.name is Constants.Scene.EARTH:
+            load_planet_earth_enemies()
+
+        if Application.ActiveScene.name is Constants.Scene.MARS:
+            load_planet_mars_enemies()
+
+        if Application.ActiveScene.name is Constants.Scene.SATURN:
+            load_planet_saturn_enemies()
 
 
     def __get_ui_text_helpers(self):
@@ -128,5 +141,3 @@ class GameStateManager(Manager):
     def __check_turn_on_spotlight(self):
         if Application.ActiveScene.name is Constants.Scene.MARS:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
-
-

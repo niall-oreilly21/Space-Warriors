@@ -43,6 +43,9 @@ class TeleporterCollider(Collider):
                 Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
                 self.__animator.set_active_take(ActiveTake.TELEPORT)
 
+    def clone(self):
+        return TeleporterCollider(self.name)
+
 
 
 

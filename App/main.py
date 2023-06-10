@@ -93,7 +93,7 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
+#GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
 
 # enemy4 = enemy.clone()
 
@@ -199,9 +199,9 @@ map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON, player)
 map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
 map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
 
-load_planet_a_enemies(earth_scene,player)
-load_planet_b_enemies(mars_scene,player)
-load_planet_c_enemies(saturn_scene,player)
+#load_planet_a_enemies(earth_scene,player)
+# load_planet_b_enemies(mars_scene,player)
+# load_planet_c_enemies(saturn_scene,player)
 
 load_sound(soundManager)
 
