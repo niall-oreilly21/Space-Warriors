@@ -37,3 +37,4 @@ class PowerUpType(Enum):
     Heal = 2
     Attack = 3
     Random = 4
+    NightVision = 5

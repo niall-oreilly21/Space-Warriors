@@ -371,6 +371,14 @@ class Constants:
         __RANDOM_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/random.png")
         MATERIAL_RANDOM = TextureMaterial2D(__RANDOM_SPRITE_SHEET, None, Vector2(0, 0), None)
 
+        __NIGHT_VISION_FRAME_RECTS = [pygame.Rect(9, 12, 81, 56), pygame.Rect(99, 12, 67, 56), pygame.Rect(177, 12, 55, 56),
+                                      pygame.Rect(242, 12, 44, 56), pygame.Rect(177, 12, 55, 56), pygame.Rect(99, 12, 67, 56),
+                                      pygame.Rect(9, 12, 81, 56)]
+        __NIGHT_VISION = Take(ActiveTake.NIGHT_VISION, __NIGHT_VISION_FRAME_RECTS)
+
+        __NIGHT_VISION_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/night_vision.png")
+        MATERIAL_NIGHT_VISION = TextureMaterial2D(__NIGHT_VISION_SPRITE_SHEET, None, Vector2(0, 0), None)
+
         ANIMATION_SPEED = 5
 
-        POWER_UP_ANIMATOR_INFO = [__POTION, __RANDOM]
+        POWER_UP_ANIMATOR_INFO = [__POTION, __RANDOM, __NIGHT_VISION]

@@ -241,35 +241,48 @@ class GameObjectConstants:
         texture_material = Constants.PowerUp.MATERIAL_POTION_SPEED
         POTION_SPEED.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
         POTION_SPEED.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                    texture_material, ActiveTake.POTION, Constants.PowerUp.ANIMATION_SPEED))
+                                                    texture_material, ActiveTake.POTION,
+                                                    Constants.PowerUp.ANIMATION_SPEED))
 
         POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = Constants.PowerUp.MATERIAL_POTION_ATTACK
         POTION_ATTACK.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
         POTION_ATTACK.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                     texture_material, ActiveTake.POTION, Constants.PowerUp.ANIMATION_SPEED))
+                                                     texture_material, ActiveTake.POTION,
+                                                     Constants.PowerUp.ANIMATION_SPEED))
 
         POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = Constants.PowerUp.MATERIAL_POTION_DEFENSE
         POTION_DEFENSE.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
         POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                      texture_material, ActiveTake.POTION, Constants.PowerUp.ANIMATION_SPEED))
+                                                      texture_material, ActiveTake.POTION,
+                                                      Constants.PowerUp.ANIMATION_SPEED))
 
         POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = Constants.PowerUp.MATERIAL_POTION_HEAL
         POTION_HEAL.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
         POTION_HEAL.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                   texture_material, ActiveTake.POTION, Constants.PowerUp.ANIMATION_SPEED))
+                                                   texture_material, ActiveTake.POTION,
+                                                   Constants.PowerUp.ANIMATION_SPEED))
 
         RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = Constants.PowerUp.MATERIAL_RANDOM
         RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                       texture_material, ActiveTake.POTION, Constants.PowerUp.ANIMATION_SPEED))
+        RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                       texture_material, ActiveTake.RANDOM,
+                                                       Constants.PowerUp.ANIMATION_SPEED))
+
+        NIGHT_VISION_POWER_UP = PowerUp("NightVisionPowerUp", PowerUpType.NightVision,
+                                        Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
+        texture_material = Constants.PowerUp.MATERIAL_NIGHT_VISION
+        NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                             texture_material, ActiveTake.NIGHT_VISION,
+                                                             Constants.PowerUp.ANIMATION_SPEED))
 
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")

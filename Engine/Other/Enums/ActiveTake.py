@@ -31,3 +31,4 @@ class ActiveTake(Enum):
     TELEPORT_IDLE = 26
     POTION = 27
     RANDOM = 28
+    NIGHT_VISION = 29
