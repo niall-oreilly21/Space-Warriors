@@ -2,6 +2,7 @@ import os
 import pygame
 
 from App.Components.Colliders.PlayerCollider import PlayerCollider
+from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
@@ -91,6 +92,8 @@ player_controller = PlayerController("Player movement", Constants.Player.MOVE_SP
 player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
+
+GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
 
 
 
