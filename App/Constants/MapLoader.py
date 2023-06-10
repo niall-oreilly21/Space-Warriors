@@ -210,13 +210,15 @@ def load_planet_c_enemies(scene,player):
     scene.add(gun)
     enemy = EntityConstants.Enemy.ALIEN_ENEMY
     enemy.add_component(BossEnemyController("Enemy movement", player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+    gun_controller = GunController("Gun Controller", enemy)
+    gun.add_component(gun_controller)
     scene.add(gun)
     scene.add(enemy)
 
     enemy2 = enemy.clone()
     enemy2.get_component(WaypointFinder).waypoints = [Vector2(2550, 3500), Vector2(3000, 3000),
                                                       Vector2(2800, 3100), Vector2(3000, 2800)]
-    scene.add(enemy2)
+    #aaascene.add(enemy2)
 
     # Boss?
 

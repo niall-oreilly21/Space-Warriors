@@ -34,7 +34,9 @@ class Bullet(GameObject):
         self.add_component(Rigidbody2D("Bullet Rigidbody"))
         self.add_component(BulletCollider("Bullet Collider"))
         self.add_component(BulletController("Bullet Controller", self.__bullet_speed, direction))
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree, [self.get_component(BoxCollider2D)]))
+        self.get_component(Renderer2D).bounds = self.get_component(Renderer2D).material.source_rect
+        Application.ActiveScene.add(self)
+        #Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree, [self.get_component(BoxCollider2D)]))
 
         super().start()
 

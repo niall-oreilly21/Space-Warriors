@@ -19,7 +19,7 @@ class EntityConstants:
     class Player:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
         PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
-        PLAYER_INITIAL_POSITION_SATURN = Vector2(920, 6300)
+        PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
 
     class Enemy:
         WOLF_ENEMY_NAME = "wolf enemy"
@@ -47,7 +47,7 @@ class EntityConstants:
         }
 
         enemy = Character("Enemy", 70, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
-                          GameObjectType.Dynamic, GameObjectCategory.Entity)
+                          GameObjectType.Dynamic, GameObjectCategory.Enemy)
         enemy.add_component(BoxCollider2D("Box-1"))
         enemy.add_component(Rigidbody2D("Rigid"))
         enemy.add_component(WaypointFinder("Waypoint finder",

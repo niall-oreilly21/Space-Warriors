@@ -212,11 +212,10 @@ class GameObjectConstants:
 
         material = TextureMaterial2D(texture, None, None, 255)
 
-        colors = [(0, 0, 255)]
-        bullet_prefab = Bullet("Bullet", material, 4, 8, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
-        Gun = Gun("Gun", bullet_prefab, 20, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
+        colors = [None]
+        bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
+        Gun = Gun("Gun", bullet_prefab, 0, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
-        # Gun.add_component(GunController("Gun Controller", Constants.Constants.EnemyAlien))
 
 
     class HealthBar:

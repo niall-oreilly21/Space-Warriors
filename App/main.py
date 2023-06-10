@@ -238,7 +238,7 @@ if screen is not None:
 
 render_manager.is_debug_mode = True
 
-
+Application.GameStarted = True
 # Main game loop
 running = True
 while running:

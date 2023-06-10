@@ -77,9 +77,6 @@ class TextureMaterial2D(Material2D):
         if self._color:
             texture_surface.fill(self._color, special_flags=pygame.BLEND_RGBA_MULT)
 
-
-
-
     def clone(self):
         return TextureMaterial2D(self.__texture, self._color, self._origin, self._alpha, self.surface, self.source_rect.copy())
 

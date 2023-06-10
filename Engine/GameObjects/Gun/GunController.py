@@ -19,9 +19,14 @@ class GunController(FollowController):
 
     def _follow_target(self):
         if self.__target_box_collider:
+            #print(self._parent.transform.position)
+
             target_position = self.__target_box_collider.bounds.center
-            self._parent.transform.position = Vector2(target_position[0] - self.__rb.material.source_rect.width / 2,
-                                                      target_position[1] - self.__rb.material.source_rect.height / 2)
+            #print(target_position)
+            # self._parent.transform.position = Vector2(target_position[0] - self.__rb.material.source_rect.width / 2,
+            #                                           target_position[1] - self.__rb.material.source_rect.height / 2)
+            self._parent.transform.position = self.target.transform.position
+
 
     def clone(self):
         return GunController(self.name, self.target)
