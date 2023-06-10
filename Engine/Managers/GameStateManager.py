@@ -1,6 +1,7 @@
 import pygame
 from pygame import Vector2
 
+from App.Constants import MapLoader
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
@@ -13,6 +14,7 @@ from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from App.Constants.MapLoader import load_planet_earth_enemies
 
 
 class GameStateManager(Manager):
@@ -46,14 +48,24 @@ class GameStateManager(Manager):
 
                 ui_text_game_object.get_component(Renderer2D).material.text = ui_text
 
+                if ui_text == "":
+                    ui_text_game_object.get_component(Renderer2D).is_drawing = False
+                else:
+                    ui_text_game_object.get_component(Renderer2D).is_drawing = True
+
+
     def __set_up_level(self):
+        Application.GameStarted = False
         if not Application.ActiveScene.contains(Application.Player):
             Application.ActiveScene.add(Application.Player)
+        self.__add_enemies()
+        Application.GameStarted = True
 
         self.__dispatch_events_for_set_up_level()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
+
 
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
@@ -84,18 +96,32 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name is Constants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
 
+    def __add_enemies(self):
+        if Application.ActiveScene.name is Constants.Scene.EARTH:
+            load_planet_earth_enemies()
+
+        # if Application.ActiveScene.name is Constants.Scene.MARS:
+        #     load_planet_mars_enemies()
+        #
+        # if Application.ActiveScene.name is Constants.Scene.SATURN:
+        #     load_planet_saturn_enemies()
+
 
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
     def __dispatch_events_for_set_up_level(self):
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        self.__dispatch_events_for_load_up_level()
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
+        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
+        self.__check_turn_on_spotlight()
+
+    def __dispatch_events_for_load_up_level(self):
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsGame))
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
-        self.__check_turn_on_spotlight()
 
     def __set_up_teleporter(self):
         Application.ActiveScene.remove(Application.Player)
@@ -113,10 +139,8 @@ class GameStateManager(Manager):
         self.__input_handler.update()
 
     def __load_level(self):
-        self.__dispatch_events_for_set_up_level()
+        self.__dispatch_events_for_load_up_level()
 
     def __check_turn_on_spotlight(self):
         if Application.ActiveScene.name is Constants.Scene.MARS:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
-
-

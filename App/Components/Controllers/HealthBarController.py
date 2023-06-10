@@ -26,15 +26,17 @@ class HealthBarController(FollowController):
     def change_colour(self):
         if self.__current_width <= 0.25 * self.__initial_width:
             self._material.color = (255, 0, 0)
+        elif self.__current_width <= 0.5 * self.__initial_width:
+            self._material.color = (255, 221, 0)
 
     def update(self, game_time):
         self.__health = self._target.health
-        health_percentage = self.__health / 100.0
-        self.__current_width = (self.__initial_width * health_percentage) / 2
-        self._material.width = self.__current_width
+        health_percentage = self.__health / self._target.initial_health
+        self.__current_width = self.__initial_width * health_percentage
+        self._material.width = min(self.__current_width, self.__initial_width)
         self.change_colour()
 
-    def follow_target(self):
+    def _follow_target(self):
         pass
 
     def clone(self):

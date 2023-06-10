@@ -1,3 +1,4 @@
+from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObjectType
@@ -22,22 +23,37 @@ class Scene:
         if game_object.game_object_category not in self.__game_object_list[game_object.game_object_type]:
             self.__game_object_list[game_object.game_object_type][game_object.game_object_category] = []
 
+        if Application.GameStarted is True:
+            self.__dispatch_quad_tree_add_events(game_object)
         self.__game_object_list[game_object.game_object_type][game_object.game_object_category].append(game_object)
 
-    def _dispatch_quad_tree_events(self, game_object):
-        print(game_object.name)
+    def __dispatch_quad_tree_remove_events(self, game_object):
         if game_object.get_component(BoxCollider2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
 
-        if game_object.get_component(Renderer2D):
+        for renderer in game_object.get_components(Renderer2D):
             Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree, [game_object.get_component(Renderer2D)]))
+                EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree,
+                          [renderer]))
+
+    def __dispatch_quad_tree_add_events(self, game_object):
+        if game_object.get_component(BoxCollider2D):
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree,
+                          [game_object.get_component(BoxCollider2D)]))
+
+            for renderer in game_object.get_components(Renderer2D):
+                Constants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.RendererManager, EventActionType.AddRendererToQuadTree,
+                              [renderer]))
 
 
     def remove(self, game_object):
         if game_object.game_object_category in self.__game_object_list[game_object.game_object_type]:
-            self._dispatch_quad_tree_events(game_object)
+
+            if Application.GameStarted is True:
+                self.__dispatch_quad_tree_remove_events(game_object)
             return self.__game_object_list[game_object.game_object_type][game_object.game_object_category].remove(game_object)
         else:
             return False

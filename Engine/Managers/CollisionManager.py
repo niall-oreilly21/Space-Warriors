@@ -31,7 +31,7 @@ class CollisionManager(QuadTreeManager):
 
         elif event_data.event_action_type == EventActionType.RemoveColliderFromQuadTree:
             box_collider = event_data.parameters[0]
-            self._add_component(box_collider)
+            self._remove_component(box_collider)
 
         elif event_data.event_action_type == EventActionType.AddColliderToQuadTree:
             box_collider = event_data.parameters[0]

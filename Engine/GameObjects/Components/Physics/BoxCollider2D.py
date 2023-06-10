@@ -139,4 +139,7 @@ class BoxCollider2D(Component):
             pygame.draw.rect(screen, self.__color, bounds, 4)
 
     def clone(self):
-        return BoxCollider2D(self._name, self.__anchor.copy())
+        box_collider = BoxCollider2D(self._name, self.__anchor.copy())
+        box_collider.scale = self.__scale
+        box_collider.offset = self.__offset
+        return box_collider
