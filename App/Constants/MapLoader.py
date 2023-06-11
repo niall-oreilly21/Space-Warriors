@@ -223,7 +223,7 @@ class MapLoader:
         enemy.health_bar = HEALTH_BAR
         scene.add(HEALTH_BAR)
 
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
@@ -359,5 +359,4 @@ class MapLoader:
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
             self.__add_enemy_to_scene(new_enemy, scene)
-
 

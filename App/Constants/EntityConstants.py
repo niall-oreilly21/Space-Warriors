@@ -99,19 +99,38 @@ class EntityConstants:
                 [Vector2(4200, 3200), Vector2(4500, 3200), Vector2(4500, 3200), Vector2(3800, 3200)],
                 [Vector2(4700, 2300), Vector2(5300, 2300), Vector2(5300, 1800), Vector2(4700, 1800)],
                 [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)],
-                [Vector2(3000, 4000), Vector2(3500, 4000), Vector2(3500, 4100), Vector2(2800, 4100)],
-                [Vector2(2200, 3200), Vector2(2500, 3200), Vector2(2500, 3200), Vector2(1800, 3200)],
+                [Vector2(3000, 4000), Vector2(3500, 4200), Vector2(3500, 4100), Vector2(2800, 4200)],
+                [Vector2(2200, 3200), Vector2(2500, 3200), Vector2(2700, 3200), Vector2(1900, 3200)],
                 [Vector2(4700, 5300), Vector2(5300, 5300), Vector2(5300, 4800), Vector2(4700, 4800)],
                 [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)],
-                [Vector2(2000, 2000), Vector2(2200, 2000), Vector2(2400, 2000), Vector2(2600, 2000)],
+                [Vector2(2000, 2000), Vector2(2200, 2100), Vector2(2400, 2000), Vector2(2600, 2100)],
                 [Vector2(2000, 4200), Vector2(2200, 4200), Vector2(2400, 4200), Vector2(2600, 4200)],
-                [Vector2(5500, 2300), Vector2(5900, 2300), Vector2(5900, 1800), Vector2(5500, 1800)],
-                [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)]
+                [Vector2(5500, 5500), Vector2(5900, 5700), Vector2(6000, 5500), Vector2(5500, 1800)],
+                [Vector2(4800, 5500), Vector2(5200, 5500), Vector2(5200, 5600), Vector2(4800, 5600)],
+                [Vector2(5800, 2800), Vector2(5000, 5500)],
+                [Vector2(3071, 2602), Vector2(2752, 2602)],
+                [Vector2(4052, 1328), Vector2(3700, 1328)],
+                [Vector2(4738, 3780), Vector2(3950, 3780)]
             ],
             WOLF_ENEMY_NAME: [
-                [Vector2(2550, 3500), Vector2(3000, 3000), Vector2(2800, 3100), Vector2(3000, 2800)]
+                [Vector2(2550, 3500), Vector2(3000, 3000), Vector2(2800, 3100), Vector2(3000, 2800)],
+                [Vector2(2690, 4552), Vector2(2392, 4051), Vector2(2660, 3844), Vector2(2600, 3000)],
+                [Vector2(1637, 3372), Vector2(1885, 3195), Vector2(1583, 2845), Vector2(1976, 2405)],
+                [Vector2(4700, 1467), Vector2(5014, 1663), Vector2(5668, 1834), Vector2(6875, 1366)],
+                [Vector2(5546, 2034), Vector2(4706, 2034), Vector2(5252, 2193), Vector2(5423, 2518)],
+                [Vector2(5375, 3665), Vector2(4934, 4539), Vector2(5601, 4803), Vector2(5761, 5533)],
+                [Vector2(3770, 2004), Vector2(3770, 1700), Vector2(4174, 1700), Vector2(4174, 2034)],
+                [Vector2(1848, 1231), Vector2(3061, 1231)],
+                [Vector2(1769, 5521), Vector2(3311, 5916)],
+                [Vector2(5112, 1943), Vector2(5112, 2817)],
+                [Vector2(3962, 3389), Vector2(3962, 4000)],
+                [Vector2(4066, 5800), Vector2(5188, 5500)]
             ],
             ALIEN_ENEMY_NAME: [
-                [Vector2(2550, 3500), Vector2(3000, 3000), Vector2(2800, 3100), Vector2(3000, 2800)]
+                [Vector2(2355, 1841), Vector2(2500, 1841)],
+                [Vector2(1970, 5580), Vector2(2272, 5368), Vector2(2575, 5527), Vector2(1981, 5188)],
+                [Vector2(5297, 4770), Vector2(4827, 4770), Vector2(4911, 4913), Vector2(4547, 4913)],
+                [Vector2(4907, 1456), Vector2(4907, 1964), Vector2(6661, 1964)],
+                [Vector2(3619, 3913), Vector2(2870, 3913)]
             ],
         }
