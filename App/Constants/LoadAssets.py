@@ -51,10 +51,6 @@ def load_fonts():
         Renderer2D("Renderer-2", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT, RendererLayers.UI))
 
 
-def load_map(map_loader, scenes):
-    for scene in scenes:
-        map_loader.map_load(scene, Constants.Map.BASE_PATH + scene.name + Constants.Map.JSON_END_PATH)
-        map_loader.load_planet_earth_enemies(scene)
 
 
 

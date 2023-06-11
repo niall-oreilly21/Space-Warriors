@@ -113,9 +113,6 @@ class RendererManager(QuadTreeManager, IDrawable):
             self.__calculate_draw_position(renderer)
             self._quad_tree.insert(renderer)
 
-    def update(self, game_time):
-        super().update(game_time)
-
 
     def draw(self):
         self.__camera_position = Application.ActiveCamera.transform.position
