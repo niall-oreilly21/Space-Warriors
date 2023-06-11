@@ -185,7 +185,9 @@ initialise_controls_menu(controls_menu_scene)
 
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 
-game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler())
+map_loader = MapLoader(player)
+
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
 managers.append(game_state_manager)
 
 Application.ActiveScene = main_menu_scene
@@ -195,18 +197,19 @@ Application.Player = player
 Constants.INPUT_HANDLER = InputHandler()
 
 # # Load Map + objects
-map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON, player)
-map_load(mars_scene, Constants.Map.PLANET_MARS_JSON, player)
-map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON, player)
-
-#load_planet_a_enemies(earth_scene,player)
-# load_planet_b_enemies(mars_scene,player)
-# load_planet_c_enemies(saturn_scene,player)
-
+map_loader.map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON)
+map_loader.map_load(mars_scene, Constants.Map.PLANET_MARS_JSON)
+map_loader.map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON)
+map_loader.load_planet_earth_enemies(earth_scene)
+map_loader.load_planet_mars_enemies(mars_scene)
+map_loader.load_planet_saturn_enemies(saturn_scene)
 load_sound(soundManager)
 
-for manager in managers:
-    manager.start()
+# for manager in managers:
+#     manager.start()
+
+scene_manager.start()
+camera_manager.start()
 
 # Fill the screen with a background color
 background_color = (0, 0, 0)  # black

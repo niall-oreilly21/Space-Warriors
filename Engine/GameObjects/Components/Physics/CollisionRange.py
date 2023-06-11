@@ -29,6 +29,10 @@ class CollisionRange:
         def width(self):
             return self.__bounds.width
 
+        @width.setter
+        def width(self, width):
+            self.__bounds.width = width
+
         @property
         def height(self):
             return self.__bounds.height

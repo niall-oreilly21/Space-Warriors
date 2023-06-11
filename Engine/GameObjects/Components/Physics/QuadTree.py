@@ -86,5 +86,14 @@ class QuadTree:
 
         return all_objects
 
+    def clear(self):
+        self.objects.clear()
+        self.subdivided = False
+
+        for child in self.children:
+            if child is not None:
+                child.clear()
+
+        self.children = [None] * 4
 
 

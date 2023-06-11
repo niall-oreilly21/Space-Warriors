@@ -1,6 +1,7 @@
 import pygame
 from pygame import Vector2
 
+from App.Constants import MapLoader
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
@@ -13,14 +14,13 @@ from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
-from App.Constants.MapLoader import load_planet_earth_enemies, load_planet_mars_enemies, load_planet_saturn_enemies
-
 
 class GameStateManager(Manager):
-    def __init__(self, event_dispatcher, input_handler):
+    def __init__(self, event_dispatcher, input_handler, map_loader):
         super().__init__(event_dispatcher)
         self.__input_handler = input_handler
         self.__ui_helper_texts = []
+        self.__map_loader = map_loader
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
@@ -54,11 +54,10 @@ class GameStateManager(Manager):
 
 
     def __set_up_level(self):
-        if not Application.ActiveScene.contains(Application.Player):
-            Application.ActiveScene.add(Application.Player)
-
+        Application.GameStarted = False
+        self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+        Application.GameStarted = True
         self.__dispatch_events_for_set_up_level()
-        self.__add_enemies()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
@@ -93,16 +92,6 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name is Constants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
 
-    def __add_enemies(self):
-        if Application.ActiveScene.name is Constants.Scene.EARTH:
-            load_planet_earth_enemies()
-
-        if Application.ActiveScene.name is Constants.Scene.MARS:
-            load_planet_mars_enemies()
-
-        if Application.ActiveScene.name is Constants.Scene.SATURN:
-            load_planet_saturn_enemies()
-
 
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
@@ -115,8 +104,8 @@ class GameStateManager(Manager):
         self.__check_turn_on_spotlight()
 
     def __dispatch_events_for_load_up_level(self):
-        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.GameCamera))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [Application.Player]))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.TurnOnCollisionDetection))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsGame))
 
