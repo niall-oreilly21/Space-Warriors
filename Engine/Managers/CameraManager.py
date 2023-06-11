@@ -26,11 +26,11 @@ class CameraManager(Manager):
 
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MenuCamera:
-            self.set_active_camera(Constants.Camera.MENU_CAMERA)
+            self.set_active_camera(Constants.Cameras.MENU_CAMERA)
             Application.ActiveCamera = self.__active_camera
 
         elif event_data.event_action_type == EventActionType.GameCamera:
-            self.set_active_camera(Constants.Camera.GAME_CAMERA)
+            self.set_active_camera(Constants.Cameras.GAME_CAMERA)
             Application.ActiveCamera = self.__active_camera
 
         elif event_data.event_action_type == EventActionType.SetCameraTarget:
