@@ -29,7 +29,6 @@ from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
-from Engine.Other.Enums.MapID import MapID
 from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Transform2D import Transform2D
 
@@ -232,40 +231,29 @@ class MapLoader:
 
     def __check_enemy_in_scene(self, scene):
         for enemy in self.__enemies[scene.name]:
+            enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
+
             if not scene.contains(enemy):
                 scene.add(enemy)
+
+    def __add_enemy_health_bar_to_scene(self, enemy, scene):
+        health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
+        health_bar.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
+        enemy.health_bar = health_bar
+        scene.add(health_bar)
 
     def __add_enemy_to_scene(self, enemy, scene):
         self.__enemies[scene.name].append(enemy)
 
-        if scene.name == Constants.Scene.MARS:
-            print(len(self.__enemies[scene.name]))
+        enemy.initial_position = Vector2(2300, 4900)
+        self.__add_enemy_health_bar_to_scene(enemy, scene)
         scene.add(enemy)
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
-        HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Entity)
 
-        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
-
-        __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-
-        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
-        __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
-
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-                       RendererLayers.UIBackground, False))
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
-        HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
-        enemy.health_bar = HEALTH_BAR
-        scene.add(HEALTH_BAR)
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -404,5 +392,7 @@ class MapLoader:
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
             self.__add_enemy_to_scene(new_enemy, scene)
+
+
 
 

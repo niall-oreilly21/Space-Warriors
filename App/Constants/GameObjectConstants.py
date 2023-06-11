@@ -328,47 +328,25 @@ class GameObjectConstants:
         HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
         HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
 
-        # RAT_HEALTH_BAR = GameObject("Rat Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                             GameObjectType.Static,
-        #                             GameObjectCategory.UI)
-        # __RAT_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/rat_health_bar.png")
-        # __MATERIAL_RAT_HEALTH_BAR = TextureMaterial2D(__RAT_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Rat Health Bar Renderer Texture", __MATERIAL_RAT_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Rat Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        ENEMY_HEALTH_BAR = GameObject("Enemy Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)),
+                                    GameObjectType.Dynamic,
+                                    GameObjectCategory.EnemyHealthUI)
 
-        # WOLF_HEALTH_BAR = GameObject("Wolf Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                              GameObjectType.Static,
-        #                              GameObjectCategory.UI)
-        # __WOLF_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/wolf_health_bar.png")
-        # __MATERIAL_WOLF_HEALTH_BAR = TextureMaterial2D(__WOLF_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Texture", __MATERIAL_WOLF_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #
-        # ALIEN_HEALTH_BAR = GameObject("Alien Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                               GameObjectType.Static,
-        #                               GameObjectCategory.UI)
-        # __ALIEN_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/alien_health_bar.png")
-        # __MATERIAL_ALIEN_HEALTH_BAR = TextureMaterial2D(__ALIEN_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Alien Health Bar Renderer Texture", __MATERIAL_ALIEN_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Alien Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
+
+        __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+
+        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
+        __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
+
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
+                       RendererLayers.UIBackground, False))
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
+
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368
