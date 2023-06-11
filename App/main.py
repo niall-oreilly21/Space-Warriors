@@ -1,167 +1,70 @@
 import os
 import pygame
+from pygame import Vector2
 
-from App.Components.Colliders.PlayerCollider import PlayerCollider
-from App.Components.Controllers.HealthBarController import HealthBarController
-from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
-from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
-    initialise_character_selection_menu, initialise_controls_menu
-from App.Constants.SoundConstants import load_sound
-from Engine.GameObjects.Character import Character
-from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
-from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
-from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from App.Constants.Constants import Constants
+from App.Constants.EntityConstants import EntityConstants
+from App.Constants.GameObjectConstants import GameObjectConstants
+from App.Constants.MapLoader import MapLoader
+from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, initialise_character_selection_menu, initialise_controls_menu
+from App.Constants.LoadAssets import load_sound, load_fonts, load_map, load_cameras
 from Engine.Managers.CollisionManager import CollisionManager
-from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
-from Engine.GameObjects.Components.Cameras.Camera import Camera
-from Engine.GameObjects.GameObject import GameObject
-from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.CameraManager import CameraManager
-from Engine.Managers.EventSystem.EventData import EventData
+from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Managers.SoundManager import SoundManager
-from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
-from App.Components.Controllers.PlayerController import PlayerController
 from Engine.Managers.RendererManager import RendererManager
 from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
-from App.Constants.MapLoader import *
-
-
-def load_fonts():
-    TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 40, "",
-                                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 700),
-                                                         (255, 255, 255))
-    TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30, "",
-                                                        Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
-                                                        (255, 255, 255))
-    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_BOTTOM.add_component(
-        Renderer2D("Renderer-1", TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM, RendererLayers.UI))
-    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_RIGHT.add_component(Renderer2D("Renderer-2", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT, RendererLayers.UI))
 
 # Initialize Pygame
 pygame.init()
 
-# Set up the display window
 screen_width = 1
 screen_height = 1
 
-# # Create the display window
 screen_info = pygame.display.Info()
 screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 
-# Set the environment variable to center the window
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-screen = pygame.display.set_mode((400, 400))
+screen = pygame.display.set_mode((Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT))
 pygame.display.set_caption(Constants.GAME_NAME)
 
-camera_game_object = GameObject("MainCamera", Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
-                                GameObjectType.Dynamic, GameObjectCategory.Player)
-camera = Camera("MainCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+game_time = GameTime()
 
-camera_game_object.add_component(camera)
-managers = []
+player = EntityConstants.Player.PLAYER
+pet = EntityConstants.Pet.PET
+
+Constants.INPUT_HANDLER = InputHandler()
+Constants.EVENT_DISPATCHER = EventDispatcher()
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
+
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
-soundManager = SoundManager(Constants.EVENT_DISPATCHER)
-
+sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
-
-camera_main_menu = Camera("MenuCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
-camera_main_menu_game_object = GameObject(Constants.Camera.MENU_CAMERA,
-                                          Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),
-                                          GameObjectType.Static, GameObjectCategory.Menu)
-camera_main_menu_game_object.add_component(camera_main_menu)
-
-third_person_camera_game_object = camera_main_menu_game_object.clone()
-third_person_camera_game_object.name = Constants.Camera.GAME_CAMERA
-
-camera_manager.add(camera_main_menu_game_object)
-camera_manager.add(third_person_camera_game_object)
-
-camera_manager.set_active_camera(camera_main_menu_game_object.name)
-
-sprite_transform = Transform2D(Vector2(10, 100), 0, Vector2(1, 1))
+collision_manager = CollisionManager(Constants.QuadTree.MAP_DIMENSIONS, player, Constants.QuadTree.COLLISION_RANGE_WIDTH, Constants.QuadTree.COLLISION_RANGE_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE, Constants.EVENT_DISPATCHER)
+game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
+render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH + 10, Constants.VIEWPORT_HEIGHT + 10, Constants.QuadTree.QUAD_TREE_SIZE)
+managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
 
 earth_scene = Scene(Constants.Scene.EARTH)
-player = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE,
-                   Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
-                   Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
-                   GameObjectType.Dynamic, GameObjectCategory.Player)
-third_person_camera_game_object.add_component(ThirdPersonController("Third Person Controller", player))
-player.add_component(Rigidbody2D("Rigid"))
-player_box_collider = BoxCollider2D("Box")
-player_box_collider.scale = Vector2(1, 0.5)
-player_box_collider.offset = Vector2(0, 20)
-player.add_component(player_box_collider)
-material_player = Constants.Player.MATERIAL_GIRL
-player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
-player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                      ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED, Constants.Player.MOVE_SPEED,
-                                     player_box_collider)
-player.add_component(player_controller)
-player_collider = PlayerCollider("Players attack collider")
-player.add_component(player_collider)
-
-#GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
-
-# enemy4 = enemy.clone()
-
-pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
-                 GameObjectCategory.Pet)
-
-material_pet = Constants.PetDog.MATERIAL_PET
-pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
-pet.get_component(SpriteRenderer2D).flip_x = True
-pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                   ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-pet.get_component(SpriteAnimator2D).is_infinite = True
-pet.add_component(Rigidbody2D("PetRigidbody"))
-pet.add_component(PetController("PetMovement", player, 25))
-pet_collider = BoxCollider2D("PetCollider")
-pet_collider.scale = Vector2(2.5, 2.5)
-pet.add_component(pet_collider)
-
-# Create a font object
-image = pygame.image.load("Assets/UI/Menu/menu_button.png")
-
-# ui_text_helper_component = UITextHelper("UI text helper")
-# ui_text_helper.add_component(ui_text_helper_component)
-
-earth_scene.add(pet)
 mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
 scene_manager.add(Constants.Scene.EARTH, earth_scene)
-render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, pygame.Rect(0, 0, 110 * 72, 120 * 72), player,
-                                 Constants.VIEWPORT_WIDTH + 10, Constants.VIEWPORT_HEIGHT + 10, 4)
 scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
-earth_scene.add(GameObjectConstants.HealthBar.HEALTH_BAR)
-# earth_scene.add(enemy2)
-# earth_scene.add(enemy3)
-# scene.add(enemy4)
-# scene.add(text)
-managers.append(camera_manager)
-managers.append(scene_manager)
+load_cameras(camera_manager, player)
+load_fonts()
+load_map(map_loader, (earth_scene, mars_scene, saturn_scene))
+load_sound(sound_manager)
 
-# scene2 = Scene("Test scene")
-# scene2.add(text)
-# sceneManager.add("Test", scene2)
-
-game_time = GameTime()
-
-collider_system = CollisionManager(pygame.Rect(0, 0, 110 * 72, 120 * 72), player, 400, 400, 4, Constants.EVENT_DISPATCHER)
-managers.append(collider_system)
-
-scene_loader = SceneLoader(camera_manager, camera_main_menu_game_object, scene_manager)
+scene_loader = SceneLoader(camera_manager, GameObjectConstants.Cameras.MAIN_MENU_CAMERA, scene_manager)
 
 pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
@@ -184,43 +87,21 @@ initialise_character_selection_menu(character_selection_menu_scene)
 initialise_level_menu(level_menu_scene)
 initialise_controls_menu(controls_menu_scene)
 
+camera_manager.set_active_camera(Constants.Cameras.MENU_CAMERA)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
-
-load_fonts()
-map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
-
-game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
-managers.append(game_state_manager)
 
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 Application.Player = player
 
-Constants.INPUT_HANDLER = InputHandler()
-
-# # Load Map + objects
-map_loader.map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON)
-map_loader.map_load(mars_scene, Constants.Map.PLANET_MARS_JSON)
-map_loader.map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON)
-map_loader.load_planet_earth_enemies(earth_scene)
-map_loader.load_planet_mars_enemies(mars_scene)
-map_loader.load_planet_saturn_enemies(saturn_scene)
-load_sound(soundManager)
-
-# for manager in managers:
-#     manager.start()
-
 scene_manager.start()
 camera_manager.start()
 
-# Fill the screen with a background color
-background_color = (0, 0, 0)  # black
+background_color = (0, 0, 0)
+
 if screen is not None:
     screen.fill(background_color)
 
-render_manager.is_debug_mode = True
-
-Application.GameStarted = True
 # Main game loop
 running = True
 while running:
@@ -229,9 +110,6 @@ while running:
             running = False
 
     game_time.tick()
-
-    Constants.EVENT_DISPATCHER.dispatch_event(
-        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)
@@ -243,10 +121,6 @@ while running:
 
     Constants.INPUT_HANDLER.update()
     Constants.EVENT_DISPATCHER.process_events()
-
-    # elapsed_time = game_time.elapsed_time
-    # fps = game_time.fps()
-    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     pygame.display.update()
     game_time.limit_fps(60)

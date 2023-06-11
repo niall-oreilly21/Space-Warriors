@@ -4,15 +4,19 @@ import random
 import pygame
 from pygame import Vector2
 
+from App.Components.Colliders.PlayerCollider import PlayerCollider
 from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Components.Controllers.HealthBarController import HealthBarController
+from App.Components.Controllers.PetController import PetController
+from App.Components.Controllers.PlayerController import PlayerController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
+from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Tiles.Tile import Tile
@@ -21,6 +25,9 @@ from Engine.GameObjects.Tiles.Tileset import Tileset
 from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Enums.MapID import MapID
 from Engine.Other.Enums.RendererLayers import RendererLayers
@@ -28,11 +35,11 @@ from Engine.Other.Transform2D import Transform2D
 
 
 class MapLoader:
-    def __init__(self, player, player_health_bar, ui_helper_texts):
+    def __init__(self, player, player_health_bar, pet, ui_helper_texts):
         self.__player = player
         self.__player_health_bar = player_health_bar
         self.__player_health_bar.add_component(HealthBarController("Player Health Bar Controller", self.__player))
-
+        self.__pet = pet
         self.__ui_helper_texts = ui_helper_texts
         self.__enemies = \
             {
@@ -40,6 +47,39 @@ class MapLoader:
                 Constants.Scene.MARS: [],
                 Constants.Scene.SATURN: []
             }
+
+        self.__load_player_components()
+        self.__load_pet_components()
+
+    def __load_player_components(self):
+        self.__player.add_component(Rigidbody2D("Rigid"))
+        player_box_collider = BoxCollider2D("Box")
+        player_box_collider.scale = Vector2(1, 0.5)
+        player_box_collider.offset = Vector2(0, 20)
+        self.__player.add_component(player_box_collider)
+        material_player = Constants.Player.MATERIAL_GIRL
+        self.__player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
+        self.__player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
+                                              ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+        player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED,
+                                             Constants.Player.MOVE_SPEED, player_box_collider)
+        self.__player.add_component(player_controller)
+        player_collider = PlayerCollider("Players attack collider")
+        self.__player.add_component(player_collider)
+
+    def __load_pet_components(self):
+        material_pet = Constants.PetDog.MATERIAL_PET
+        self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
+        self.__pet.get_component(SpriteRenderer2D).flip_x = True
+        self.__pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
+                                           ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+        self.__pet.get_component(SpriteAnimator2D).is_infinite = True
+        self.__pet.add_component(Rigidbody2D("PetRigidbody"))
+        self.__pet.add_component(PetController("PetMovement", self.__player, 25))
+        pet_collider = BoxCollider2D("PetCollider")
+        pet_collider.scale = Vector2(2.5, 2.5)
+        self.__pet.add_component(pet_collider)
+
 
     def map_load(self, scene, planet_json):
         tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
@@ -86,7 +126,7 @@ class MapLoader:
                 y = object["y"]
                 id = object["t"]["id"]
                 if id == 5:
-                    if planet_json == Constants.Map.PLANET_EARTH_JSON:
+                    if scene.name is Constants.Scene.EARTH:
                         tree_object = random.choice(
                             [GameObjectConstants.Foliage.TALL_TREE.clone(),
                              GameObjectConstants.Foliage.LOW_TREE.clone()])
@@ -101,7 +141,7 @@ class MapLoader:
                         tree_object.transform.position = Vector2(x * 71,
                                                                  y * 71)  # starting area forces every tree to one point
                         scene.add(tree_object)
-                    elif planet_json == Constants.Map.PLANET_SATURN_JSON:
+                    elif scene.name is Constants.Scene.SATURN:
                         tree_object = GameObjectConstants.NaturalStructures.ROCK_THREE.clone()
                         tree_collider = BoxCollider2D("TreeCollider")
                         tree_object.add_component(tree_collider)
@@ -109,7 +149,7 @@ class MapLoader:
                                                                  y * 71)  # starting area forces every tree to one point
                         scene.add(tree_object)
                 elif id == 15:
-                    if planet_json == Constants.Map.PLANET_EARTH_JSON:
+                    if scene.name is Constants.Scene.EARTH:
                         bush_object = random.choice(
                             [GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
                              GameObjectConstants.Foliage.BUSH_FOUR.clone(),
@@ -120,13 +160,13 @@ class MapLoader:
                             bush_object.transform.scale = Vector2(scale, scale)
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
-                    elif planet_json == Constants.Map.PLANET_MARS_JSON:
+                    elif scene.name is Constants.Scene.MARS:
                         bush_object = random.choice([GameObjectConstants.Foliage.BUSH_THREE.clone(),
                                                      GameObjectConstants.Foliage.DEAD_BUSH.clone()])
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
-                    elif planet_json == Constants.Map.PLANET_SATURN_JSON:
+                    elif scene.name is Constants.Scene.SATURN:
                         bush_object = GameObjectConstants.Foliage.DEAD_BUSH.clone()
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         bush_object.transform.position = Vector2(x * 72, y * 72)
@@ -182,6 +222,10 @@ class MapLoader:
         if not scene.contains(self.__player):
             scene.add(self.__player)
             scene.add(self.__player_health_bar)
+
+            if not scene.contains(self.__pet):
+                if self.__pet.get_component(PetController).adopted:
+                    scene.add(self.__pet)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
@@ -297,6 +341,7 @@ class MapLoader:
         bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
         scene.add(bridge4)
 
+        scene.add(self.__pet)
         self.__load_teleporter(scene, Vector2(584, 6350.2))
         self.__load_ui_texts(scene)
 

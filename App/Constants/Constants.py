@@ -11,7 +11,7 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 class Constants:
     GAME_NAME = "Space Warriors"
 
-    EVENT_DISPATCHER = EventDispatcher()
+    EVENT_DISPATCHER = None
     INPUT_HANDLER = None
 
     VIEWPORT_WIDTH = 1500
@@ -296,9 +296,17 @@ class Constants:
         CHARACTER_SELECTION_MENU = "CharacterSelectionMenuScene"
         CONTROLS_MENU = "ControlsMenu"
 
-    class Camera:
+    class QuadTree:
+        MAP_DIMENSIONS = pygame.Rect(0, 0, 110 * 72, 120 * 72)
+        COLLISION_RANGE_WIDTH = 400
+        COLLISION_RANGE_HEIGHT = 400
+        QUAD_TREE_SIZE = 4
+
+
+    class Cameras:
         GAME_CAMERA = "GameCamera"
         MENU_CAMERA = "MenuCamera"
+
 
     class Music:
         MENU_MUSIC = "MenuMusic"
@@ -329,9 +337,8 @@ class Constants:
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 
     class Map:
-        PLANET_EARTH_JSON = "Constants/JSON/Earth.json"
-        PLANET_MARS_JSON = "Constants/JSON/Mars.json"
-        PLANET_SATURN_JSON = "Constants/JSON/Saturn.json"
+        BASE_PATH = "Constants/JSON/"
+        JSON_END_PATH = ".json"
 
     class Tile:
         GRASS = 1
