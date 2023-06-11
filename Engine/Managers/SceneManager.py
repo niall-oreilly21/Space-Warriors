@@ -131,7 +131,7 @@ class SceneManager(Manager):
 
     def __check_turn_off_spotlight(self):
         if self.__active_scene.name is Constants.Scene.MARS:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOff))
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
 
     def __set_scenes(self):
         Application.ActiveScene = Application.LastActiveScene
