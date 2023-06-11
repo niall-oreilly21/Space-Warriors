@@ -8,6 +8,10 @@ from App.Constants.Application import Application
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
     initialise_character_selection_menu, initialise_controls_menu
 from App.Constants.SoundConstants import load_sound
+from Engine.GameObjects.Character import Character
+from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
+from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
+from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Cameras.Camera import Camera
@@ -17,6 +21,7 @@ from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.GameStateManager import GameStateManager
 from Engine.Managers.SoundManager import SoundManager
+from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
@@ -27,6 +32,17 @@ from Engine.Managers.SceneManager import SceneManager
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from App.Constants.MapLoader import *
 
+
+def load_fonts():
+    TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 40, "",
+                                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 700),
+                                                         (255, 255, 255))
+    TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30, "",
+                                                        Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
+                                                        (255, 255, 255))
+    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_BOTTOM.add_component(
+        Renderer2D("Renderer-1", TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM, RendererLayers.UI))
+    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_RIGHT.add_component(Renderer2D("Renderer-2", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT, RendererLayers.UI))
 
 # Initialize Pygame
 pygame.init()
@@ -113,27 +129,12 @@ pet_collider.scale = Vector2(2.5, 2.5)
 pet.add_component(pet_collider)
 
 # Create a font object
-font_path = "Assets/Fonts/VCR_OSD_MONO.ttf"
-
-text_material = TextMaterial2D(font_path, 40, "", Vector2(Constants.VIEWPORT_WIDTH / 2, 700), (255, 255, 255))
-ui_text_helper = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                            GameObjectCategory.UIPrompts)
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
-ui_text_helper.add_component(Renderer2D("Renderer-1", text_material, RendererLayers.UI))
-
-text_material_top_right = TextMaterial2D(font_path, 30, "", Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
-                                         (255, 255, 255))
-ui_text_helper_top_right = GameObject(Constants.UITextPrompts.UI_TEXT_RIGHT, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
-                                      GameObjectType.Static, GameObjectCategory.UIPrompts)
-ui_text_helper_top_right.add_component(Renderer2D("Renderer-2", text_material_top_right, RendererLayers.UI))
 
 # ui_text_helper_component = UITextHelper("UI text helper")
 # ui_text_helper.add_component(ui_text_helper_component)
 
 earth_scene.add(pet)
-earth_scene.add(ui_text_helper)
-earth_scene.add(ui_text_helper_top_right)
-
 mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
 
@@ -185,7 +186,8 @@ initialise_controls_menu(controls_menu_scene)
 
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 
-map_loader = MapLoader(player)
+load_fonts()
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
 managers.append(game_state_manager)
@@ -229,8 +231,7 @@ while running:
     game_time.tick()
 
     Constants.EVENT_DISPATCHER.dispatch_event(
-        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+        EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     for manager in managers:
         manager.update(game_time)

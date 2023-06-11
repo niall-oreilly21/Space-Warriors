@@ -275,6 +275,13 @@ class GameObjectConstants:
         bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
         Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
+    class UiHelperTexts:
+        UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
+        UI_TEXT_HELPER_BOTTOM = GameObject(Constants.Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
+        UI_TEXT_HELPER_RIGHT = UI_TEXT_HELPER_BOTTOM.clone()
+        UI_TEXT_HELPER_RIGHT.name = Constants.Constants.UITextPrompts.UI_TEXT_RIGHT
+        UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_RIGHT)
+
     class HealthBar:
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
                                 GameObjectCategory.UI)
@@ -286,13 +293,10 @@ class GameObjectConstants:
         __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(135, 63))
         __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
 
-        # HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
+        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+
         # RAT_HEALTH_BAR = GameObject("Rat Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
         #                             GameObjectType.Static,
         #                             GameObjectCategory.UI)
