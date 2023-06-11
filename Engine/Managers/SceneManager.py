@@ -33,6 +33,7 @@ class SceneManager(Manager):
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(Constants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
+            self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(Constants.Music.MENU_MUSIC, Constants.Music.BACKGROUND_MUSIC_EARTH)
 
@@ -47,6 +48,7 @@ class SceneManager(Manager):
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(Constants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
+            self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(Constants.Music.MENU_MUSIC, Constants.Music.BACKGROUND_MUSIC_SATURN)
 
@@ -57,7 +59,6 @@ class SceneManager(Manager):
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__check_turn_off_spotlight()
             self.__dispatch_menu_events()
-
             Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(Constants.Scene.PAUSE_MENU)
             self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
@@ -132,6 +133,8 @@ class SceneManager(Manager):
     def __check_turn_off_spotlight(self):
         if self.__active_scene.name is Constants.Scene.MARS:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
+        else:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOff))
 
     def __set_scenes(self):
         Application.ActiveScene = Application.LastActiveScene
@@ -162,7 +165,6 @@ class SceneManager(Manager):
         return True
 
     def update(self, game_time):
-
         if self.__active_scene is not None:
             self.__active_scene.update(game_time)
 
