@@ -236,31 +236,34 @@ class MapLoader:
             if not scene.contains(enemy):
                 scene.add(enemy)
 
-    def __add_enemy_health_bar_to_scene(self, enemy, scene):
+    def __add_enemy_health_bar_to_scene(self, enemy, enemy_health_bar_texture, scene):
         health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
+        self.__set_texture_for_enemy_health_bar(health_bar, enemy_health_bar_texture)
         health_bar.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
         enemy.health_bar = health_bar
         scene.add(health_bar)
 
-    def __add_enemy_to_scene(self, enemy, scene):
+    def __set_texture_for_enemy_health_bar(self, health_bar, enemy_health_bar_texture):
+        for renderer in health_bar.get_components(Renderer2D):
+            if isinstance(renderer.material, TextureMaterial2D):
+                renderer.material.texture = enemy_health_bar_texture
+
+    def __add_enemy_to_scene(self, enemy, enemy_health_bar_texture, scene):
         self.__enemies[scene.name].append(enemy)
 
         enemy.initial_position = Vector2(2300, 4900)
-        self.__add_enemy_health_bar_to_scene(enemy, scene)
+        self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
         scene.add(enemy)
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
-
-
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(
-            ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -382,16 +385,19 @@ class MapLoader:
 
     def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
         enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
+        enemy_health_bar_texture = GameObjectConstants.HealthBar.ALIEN_ENEMY_HEALTH_BAR_IMAGE
         if enemy_type == GameObjectCategory.Rat:
             enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+            enemy_health_bar_texture = GameObjectConstants.HealthBar.RAT_ENEMY_HEALTH_BAR_IMAGE
         elif enemy_type == GameObjectCategory.Wolf:
             enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
+            enemy_health_bar_texture = GameObjectConstants.HealthBar.WOLF_ENEMY_HEALTH_BAR_IMAGE
 
         for waypoints in enemy_waypoints[enemy_type_name]:
             new_enemy = enemy.clone()
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
-            self.__add_enemy_to_scene(new_enemy, scene)
+            self.__add_enemy_to_scene(new_enemy,enemy_health_bar_texture, scene)
 
 
 

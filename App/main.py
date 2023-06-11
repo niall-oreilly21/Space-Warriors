@@ -41,7 +41,7 @@ pet = EntityConstants.Pet.PET
 
 Constants.INPUT_HANDLER = InputHandler()
 Constants.EVENT_DISPATCHER = EventDispatcher()
-map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.PLAYER_HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
 
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
 sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
