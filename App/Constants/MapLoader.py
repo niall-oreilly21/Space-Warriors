@@ -177,8 +177,6 @@ class MapLoader:
                 else:
                     map_data[y][x] = TileAttributes(s_id, False, color, alpha)
 
-
-
     def load_planet_dynamic_objects(self, scene):
         if not scene.contains(self.__player):
             scene.add(self.__player)

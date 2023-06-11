@@ -201,12 +201,15 @@ map_loader.map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON)
 map_loader.map_load(mars_scene, Constants.Map.PLANET_MARS_JSON)
 map_loader.map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON)
 map_loader.load_planet_earth_enemies(earth_scene)
-map_loader.load_planet_earth_enemies(mars_scene)
-map_loader.load_planet_earth_enemies(saturn_scene)
+map_loader.load_planet_mars_enemies(mars_scene)
+map_loader.load_planet_saturn_enemies(saturn_scene)
 load_sound(soundManager)
 
-for manager in managers:
-    manager.start()
+# for manager in managers:
+#     manager.start()
+
+scene_manager.start()
+camera_manager.start()
 
 # Fill the screen with a background color
 background_color = (0, 0, 0)  # black
