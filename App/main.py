@@ -8,7 +8,7 @@ from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.MapLoader import MapLoader
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, initialise_character_selection_menu, initialise_controls_menu
-from App.Constants.LoadAssets import load_sound, load_fonts, load_map, load_cameras
+from App.Constants.LoadAssets import load_sound, load_fonts, load_cameras
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
@@ -48,7 +48,7 @@ sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
 collision_manager = CollisionManager(Constants.QuadTree.MAP_DIMENSIONS, player, Constants.QuadTree.COLLISION_RANGE_WIDTH, Constants.QuadTree.COLLISION_RANGE_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE, Constants.EVENT_DISPATCHER)
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
-render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH + 10, Constants.VIEWPORT_HEIGHT + 10, Constants.QuadTree.QUAD_TREE_SIZE)
+render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE)
 managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
 
 earth_scene = Scene(Constants.Scene.EARTH)
@@ -61,7 +61,12 @@ scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
 load_cameras(camera_manager, player)
 load_fonts()
-load_map(map_loader, (earth_scene, mars_scene, saturn_scene))
+map_loader.map_load(earth_scene, Constants.Map.BASE_PATH + Constants.Scene.EARTH + Constants.Map.JSON_END_PATH)
+map_loader.map_load(mars_scene, Constants.Map.BASE_PATH + Constants.Scene.MARS + Constants.Map.JSON_END_PATH)
+map_loader.map_load(saturn_scene, Constants.Map.BASE_PATH + Constants.Scene.SATURN + Constants.Map.JSON_END_PATH)
+map_loader.load_planet_earth_enemies(earth_scene)
+map_loader.load_planet_mars_enemies(mars_scene)
+map_loader.load_planet_saturn_enemies(saturn_scene)
 load_sound(sound_manager)
 
 scene_loader = SceneLoader(camera_manager, GameObjectConstants.Cameras.MAIN_MENU_CAMERA, scene_manager)

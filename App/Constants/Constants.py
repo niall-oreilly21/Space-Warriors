@@ -337,7 +337,7 @@ class Constants:
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 
     class Map:
-        BASE_PATH = "Constants/JSON/"
+        BASE_PATH = "Assets/JSON/"
         JSON_END_PATH = ".json"
 
     class Tile:

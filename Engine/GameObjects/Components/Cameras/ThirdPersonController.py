@@ -27,7 +27,7 @@ class ThirdPersonController(FollowController):
                 if self.target.name == "Teleporter":
                     target_position = self._target.transform.position + Vector2(0, self.target.get_component(BoxCollider2D).bounds.height / 2) - viewport_center
                 else:
-                    target_position = self._target.transform.position + Vector2(15, 40) - viewport_center
+                    target_position = self._target.transform.position + Vector2(20, 50) - viewport_center
 
                 if self.__smooth_position is None:
                     # Start the smooth transition from the current camera position
