@@ -65,6 +65,7 @@ class SceneManager(Manager):
         elif event_data.event_action_type == EventActionType.DeathScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__dispatch_menu_events()
+            Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(Constants.Scene.DEATH_MENU)
             self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
 

@@ -4,7 +4,6 @@ import pygame
 from pygame.math import Vector2
 from Engine.Graphics.Materials.Material2D import Material2D
 
-
 class TextMaterial2D(Material2D):
     def __init__(self, sprite_font_file_path, font_size, text, text_offset, color, alpha=255, origin=Vector2(0, 0)):
         super().__init__(color, alpha, origin)

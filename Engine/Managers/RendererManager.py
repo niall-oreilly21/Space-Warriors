@@ -1,5 +1,3 @@
-import time
-
 import pygame
 from pygame import Vector2, Rect
 
@@ -7,16 +5,10 @@ from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
-from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
-from Engine.GameObjects.Tiles.Tile import Tile
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
-from Engine.Managers.Manager import Manager
 from Engine.Managers.QuadTreeManager import QuadTreeManager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory

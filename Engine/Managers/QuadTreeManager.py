@@ -2,8 +2,8 @@ from abc import ABC
 
 from App.Constants.Application import Application
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
-from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
+from Engine.QuadTree.CollisionRange import CollisionRange
+from Engine.QuadTree.QuadTree import QuadTree
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.GameObjectEnums import GameObjectType
 

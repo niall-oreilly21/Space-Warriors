@@ -7,28 +7,20 @@ from pygame import Vector2
 from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
+from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
-from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
-from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.GameObjects.GameObject import GameObject
-from Engine.GameObjects.Gun.Bullet import Bullet
-from Engine.GameObjects.Gun.Gun import Gun
-from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
 from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
-from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
-from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 from Engine.Other.Enums.MapID import MapID
 from Engine.Other.Enums.RendererLayers import RendererLayers
@@ -36,8 +28,12 @@ from Engine.Other.Transform2D import Transform2D
 
 
 class MapLoader:
-    def __init__(self, player):
+    def __init__(self, player, player_health_bar, ui_helper_texts):
         self.__player = player
+        self.__player_health_bar = player_health_bar
+        self.__player_health_bar.add_component(HealthBarController("Player Health Bar Controller", self.__player))
+
+        self.__ui_helper_texts = ui_helper_texts
         self.__enemies = \
             {
                 Constants.Scene.EARTH: [],
@@ -185,6 +181,7 @@ class MapLoader:
     def load_planet_dynamic_objects(self, scene):
         if not scene.contains(self.__player):
             scene.add(self.__player)
+            scene.add(self.__player_health_bar)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
@@ -197,30 +194,16 @@ class MapLoader:
     def __add_enemy_to_scene(self, enemy, scene):
         self.__enemies[scene.name].append(enemy)
 
-        if scene.name == Constants.Scene.EARTH:
+        if scene.name == Constants.Scene.MARS:
             print(len(self.__enemies[scene.name]))
-
         scene.add(enemy)
-
-    def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
-        enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
-        if enemy_type == GameObjectCategory.Rat:
-            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
-        elif enemy_type == GameObjectCategory.Wolf:
-            enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
-
-        for waypoints in enemy_waypoints[enemy_type_name]:
-            new_enemy = enemy.clone()
-            new_enemy.initial_position = waypoints[0]
-            new_enemy.get_component(WaypointFinder).waypoints = waypoints
-            self.__add_enemy_to_scene(new_enemy, scene)
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Entity)
+                                GameObjectCategory.Enemy)
 
         __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
@@ -240,7 +223,7 @@ class MapLoader:
         enemy.health_bar = HEALTH_BAR
         scene.add(HEALTH_BAR)
 
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
@@ -314,6 +297,9 @@ class MapLoader:
         bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
         scene.add(bridge4)
 
+        self.__load_teleporter(scene, Vector2(584, 6350.2))
+        self.__load_ui_texts(scene)
+
     def __load_planet_mars_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_FOUR.clone()
         ruin.transform.position = Vector2(2450, 3500)
@@ -331,9 +317,8 @@ class MapLoader:
         statue.transform.position = Vector2(2500, 4700)
         scene.add(statue)
 
-        teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-        teleporter.transform.position = Vector2(3788.2, 4600)
-        scene.add(teleporter)
+        self.__load_teleporter(scene, Vector2(3640, 4700))
+        self.__load_ui_texts(scene)
 
     def __load_planet_saturn_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_SEVEN.clone()
@@ -351,6 +336,28 @@ class MapLoader:
         ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
+        self.__load_ui_texts(scene)
+
+    def __load_teleporter(self, scene, position):
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-        teleporter.transform.position = Vector2(584, 6350.2)
+        teleporter.transform.position = position
         scene.add(teleporter)
+
+    def __load_ui_texts(self, scene):
+        for ui_helper_text in self.__ui_helper_texts:
+            scene.add(ui_helper_text)
+
+    def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
+        enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
+        if enemy_type == GameObjectCategory.Rat:
+            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+        elif enemy_type == GameObjectCategory.Wolf:
+            enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
+
+        for waypoints in enemy_waypoints[enemy_type_name]:
+            new_enemy = enemy.clone()
+            new_enemy.initial_position = waypoints[0]
+            new_enemy.get_component(WaypointFinder).waypoints = waypoints
+            self.__add_enemy_to_scene(new_enemy, scene)
+
+
