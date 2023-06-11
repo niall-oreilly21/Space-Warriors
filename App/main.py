@@ -7,7 +7,7 @@ from App.Components.Controllers.PetController import PetController
 from App.Constants.Application import Application
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, \
     initialise_character_selection_menu, initialise_controls_menu
-from App.Constants.SoundConstants import load_sound
+from App.Constants.LoadAssets import load_sound, load_fonts, load_map
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
@@ -31,18 +31,6 @@ from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from App.Constants.MapLoader import *
-
-
-def load_fonts():
-    TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 40, "",
-                                                         Vector2(Constants.VIEWPORT_WIDTH / 2, 700),
-                                                         (255, 255, 255))
-    TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30, "",
-                                                        Vector2(Constants.VIEWPORT_WIDTH - 150, 75),
-                                                        (255, 255, 255))
-    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_BOTTOM.add_component(
-        Renderer2D("Renderer-1", TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM, RendererLayers.UI))
-    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_RIGHT.add_component(Renderer2D("Renderer-2", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT, RendererLayers.UI))
 
 # Initialize Pygame
 pygame.init()
@@ -68,7 +56,7 @@ camera = Camera("MainCamera", Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGH
 camera_game_object.add_component(camera)
 managers = []
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
-soundManager = SoundManager(Constants.EVENT_DISPATCHER)
+sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
 
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
 
@@ -109,12 +97,7 @@ player.add_component(player_controller)
 player_collider = PlayerCollider("Players attack collider")
 player.add_component(player_collider)
 
-#GameObjectConstants.HealthBar.HEALTH_BAR.add_component(HealthBarController("Health Bar Controller", player))
-
-# enemy4 = enemy.clone()
-
-pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,
-                 GameObjectCategory.Pet)
+pet = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,GameObjectCategory.Pet)
 
 material_pet = Constants.PetDog.MATERIAL_PET
 pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
@@ -131,9 +114,6 @@ pet.add_component(pet_collider)
 # Create a font object
 image = pygame.image.load("Assets/UI/Menu/menu_button.png")
 
-# ui_text_helper_component = UITextHelper("UI text helper")
-# ui_text_helper.add_component(ui_text_helper_component)
-
 earth_scene.add(pet)
 mars_scene = Scene(Constants.Scene.MARS)
 saturn_scene = Scene(Constants.Scene.SATURN)
@@ -145,16 +125,8 @@ scene_manager.add(Constants.Scene.MARS, mars_scene)
 scene_manager.add(Constants.Scene.SATURN, saturn_scene)
 
 earth_scene.add(GameObjectConstants.HealthBar.HEALTH_BAR)
-# earth_scene.add(enemy2)
-# earth_scene.add(enemy3)
-# scene.add(enemy4)
-# scene.add(text)
 managers.append(camera_manager)
 managers.append(scene_manager)
-
-# scene2 = Scene("Test scene")
-# scene2.add(text)
-# sceneManager.add("Test", scene2)
 
 game_time = GameTime()
 
@@ -187,7 +159,7 @@ initialise_controls_menu(controls_menu_scene)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
 
 load_fonts()
-map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
 
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
 managers.append(game_state_manager)
@@ -198,17 +170,9 @@ Application.Player = player
 
 Constants.INPUT_HANDLER = InputHandler()
 
-# # Load Map + objects
-map_loader.map_load(earth_scene, Constants.Map.PLANET_EARTH_JSON)
-map_loader.map_load(mars_scene, Constants.Map.PLANET_MARS_JSON)
-map_loader.map_load(saturn_scene, Constants.Map.PLANET_SATURN_JSON)
-map_loader.load_planet_earth_enemies(earth_scene)
-map_loader.load_planet_mars_enemies(mars_scene)
-map_loader.load_planet_saturn_enemies(saturn_scene)
-load_sound(soundManager)
+load_map(map_loader, (earth_scene, mars_scene, saturn_scene))
+load_sound(sound_manager)
 
-# for manager in managers:
-#     manager.start()
 
 scene_manager.start()
 camera_manager.start()

@@ -8,6 +8,7 @@ from App.Components.Controllers.BossEnemyController import BossEnemyController
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Components.Controllers.HealthBarController import HealthBarController
+from App.Components.Controllers.PetController import PetController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
@@ -28,10 +29,11 @@ from Engine.Other.Transform2D import Transform2D
 
 
 class MapLoader:
-    def __init__(self, player, player_health_bar, ui_helper_texts):
+    def __init__(self, player, player_health_bar, pet, ui_helper_texts):
         self.__player = player
         self.__player_health_bar = player_health_bar
         self.__player_health_bar.add_component(HealthBarController("Player Health Bar Controller", self.__player))
+        self.__pet = pet
 
         self.__ui_helper_texts = ui_helper_texts
         self.__enemies = \
@@ -182,6 +184,10 @@ class MapLoader:
         if not scene.contains(self.__player):
             scene.add(self.__player)
             scene.add(self.__player_health_bar)
+
+            if not scene.contains(self.__pet):
+                if self.__pet.get_component(PetController).adopted:
+                    scene.add(self.__pet)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
