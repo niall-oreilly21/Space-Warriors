@@ -60,7 +60,8 @@ class MapLoader:
         material_player = Constants.Player.MATERIAL_GIRL
         self.__player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
         self.__player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                              ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+                                                     ActiveTake.PLAYER_IDLE_DOWN,
+                                                     Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
         player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED,
                                              Constants.Player.MOVE_SPEED, player_box_collider)
         self.__player.add_component(player_controller)
@@ -72,14 +73,13 @@ class MapLoader:
         self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
         self.__pet.get_component(SpriteRenderer2D).flip_x = True
         self.__pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                           ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+                                                  ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
         self.__pet.get_component(SpriteAnimator2D).is_infinite = True
         self.__pet.add_component(Rigidbody2D("PetRigidbody"))
         self.__pet.add_component(PetController("PetMovement", self.__player, 25))
         pet_collider = BoxCollider2D("PetCollider")
         pet_collider.scale = Vector2(2.5, 2.5)
         self.__pet.add_component(pet_collider)
-
 
     def map_load(self, scene, planet_json):
         tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
@@ -179,11 +179,30 @@ class MapLoader:
 
                     scene.add(lilypad_object)
                 elif id == 1:
-                    power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                     GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                     GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                     GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                     GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    if scene.name is Constants.Scene.EARTH:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    elif scene.name is Constants.Scene.MARS:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
+                    else:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
                     power_up_collider.scale = Vector2(2.5, 2.5)
@@ -237,9 +256,6 @@ class MapLoader:
 
     def __add_enemy_to_scene(self, enemy, scene):
         self.__enemies[scene.name].append(enemy)
-
-        if scene.name == Constants.Scene.MARS:
-            print(len(self.__enemies[scene.name]))
         scene.add(enemy)
 
     def load_planet_earth_enemies(self, scene):
@@ -362,7 +378,7 @@ class MapLoader:
         statue.transform.position = Vector2(2500, 4700)
         scene.add(statue)
 
-        self.__load_teleporter(scene, Vector2(3640, 4700))
+        self.__load_teleporter(scene, Vector2(3690, 4700))
         self.__load_ui_texts(scene)
 
     def __load_planet_saturn_specifics(self, scene):
@@ -404,4 +420,3 @@ class MapLoader:
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
             self.__add_enemy_to_scene(new_enemy, scene)
-

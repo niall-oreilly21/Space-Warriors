@@ -303,9 +303,6 @@ class GameObjectConstants:
         GAME_CAMERA.get_component(Camera).name = Constants.Cameras.GAME_CAMERA
         GAME_CAMERA.name = Constants.Cameras.GAME_CAMERA
 
-
-
-
     class UiHelperTexts:
         UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
         UI_TEXT_HELPER_BOTTOM = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)

@@ -25,9 +25,6 @@ class TeleporterCollider(Collider):
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to teleport", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
             self.__check_teleporter_input()
 
-    def handle_collision_exit(self):
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
-
     def update(self, game_time):
         if self.__animator.is_animation_complete:
             Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))

@@ -124,6 +124,7 @@ while running:
 
     pygame.display.update()
     game_time.limit_fps(60)
-    print(player.transform.position.x, ", ", player.transform.position.y)
+
+    # print(player.transform.position.x, ", ", player.transform.position.y)
 
 pygame.quit()
