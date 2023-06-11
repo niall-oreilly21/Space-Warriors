@@ -22,7 +22,6 @@ class GameObjectCategory(Enum):
     UIPrompts = 12
     Bullet = 13
     Gun = 14
-    Enemy = 15
 
 
 class GameObjectDirection(Enum):
@@ -38,3 +37,4 @@ class PowerUpType(Enum):
     Heal = 2
     Attack = 3
     Random = 4
+    NightVision = 5

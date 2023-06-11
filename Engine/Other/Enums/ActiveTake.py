@@ -29,3 +29,6 @@ class ActiveTake(Enum):
     PET_DOG_RUN = 24,
     PET_DOG_IDLE = 25
     TELEPORT_IDLE = 26
+    POTION = 27
+    RANDOM = 28
+    NIGHT_VISION = 29

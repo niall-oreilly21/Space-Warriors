@@ -35,7 +35,6 @@ class BulletController(Component):
         if self.__total_elapsed_time >= self.__bullet_span_life:
             self.__remove_bullet()
 
-
     def __remove_bullet(self):
         Application.ActiveScene.remove(self._parent)
 

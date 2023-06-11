@@ -172,6 +172,7 @@ class PlayerCollider(Collider):
                 self.__attack_activated = True
                 self.show_text(colliding_game_object, PowerUpType.Attack)
             elif power_up_type == PowerUpType.Speed:
+                player.get_component(SpriteAnimator2D).fps += colliding_game_object.power_up_value
                 player_speed_x = player.get_component(PlayerController).speed.x
                 player_speed_y = player.get_component(PlayerController).speed.y
                 player.get_component(PlayerController).speed = Vector2(
@@ -211,6 +212,7 @@ class PlayerCollider(Collider):
                 self.__speed_activated = False
                 self.parent.get_component(PlayerController).speed = Vector2(Constants.Player.MOVE_SPEED,
                                                                             Constants.Player.MOVE_SPEED)
+                self.parent.get_component(SpriteAnimator2D).fps = Constants.CHARACTER_ANIMATOR_MOVE_SPEED
 
         # Show power up text
         if self.__text_shown:

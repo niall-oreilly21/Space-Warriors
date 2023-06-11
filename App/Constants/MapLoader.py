@@ -209,7 +209,7 @@ class MapLoader:
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Enemy)
+                                GameObjectCategory.Entity)
 
         __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
@@ -229,47 +229,14 @@ class MapLoader:
         enemy.health_bar = HEALTH_BAR
         scene.add(HEALTH_BAR)
 
-        init_pos = 2500, 4900
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3000),
-                                                          Vector2(4500, 3100), Vector2(3800, 3100)]
-        self.__add_enemy_to_scene(enemy2, scene)
-
-        init_pos = 4200, 3200
-        enemy3 = enemy.clone()
-        enemy3.initial_position = Vector2(init_pos)
-        enemy3.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3200),
-                                                          Vector2(4500, 3200), Vector2(3800, 3200)]
-        self.__add_enemy_to_scene(enemy3, scene)
-
-        init_pos = 4700, 2300
-        enemy4 = enemy.clone()
-        enemy4.initial_position = Vector2(init_pos)
-        enemy4.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5300, 2300),
-                                                          Vector2(5300, 1800), Vector2(4700, 1800)]
-        self.__add_enemy_to_scene(enemy4, scene)
-
-        init_pos = 4800, 2400
-        enemy5 = enemy.clone()
-        enemy5.initial_position = Vector2(init_pos)
-        enemy5.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5200, 2400),
-                                                          Vector2(5200, 1900), Vector2(4800, 1900)]
-        self.__add_enemy_to_scene(enemy5, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
         enemy.add_component(
             ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
-        init_pos = 2550, 3500
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.add_component(
-            ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
-                                                          Vector2(2800, 3100), Vector2(3000, 2800)]
-        self.__add_enemy_to_scene(enemy2, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
     def load_planet_saturn_enemies(self, scene):
         gun = GameObjectConstants.Gun.Gun
@@ -279,11 +246,7 @@ class MapLoader:
             BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
         scene.add(gun)
 
-        init_pos = 2550, 3500
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
-                                                          Vector2(2800, 3100), Vector2(3000, 2800)]
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
 
         # Boss?
         init_pos = 3200, 4000
@@ -389,4 +352,18 @@ class MapLoader:
     def __load_ui_texts(self, scene):
         for ui_helper_text in self.__ui_helper_texts:
             scene.add(ui_helper_text)
+
+    def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
+        enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
+        if enemy_type == GameObjectCategory.Rat:
+            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+        elif enemy_type == GameObjectCategory.Wolf:
+            enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
+
+        for waypoints in enemy_waypoints[enemy_type_name]:
+            new_enemy = enemy.clone()
+            new_enemy.initial_position = waypoints[0]
+            new_enemy.get_component(WaypointFinder).waypoints = waypoints
+            self.__add_enemy_to_scene(new_enemy, scene)
+
 
