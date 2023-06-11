@@ -34,12 +34,13 @@ from Engine.Other.Enums.MapID import MapID
 from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Transform2D import Transform2D
 
+
 class MapLoader:
     def __init__(self, player):
         self.__player = player
         self.__enemies = \
             {
-                Constants.Scene.EARTH:[],
+                Constants.Scene.EARTH: [],
                 Constants.Scene.MARS: [],
                 Constants.Scene.SATURN: []
             }
@@ -54,7 +55,7 @@ class MapLoader:
         tileset.add_tile(Tile("Dirt", Constants.Tile.DIRT, Vector2(308, 12)))
         tileset.add_tile(Tile("Sand", Constants.Tile.SAND, Vector2(216, 156)))
         tileset.add_tile(Tile("CoarseDirt", Constants.Tile.COARSE_DIRT, Vector2(216, 108)))
-        tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308,12)))
+        tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308, 12)))
         tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
         tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
 
@@ -80,7 +81,7 @@ class MapLoader:
             self.__color_tiles(map_data, tile_data, width, height, [255, 100, 150], 220)
         elif scene.name == Constants.Scene.SATURN:
             self.__load_planet_saturn_specifics(scene)
-            self.__color_tiles(map_data, tile_data, width, height, [255,255,0], 150)
+            self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
 
         # Object generation
         for object in object_data:
@@ -91,7 +92,8 @@ class MapLoader:
                 if id == 5:
                     if planet_json == Constants.Map.PLANET_EARTH_JSON:
                         tree_object = random.choice(
-                            [GameObjectConstants.Foliage.TALL_TREE.clone(), GameObjectConstants.Foliage.LOW_TREE.clone()])
+                            [GameObjectConstants.Foliage.TALL_TREE.clone(),
+                             GameObjectConstants.Foliage.LOW_TREE.clone()])
                         tree_collider = BoxCollider2D("TreeCollider")
                         if tree_object.name == "Tree":
                             tree_collider.scale = Vector2(0.3, 0.15)
@@ -100,7 +102,8 @@ class MapLoader:
                             tree_collider.scale = Vector2(0.5, 0.25)
                             tree_collider.offset = Vector2(0, 32)
                         tree_object.add_component(tree_collider)
-                        tree_object.transform.position = Vector2(x * 71, y * 71)  # starting area forces every tree to one point
+                        tree_object.transform.position = Vector2(x * 71,
+                                                                 y * 71)  # starting area forces every tree to one point
                         scene.add(tree_object)
                     elif planet_json == Constants.Map.PLANET_SATURN_JSON:
                         tree_object = GameObjectConstants.NaturalStructures.ROCK_THREE.clone()
@@ -111,9 +114,10 @@ class MapLoader:
                         scene.add(tree_object)
                 elif id == 15:
                     if planet_json == Constants.Map.PLANET_EARTH_JSON:
-                        bush_object = random.choice([GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
-                                                     GameObjectConstants.Foliage.BUSH_FOUR.clone(),
-                                                     GameObjectConstants.NaturalStructures.ROCK_ONE.clone()])
+                        bush_object = random.choice(
+                            [GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
+                             GameObjectConstants.Foliage.BUSH_FOUR.clone(),
+                             GameObjectConstants.NaturalStructures.ROCK_ONE.clone()])
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         if bush_object.name == "RockOne":
                             scale = random.uniform(0.7, 2)
@@ -121,7 +125,8 @@ class MapLoader:
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
                     elif planet_json == Constants.Map.PLANET_MARS_JSON:
-                        bush_object = random.choice([GameObjectConstants.Foliage.BUSH_THREE.clone(),GameObjectConstants.Foliage.DEAD_BUSH.clone()])
+                        bush_object = random.choice([GameObjectConstants.Foliage.BUSH_THREE.clone(),
+                                                     GameObjectConstants.Foliage.DEAD_BUSH.clone()])
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
@@ -192,17 +197,30 @@ class MapLoader:
     def __add_enemy_to_scene(self, enemy, scene):
         self.__enemies[scene.name].append(enemy)
 
-        if scene.name == Constants.Scene.MARS:
+        if scene.name == Constants.Scene.EARTH:
             print(len(self.__enemies[scene.name]))
+
         scene.add(enemy)
 
+    def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
+        enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
+        if enemy_type == GameObjectCategory.Rat:
+            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+        elif enemy_type == GameObjectCategory.Wolf:
+            enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
+
+        for waypoints in enemy_waypoints[enemy_type_name]:
+            new_enemy = enemy.clone()
+            new_enemy.initial_position = waypoints[0]
+            new_enemy.get_component(WaypointFinder).waypoints = waypoints
+            self.__add_enemy_to_scene(new_enemy, scene)
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Enemy)
+                                GameObjectCategory.Entity)
 
         __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
@@ -216,76 +234,40 @@ class MapLoader:
         HEALTH_BAR.add_component(
             Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
                        RendererLayers.UIBackground, False))
-        HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
+        HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
         HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
         enemy.health_bar = HEALTH_BAR
         scene.add(HEALTH_BAR)
 
-        init_pos = 2500, 4900
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3000),
-                                                    Vector2(4500, 3100), Vector2(3800, 3100)]
-        self.__add_enemy_to_scene(enemy2, scene)
-
-        init_pos = 4200, 3200
-        enemy3 = enemy.clone()
-        enemy3.initial_position = Vector2(init_pos)
-        enemy3.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(4500, 3200),
-                                                          Vector2(4500, 3200), Vector2(3800, 3200)]
-        self.__add_enemy_to_scene(enemy3, scene)
-
-        init_pos = 4700, 2300
-        enemy4 = enemy.clone()
-        enemy4.initial_position = Vector2(init_pos)
-        enemy4.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5300, 2300),
-                                                          Vector2(5300, 1800), Vector2(4700, 1800)]
-        self.__add_enemy_to_scene(enemy4, scene)
-
-        init_pos = 4800, 2400
-        enemy5 = enemy.clone()
-        enemy5.initial_position = Vector2(init_pos)
-        enemy5.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(5200, 2400),
-                                                          Vector2(5200, 1900), Vector2(4800, 1900)]
-        self.__add_enemy_to_scene(enemy5, scene)
-
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(
+            ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
-        init_pos = 2550, 3500
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.add_component(ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
-                                                          Vector2(2800, 3100), Vector2(3000, 2800)]
-        self.__add_enemy_to_scene(enemy2, scene)
-
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
     def load_planet_saturn_enemies(self, scene):
         gun = GameObjectConstants.Gun.Gun
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
-        enemy.add_component(BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+        enemy.add_component(
+            BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
         scene.add(gun)
 
-        init_pos = 2550, 3500
-        enemy2 = enemy.clone()
-        enemy2.initial_position = Vector2(init_pos)
-        enemy2.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 3000),
-                                                          Vector2(2800, 3100), Vector2(3000, 2800)]
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
 
         # Boss?
         init_pos = 3200, 4000
         boss = EntityConstants.Enemy.ALIEN_ENEMY
         boss.initial_position = Vector2(init_pos)
-        boss.transform.scale = Vector2(5,5)
+        boss.transform.scale = Vector2(5, 5)
         boss.transform.position = Vector2(3207.8, 4013)
-        boss.add_component(BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+        boss.add_component(
+            BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
         boss.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
-
-
 
     def __load_planet_earth_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_ONE.clone()
@@ -294,7 +276,7 @@ class MapLoader:
 
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_TWO.clone()
         ruin.transform.position = Vector2(4800, 1900)
-        ruin.transform.scale = Vector2(3,3)
+        ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_THREE.clone()
@@ -331,7 +313,6 @@ class MapLoader:
         bridge4 = GameObjectConstants.UnnaturalStructures.BRIDGE.clone()
         bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
         scene.add(bridge4)
-
 
     def __load_planet_mars_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_FOUR.clone()
@@ -373,21 +354,3 @@ class MapLoader:
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
         teleporter.transform.position = Vector2(584, 6350.2)
         scene.add(teleporter)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
