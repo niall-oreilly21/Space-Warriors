@@ -295,9 +295,9 @@ class GameObjectConstants:
 
     class UiHelperTexts:
         UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
-        UI_TEXT_HELPER_BOTTOM = GameObject(Constants.Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
+        UI_TEXT_HELPER_BOTTOM = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
         UI_TEXT_HELPER_RIGHT = UI_TEXT_HELPER_BOTTOM.clone()
-        UI_TEXT_HELPER_RIGHT.name = Constants.Constants.UITextPrompts.UI_TEXT_RIGHT
+        UI_TEXT_HELPER_RIGHT.name = Constants.UITextPrompts.UI_TEXT_RIGHT
         UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_RIGHT)
 
     class HealthBar:

@@ -203,7 +203,7 @@ class MapLoader:
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
         HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Enemy)
+                                GameObjectCategory.Entity)
 
         __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
 
