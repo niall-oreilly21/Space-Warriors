@@ -7,6 +7,7 @@ from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants.Constants import Constants
 from App.Constants.Application import Application
+from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
@@ -292,6 +293,18 @@ class GameObjectConstants:
         colors = [None]
         bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
         Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
+
+    class Cameras:
+        __MAIN_MENU_CAMERA_COMPONENT = Camera(Constants.Cameras.MENU_CAMERA, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
+        MAIN_MENU_CAMERA = GameObject(Constants.Cameras.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),GameObjectType.Static, GameObjectCategory.Menu)
+        MAIN_MENU_CAMERA.add_component(__MAIN_MENU_CAMERA_COMPONENT)
+
+        GAME_CAMERA = MAIN_MENU_CAMERA.clone()
+        GAME_CAMERA.get_component(Camera).name = Constants.Cameras.GAME_CAMERA
+        GAME_CAMERA.name = Constants.Cameras.GAME_CAMERA
+
+
+
 
     class UiHelperTexts:
         UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"

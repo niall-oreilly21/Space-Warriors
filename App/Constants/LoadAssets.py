@@ -1,7 +1,7 @@
 from pygame import Vector2
-
 from App.Constants.Constants import Constants
 from App.Constants.GameObjectConstants import GameObjectConstants
+from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Managers.EventSystem.EventData import EventData
@@ -30,6 +30,11 @@ def load_sound(sound_manager):
     sound_manager.set_sound_volume(Constants.Music.POTION_DRINK_SOUND, 1)
     Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [Constants.Music.MENU_MUSIC]))
 
+def load_cameras(camera_manager, player):
+    camera_manager.add(GameObjectConstants.Cameras.MAIN_MENU_CAMERA)
+    camera_manager.add(GameObjectConstants.Cameras.GAME_CAMERA)
+    GameObjectConstants.Cameras.GAME_CAMERA.add_component(ThirdPersonController("Third Person Controller", player))
+
 
 def load_fonts():
     TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 40,
@@ -48,8 +53,11 @@ def load_fonts():
 
 def load_map(map_loader, scenes):
     for scene in scenes:
-        map_loader.map_load(scene, Constants.Map.path)
+        map_loader.map_load(scene, Constants.Map.BASE_PATH + scene.name + Constants.Map.JSON_END_PATH)
         map_loader.load_planet_earth_enemies(scene)
+
+
+
 
 
 

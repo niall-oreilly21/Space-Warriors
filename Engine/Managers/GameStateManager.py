@@ -1,12 +1,9 @@
 import pygame
-from pygame import Vector2
 
-from App.Constants import MapLoader
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
 from App.Constants.EntityConstants import EntityConstants
 from Engine.GameObjects.Character import Character
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData

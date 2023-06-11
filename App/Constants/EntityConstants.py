@@ -26,6 +26,13 @@ class EntityConstants:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
         PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
         PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
+        PLAYER = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE,
+                   Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
+                   Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
+                   GameObjectType.Dynamic, GameObjectCategory.Player)
+
+    class Pet:
+        PET = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,GameObjectCategory.Pet)
 
     class Enemy:
         WOLF_ENEMY_NAME = "wolf enemy"
