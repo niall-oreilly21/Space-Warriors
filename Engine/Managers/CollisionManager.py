@@ -1,18 +1,12 @@
-import time
-
-import pygame
 from App.Constants.Application import Application
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider import Collider
-from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
-from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
-from Engine.Managers.Manager import Manager
 from Engine.Managers.QuadTreeManager import QuadTreeManager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
-from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
 from Engine.Other.Enums.RendererLayers import RendererLayers
 
 
