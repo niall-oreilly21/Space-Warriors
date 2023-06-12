@@ -3,6 +3,7 @@ from random import randint
 import pygame
 from pygame import Vector2
 
+from App.Components.Colliders.PowerUpCollider import PowerUpCollider
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants.GameConstants import GameConstants
@@ -241,6 +242,7 @@ class GameObjectConstants:
                                GameObjectType.Static, GameObjectCategory.PowerUp)
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_SPEED
         POTION_SPEED.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_SPEED.add_component(PowerUpCollider("Potion Speed Collider"))
         POTION_SPEED.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                     texture_material, ActiveTake.POTION,
                                                     GameConstants.PowerUp.ANIMATION_SPEED))
@@ -249,6 +251,7 @@ class GameObjectConstants:
                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_ATTACK
         POTION_ATTACK.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_ATTACK.add_component(PowerUpCollider("Potion Speed Collider"))
         POTION_ATTACK.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                      texture_material, ActiveTake.POTION,
                                                      GameConstants.PowerUp.ANIMATION_SPEED))
@@ -257,6 +260,7 @@ class GameObjectConstants:
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_DEFENSE
         POTION_DEFENSE.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_DEFENSE.add_component(PowerUpCollider("Potion Attack Collider"))
         POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                       texture_material, ActiveTake.POTION,
                                                       GameConstants.PowerUp.ANIMATION_SPEED))
@@ -265,6 +269,7 @@ class GameObjectConstants:
                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_HEAL
         POTION_HEAL.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_HEAL.add_component(PowerUpCollider("Potion Heal Collider"))
         POTION_HEAL.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                    texture_material, ActiveTake.POTION,
                                                    GameConstants.PowerUp.ANIMATION_SPEED))
@@ -273,6 +278,7 @@ class GameObjectConstants:
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_RANDOM
         RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        RANDOM_POWER_UP.add_component(PowerUpCollider("Random Power Up Collider"))
         RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                        texture_material, ActiveTake.RANDOM,
                                                        GameConstants.PowerUp.ANIMATION_SPEED))
@@ -281,6 +287,7 @@ class GameObjectConstants:
                                         Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
         NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        RANDOM_POWER_UP.add_component(PowerUpCollider("Night Vision Collider"))
         NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                              texture_material, ActiveTake.NIGHT_VISION,
                                                              GameConstants.PowerUp.ANIMATION_SPEED))

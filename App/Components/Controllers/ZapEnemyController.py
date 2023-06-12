@@ -21,7 +21,6 @@ class ZapEnemyController(EnemyController):
         self._speed = self.__initial_speed
 
         self.__total_elapsed_time += game_time.elapsed_time
-        print(self.__zap_interval)
         if self.__total_elapsed_time >= self.__zap_interval:
 
             GameConstants.EVENT_DISPATCHER.dispatch_event(
