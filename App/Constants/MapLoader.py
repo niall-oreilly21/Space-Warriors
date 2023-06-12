@@ -246,8 +246,6 @@ class MapLoader:
 
     def __add_enemy_to_scene(self, enemy, enemy_health_bar_texture, scene):
         self.__enemies[scene.name].append(enemy)
-
-        enemy.initial_position = Vector2(2300, 4900)
         self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
         scene.add(enemy)
 
