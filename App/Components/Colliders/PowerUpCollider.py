@@ -18,7 +18,6 @@ class PowerUpCollider(Collider):
         super().__init__(name)
 
     def handle_response(self, colliding_game_object):
-        print(self.parent.power_up_type)
         if colliding_game_object == Application.Player:
             if self.parent.power_up_type == PowerUpType.Heal:
                 self.__handle_power_up_collision(5, 15, "Press E to heal")
@@ -118,7 +117,7 @@ class PowerUpCollider(Collider):
 
         GameConstants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+                      [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
         self.__text_shown = True
         self.__text_shown_time = 0
 
@@ -128,7 +127,7 @@ class PowerUpCollider(Collider):
                       ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
         GameConstants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+                      ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
 
     def clone(self):
         return PowerUpCollider(self.name)

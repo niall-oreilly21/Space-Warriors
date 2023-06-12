@@ -43,12 +43,19 @@ def load_fonts():
                                                          (255, 255, 255))
     TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30,
                                                         "",
-                                                        Vector2(GameConstants.VIEWPORT_WIDTH - 150, 75),
+                                                        Vector2(GameConstants.VIEWPORT_WIDTH - 175, 75),
+                                                        (255, 255, 255))
+    TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT2 = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30,
+                                                        "",
+                                                        Vector2(GameConstants.VIEWPORT_WIDTH - 175, 145),
                                                         (255, 255, 255))
     GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_BOTTOM.add_component(
         Renderer2D("Renderer-1", TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM, RendererLayers.UI))
     GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_RIGHT.add_component(
         Renderer2D("Renderer-2", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT, RendererLayers.UI))
+    GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_RIGHT2.add_component(
+        Renderer2D("Renderer-3", TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT2, RendererLayers.UI))
+
 
 
 

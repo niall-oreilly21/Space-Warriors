@@ -366,6 +366,7 @@ class GameConstants:
     class UITextPrompts:
         UI_TEXT_BOTTOM = "UITextBottom"
         UI_TEXT_RIGHT = "UITextRight"
+        UI_TEXT_RIGHT2 = "UITextRight2"
 
     class PowerUp:
         __POTION_FRAME_RECTS = [pygame.Rect(14, 0, 72, 84), pygame.Rect(103, 0, 60, 84), pygame.Rect(180, 0, 50, 84),
