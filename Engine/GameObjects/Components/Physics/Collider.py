@@ -11,6 +11,7 @@ class Collider(Component, ABC):
 
     def __init__(self, name):
         super().__init__(name)
+        self.is_colliding = False
 
     @abstractmethod
     def handle_response(self, colliding_game_object):

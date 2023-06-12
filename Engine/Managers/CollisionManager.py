@@ -55,6 +55,10 @@ class CollisionManager(QuadTreeManager):
 
             for i in range(len(potential_colliders)):
                 box_collider_one = potential_colliders[i]
+
+                if box_collider_one.parent.get_component(Collider):
+                    box_collider_one.parent.get_component(Collider).is_colliding = False
+
                 for j in range(i + 1, len(potential_colliders)):
                     box_collider_two = potential_colliders[j]
                     self.__check_collision(box_collider_one, box_collider_two)
@@ -150,13 +154,20 @@ class CollisionManager(QuadTreeManager):
             return
 
         if box_collider_one.collides_with(box_collider_two):
+            if collider_one:
+                collider_one.is_colliding = True
+
+            if collider_two:
+                collider_two.is_colliding = True
+            self.__handle_collision_responses(collider_one, collider_two, collider_one_entity, collider_two_entity)
             self.__change_collision_layers_for_trees(collider_one_entity, collider_two_entity, RendererLayers.BelowPlayer)
 
             self.__handle_collision_physics(collider_one_entity, collider_two_entity)
-
-            self.__handle_collision_responses(collider_one, collider_two, collider_one_entity, collider_two_entity)
         else:
-            self.__handle_collision_exits(collider_one, collider_two)
+            if collider_one and collider_two:
+                if not collider_one.is_colliding and not collider_two.is_colliding:
+                    self.__handle_collision_exits(collider_one, collider_two)
+
             self.__change_collision_layers_for_trees(collider_one_entity, collider_two_entity, RendererLayers.AbovePlayer)
 
 

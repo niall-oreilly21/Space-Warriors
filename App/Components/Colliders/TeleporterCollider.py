@@ -20,7 +20,6 @@ class TeleporterCollider(Collider):
         self.__animator = self._parent.get_component(SpriteAnimator2D)
 
     def handle_response(self, colliding_game_object):
-
         if colliding_game_object == Application.Player:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to teleport", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
             self.__check_teleporter_input()
@@ -44,6 +43,10 @@ class TeleporterCollider(Collider):
     def clone(self):
         return TeleporterCollider(self.name)
 
+    def handle_collision_exit(self):
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
 
 
