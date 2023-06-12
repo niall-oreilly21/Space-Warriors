@@ -32,3 +32,4 @@ class ActiveTake(Enum):
     POTION = 27
     RANDOM = 28
     NIGHT_VISION = 29
+    PLAYER_FAINT = 30

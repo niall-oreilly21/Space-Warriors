@@ -8,6 +8,7 @@ from Engine.Graphics.Sprites.Take import Take
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
+
 class Constants:
     GAME_NAME = "Space Warriors"
 
@@ -22,7 +23,7 @@ class Constants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 50
+        DEFAULT_HEALTH = 1
         DEFAULT_ATTACK_DAMAGE = 5
 
         MOVE_SPEED = 0.2
@@ -80,15 +81,21 @@ class Constants:
 
         __PLAYER_ATTACK_DOWN = Take(ActiveTake.PLAYER_ATTACK_DOWN, __PLAYER_ATTACK_DOWN_FRAME_RECT, False, 1)
 
+        __PLAYER_FAINT_FRAME_RECT = [pygame.Rect(18, 1293, 28, 49), pygame.Rect(84, 1293, 27, 49),
+                                     pygame.Rect(148, 1293, 27, 49),
+                                     pygame.Rect(212, 1293, 27, 49), pygame.Rect(276, 1293, 35, 49),
+                                     pygame.Rect(337, 1293, 39, 49)]
+        __PLAYER_FAINT = Take(ActiveTake.PLAYER_FAINT, __PLAYER_FAINT_FRAME_RECT, False, 1)
+
         PLAYER_ANIMATOR_INFO = [__PLAYER_MOVE_X, __PLAYER_MOVE_DOWN, __PLAYER_MOVE_UP, __PLAYER_IDLE_X,
                                 __PLAYER_IDLE_DOWN, __PLAYER_IDLE_UP, __PLAYER_ATTACK_X, __PLAYER_ATTACK_UP,
-                                __PLAYER_ATTACK_DOWN]
+                                __PLAYER_ATTACK_DOWN, __PLAYER_FAINT]
 
         __GIRL_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_girl.png")
         __BOY_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/player_boy.png")
 
         MATERIAL_GIRL = TextureMaterial2D(__GIRL_SPRITE_SHEET, None, Vector2(0, 0), None)
-        MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None,  Vector2(0, 0), None)
+        MATERIAL_BOY = TextureMaterial2D(__BOY_SPRITE_SHEET, None, Vector2(0, 0), None)
 
     class EnemyWolf:
         MOVE_SPEED = 3
@@ -160,7 +167,7 @@ class Constants:
 
         MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
         MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
-        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None,  Vector2(0, 0), None)
+        MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
 
     class EnemyAlien:
         MOVE_SPEED = 6
@@ -241,7 +248,8 @@ class Constants:
         __DEATH_MENU_BACKGROUND = __PAUSE_MENU_BACKGROUND
         MATERIAL_DEATH_MENU = TextureMaterial2D(__DEATH_MENU_BACKGROUND, None, Vector2(0, 0), None)
 
-        __STARS_FRAME_RECT = [pygame.Rect(252, 14, 91, 119), pygame.Rect(154, 14, 91, 119), pygame.Rect(14, 14, 91, 119),
+        __STARS_FRAME_RECT = [pygame.Rect(252, 14, 91, 119), pygame.Rect(154, 14, 91, 119),
+                              pygame.Rect(14, 14, 91, 119),
                               pygame.Rect(154, 14, 91, 119), pygame.Rect(252, 14, 91, 119)]
         __STARS = Take(ActiveTake.STAR, __STARS_FRAME_RECT)
         STARS_ANIMATOR_INFO = [__STARS]
@@ -302,11 +310,9 @@ class Constants:
         COLLISION_RANGE_HEIGHT = 400
         QUAD_TREE_SIZE = 4
 
-
     class Cameras:
         GAME_CAMERA = "GameCamera"
         MENU_CAMERA = "MenuCamera"
-
 
     class Music:
         MENU_MUSIC = "MenuMusic"
@@ -331,8 +337,8 @@ class Constants:
         ZAP_SOUND_FILEPATH = "Assets/Sounds/zap.wav"
         TELEPORT_SOUND_FILEPATH = "Assets/Sounds/teleport.wav"
         PLAYER_DEATH_SOUND_FILEPATH = "Assets/Sounds/death.wav"
-        ENEMY_DEATH_SOUND_FILEPATH ="Assets/Sounds/enemy_death.wav"
-        POTION_DRINK_SOUND_FILEPATH ="Assets/Sounds/potion.wav"
+        ENEMY_DEATH_SOUND_FILEPATH = "Assets/Sounds/enemy_death.wav"
+        POTION_DRINK_SOUND_FILEPATH = "Assets/Sounds/potion.wav"
         PLAYER_ATTACK_SOUND_FILEPATH = "Assets/Sounds/sword_swish.wav"
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
 
@@ -378,8 +384,10 @@ class Constants:
         __RANDOM_SPRITE_SHEET = pygame.image.load("Assets/UI/PowerUps/random.png")
         MATERIAL_RANDOM = TextureMaterial2D(__RANDOM_SPRITE_SHEET, None, Vector2(0, 0), None)
 
-        __NIGHT_VISION_FRAME_RECTS = [pygame.Rect(9, 12, 81, 56), pygame.Rect(99, 12, 67, 56), pygame.Rect(177, 12, 55, 56),
-                                      pygame.Rect(242, 12, 44, 56), pygame.Rect(177, 12, 55, 56), pygame.Rect(99, 12, 67, 56),
+        __NIGHT_VISION_FRAME_RECTS = [pygame.Rect(9, 12, 81, 56), pygame.Rect(99, 12, 67, 56),
+                                      pygame.Rect(177, 12, 55, 56),
+                                      pygame.Rect(242, 12, 44, 56), pygame.Rect(177, 12, 55, 56),
+                                      pygame.Rect(99, 12, 67, 56),
                                       pygame.Rect(9, 12, 81, 56)]
         __NIGHT_VISION = Take(ActiveTake.NIGHT_VISION, __NIGHT_VISION_FRAME_RECTS)
 
