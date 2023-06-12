@@ -5,11 +5,14 @@ import time
 
 from App.Constants.Application import Application
 from App.Constants.Constants import Constants
+from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
+from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectType
+
 
 class SceneManager(Manager):
     def __init__(self, event_dispatcher):
@@ -63,11 +66,15 @@ class SceneManager(Manager):
             self.__set_menu_scene(Constants.Scene.PAUSE_MENU)
             self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
 
-        elif event_data.event_action_type == EventActionType.DeathScene:
+        elif event_data.event_action_type == EventActionType.EndLevelScene:
+
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__dispatch_menu_events()
             Application.LastActiveScene = self.__active_scene
-            self.__set_menu_scene(Constants.Scene.DEATH_MENU)
+            self.__set_menu_scene(Constants.Scene.END_LEVEL_MENU)
+            end_level_scene_text = event_data.parameters[0]
+
+            self.__set_end_level_menu_title(end_level_scene_text)
             self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
@@ -135,6 +142,10 @@ class SceneManager(Manager):
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
         else:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOff))
+
+    def __set_end_level_menu_title(self, end_level_scene_text):
+        end_screen_title = self.__active_scene.find_all_by_category(GameObjectType.Static, GameObjectCategory.MenuTitle)[0]
+        end_screen_title.get_component(Renderer2D).material.text = end_level_scene_text
 
     def __set_scenes(self):
         Application.ActiveScene = Application.LastActiveScene

@@ -1,7 +1,6 @@
 import json
 import random
 
-import pygame
 from pygame import Vector2
 
 from App.Components.Colliders.PlayerCollider import PlayerCollider
@@ -18,19 +17,16 @@ from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
-from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
-from Engine.Graphics.Materials.RectMaterial2D import RectMaterial2D
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
-from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
+from Engine.Other.Enums.GameObjectEnums import GameObjectCategory
 from Engine.Other.Enums.RendererLayers import RendererLayers
-from Engine.Other.Transform2D import Transform2D
 
 
 class MapLoader:
@@ -59,8 +55,7 @@ class MapLoader:
         material_player = Constants.Player.MATERIAL_GIRL
         self.__player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
         self.__player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                                     ActiveTake.PLAYER_IDLE_DOWN,
-                                                     Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+                                              ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
         player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED,
                                              Constants.Player.MOVE_SPEED, player_box_collider)
         self.__player.add_component(player_controller)
@@ -72,7 +67,7 @@ class MapLoader:
         self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
         self.__pet.get_component(SpriteRenderer2D).flip_x = True
         self.__pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                                  ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+                                           ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
         self.__pet.get_component(SpriteAnimator2D).is_infinite = True
         self.__pet.add_component(Rigidbody2D("PetRigidbody"))
         self.__pet.add_component(PetController("PetMovement", self.__player, 25))
@@ -178,30 +173,11 @@ class MapLoader:
 
                     scene.add(lilypad_object)
                 elif id == 1:
-                    if scene.name is Constants.Scene.EARTH:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
-                    elif scene.name is Constants.Scene.MARS:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
-                    else:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
+                    power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                     GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                     GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                     GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                     GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
                     power_up_collider.scale = Vector2(2.5, 2.5)
@@ -247,49 +223,43 @@ class MapLoader:
 
         self.__check_enemy_in_scene(scene)
         scene.start()
-
         return len(self.__enemies[scene.name])
 
     def __check_enemy_in_scene(self, scene):
         for enemy in self.__enemies[scene.name]:
+            enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
+
             if not scene.contains(enemy):
                 scene.add(enemy)
 
-    def __add_enemy_to_scene(self, enemy, scene):
+    def __add_enemy_health_bar_to_scene(self, enemy, enemy_health_bar_texture, scene):
+        health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
+        self.__set_texture_for_enemy_health_bar(health_bar, enemy_health_bar_texture)
+        health_bar.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
+        enemy.health_bar = health_bar
+        scene.add(health_bar)
+
+    def __set_texture_for_enemy_health_bar(self, health_bar, enemy_health_bar_texture):
+        for renderer in health_bar.get_components(Renderer2D):
+            if isinstance(renderer.material, TextureMaterial2D):
+                renderer.material.texture = enemy_health_bar_texture
+
+    def __add_enemy_to_scene(self, enemy, enemy_health_bar_texture, scene):
         self.__enemies[scene.name].append(enemy)
+
+        enemy.initial_position = Vector2(2300, 4900)
+        self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
         scene.add(enemy)
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
 
-        HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic,
-                                GameObjectCategory.Entity)
-
-        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
-
-        __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-
-        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
-        __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
-
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-                       RendererLayers.UIBackground, False))
-        HEALTH_BAR.add_component(
-            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI, False))
-        HEALTH_BAR.add_component(EnemyHealthBarController("Health Bar Controller Enemy", enemy))
-        enemy.health_bar = HEALTH_BAR
-        scene.add(HEALTH_BAR)
-
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(
-            ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -379,7 +349,7 @@ class MapLoader:
         statue.transform.position = Vector2(2500, 4700)
         scene.add(statue)
 
-        self.__load_teleporter(scene, Vector2(3690, 4700))
+        self.__load_teleporter(scene, Vector2(3640, 4700))
         self.__load_ui_texts(scene)
 
     def __load_planet_saturn_specifics(self, scene):
@@ -411,13 +381,16 @@ class MapLoader:
 
     def load_enemies(self, enemy_waypoints, enemy_type, enemy, scene):
         enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
+        enemy_health_bar_texture = GameObjectConstants.HealthBar.ALIEN_ENEMY_HEALTH_BAR_IMAGE
         if enemy_type == GameObjectCategory.Rat:
             enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+            enemy_health_bar_texture = GameObjectConstants.HealthBar.RAT_ENEMY_HEALTH_BAR_IMAGE
         elif enemy_type == GameObjectCategory.Wolf:
             enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
+            enemy_health_bar_texture = GameObjectConstants.HealthBar.WOLF_ENEMY_HEALTH_BAR_IMAGE
 
         for waypoints in enemy_waypoints[enemy_type_name]:
             new_enemy = enemy.clone()
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
-            self.__add_enemy_to_scene(new_enemy, scene)
+            self.__add_enemy_to_scene(new_enemy,enemy_health_bar_texture, scene)

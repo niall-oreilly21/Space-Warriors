@@ -8,7 +8,7 @@ from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.MapLoader import MapLoader
 from App.Constants.SceneLoader import SceneLoader, initialise_menu, initialise_level_menu, initialise_character_selection_menu, initialise_controls_menu
-from App.Constants.LoadAssets import load_sound, load_fonts, load_map, load_cameras
+from App.Constants.LoadAssets import load_sound, load_fonts, load_cameras
 from Engine.Managers.CollisionManager import CollisionManager
 from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
@@ -41,36 +41,25 @@ pet = EntityConstants.Pet.PET
 
 Constants.INPUT_HANDLER = InputHandler()
 Constants.EVENT_DISPATCHER = EventDispatcher()
-map_loader = MapLoader(player, GameObjectConstants.HealthBar.HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.PLAYER_HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
 
 scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
 sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
 camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
 collision_manager = CollisionManager(Constants.QuadTree.MAP_DIMENSIONS, player, Constants.QuadTree.COLLISION_RANGE_WIDTH, Constants.QuadTree.COLLISION_RANGE_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE, Constants.EVENT_DISPATCHER)
 game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
-render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH + 10, Constants.VIEWPORT_HEIGHT + 10, Constants.QuadTree.QUAD_TREE_SIZE)
-managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
+render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE)
+update_managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
 
-earth_scene = Scene(Constants.Scene.EARTH)
-mars_scene = Scene(Constants.Scene.MARS)
-saturn_scene = Scene(Constants.Scene.SATURN)
-
-scene_manager.add(Constants.Scene.EARTH, earth_scene)
-scene_manager.add(Constants.Scene.MARS, mars_scene)
-scene_manager.add(Constants.Scene.SATURN, saturn_scene)
-
-load_cameras(camera_manager, player)
-load_fonts()
-load_map(map_loader, (earth_scene, mars_scene, saturn_scene))
-load_sound(sound_manager)
-
-scene_loader = SceneLoader(camera_manager, GameObjectConstants.Cameras.MAIN_MENU_CAMERA, scene_manager)
-
+scene_loader = SceneLoader(scene_manager)
+earth_scene = scene_loader.initialise_menu_scene(Constants.Scene.EARTH)
+mars_scene = scene_loader.initialise_menu_scene(Constants.Scene.MARS)
+saturn_scene = scene_loader.initialise_menu_scene(Constants.Scene.SATURN)
 pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
 main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
 level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
 sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
-death_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.DEATH_MENU)
+end_level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.END_LEVEL_MENU)
 character_selection_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
 controls_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CONTROLS_MENU)
 
@@ -81,11 +70,21 @@ initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused",
                 [Constants.Button.RESUME_BUTTON, Constants.Button.LEVELS_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound",
                 [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-initialise_menu(death_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
+initialise_menu(end_level_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
                 [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
 initialise_character_selection_menu(character_selection_menu_scene)
 initialise_level_menu(level_menu_scene)
 initialise_controls_menu(controls_menu_scene)
+
+load_cameras(camera_manager, player)
+load_fonts()
+map_loader.map_load(earth_scene, Constants.Map.BASE_PATH + Constants.Scene.EARTH + Constants.Map.JSON_END_PATH)
+map_loader.map_load(mars_scene, Constants.Map.BASE_PATH + Constants.Scene.MARS + Constants.Map.JSON_END_PATH)
+map_loader.map_load(saturn_scene, Constants.Map.BASE_PATH + Constants.Scene.SATURN + Constants.Map.JSON_END_PATH)
+map_loader.load_planet_earth_enemies(earth_scene)
+map_loader.load_planet_mars_enemies(mars_scene)
+map_loader.load_planet_saturn_enemies(saturn_scene)
+load_sound(sound_manager)
 
 camera_manager.set_active_camera(Constants.Cameras.MENU_CAMERA)
 scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
@@ -111,7 +110,7 @@ while running:
 
     game_time.tick()
 
-    for manager in managers:
+    for manager in update_managers:
         manager.update(game_time)
 
     if screen is not None:

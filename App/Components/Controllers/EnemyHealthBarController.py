@@ -35,17 +35,22 @@ class EnemyHealthBarController(HealthBarController):
             self.__turn_on_renderers()
 
     def _follow_target(self):
-        pass
-        # target_center = self._target_box_collider.bounds.center
-        # desired_position = Vector2(target_center[0] - self.__texture_material.source_rect.width * self.transform.scale.x / 2,
-        #                            target_center[1] - self.__texture_material.source_rect.height * self.transform.scale.y * 1.5)
-        #
-        #
-        # self.transform.position = desired_position
+        target_center = self._target_box_collider.bounds.center
+        desired_position = Vector2(target_center[0] - self.__texture_material.source_rect.width * self.transform.scale.x / 2,
+                                   target_center[1] - self.__texture_material.source_rect.height * self.transform.scale.y * 1.5)
+
+
+        self.transform.position = desired_position
 
     def __turn_on_renderers(self):
         for renderer in self._parent.get_components(Renderer2D):
             renderer.is_drawing = True
+
+    def reset_health_bar_visibility(self):
+        self.__is_active = False
+
+        for renderer in self.parent.get_components(Renderer2D):
+            renderer.is_drawing = False
 
     def clone(self):
         return EnemyHealthBarController(self.name, self.target)

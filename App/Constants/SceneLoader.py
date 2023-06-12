@@ -38,7 +38,7 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
     background = initialise_menu_background(background_material)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
+                       GameObjectCategory.MenuTitle)
     title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, Constants.Menu.TITLE_FONT_SIZE, title_text,
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, Constants.VIEWPORT_HEIGHT / 6),
                                          (255, 255, 255))
@@ -76,7 +76,7 @@ def initialise_level_menu(menu_scene):
     background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
+                       GameObjectCategory.MenuTitle)
     title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Land on...",
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
@@ -131,7 +131,7 @@ def initialise_character_selection_menu(menu_scene):
     background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
+                       GameObjectCategory.MenuTitle)
     title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Choose your warrior",
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
@@ -218,7 +218,7 @@ def initialise_controls_menu(menu_scene):
     background = initialise_menu_background(Constants.Menu.MATERIAL_PAUSE_MENU)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                       GameObjectCategory.Menu)
+                       GameObjectCategory.MenuTitle)
     title_text_material = TextMaterial2D(Constants.Menu.TITLE_FONT_PATH, 30, "Controls",
                                          Vector2(Constants.VIEWPORT_WIDTH / 2, 125), (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
@@ -248,16 +248,11 @@ def initialise_controls_menu(menu_scene):
 
 
 class SceneLoader:
-    def __init__(self, camera_manager, camera_main_menu_game_object, scene_manager):
-        self.__camera_manager = camera_manager
-        self.__camera_main_menu_game_object = camera_main_menu_game_object
+    def __init__(self, scene_manager):
         self.__scene_manager = scene_manager
 
     def initialise_menu_scene(self, scene_name):
-        self.__camera_manager.set_active_camera("MenuCamera")
-
         menu_scene = Scene(scene_name)
-        menu_scene.add(self.__camera_main_menu_game_object)
         self.__scene_manager.add(scene_name, menu_scene)
 
         return menu_scene

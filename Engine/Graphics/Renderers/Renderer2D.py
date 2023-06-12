@@ -64,4 +64,4 @@ class Renderer2D(Component):
             return screen_rect
 
         def clone(self):
-            return Renderer2D(self._name, self._material.clone(), self._layer)
+            return Renderer2D(self._name, self._material.clone(), self._layer, self.__is_drawing)

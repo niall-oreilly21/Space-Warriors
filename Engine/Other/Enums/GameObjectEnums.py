@@ -22,6 +22,8 @@ class GameObjectCategory(Enum):
     UIPrompts = 12
     Bullet = 13
     Gun = 14
+    EnemyHealthUI = 15
+    MenuTitle = 16
 
 
 class GameObjectDirection(Enum):
