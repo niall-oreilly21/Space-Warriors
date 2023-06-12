@@ -12,12 +12,14 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 
+
 class GameStateManager(Manager):
     def __init__(self, event_dispatcher, input_handler, map_loader):
         super().__init__(event_dispatcher)
         self.__input_handler = input_handler
         self.__ui_helper_texts = []
         self.__map_loader = map_loader
+        self.__enemies_in_scene_count = 0
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
@@ -37,6 +39,9 @@ class GameStateManager(Manager):
         elif event_data.event_action_type == EventActionType.LoadLevel:
             self.__load_level()
 
+        elif event_data.event_action_type == EventActionType.RemoveEnemyFromScene:
+            self.__enemies_in_scene_count -= 1
+
     def __set_ui_text(self, ui_text, ui_text_game_object_name):
 
         for ui_text_game_object in self.__ui_helper_texts:
@@ -49,16 +54,15 @@ class GameStateManager(Manager):
                 else:
                     ui_text_game_object.get_component(Renderer2D).is_drawing = True
 
-
     def __set_up_level(self):
         Application.GameStarted = False
-        self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+        self.__enemies_in_scene_count = self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+        print(self.__enemies_in_scene_count)
         Application.GameStarted = True
         self.__dispatch_events_for_set_up_level()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
-
 
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
@@ -89,7 +93,6 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name is Constants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
 
-
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
@@ -115,7 +118,6 @@ class GameStateManager(Manager):
                 or Application.ActiveScene.name == Constants.Scene.SATURN:
             if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
                 self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
-
 
     def update(self, game_time):
         self.__check_pause_menu()

@@ -29,7 +29,6 @@ from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
-from Engine.Other.Enums.MapID import MapID
 from Engine.Other.Enums.RendererLayers import RendererLayers
 from Engine.Other.Transform2D import Transform2D
 
@@ -248,6 +247,8 @@ class MapLoader:
 
         self.__check_enemy_in_scene(scene)
         scene.start()
+
+        return len(self.__enemies[scene.name])
 
     def __check_enemy_in_scene(self, scene):
         for enemy in self.__enemies[scene.name]:

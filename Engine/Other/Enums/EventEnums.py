@@ -51,3 +51,4 @@ class EventActionType:
     CharacterSelectionMenuScene = 40
     ControlsMenuScene = 41
     SetRendererQuadTreeTarget = 44
+    RemoveEnemyFromScene = 45

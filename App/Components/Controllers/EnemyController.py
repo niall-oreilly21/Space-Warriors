@@ -8,7 +8,6 @@ from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
-from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
@@ -59,6 +58,9 @@ class EnemyController(FollowController):
             Constants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
                           [Constants.Music.ENEMY_DEATH_SOUND, False]))
+            Constants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.RemoveEnemyFromScene)
+            )
 
     def _follow_target(self):
         self.calculate_movement_direction(self.__target.transform.position, self.transform.position)
