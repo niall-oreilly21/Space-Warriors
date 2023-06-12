@@ -40,9 +40,6 @@ class HealthBarController(FollowController):
         self._material.width = min(self.__current_width, self.__initial_width)
         self.change_colour()
 
-        if self.__current_width < 0:
-            self.__current_width = 0
-
     def _follow_target(self):
         pass
 
