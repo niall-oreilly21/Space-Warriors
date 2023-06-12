@@ -30,7 +30,10 @@ ruins_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Assets_source.png"
 rocks_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Rocks_source.png")
 bushes_image = pygame.image.load("Assets/SpriteSheets/Tilesets/Bushes_source.png")
 image2 = pygame.image.load("Assets/SpriteSheets/Tilesets/plain_tileset2.png")
-
+building_image = pygame.image.load("Assets/SpriteSheets/Tilesets/building_1.png")
+bed_image = pygame.image.load("Assets/SpriteSheets/Tilesets/bed.png")
+table_image = pygame.image.load("Assets/SpriteSheets/Tilesets/table.png")
+couch_image = pygame.image.load("Assets/SpriteSheets/Tilesets/couch.png")
 
 class GameObjectConstants:
     class Foliage:
@@ -154,6 +157,37 @@ class GameObjectConstants:
 
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
+
+        BUILDING = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1,0.1)), GameObjectType.Static,
+                              GameObjectCategory.Player)
+        object_frame = building_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        BUILDING.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        BUILDING.add_component(BoxCollider2D("Box-3"))
+
+        BED = GameObject("Bed", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                              GameObjectCategory.Player)
+        object_frame = bed_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        BED.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        BED.add_component(BoxCollider2D("Box-3"))
+
+        TABLE = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                         GameObjectCategory.Player)
+        object_frame = table_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        TABLE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        TABLE.add_component(BoxCollider2D("Box-3"))
+
+        COUCH = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                           GameObjectCategory.Player)
+        object_frame = couch_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        COUCH.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        COUCH.add_component(BoxCollider2D("Box-3"))
+
+
+
         # Earth Ruins
         RUIN_ONE = GameObject("RuinOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                               GameObjectCategory.Player)
