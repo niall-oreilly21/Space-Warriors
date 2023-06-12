@@ -405,7 +405,12 @@ class MapLoader:
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
         enemy.initial_position = Vector2(10000, 10000)
         enemy.add_component(
-            ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+            EnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600))
+
+        door = GameObjectConstants.UnnaturalStructures.DOOR.clone()
+        door.transform.position = Vector2(1000, 950)
+        door.transform.scale = Vector2(.4, .4)
+        scene.add(door)
 
         bed = GameObjectConstants.UnnaturalStructures.BED.clone()
         bed.transform.position = Vector2(500, 0)
@@ -421,6 +426,17 @@ class MapLoader:
         couch.transform.position = Vector2(1400, 0)
         couch.transform.scale = Vector2(.4, .4)
         scene.add(couch)
+
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(1000, -60)
+        window.transform.scale = Vector2(.5,.5)
+        scene.add(window)
+
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(2000, -60)
+        window.transform.scale = Vector2(.5,.5)
+        scene.add(window)
+
 
 
 

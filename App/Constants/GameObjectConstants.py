@@ -35,6 +35,8 @@ building_image = pygame.image.load("Assets/SpriteSheets/Tilesets/building_1.png"
 bed_image = pygame.image.load("Assets/SpriteSheets/Tilesets/bed.png")
 table_image = pygame.image.load("Assets/SpriteSheets/Tilesets/table.png")
 couch_image = pygame.image.load("Assets/SpriteSheets/Tilesets/couch.png")
+door_image = pygame.image.load("Assets/SpriteSheets/Tilesets/door.png")
+window_image = pygame.image.load("Assets/SpriteSheets/Tilesets/window.png")
 
 class GameObjectConstants:
     class Foliage:
@@ -165,6 +167,19 @@ class GameObjectConstants:
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         BUILDING.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         BUILDING.add_component(BoxCollider2D("Box-3"))
+
+        DOOR = GameObject("Door", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                         GameObjectCategory.Player)
+        object_frame = door_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        DOOR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        DOOR.add_component(BoxCollider2D("Box-3"))
+
+        WINDOW = GameObject("Window", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                          GameObjectCategory.Player)
+        object_frame = window_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        WINDOW.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
         BED = GameObject("Bed", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                               GameObjectCategory.Player)

@@ -26,7 +26,7 @@ class EntityConstants:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
         PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
         PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
-        PLAYER_INITIAL_POSITION_HOUSE = Vector2(1000, 930)
+        PLAYER_INITIAL_POSITION_HOUSE = Vector2(1000, 900)
         PLAYER = Character("Player", GameConstants.Player.DEFAULT_HEALTH, GameConstants.Player.DEFAULT_ATTACK_DAMAGE,
                            GameConstants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
                            Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
