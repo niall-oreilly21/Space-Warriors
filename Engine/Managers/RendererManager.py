@@ -142,12 +142,14 @@ class RendererManager(QuadTreeManager, IDrawable):
                 if renderer.parent.get_component(BoxCollider2D):
                     renderer.parent.get_component(BoxCollider2D).draw(self.__surface, Application.ActiveCamera.transform.position)
 
+        if self.__is_spotlight_on:
+            self.draw_spotlight()
+
         for renderer in self.__text_renderers:
             renderer.draw(self.__surface, Transform2D(renderer.transform.position, renderer.transform.rotation, renderer.transform.scale))
 
 
-        if self.__is_spotlight_on:
-            self.draw_spotlight()
+
 
     def __draw_menu(self):
         renderers = Application.ActiveScene.get_all_components_by_type(Renderer2D)
