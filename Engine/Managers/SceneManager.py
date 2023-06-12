@@ -33,7 +33,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.EarthScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.set_active_scene(GameConstants.Scene.EARTH)
+            self.set_active_scene(GameConstants.Scene.HOUSE_SCENE)
             Application.ActiveScene = self.__active_scene
             self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))

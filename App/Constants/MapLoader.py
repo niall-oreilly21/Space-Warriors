@@ -41,7 +41,8 @@ class MapLoader:
             {
                 GameConstants.Scene.EARTH: [],
                 GameConstants.Scene.MARS: [],
-                GameConstants.Scene.SATURN: []
+                GameConstants.Scene.SATURN: [],
+                GameConstants.Scene.HOUSE_SCENE: []
             }
 
         self.__load_player_components()
@@ -82,13 +83,14 @@ class MapLoader:
         # Add tiles to the tileset
         tileset.add_tile(Tile("Grass", GameConstants.Tile.GRASS, Vector2(216, 12)))
         tileset.add_tile(Tile("Water", GameConstants.Tile.WATER, Vector2(264, 156)))
-        tileset.add_tile(Tile("Dark Grass", GameConstants.Tile.DARK_GRASS, Vector2(216, 108)))
+        tileset.add_tile(Tile("Dark Grass", GameConstants.Tile.WOOD, Vector2(216, 108)))
         tileset.add_tile(Tile("Dirt", GameConstants.Tile.DIRT, Vector2(308, 12)))
         tileset.add_tile(Tile("Sand", GameConstants.Tile.SAND, Vector2(216, 156)))
         tileset.add_tile(Tile("CoarseDirt", GameConstants.Tile.COARSE_DIRT, Vector2(216, 108)))
         tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308, 12)))
         tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
         tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
+        tileset.add_tile(Tile("Wood", GameConstants.Tile.DARK_GRASS, Vector2(307,60)))
 
         map_data = []
 
@@ -113,6 +115,9 @@ class MapLoader:
         elif scene.name == GameConstants.Scene.SATURN:
             self.__load_planet_saturn_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
+        elif scene.name == GameConstants.Scene.HOUSE_SCENE:
+            self.__load_house_specifics(scene)
+            self.__color_tiles(map_data, tile_data, 33, 14, [255, 255, 255], 255)
 
         # Object generation
         for object in object_data:
@@ -244,12 +249,14 @@ class MapLoader:
         return len(self.__enemies[scene.name])
 
     def __check_enemy_in_scene(self, scene):
-        for enemy in self.__enemies[scene.name]:
-            enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
+        if self.__enemies[scene.name] is not None:
+            for enemy in self.__enemies[scene.name]:
+                enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
 
-            if not scene.contains(enemy):
-                scene.add(enemy)
-
+                if not scene.contains(enemy):
+                    scene.add(enemy)
+        else:
+            print(scene.name)
     def __add_enemy_health_bar_to_scene(self, enemy, enemy_health_bar_texture, scene):
         health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
         self.__set_texture_for_enemy_health_bar(health_bar, enemy_health_bar_texture)
@@ -302,11 +309,16 @@ class MapLoader:
 
     def __load_planet_earth_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_ONE.clone()
-        ruin.transform.position = Vector2(2850, 2600)
+        ruin.transform.position = Vector2(2050, 2600)
         scene.add(ruin)
 
+        building = GameObjectConstants.UnnaturalStructures.BUILDING.clone()
+        building.transform.position = Vector2(2700, 2400)
+        building.transform.scale = Vector2(0.6,0.6)
+        scene.add(building)
+
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_TWO.clone()
-        ruin.transform.position = Vector2(4800, 1900)
+        ruin.transform.position = Vector2(4200, 1900)
         ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
@@ -387,6 +399,34 @@ class MapLoader:
 
         self.__load_teleporter(scene, Vector2(3640, 4700))
         self.__load_ui_texts(scene)
+
+    def __load_house_specifics(self, scene):
+
+        enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
+        enemy.initial_position = Vector2(10000, 10000)
+        enemy.add_component(
+            ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+
+        bed = GameObjectConstants.UnnaturalStructures.BED.clone()
+        bed.transform.position = Vector2(500, 0)
+        bed.transform.scale = Vector2(.2,.2)
+        scene.add(bed)
+
+        table = GameObjectConstants.UnnaturalStructures.TABLE.clone()
+        table.transform.position = Vector2(1000,500)
+        table.transform.scale = Vector2(.3,.3)
+        scene.add(table)
+
+        couch = GameObjectConstants.UnnaturalStructures.COUCH.clone()
+        couch.transform.position = Vector2(1400, 0)
+        couch.transform.scale = Vector2(.4, .4)
+        scene.add(couch)
+
+
+
+
+
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
     def __load_teleporter(self, scene, position):
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
