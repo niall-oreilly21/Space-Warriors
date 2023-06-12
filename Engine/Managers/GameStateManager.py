@@ -92,6 +92,9 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name is GameConstants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
 
+        if Application.ActiveScene.name is GameConstants.Scene.HOUSE_SCENE:
+            Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_HOUSE
+
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
 
