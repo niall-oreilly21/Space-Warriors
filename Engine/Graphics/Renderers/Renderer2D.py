@@ -46,13 +46,13 @@ class Renderer2D(Component):
 
         @property
         def bounds(self):
-            return self.__bounds
+            return Rect(self._transform.position.x, self._transform.position.y,
+                          self.__bounds.width * self.transform.scale.x,
+                          self.__bounds.height * self.transform.scale.y)
 
         @bounds.setter
         def bounds(self, bounds):
-            self.__bounds = Rect(self._transform.position.x, self._transform.position.y,
-                          bounds.width * self.transform.scale.x,
-                          bounds.height * self.transform.scale.y)
+            self.__bounds = bounds
 
 
         def get_bounding_rect(self, transform):
@@ -64,4 +64,4 @@ class Renderer2D(Component):
             return screen_rect
 
         def clone(self):
-            return Renderer2D(self._name, self._material.clone(), self._layer)
+            return Renderer2D(self._name, self._material.clone(), self._layer, self.__is_drawing)

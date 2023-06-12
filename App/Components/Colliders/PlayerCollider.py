@@ -7,7 +7,7 @@ from pygame import Vector2
 from App.Components.Controllers.PetController import PetController
 from App.Components.Controllers.PlayerController import PlayerController
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider import Collider
@@ -22,9 +22,9 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, PowerUpType
 
 def handle_power_up_collision(colliding_game_object: PowerUp, min_value, max_value, prompt_text):
     colliding_game_object.power_up_value = random.randint(min_value, max_value)
-    Constants.EVENT_DISPATCHER.dispatch_event(
+    GameConstants.EVENT_DISPATCHER.dispatch_event(
         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                  [prompt_text, Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+                  [prompt_text, GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
 
 class PlayerCollider(Collider):
@@ -33,6 +33,7 @@ class PlayerCollider(Collider):
         self.__current_speed_time = 0
         self.__current_attack_time = 0
         self.__current_defense_time = 0
+        self.__current_night_vision_time = 0
 
         self.__text_shown_time = 0
         self.__text_shown = False
@@ -40,6 +41,7 @@ class PlayerCollider(Collider):
         self.__speed_activated = False
         self.__attack_activated = False
         self.__defense_activated = False
+        self.__night_vision_activated = False
 
         self.__text_time = 10000
         self.__total_time = 10000
@@ -59,9 +61,13 @@ class PlayerCollider(Collider):
             type_str = "Defense"
 
         ui_text = type_str + " " + symbol + str(colliding_game_object.power_up_value)
-        Constants.EVENT_DISPATCHER.dispatch_event(
+
+        if power_up_type == PowerUpType.NightVision:
+            ui_text = "Night vision on"
+
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      [ui_text, Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                      [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
         self.__text_shown = True
         self.__text_shown_time = 0
 
@@ -97,7 +103,6 @@ class PlayerCollider(Collider):
             # if self.parent.health == 0:
             #     self.parent.health = Constants.Player.DEFAULT_HEALTH
 
-
         # Player and power up collide
         if isinstance(colliding_game_object, PowerUp):
             if colliding_game_object.power_up_type == PowerUpType.Heal:
@@ -112,10 +117,13 @@ class PlayerCollider(Collider):
             elif colliding_game_object.power_up_type == PowerUpType.Speed:
                 handle_power_up_collision(colliding_game_object, 1, 5, "Press E to increase speed")
                 self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.Speed)
+            elif colliding_game_object.power_up_type == PowerUpType.NightVision:
+                handle_power_up_collision(colliding_game_object, 0, 0, "Press E to equip night vision goggles")
+                self.handle_power_up_selected(self.parent, colliding_game_object, PowerUpType.NightVision)
             else:
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to get a random power up", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+                              ["Press E to get a random power up", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
                 random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack,
                                              PowerUpType.Defense])
                 if random_type == PowerUpType.Heal:
@@ -127,39 +135,39 @@ class PlayerCollider(Collider):
 
         # Player and pet collide
         if colliding_game_object.game_object_category == GameObjectCategory.Pet:
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          ["You found a stranded dog! Press E to adopt", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
-            if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                          ["You found a stranded dog! Press E to adopt", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+            if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                 colliding_game_object.get_component(PetController).adopt()
 
-                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [colliding_game_object.get_component(BoxCollider2D)]))
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [colliding_game_object.get_component(BoxCollider2D)]))
 
                 colliding_game_object.remove_component(BoxCollider2D)
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                               ["Your dog loves you <3!",
-                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
                 self.__text_shown = True
                 self.__text_shown_time = 0
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                               ["He will help you in battles and heal you every 30 secs!",
-                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
                 self.__text_shown = True
                 self.__text_shown_time = 0
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                               ["Attack damage +3",
-                               Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
                 self.__text_shown = True
                 self.__text_shown_time = 0
 
     def handle_power_up_selected(self, player: Character, colliding_game_object: PowerUp, power_up_type: PowerUpType):
-        if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
-            Constants.EVENT_DISPATCHER.dispatch_event(
+        if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [Constants.Music.POTION_DRINK_SOUND, None]))
+                          [GameConstants.Music.POTION_DRINK_SOUND, None]))
             if power_up_type == PowerUpType.Heal:
                 player.health += colliding_game_object.power_up_value
                 self.show_text(colliding_game_object, PowerUpType.Heal)
@@ -172,6 +180,7 @@ class PlayerCollider(Collider):
                 self.__attack_activated = True
                 self.show_text(colliding_game_object, PowerUpType.Attack)
             elif power_up_type == PowerUpType.Speed:
+                player.get_component(SpriteAnimator2D).fps += colliding_game_object.power_up_value
                 player_speed_x = player.get_component(PlayerController).speed.x
                 player_speed_y = player.get_component(PlayerController).speed.y
                 player.get_component(PlayerController).speed = Vector2(
@@ -179,14 +188,18 @@ class PlayerCollider(Collider):
                     player_speed_y + colliding_game_object.power_up_value * 0.01)
                 self.__speed_activated = True
                 self.show_text(colliding_game_object, PowerUpType.Speed)
+            else:
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager,
+                                                                        EventActionType.TurnSpotLightOff))
+                self.__night_vision_activated = True
+                self.show_text(colliding_game_object, PowerUpType.NightVision)
 
             if Application.ActiveScene.contains(colliding_game_object):
                 Application.ActiveScene.remove(colliding_game_object)
 
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          ["", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
-
+                          ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     def update(self, game_time):
         # Power up activation
@@ -195,22 +208,31 @@ class PlayerCollider(Collider):
             if self.__current_attack_time >= self.__total_time:
                 self.__current_attack_time = 0
                 self.__attack_activated = False
-                self.parent.attack_damage = Constants.Player.DEFAULT_ATTACK_DAMAGE
+                self.parent.attack_damage = GameConstants.Player.DEFAULT_ATTACK_DAMAGE
 
         if self.__defense_activated:
             self.__current_defense_time += game_time.elapsed_time
             if self.__current_defense_time >= self.__total_time:
                 self.__current_defense_time = 0
                 self.__defense_activated = False
-                self.parent.damage_cooldown = Constants.Player.DAMAGE_COOLDOWN
+                self.parent.damage_cooldown = GameConstants.Player.DAMAGE_COOLDOWN
 
         if self.__speed_activated:
             self.__current_speed_time += game_time.elapsed_time
             if self.__current_speed_time >= self.__total_time:
                 self.__current_speed_time = 0
                 self.__speed_activated = False
-                self.parent.get_component(PlayerController).speed = Vector2(Constants.Player.MOVE_SPEED,
-                                                                            Constants.Player.MOVE_SPEED)
+                self.parent.get_component(PlayerController).speed = Vector2(GameConstants.Player.MOVE_SPEED,
+                                                                            GameConstants.Player.MOVE_SPEED)
+                self.parent.get_component(SpriteAnimator2D).fps = GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED
+
+        if self.__night_vision_activated:
+            self.__current_night_vision_time += game_time.elapsed_time
+            if self.__current_night_vision_time >= self.__total_time:
+                self.__current_night_vision_time = 0
+                self.__night_vision_activated = False
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager,
+                                                                        EventActionType.TurnSpotLightOn))
 
         # Show power up text
         if self.__text_shown:
@@ -218,6 +240,11 @@ class PlayerCollider(Collider):
             if self.__text_shown_time >= self.__text_time:
                 self.__text_shown_time = 0
                 self.__text_shown = False
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["", Constants.UITextPrompts.UI_TEXT_RIGHT]))
+                              ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+
+    def handle_collision_exit(self):
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))

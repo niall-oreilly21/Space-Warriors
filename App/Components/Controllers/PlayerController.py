@@ -1,7 +1,7 @@
 from pygame import Vector2
 
 from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
@@ -147,7 +147,7 @@ class PlayerController(Component, IMoveable):
             self.parent.remove_component(BoxCollider2D)
 
             self.__is_attacking = True
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["AttackSound"]))
             attack_collider = AttackBoxCollider2D("Attack box collider", self)
             self.parent.add_component(attack_collider)
@@ -170,6 +170,6 @@ class PlayerController(Component, IMoveable):
         if self.parent.health <= 0:
             print("FAINT")
             self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
-            Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SceneManager, EventActionType.DeathScene))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_DEATH_MENU]))
 

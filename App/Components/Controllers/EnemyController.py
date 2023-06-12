@@ -2,13 +2,12 @@ from pygame import Vector2
 import math
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.FollowController import FollowController
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, GameObjectDirection
-from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
@@ -42,7 +41,8 @@ class EnemyController(FollowController):
         self.__target_position = self.__target.transform.position
         self.__position = self.transform.position
 
-        self._distance_from_target = math.sqrt((self.__target_position.x - self.__position.x) ** 2 + (self.__target_position.y - self.__position.y) ** 2)
+        self._distance_from_target = math.sqrt(
+            (self.__target_position.x - self.__position.x) ** 2 + (self.__target_position.y - self.__position.y) ** 2)
 
         if self._distance_from_target <= self._min_distance_to_target:
             self._follow_target()
@@ -51,14 +51,16 @@ class EnemyController(FollowController):
             if self.__waypoint_finder is not None:
                 self.calculate_patrol_routes(game_time)
 
-
     def __check_enemy_health(self):
         if self.parent.health <= 0:
-            #Application.ActiveScene.remove(self.parent.health_bar)
+            Application.ActiveScene.remove(self.parent.health_bar)
             Application.ActiveScene.remove(self.parent)
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [Constants.Music.ENEMY_DEATH_SOUND, False]))
-
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                          [GameConstants.Music.ENEMY_DEATH_SOUND, False]))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.RemoveEnemyFromScene)
+            )
 
     def _follow_target(self):
         self.calculate_movement_direction(self.__target.transform.position, self.transform.position)
@@ -93,7 +95,9 @@ class EnemyController(FollowController):
 
     def calculate_movement_direction(self, target_position, enemy_position):
         self._direction = target_position - enemy_position
-        self._direction.normalize()
+
+        if self._direction.x > 0 and self._direction.y > 0:
+            self._direction.normalize()
 
         angle = math.degrees(math.atan2(self._direction.y, self._direction.x))
         if angle < 0:

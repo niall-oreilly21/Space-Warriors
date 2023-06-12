@@ -1,22 +1,14 @@
-import time
-
 import pygame
 from pygame import Vector2, Rect
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.GameObjects.Components.Physics.CollisionRange import CollisionRange
-from Engine.GameObjects.Components.Physics.QuadTree import QuadTree
-from Engine.GameObjects.Tiles.Tile import Tile
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
-from Engine.Managers.CameraManager import CameraManager
 from Engine.Managers.EventSystem.EventData import EventData
-from Engine.Managers.Manager import Manager
 from Engine.Managers.QuadTreeManager import QuadTreeManager
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
@@ -26,7 +18,7 @@ from Engine.Other.Transform2D import Transform2D
 
 class RendererManager(QuadTreeManager, IDrawable):
     def __init__(self, surface, event_dispatcher, map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, component_type = Renderer2D):
-        super().__init__(map_dimensions, collision_range_target, collision_range_width, collision_range_height,quad_tree_capacity, event_dispatcher, component_type)
+        super().__init__(map_dimensions, collision_range_target, collision_range_width, collision_range_height, quad_tree_capacity, event_dispatcher, component_type)
         self.__is_menu = True
         self.__surface = surface
         self.__is_debug_mode = False
@@ -81,9 +73,9 @@ class RendererManager(QuadTreeManager, IDrawable):
             self._collision_range_target = target
 
             if self._collision_range_target.name == GameObjectConstants.Teleporter.TELEPORTER_NAME:
-                self._collision_range.width += Constants.VIEWPORT_WIDTH + 60
+                self._collision_range.width += GameConstants.VIEWPORT_WIDTH + 60
             else:
-                self._collision_range.width = Constants.VIEWPORT_WIDTH + 10
+                self._collision_range.width = GameConstants.VIEWPORT_WIDTH + 10
 
             self._collision_range_target_box_collider = target.get_component(BoxCollider2D)
 
@@ -91,7 +83,7 @@ class RendererManager(QuadTreeManager, IDrawable):
         self._set_up_component_list_and_quad_tree()
 
         for renderer in self._components:
-            if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.Menu or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
+            if renderer.parent.game_object_category == GameObjectCategory.UI or renderer.parent.game_object_category == GameObjectCategory.UIPrompts:
                 self.__text_renderers.append(renderer)
 
             else:
@@ -108,22 +100,20 @@ class RendererManager(QuadTreeManager, IDrawable):
         material_source_rect = renderer.material.source_rect
 
         if isinstance(renderer, SpriteRenderer2D):
-            if renderer.parent.get_component(SpriteAnimator2D):
-                material_source_rect = renderer.parent.get_component(SpriteAnimator2D).get_current_sprite().source_rect
-            elif renderer.sprite:
+            if renderer.sprite:
                 material_source_rect = renderer.sprite.source_rect
+
+            elif renderer.parent.get_component(SpriteAnimator2D):
+                material_source_rect = renderer.parent.get_component(SpriteAnimator2D).get_current_sprite().source_rect
 
         renderer.bounds = material_source_rect
 
-    def _update_dynamic_game_objects_in_quad_tree(self):
+    def _update_dynamic_game_objects_in_quad_tree(self, objects_in_range):
         for renderer in self._dynamic_objects_components:
-            self._quad_tree.remove(renderer)
-            self.__calculate_draw_position(renderer)
-            self._quad_tree.insert(renderer)
-
-    def update(self, game_time):
-        super().update(game_time)
-
+            if renderer in objects_in_range:
+                self._quad_tree.remove(renderer)
+                self.__calculate_draw_position(renderer)
+                self._quad_tree.insert(renderer)
 
     def draw(self):
         self.__camera_position = Application.ActiveCamera.transform.position
@@ -136,7 +126,7 @@ class RendererManager(QuadTreeManager, IDrawable):
 
 
     def __draw_game(self):
-        self._update_quad_tree()
+        self._update_collision_range()
         potential_renderers = self._get_potential_components()
 
         # Sort the renderers based on their layer depth
@@ -169,14 +159,6 @@ class RendererManager(QuadTreeManager, IDrawable):
             object_position = renderer.transform.position
             renderer.draw(self.__surface, Transform2D(object_position, renderer.transform.rotation, renderer.transform.scale))
 
-
-    def is_rect_visible(self, rect, viewport):
-        # Create a rectangle representing the camera's viewport
-        camera_rect = Rect(0, 0, viewport.x + 60, viewport.y + 70)
-        camera_rect.center = (viewport.x // 2, viewport.y // 2)
-
-        # Check if the object's rect intersects with or is contained within the camera's viewport
-        return rect.colliderect(camera_rect) or camera_rect.contains(rect)
 
     def draw_spotlight(self):
         # Calculate the spotlight circle around the player

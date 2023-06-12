@@ -4,7 +4,6 @@ import pygame
 from pygame.math import Vector2
 from Engine.Graphics.Materials.Material2D import Material2D
 
-
 class TextMaterial2D(Material2D):
     def __init__(self, sprite_font_file_path, font_size, text, text_offset, color, alpha=255, origin=Vector2(0, 0)):
         super().__init__(color, alpha, origin)
@@ -21,6 +20,14 @@ class TextMaterial2D(Material2D):
     @text.setter
     def text(self, text):
         self.__text = text
+
+    @property
+    def text_offset(self):
+        return self.__text_offset
+
+    @text_offset.setter
+    def text_offset(self, text_offset):
+        self.__text_offset = text_offset
 
     def _transform_material(self, surface, transform):
         rotated_text_surface = self._rotate_surface(surface, transform.rotation)

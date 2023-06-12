@@ -3,7 +3,7 @@ import time
 import pygame
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.Managers import SceneManager
@@ -31,56 +31,56 @@ class ButtonCollider2D(BoxCollider2D):
 
     def button_pressed(self):
         self.__load_event()
-        Constants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [Constants.Music.BUTTON_SOUND, False]))
-        if self._parent.name == Constants.Button.START_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [GameConstants.Music.BUTTON_SOUND, False]))
+        if self._parent.name == GameConstants.Button.START_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.CharacterSelectionMenuScene))
-        elif self._parent.name == Constants.Button.QUIT_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.ExitGame))
-        elif self._parent.name == Constants.Button.RESUME_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.SetToLastActiveScene))
+        elif self._parent.name == GameConstants.Button.QUIT_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.ExitGame))
+        elif self._parent.name == GameConstants.Button.RESUME_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.SetToLastActiveScene))
 
-        if self._parent.name == Constants.Button.MAIN_MENU_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.MainMenuScene))
-        elif self._parent.name == Constants.Button.SOUND_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.SoundMenuScene))
-        elif self._parent.name == Constants.Button.MUTE_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
-                                                                EventActionType.SetSoundMasterVolume, [0]))
-        elif self._parent.name == Constants.Button.UNMUTE_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
-                                                                EventActionType.SetSoundMasterVolume, [0.5]))
-        elif self._parent.name == Constants.Button.EARTH_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.EarthScene))
-        elif self._parent.name == Constants.Button.MARS_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.MarsScene))
-        elif self._parent.name == Constants.Button.SATURN_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.SaturnScene))
-        elif self._parent.name == Constants.Button.RESTART_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.ResetLevelScene))
-        elif self._parent.name == Constants.Button.GIRL_PLAYER_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                      EventActionType.GirlCharacterSelected))
-        elif self._parent.name == Constants.Button.BOY_PLAYER_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                      EventActionType.BoyCharacterSelected))
-        elif self._parent.name == Constants.Button.CONTROLS_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.ControlsMenuScene))
-        elif self._parent.name == Constants.Button.BACK_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.MainMenuScene))
-        elif self._parent.name == Constants.Button.LEVELS_BUTTON:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                EventActionType.LevelScene))
+        if self._parent.name == GameConstants.Button.MAIN_MENU_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.MainMenuScene))
+        elif self._parent.name == GameConstants.Button.SOUND_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.SoundMenuScene))
+        elif self._parent.name == GameConstants.Button.MUTE_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
+                                                                    EventActionType.SetSoundMasterVolume, [0]))
+        elif self._parent.name == GameConstants.Button.UNMUTE_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager,
+                                                                    EventActionType.SetSoundMasterVolume, [0.5]))
+        elif self._parent.name == GameConstants.Button.EARTH_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.EarthScene))
+        elif self._parent.name == GameConstants.Button.MARS_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.MarsScene))
+        elif self._parent.name == GameConstants.Button.SATURN_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.SaturnScene))
+        elif self._parent.name == GameConstants.Button.RESTART_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.ResetLevelScene))
+        elif self._parent.name == GameConstants.Button.GIRL_PLAYER_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.GirlCharacterSelected))
+        elif self._parent.name == GameConstants.Button.BOY_PLAYER_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.BoyCharacterSelected))
+        elif self._parent.name == GameConstants.Button.CONTROLS_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.ControlsMenuScene))
+        elif self._parent.name == GameConstants.Button.BACK_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.MainMenuScene))
+        elif self._parent.name == GameConstants.Button.LEVELS_BUTTON:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                    EventActionType.LevelScene))
 
     def __load_event(self):
         load_time = .4

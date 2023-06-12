@@ -1,5 +1,5 @@
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObjectType
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
@@ -29,22 +29,22 @@ class Scene:
 
     def __dispatch_quad_tree_remove_events(self, game_object):
         if game_object.get_component(BoxCollider2D):
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [game_object.get_component(BoxCollider2D)]))
 
         for renderer in game_object.get_components(Renderer2D):
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.RendererManager, EventActionType.RemoveRendererFromQuadTree,
                           [renderer]))
 
     def __dispatch_quad_tree_add_events(self, game_object):
         if game_object.get_component(BoxCollider2D):
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.CollisionManager, EventActionType.AddColliderToQuadTree,
                           [game_object.get_component(BoxCollider2D)]))
 
             for renderer in game_object.get_components(Renderer2D):
-                Constants.EVENT_DISPATCHER.dispatch_event(
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
                     EventData(EventCategoryType.RendererManager, EventActionType.AddRendererToQuadTree,
                               [renderer]))
 

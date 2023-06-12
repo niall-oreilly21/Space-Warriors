@@ -20,10 +20,14 @@ class HealthBarController(FollowController):
             if isinstance(renderer.material, RectMaterial2D):
                 if renderer.name == "Health Bar Renderer Rect":
                     self._material = renderer.material
-                    self.__initial_width = self._material.width
-                    self.__current_width = self.__initial_width
+
+                if renderer.name == "Health Bar Renderer Rect Background":
+                        self.__initial_width = renderer.material.width
+                        self.__current_width = self.__initial_width
 
     def change_colour(self):
+        if self.__current_width > 0.5 * self.__initial_width:
+            self._material.color = (0, 224, 79)
         if self.__current_width <= 0.25 * self.__initial_width:
             self._material.color = (255, 0, 0)
         elif self.__current_width <= 0.5 * self.__initial_width:
@@ -35,6 +39,9 @@ class HealthBarController(FollowController):
         self.__current_width = self.__initial_width * health_percentage
         self._material.width = min(self.__current_width, self.__initial_width)
         self.change_colour()
+
+        if self.__current_width < 0:
+            self.__current_width = 0
 
     def _follow_target(self):
         pass

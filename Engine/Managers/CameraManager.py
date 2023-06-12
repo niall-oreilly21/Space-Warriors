@@ -3,7 +3,7 @@ from typing import Dict
 import pygame
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.GameObject import GameObject
@@ -26,11 +26,11 @@ class CameraManager(Manager):
 
     def _handle_events(self, event_data):
         if event_data.event_action_type == EventActionType.MenuCamera:
-            self.set_active_camera(Constants.Camera.MENU_CAMERA)
+            self.set_active_camera(GameConstants.Cameras.MENU_CAMERA)
             Application.ActiveCamera = self.__active_camera
 
         elif event_data.event_action_type == EventActionType.GameCamera:
-            self.set_active_camera(Constants.Camera.GAME_CAMERA)
+            self.set_active_camera(GameConstants.Cameras.GAME_CAMERA)
             Application.ActiveCamera = self.__active_camera
 
         elif event_data.event_action_type == EventActionType.SetCameraTarget:

@@ -1,5 +1,5 @@
 from App.Components.Controllers.EnemyController import EnemyController
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
@@ -22,9 +22,9 @@ class ZapEnemyController(EnemyController):
         self.__total_elapsed_time += game_time.elapsed_time
 
         if self.__total_elapsed_time >= self.__zap_interval:
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [Constants.Music.ZAP_SOUND, None]))
+                          [GameConstants.Music.ZAP_SOUND, None]))
             self._speed *= self.__zap_speed_multiplier
             self.__total_elapsed_time = 0
 

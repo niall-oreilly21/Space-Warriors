@@ -1,12 +1,9 @@
 import pygame
-from pygame import Vector2
 
-from App.Constants import MapLoader
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.EntityConstants import EntityConstants
 from Engine.GameObjects.Character import Character
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
@@ -14,14 +11,15 @@ from Engine.Managers.Manager import Manager
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
-from App.Constants.MapLoader import load_planet_earth_enemies
 
 
 class GameStateManager(Manager):
-    def __init__(self, event_dispatcher, input_handler):
+    def __init__(self, event_dispatcher, input_handler, map_loader):
         super().__init__(event_dispatcher)
         self.__input_handler = input_handler
         self.__ui_helper_texts = []
+        self.__map_loader = map_loader
+        self.__enemies_in_scene_count = GameConstants.DEFAULT_ENEMIES
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
@@ -41,6 +39,9 @@ class GameStateManager(Manager):
         elif event_data.event_action_type == EventActionType.LoadLevel:
             self.__load_level()
 
+        elif event_data.event_action_type == EventActionType.RemoveEnemyFromScene:
+            self.__enemies_in_scene_count -= 1
+
     def __set_ui_text(self, ui_text, ui_text_game_object_name):
 
         for ui_text_game_object in self.__ui_helper_texts:
@@ -53,19 +54,14 @@ class GameStateManager(Manager):
                 else:
                     ui_text_game_object.get_component(Renderer2D).is_drawing = True
 
-
     def __set_up_level(self):
         Application.GameStarted = False
-        if not Application.ActiveScene.contains(Application.Player):
-            Application.ActiveScene.add(Application.Player)
-        self.__add_enemies()
+        self.__enemies_in_scene_count = self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
         Application.GameStarted = True
-
         self.__dispatch_events_for_set_up_level()
         self.__position_characters_for_level()
         self.__set_up_teleporter_for_level()
         self.__get_ui_text_helpers()
-
 
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
@@ -87,25 +83,14 @@ class GameStateManager(Manager):
                 game_object.reset_health()
 
     def __reset_player_position(self):
-        if Application.ActiveScene.name is Constants.Scene.EARTH:
+        if Application.ActiveScene.name is GameConstants.Scene.EARTH:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_EARTH
 
-        if Application.ActiveScene.name is Constants.Scene.MARS:
+        if Application.ActiveScene.name is GameConstants.Scene.MARS:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_MARS
 
-        if Application.ActiveScene.name is Constants.Scene.SATURN:
+        if Application.ActiveScene.name is GameConstants.Scene.SATURN:
             Application.Player.initial_position = EntityConstants.Player.PLAYER_INITIAL_POSITION_SATURN
-
-    def __add_enemies(self):
-        if Application.ActiveScene.name is Constants.Scene.EARTH:
-            load_planet_earth_enemies()
-
-        # if Application.ActiveScene.name is Constants.Scene.MARS:
-        #     load_planet_mars_enemies()
-        #
-        # if Application.ActiveScene.name is Constants.Scene.SATURN:
-        #     load_planet_saturn_enemies()
-
 
     def __get_ui_text_helpers(self):
         self.__ui_helper_texts = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.UIPrompts)
@@ -114,7 +99,7 @@ class GameStateManager(Manager):
         self.__dispatch_events_for_load_up_level()
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
-        Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
         self.__check_turn_on_spotlight()
 
     def __dispatch_events_for_load_up_level(self):
@@ -127,20 +112,25 @@ class GameStateManager(Manager):
         Application.ActiveScene.remove(Application.Player)
 
     def __check_pause_menu(self):
-        if Application.ActiveScene.name == Constants.Scene.EARTH \
-                or Application.ActiveScene.name == Constants.Scene.MARS \
-                or Application.ActiveScene.name == Constants.Scene.SATURN:
+        if Application.ActiveScene.name == GameConstants.Scene.EARTH \
+                or Application.ActiveScene.name == GameConstants.Scene.MARS \
+                or Application.ActiveScene.name == GameConstants.Scene.SATURN:
             if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
                 self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
-
 
     def update(self, game_time):
         self.__check_pause_menu()
         self.__input_handler.update()
+        self.__handle_level_complete()
 
     def __load_level(self):
         self.__dispatch_events_for_load_up_level()
 
     def __check_turn_on_spotlight(self):
-        if Application.ActiveScene.name is Constants.Scene.MARS:
+        if Application.ActiveScene.name is GameConstants.Scene.MARS:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.TurnSpotLightOn))
+
+    def __handle_level_complete(self):
+        if self.__enemies_in_scene_count <= 0:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_COMPLETE_MENU]))
+            self.__enemies_in_scene_count = GameConstants.DEFAULT_ENEMIES

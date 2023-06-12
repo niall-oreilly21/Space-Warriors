@@ -31,7 +31,7 @@ class EventActionType:
     SetUpColliders = 20
     RemoveColliderFromQuadTree = 21
     SoundMenuScene = 22
-    DeathScene = 23
+    EndLevelScene = 23
     TurnSpotLightOn = 24
     DrawCollisionRange = 25
     AddColliderToQuadTree = 26
@@ -51,3 +51,4 @@ class EventActionType:
     CharacterSelectionMenuScene = 40
     ControlsMenuScene = 41
     SetRendererQuadTreeTarget = 44
+    RemoveEnemyFromScene = 45

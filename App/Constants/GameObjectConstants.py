@@ -5,8 +5,9 @@ from pygame import Vector2
 
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
-from App.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.Application import Application
+from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
 from Engine.GameObjects.Gun.Bullet import Bullet
@@ -238,33 +239,51 @@ class GameObjectConstants:
         POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
                                GameObjectType.Static, GameObjectCategory.PowerUp)
-        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_speed.png")
-        texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
-        POTION_SPEED.add_component(Renderer2D("Renderer-2", texture_material, layer))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_SPEED
+        POTION_SPEED.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_SPEED.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                    texture_material, ActiveTake.POTION,
+                                                    GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_attack.png")
-        texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
-        POTION_ATTACK.add_component(Renderer2D("Renderer-2", texture_material, layer))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_ATTACK
+        POTION_ATTACK.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_ATTACK.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                     texture_material, ActiveTake.POTION,
+                                                     GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_defense.png")
-        texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
-        POTION_DEFENSE.add_component(Renderer2D("Renderer-2", texture_material, layer))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_DEFENSE
+        POTION_DEFENSE.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                      texture_material, ActiveTake.POTION,
+                                                      GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = pygame.image.load("Assets/UI/PowerUps/potion_heal.png")
-        texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
-        POTION_HEAL.add_component(Renderer2D("Renderer-2", texture_material, layer))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_HEAL
+        POTION_HEAL.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        POTION_HEAL.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                   texture_material, ActiveTake.POTION,
+                                                   GameConstants.PowerUp.ANIMATION_SPEED))
 
         RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        power_up_image = pygame.image.load("Assets/UI/PowerUps/random.png")
-        texture_material = TextureMaterial2D(power_up_image, None, Vector2(0, 0), 255)
-        RANDOM_POWER_UP.add_component(Renderer2D("Renderer-2", texture_material, layer))
+        texture_material = GameConstants.PowerUp.MATERIAL_RANDOM
+        RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                       texture_material, ActiveTake.RANDOM,
+                                                       GameConstants.PowerUp.ANIMATION_SPEED))
+
+        NIGHT_VISION_POWER_UP = PowerUp("NightVisionPowerUp", PowerUpType.NightVision,
+                                        Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
+        texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
+        NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                             texture_material, ActiveTake.NIGHT_VISION,
+                                                             GameConstants.PowerUp.ANIMATION_SPEED))
 
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
@@ -275,65 +294,51 @@ class GameObjectConstants:
         bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
         Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
+    class Cameras:
+        __MAIN_MENU_CAMERA_COMPONENT = Camera(GameConstants.Cameras.MENU_CAMERA, GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT)
+        MAIN_MENU_CAMERA = GameObject(GameConstants.Cameras.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Static, GameObjectCategory.Menu)
+        MAIN_MENU_CAMERA.add_component(__MAIN_MENU_CAMERA_COMPONENT)
+
+        GAME_CAMERA = MAIN_MENU_CAMERA.clone()
+        GAME_CAMERA.get_component(Camera).name = GameConstants.Cameras.GAME_CAMERA
+        GAME_CAMERA.name = GameConstants.Cameras.GAME_CAMERA
+
+    class UiHelperTexts:
+        UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
+        UI_TEXT_HELPER_BOTTOM = GameObject(GameConstants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
+        UI_TEXT_HELPER_RIGHT = UI_TEXT_HELPER_BOTTOM.clone()
+        UI_TEXT_HELPER_RIGHT.name = GameConstants.UITextPrompts.UI_TEXT_RIGHT
+        UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_RIGHT)
+
     class HealthBar:
-        HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static,
-                                GameObjectCategory.UI)
+        __HEALTH_BAR_IMAGE_BASE_PATH = "Assets/UI/HealthBars/"
+        __HEALTH_BAR_IMAGE_END_PATH = "_health_bar.png"
 
-        __HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/health_bar.png")
+        __PLAYER_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "player" + __HEALTH_BAR_IMAGE_END_PATH)
+        RAT_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "rat" + __HEALTH_BAR_IMAGE_END_PATH)
+        WOLF_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "wolf" + __HEALTH_BAR_IMAGE_END_PATH)
+        ALIEN_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "alien" + __HEALTH_BAR_IMAGE_END_PATH)
 
-        __MATERIAL_HEALTH_BAR = TextureMaterial2D(__HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+        __PLAYER_MATERIAL_HEALTH_BAR = TextureMaterial2D(__PLAYER_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
+        __ENEMY_MATERIAL_HEALTH_BAR = TextureMaterial2D(ALIEN_ENEMY_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
 
-        __RECT_MATERIAL_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(135, 63))
-        __RECT_MATERIAL_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
+        __RECT_MATERIAL_PLAYER_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(135, 63))
+        __RECT_MATERIAL_PLAYER_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(135, 63))
 
-        # HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Texture", __MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #
-        # RAT_HEALTH_BAR = GameObject("Rat Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                             GameObjectType.Static,
-        #                             GameObjectCategory.UI)
-        # __RAT_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/rat_health_bar.png")
-        # __MATERIAL_RAT_HEALTH_BAR = TextureMaterial2D(__RAT_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Rat Health Bar Renderer Texture", __MATERIAL_RAT_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Rat Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # RAT_HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        __RECT_MATERIAL_ENEMY_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
+        __RECT_MATERIAL_ENEMY_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
 
-        # WOLF_HEALTH_BAR = GameObject("Wolf Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                              GameObjectType.Static,
-        #                              GameObjectCategory.UI)
-        # __WOLF_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/wolf_health_bar.png")
-        # __MATERIAL_WOLF_HEALTH_BAR = TextureMaterial2D(__WOLF_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Texture", __MATERIAL_WOLF_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # WOLF_HEALTH_BAR.add_component(
-        #     Renderer2D("Wolf Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
-        #
-        # ALIEN_HEALTH_BAR = GameObject("Alien Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
-        #                               GameObjectType.Static,
-        #                               GameObjectCategory.UI)
-        # __ALIEN_HEALTH_BAR_IMAGE = pygame.image.load("Assets/UI/alien_health_bar.png")
-        # __MATERIAL_ALIEN_HEALTH_BAR = TextureMaterial2D(__ALIEN_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
-        #
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Alien Health Bar Renderer Texture", __MATERIAL_ALIEN_HEALTH_BAR, RendererLayers.UIHealthBar))
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Alien Health Bar Renderer Rect Background", __RECT_MATERIAL_HEALTH_BAR_BACKGROUND,
-        #                RendererLayers.UIBackground))
-        # ALIEN_HEALTH_BAR.add_component(
-        #     Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_HEALTH_BAR, RendererLayers.UI))
+        PLAYER_HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static, GameObjectCategory.UI)
+
+        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __PLAYER_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_PLAYER_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
+        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_PLAYER_HEALTH_BAR, RendererLayers.UI))
+
+        ENEMY_HEALTH_BAR = GameObject("Enemy Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic, GameObjectCategory.EnemyHealthUI)
+        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __ENEMY_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
+        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_ENEMY_HEALTH_BAR_BACKGROUND,RendererLayers.UIBackground, False))
+        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_ENEMY_HEALTH_BAR, RendererLayers.UI, False))
+
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368
