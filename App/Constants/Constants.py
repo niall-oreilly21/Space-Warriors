@@ -266,6 +266,9 @@ class Constants:
         ATTACK_CONTROLS_IMAGE = pygame.image.load("Assets/UI/Menu/attack_keys.png")
         ACTIVATE_CONTROL_IMAGE = pygame.image.load("Assets/UI/Menu/activate_key.png")
 
+        END_LEVEL_DEATH_MENU = "You Died!"
+        END_LEVEL_COMPLETE_MENU = "Level Complete!"
+
     class Button:
         START_BUTTON = "Start"
         QUIT_BUTTON = "Quit"
@@ -287,7 +290,7 @@ class Constants:
     class Scene:
         MAIN_MENU = "MainMenuScene"
         PAUSE_MENU = "PauseMenuScene"
-        DEATH_MENU = "DeathMenuScene"
+        END_LEVEL_MENU = "EndLevelMenuScene"
         SOUND_MENU = "SoundMenuScene"
         LEVEL_MENU = "LevelMenuScene"
         EARTH = "EarthScene"

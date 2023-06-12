@@ -171,5 +171,5 @@ class PlayerController(Component, IMoveable):
             print("FAINT")
             self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
             Constants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SceneManager, EventActionType.DeathScene))
+                EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [Constants.Menu.END_LEVEL_DEATH_MENU]))
 
