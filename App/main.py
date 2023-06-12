@@ -3,7 +3,7 @@ import pygame
 from pygame import Vector2
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from App.Constants.MapLoader import MapLoader
@@ -30,63 +30,63 @@ screen_resolution = Vector2(screen_info.current_w, screen_info.current_h)
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-screen = pygame.display.set_mode((Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT))
-pygame.display.set_caption(Constants.GAME_NAME)
+screen = pygame.display.set_mode((GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT))
+pygame.display.set_caption(GameConstants.GAME_NAME)
 
 game_time = GameTime()
 
 player = EntityConstants.Player.PLAYER
 pet = EntityConstants.Pet.PET
 
-Constants.INPUT_HANDLER = InputHandler()
-Constants.EVENT_DISPATCHER = EventDispatcher()
+GameConstants.INPUT_HANDLER = InputHandler()
+GameConstants.EVENT_DISPATCHER = EventDispatcher()
 map_loader = MapLoader(player, GameObjectConstants.HealthBar.PLAYER_HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
 
-scene_manager = SceneManager(Constants.EVENT_DISPATCHER)
-sound_manager = SoundManager(Constants.EVENT_DISPATCHER)
-camera_manager = CameraManager(screen, scene_manager, Constants.EVENT_DISPATCHER)
-collision_manager = CollisionManager(Constants.QuadTree.MAP_DIMENSIONS, player, Constants.QuadTree.COLLISION_RANGE_WIDTH, Constants.QuadTree.COLLISION_RANGE_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE, Constants.EVENT_DISPATCHER)
-game_state_manager = GameStateManager(Constants.EVENT_DISPATCHER, InputHandler(), map_loader)
-render_manager = RendererManager(screen, Constants.EVENT_DISPATCHER, Constants.QuadTree.MAP_DIMENSIONS, player, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, Constants.QuadTree.QUAD_TREE_SIZE)
+scene_manager = SceneManager(GameConstants.EVENT_DISPATCHER)
+sound_manager = SoundManager(GameConstants.EVENT_DISPATCHER)
+camera_manager = CameraManager(screen, scene_manager, GameConstants.EVENT_DISPATCHER)
+collision_manager = CollisionManager(GameConstants.QuadTree.MAP_DIMENSIONS, player, GameConstants.QuadTree.COLLISION_RANGE_WIDTH, GameConstants.QuadTree.COLLISION_RANGE_HEIGHT, GameConstants.QuadTree.QUAD_TREE_SIZE, GameConstants.EVENT_DISPATCHER)
+game_state_manager = GameStateManager(GameConstants.EVENT_DISPATCHER, InputHandler(), map_loader)
+render_manager = RendererManager(screen, GameConstants.EVENT_DISPATCHER, GameConstants.QuadTree.MAP_DIMENSIONS, player, GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, GameConstants.QuadTree.QUAD_TREE_SIZE)
 update_managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
 
 scene_loader = SceneLoader(scene_manager)
-earth_scene = scene_loader.initialise_menu_scene(Constants.Scene.EARTH)
-mars_scene = scene_loader.initialise_menu_scene(Constants.Scene.MARS)
-saturn_scene = scene_loader.initialise_menu_scene(Constants.Scene.SATURN)
-pause_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.PAUSE_MENU)
-main_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.MAIN_MENU)
-level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.LEVEL_MENU)
-sound_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.SOUND_MENU)
-end_level_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.END_LEVEL_MENU)
-character_selection_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CHARACTER_SELECTION_MENU)
-controls_menu_scene = scene_loader.initialise_menu_scene(Constants.Scene.CONTROLS_MENU)
+earth_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.EARTH)
+mars_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.MARS)
+saturn_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.SATURN)
+pause_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.PAUSE_MENU)
+main_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.MAIN_MENU)
+level_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.LEVEL_MENU)
+sound_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.SOUND_MENU)
+end_level_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.END_LEVEL_MENU)
+character_selection_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.CHARACTER_SELECTION_MENU)
+controls_menu_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.CONTROLS_MENU)
 
-initialise_menu(main_menu_scene, Constants.Menu.MATERIAL_MAIN_MENU, Constants.GAME_NAME,
-                [Constants.Button.START_BUTTON, Constants.Button.CONTROLS_BUTTON, Constants.Button.SOUND_BUTTON,
-                 Constants.Button.QUIT_BUTTON])
-initialise_menu(pause_menu_scene, Constants.Menu.MATERIAL_PAUSE_MENU, "Paused",
-                [Constants.Button.RESUME_BUTTON, Constants.Button.LEVELS_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-initialise_menu(sound_menu_scene, Constants.Menu.MATERIAL_SOUND_MENU, "Sound",
-                [Constants.Button.MUTE_BUTTON, Constants.Button.UNMUTE_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
-initialise_menu(end_level_menu_scene, Constants.Menu.MATERIAL_DEATH_MENU, "You Died",
-                [Constants.Button.RESTART_BUTTON, Constants.Button.MAIN_MENU_BUTTON])
+initialise_menu(main_menu_scene, GameConstants.Menu.MATERIAL_MAIN_MENU, GameConstants.GAME_NAME,
+                [GameConstants.Button.START_BUTTON, GameConstants.Button.CONTROLS_BUTTON, GameConstants.Button.SOUND_BUTTON,
+                 GameConstants.Button.QUIT_BUTTON])
+initialise_menu(pause_menu_scene, GameConstants.Menu.MATERIAL_PAUSE_MENU, "Paused",
+                [GameConstants.Button.RESUME_BUTTON, GameConstants.Button.LEVELS_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
+initialise_menu(sound_menu_scene, GameConstants.Menu.MATERIAL_SOUND_MENU, "Sound",
+                [GameConstants.Button.MUTE_BUTTON, GameConstants.Button.UNMUTE_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
+initialise_menu(end_level_menu_scene, GameConstants.Menu.MATERIAL_DEATH_MENU, "You Died",
+                [GameConstants.Button.RESTART_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
 initialise_character_selection_menu(character_selection_menu_scene)
 initialise_level_menu(level_menu_scene)
 initialise_controls_menu(controls_menu_scene)
 
 load_cameras(camera_manager, player)
 load_fonts()
-map_loader.map_load(earth_scene, Constants.Map.BASE_PATH + Constants.Scene.EARTH + Constants.Map.JSON_END_PATH)
-map_loader.map_load(mars_scene, Constants.Map.BASE_PATH + Constants.Scene.MARS + Constants.Map.JSON_END_PATH)
-map_loader.map_load(saturn_scene, Constants.Map.BASE_PATH + Constants.Scene.SATURN + Constants.Map.JSON_END_PATH)
+map_loader.map_load(earth_scene, GameConstants.Map.BASE_PATH + GameConstants.Scene.EARTH + GameConstants.Map.JSON_END_PATH)
+map_loader.map_load(mars_scene, GameConstants.Map.BASE_PATH + GameConstants.Scene.MARS + GameConstants.Map.JSON_END_PATH)
+map_loader.map_load(saturn_scene, GameConstants.Map.BASE_PATH + GameConstants.Scene.SATURN + GameConstants.Map.JSON_END_PATH)
 map_loader.load_planet_earth_enemies(earth_scene)
 map_loader.load_planet_mars_enemies(mars_scene)
 map_loader.load_planet_saturn_enemies(saturn_scene)
 load_sound(sound_manager)
 
-camera_manager.set_active_camera(Constants.Cameras.MENU_CAMERA)
-scene_manager.set_active_scene(Constants.Scene.MAIN_MENU)
+camera_manager.set_active_camera(GameConstants.Cameras.MENU_CAMERA)
+scene_manager.set_active_scene(GameConstants.Scene.MAIN_MENU)
 
 Application.ActiveScene = main_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
@@ -117,12 +117,16 @@ while running:
 
     render_manager.draw()
 
-    Constants.INPUT_HANDLER.update()
-    Constants.EVENT_DISPATCHER.process_events()
+    GameConstants.INPUT_HANDLER.update()
+    GameConstants.EVENT_DISPATCHER.process_events()
 
     pygame.display.update()
     game_time.limit_fps(60)
 
-    # print(player.transform.position.x, ", ", player.transform.position.y)
+    # elapsed_time = game_time.elapsed_time
+    # fps = game_time.fps()
+    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+
+    #print(player.transform.position.x, ", ", player.transform.position.y)
 
 pygame.quit()

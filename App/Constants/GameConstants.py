@@ -9,7 +9,7 @@ from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
-class Constants:
+class GameConstants:
     GAME_NAME = "Space Warriors"
 
     EVENT_DISPATCHER = None
@@ -23,7 +23,7 @@ class Constants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 1
+        DEFAULT_HEALTH = 20
         DEFAULT_ATTACK_DAMAGE = 5
 
         MOVE_SPEED = 0.2

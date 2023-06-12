@@ -2,7 +2,7 @@ from pygame import Vector2
 import math
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.FollowController import FollowController
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
 from Engine.Managers.EventSystem.EventData import EventData
@@ -53,12 +53,12 @@ class EnemyController(FollowController):
 
     def __check_enemy_health(self):
         if self.parent.health <= 0:
-            # Application.ActiveScene.remove(self.parent.health_bar)
+            Application.ActiveScene.remove(self.parent.health_bar)
             Application.ActiveScene.remove(self.parent)
-            Constants.EVENT_DISPATCHER.dispatch_event(
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [Constants.Music.ENEMY_DEATH_SOUND, False]))
-            Constants.EVENT_DISPATCHER.dispatch_event(
+                          [GameConstants.Music.ENEMY_DEATH_SOUND, False]))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.GameStateManager, EventActionType.RemoveEnemyFromScene)
             )
 

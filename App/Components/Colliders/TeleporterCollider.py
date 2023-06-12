@@ -1,7 +1,7 @@
 import pygame
 
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Collider import Collider
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
@@ -22,23 +22,23 @@ class TeleporterCollider(Collider):
     def handle_response(self, colliding_game_object):
 
         if colliding_game_object == Application.Player:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to teleport", Constants.UITextPrompts.UI_TEXT_BOTTOM]))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to teleport", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
             self.__check_teleporter_input()
 
     def update(self, game_time):
         if self.__animator.is_animation_complete:
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
-            Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
 
     def __check_teleporter_input(self):
-        if Application.ActiveScene.name == Constants.Scene.EARTH \
-                or Application.ActiveScene.name == Constants.Scene.MARS \
-                or Application.ActiveScene.name == Constants.Scene.SATURN:
-            if Constants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+        if Application.ActiveScene.name == GameConstants.Scene.EARTH \
+                or Application.ActiveScene.name == GameConstants.Scene.MARS \
+                or Application.ActiveScene.name == GameConstants.Scene.SATURN:
+            if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
                 Application.ActiveScene.remove(Application.Player)
 
-                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
-                Constants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
                 self.__animator.set_active_take(ActiveTake.TELEPORT)
 
     def clone(self):

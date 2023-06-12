@@ -1,5 +1,5 @@
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
@@ -18,9 +18,9 @@ class BulletController(Component):
         self.__total_elapsed_time = 0
 
     def start(self):
-        Constants.EVENT_DISPATCHER.dispatch_event(
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                      [Constants.Music.BULLET_SOUND, None]))
+                      [GameConstants.Music.BULLET_SOUND, None]))
         self.__rb = self._parent.get_component(Rigidbody2D)
 
     def update(self, game_time):
