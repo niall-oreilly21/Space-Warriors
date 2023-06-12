@@ -5,7 +5,6 @@ from pygame import Vector2
 
 from Engine.Graphics.Materials.TextureMaterial2D import TextureMaterial2D
 from Engine.Graphics.Sprites.Take import Take
-from Engine.Managers.EventSystem.EventDispatcher import EventDispatcher
 from Engine.Other.Enums.ActiveTake import ActiveTake
 
 
@@ -24,8 +23,8 @@ class GameConstants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 200
-        DEFAULT_ATTACK_DAMAGE = 5
+        DEFAULT_HEALTH = 100
+        DEFAULT_ATTACK_DAMAGE = 8
 
         MOVE_SPEED = 0.2
         DAMAGE_COOLDOWN = 1
@@ -100,6 +99,8 @@ class GameConstants:
 
     class EnemyWolf:
         MOVE_SPEED = 3
+        ATTACK_DAMAGE = 3
+        HEALTH = 45
 
         __ENEMY_MOVE_X_FRAME_RECTS = [
             pygame.Rect(84, 723, 27, 43), pygame.Rect(149, 722, 26, 43), pygame.Rect(211, 722, 28, 43),
@@ -134,6 +135,8 @@ class GameConstants:
 
     class EnemyRat:
         MOVE_SPEED = 2
+        ATTACK_DAMAGE = 3
+        HEALTH = 40
 
         __MOVE_X_Y = 715
         __MOVE_X_HEIGHT = 51
@@ -172,6 +175,8 @@ class GameConstants:
 
     class EnemyAlien:
         MOVE_SPEED = 6
+        ATTACK_DAMAGE = 5
+        HEALTH = 50
 
         __ENEMY_MOVE_X_FRAME_RECTS = [
             pygame.Rect(84, 721, 35, 45), pygame.Rect(149, 720, 36, 45), pygame.Rect(211, 720, 36, 45),
@@ -275,8 +280,8 @@ class GameConstants:
         ATTACK_CONTROLS_IMAGE = pygame.image.load("Assets/UI/Menu/attack_keys.png")
         ACTIVATE_CONTROL_IMAGE = pygame.image.load("Assets/UI/Menu/activate_key.png")
 
-        END_LEVEL_DEATH_MENU = "You Died!"
-        END_LEVEL_COMPLETE_MENU = "Level Complete!"
+        END_LEVEL_DEATH_MENU = "You died!"
+        END_LEVEL_COMPLETE_MENU = "You saved the universe!"
 
     class Button:
         START_BUTTON = "Start"
