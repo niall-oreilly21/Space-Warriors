@@ -2,6 +2,7 @@ from abc import ABC
 
 from App.Constants.Application import Application
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
+from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.QuadTree.CollisionRange import CollisionRange
 from Engine.QuadTree.QuadTree import QuadTree
 from Engine.Managers.Manager import Manager
@@ -53,22 +54,22 @@ class QuadTreeManager(Manager,  ABC):
             self._quad_tree.clear()
 
     def update(self, game_time):
-        self._update_quad_tree()
-
-    def _update_quad_tree(self):
-        self.__update_collision_range()
-        self._update_dynamic_game_objects_in_quad_tree()
+        self._update_collision_range()
 
     def _get_potential_components(self):
-        return self._quad_tree.query(self._collision_range.bounds)
+        objects_in_range = self._quad_tree.query(self._collision_range.bounds)
+
+        self._update_dynamic_game_objects_in_quad_tree(objects_in_range)
+        return objects_in_range
 
 
-    def _update_dynamic_game_objects_in_quad_tree(self):
+    def _update_dynamic_game_objects_in_quad_tree(self, objects_in_range):
         for game_object_component in self._dynamic_objects_components:
-            self._quad_tree.remove(game_object_component)
-            self._quad_tree.insert(game_object_component)
+            if game_object_component in objects_in_range:
+                self._quad_tree.remove(game_object_component)
+                self._quad_tree.insert(game_object_component)
 
-    def __update_collision_range(self):
+    def _update_collision_range(self):
         self._collision_range.x = self._collision_range_target_box_collider.bounds.centerx - self._collision_range.width / 2
         self._collision_range.y = self._collision_range_target_box_collider.bounds.centery - self._collision_range.height / 2
 

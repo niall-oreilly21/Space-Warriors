@@ -23,7 +23,7 @@ class GameConstants:
     class Player:
         WIDTH = 29
 
-        DEFAULT_HEALTH = 20
+        DEFAULT_HEALTH = 200
         DEFAULT_ATTACK_DAMAGE = 5
 
         MOVE_SPEED = 0.2
