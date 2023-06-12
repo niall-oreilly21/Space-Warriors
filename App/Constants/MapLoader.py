@@ -174,11 +174,28 @@ class MapLoader:
 
                     scene.add(lilypad_object)
                 elif id == 1:
-                    power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                     GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                     GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                     GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                     GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    if scene.name is GameConstants.Scene.EARTH:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    elif scene.name is GameConstants.Scene.MARS:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
+                    else:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
                     power_up_collider.scale = Vector2(2.5, 2.5)
@@ -368,6 +385,7 @@ class MapLoader:
         ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
+        self.__load_teleporter(scene, Vector2(3640, 4700))
         self.__load_ui_texts(scene)
 
     def __load_teleporter(self, scene, position):

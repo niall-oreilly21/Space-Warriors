@@ -132,5 +132,16 @@ class GameStateManager(Manager):
 
     def __handle_level_complete(self):
         if self.__enemies_in_scene_count <= 0:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_COMPLETE_MENU]))
+            if Application.ActiveScene.name is GameConstants.Scene.EARTH:
+                Application.EarthComplete = True
+            if Application.ActiveScene.name is GameConstants.Scene.MARS:
+                Application.MarsComplete = True
+            if Application.ActiveScene.name is GameConstants.Scene.SATURN:
+                Application.SaturnComplete = True
+
             self.__enemies_in_scene_count = GameConstants.DEFAULT_ENEMIES
+
+            if Application.EarthComplete and Application.MarsComplete and Application.SaturnComplete:
+                self._event_dispatcher.dispatch_event(
+                    EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene,
+                              [GameConstants.Menu.END_LEVEL_COMPLETE_MENU]))

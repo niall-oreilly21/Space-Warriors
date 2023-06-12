@@ -1,6 +1,7 @@
 import pygame
 from pygame import Vector2
 
+from App.Constants.Application import Application
 from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
 from Engine.GameObjects.GameObject import GameObject
@@ -35,11 +36,15 @@ def initialise_back_button(menu_scene):
 
 
 def initialise_menu(menu_scene, background_material, title_text, button_texts):
+    if menu_scene.name == GameConstants.Scene.SOUND_MENU or menu_scene.name == GameConstants.Scene.PAUSE_MENU:
+        initialise_back_button(menu_scene)
+
     background = initialise_menu_background(background_material)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                        GameObjectCategory.MenuTitle)
-    title_text_material = TextMaterial2D(GameConstants.Menu.TITLE_FONT_PATH, GameConstants.Menu.TITLE_FONT_SIZE, title_text,
+    title_text_material = TextMaterial2D(GameConstants.Menu.TITLE_FONT_PATH, GameConstants.Menu.TITLE_FONT_SIZE,
+                                         title_text,
                                          Vector2(GameConstants.VIEWPORT_WIDTH / 2, GameConstants.VIEWPORT_HEIGHT / 6),
                                          (255, 255, 255))
     title.add_component(Renderer2D("TitleRenderer", title_text_material, 1))
@@ -59,7 +64,8 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
                             GameObjectType.Static, GameObjectCategory.Menu)
 
         button_texture_material = TextureMaterial2D(GameConstants.Menu.MENU_BUTTON_IMAGE, None, Vector2(0, 0))
-        button_text_material = TextMaterial2D(GameConstants.Menu.TEXT_FONT_PATH, GameConstants.Menu.TEXT_FONT_SIZE, button_text,
+        button_text_material = TextMaterial2D(GameConstants.Menu.TEXT_FONT_PATH, GameConstants.Menu.TEXT_FONT_SIZE,
+                                              button_text,
                                               Vector2(150, 27), (0, 0, 0))
 
         button.add_component(Renderer2D(f"{button_text}Renderer", button_texture_material, 1))
@@ -73,6 +79,7 @@ def initialise_menu(menu_scene, background_material, title_text, button_texts):
 
 
 def initialise_level_menu(menu_scene):
+    initialise_back_button(menu_scene)
     background = initialise_menu_background(GameConstants.Menu.MATERIAL_PAUSE_MENU)
 
     title = GameObject("MenuTitle", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
@@ -84,7 +91,7 @@ def initialise_level_menu(menu_scene):
     earth = GameObject(GameConstants.Button.EARTH_BUTTON,
                        Transform2D(Vector2(GameConstants.VIEWPORT_WIDTH / 3 - 882 * 0.4, 260),
                                    0, Vector2(0.3, 0.3)), GameObjectType.Static, GameObjectCategory.Menu)
-    earth_texture_material = TextureMaterial2D(GameConstants.Menu.EARTH_IMAGE, None,
+    earth_texture_material = TextureMaterial2D(GameConstants.Menu.EARTH_IMAGE, (120, 120, 120),
                                                Vector2(0, 0))
     earth.add_component(Renderer2D("EarthRenderer", earth_texture_material, 1))
     earth.add_component(ButtonColliderHover2D("ButtonCollider", 0.05))
@@ -99,7 +106,9 @@ def initialise_level_menu(menu_scene):
     mars = earth.clone()
     mars.name = GameConstants.Button.MARS_BUTTON
     mars.transform.position.x = earth.transform.position.x + 883 * 0.3 + 150
-    mars.get_component(Renderer2D).material.texture = GameConstants.Menu.MARS_IMAGE
+    mars_texture_material = TextureMaterial2D(GameConstants.Menu.MARS_IMAGE, (120, 120, 120),
+                                              Vector2(0, 0))
+    mars.get_component(Renderer2D).material = mars_texture_material
 
     mars_text = earth_text.clone()
     mars_text.transform.position.x = mars.transform.position.x + 135
@@ -108,7 +117,7 @@ def initialise_level_menu(menu_scene):
     saturn = earth.clone()
     saturn.name = GameConstants.Button.SATURN_BUTTON
     saturn.transform.position.x = mars.transform.position.x + 883 * 0.3 + 100
-    saturn_texture_material = TextureMaterial2D(GameConstants.Menu.SATURN_IMAGE, None,
+    saturn_texture_material = TextureMaterial2D(GameConstants.Menu.SATURN_IMAGE, (120, 120, 120),
                                                 Vector2(0, 0))
     saturn.get_component(Renderer2D).material = saturn_texture_material
 
@@ -143,11 +152,13 @@ def initialise_character_selection_menu(menu_scene):
     material_player = GameConstants.Player.MATERIAL_GIRL
     girl_player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.UI))
     girl_player.add_component(SpriteAnimator2D("player", GameConstants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                               ActiveTake.PLAYER_MOVE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
+                                               ActiveTake.PLAYER_MOVE_DOWN,
+                                               GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
     girl_player.add_component(ButtonColliderHover2D("ButtonColliderGirl", 0.6))
 
-    boy_player = GameObject(GameConstants.Button.BOY_PLAYER_BUTTON, Transform2D(Vector2(GameConstants.VIEWPORT_WIDTH / 2 + 150,
-                                                                                        295), 0, Vector2(4, 4)),
+    boy_player = GameObject(GameConstants.Button.BOY_PLAYER_BUTTON,
+                            Transform2D(Vector2(GameConstants.VIEWPORT_WIDTH / 2 + 150,
+                                                295), 0, Vector2(4, 4)),
                             GameObjectType.Static, GameObjectCategory.UI)
     material_player = GameConstants.Player.MATERIAL_BOY
     boy_player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.UI))
@@ -237,8 +248,9 @@ def initialise_controls_menu(menu_scene):
     activate = GameObject("ActivateControls", Transform2D(Vector2(GameConstants.VIEWPORT_WIDTH / 2 - 170, 600),
                                                           0, Vector2(0.6, 0.6)), GameObjectType.Static,
                           GameObjectCategory.Menu)
-    activate.add_component(Renderer2D("ActivateRenderer", TextureMaterial2D(GameConstants.Menu.ACTIVATE_CONTROL_IMAGE, None,
-                                                                            Vector2(0, 0), None), 1))
+    activate.add_component(
+        Renderer2D("ActivateRenderer", TextureMaterial2D(GameConstants.Menu.ACTIVATE_CONTROL_IMAGE, None,
+                                                         Vector2(0, 0), None), 1))
 
     menu_scene.add(background)
     menu_scene.add(title)
