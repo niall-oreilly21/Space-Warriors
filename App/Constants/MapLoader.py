@@ -196,8 +196,6 @@ class MapLoader:
                     else:
                         power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
                                                          GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
                                                          GameObjectConstants.Consumables.POTION_ATTACK.clone(),
                                                          GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
