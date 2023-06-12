@@ -17,7 +17,6 @@ from Engine.Managers.SoundManager import SoundManager
 from Engine.Other.InputHandler import InputHandler
 from Engine.Time.GameTime import GameTime
 from Engine.Managers.RendererManager import RendererManager
-from Engine.Managers.Scene import Scene
 from Engine.Managers.SceneManager import SceneManager
 
 # Initialize Pygame
