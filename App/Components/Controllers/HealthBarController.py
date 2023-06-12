@@ -37,7 +37,9 @@ class HealthBarController(FollowController):
         self.__health = self._target.health
         health_percentage = self.__health / self._target.initial_health
         self.__current_width = self.__initial_width * health_percentage
-        self._material.width = min(self.__current_width, self.__initial_width)
+
+        if self.__current_width >= 0:
+            self._material.width = min(self.__current_width, self.__initial_width)
         self.change_colour()
 
     def _follow_target(self):
