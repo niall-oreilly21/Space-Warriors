@@ -1,11 +1,10 @@
 import sys
 
 import pygame
-import time
 
 from App.Constants.Application import Application
 from App.Constants.GameConstants import GameConstants
-from Engine.Graphics.Materials.TextMaterial2D import TextMaterial2D
+from Engine.GameObjects.Components.Physics.ButtonColliderHover2D import ButtonColliderHover2D
 from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
@@ -87,7 +86,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.ResetLevelScene:
             self.__set_scenes()
-            self.set_active_scene(GameConstants.Scene.EARTH)
+            self.set_active_scene(Application.LastActiveScene)
             Application.ActiveScene = self.__active_scene
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             if self.__check_level_scene():
@@ -153,8 +152,17 @@ class SceneManager(Manager):
 
     def __set_menu_scene(self, next_scene_name):
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.MenuCamera))
+        Application.LastActiveScene = self.__active_scene
         self.set_active_scene(next_scene_name)
         Application.ActiveScene = self.__active_scene
+
+        if next_scene_name == GameConstants.Scene.LEVEL_MENU:
+            for button in self.__active_scene.get_all_components_by_type(ButtonColliderHover2D):
+                if (Application.EarthComplete and button.parent.name == GameConstants.Button.EARTH_BUTTON)\
+                        or (Application.MarsComplete and button.parent.name == GameConstants.Button.MARS_BUTTON)\
+                        or (Application.SaturnComplete and button.parent.name == GameConstants.Button.SATURN_BUTTON):
+                    button.parent.get_component(Renderer2D).material.color = None
+                    button.parent.remove_component(ButtonColliderHover2D)
 
     def __check_level_scene(self):
         return self.__active_scene.name is GameConstants.Scene.EARTH or\

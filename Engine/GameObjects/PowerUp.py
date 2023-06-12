@@ -5,7 +5,7 @@ from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategor
 
 
 class PowerUp(GameObject):
-    def __init__(self, name, power_up_type,  transform=None, game_object_type=GameObjectType.Static,
+    def __init__(self, name, power_up_type,  transform=None, game_object_type=GameObjectType.Dynamic,
                  game_object_category=GameObjectCategory.PowerUp):
         super().__init__(name, transform, game_object_type, game_object_category)
         self.__power_up_type = power_up_type

@@ -17,6 +17,7 @@ from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.GameObjects.Components.Physics.WaypointFinder import WaypointFinder
+from Engine.GameObjects.Gun.GunController import GunController
 from Engine.GameObjects.Tiles.Tile import Tile
 from Engine.GameObjects.Tiles.TileAttributes import TileAttributes
 from Engine.GameObjects.Tiles.Tileset import Tileset
@@ -178,11 +179,28 @@ class MapLoader:
 
                     scene.add(lilypad_object)
                 elif id == 1:
-                    power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                     GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                     GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                     GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
-                                                     GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    if scene.name is GameConstants.Scene.EARTH:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
+                    elif scene.name is GameConstants.Scene.MARS:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
+                    else:
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                                                         GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
                     power_up_collider.scale = Vector2(2.5, 2.5)
@@ -222,9 +240,9 @@ class MapLoader:
             scene.add(self.__player)
             scene.add(self.__player_health_bar)
 
-            if not scene.contains(self.__pet):
-                if self.__pet.get_component(PetController).adopted:
-                    scene.add(self.__pet)
+        if not scene.contains(self.__pet):
+            if self.__pet.get_component(PetController).adopted:
+                scene.add(self.__pet)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
@@ -264,7 +282,7 @@ class MapLoader:
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -272,8 +290,9 @@ class MapLoader:
         gun = GameObjectConstants.Gun.Gun
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
-        enemy.add_component(
-            BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+        enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+
+        gun.add_component(GunController("Enemy Gun Controller", enemy))
         scene.add(gun)
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
@@ -378,6 +397,7 @@ class MapLoader:
         ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
+        self.__load_teleporter(scene, Vector2(3640, 4700))
         self.__load_ui_texts(scene)
 
     def __load_house_specifics(self, scene):

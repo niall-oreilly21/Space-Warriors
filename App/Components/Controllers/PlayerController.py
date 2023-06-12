@@ -168,7 +168,6 @@ class PlayerController(Component, IMoveable):
     def _faint(self):
 
         if self.parent.health <= 0:
-            print("FAINT")
             self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_DEATH_MENU]))

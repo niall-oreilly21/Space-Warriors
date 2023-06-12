@@ -21,7 +21,8 @@ class GunController(FollowController):
         if self.__target_box_collider:
             #print(self._parent.transform.position)
 
-            target_position = self.__target_box_collider.bounds.center
+            #target_position = self.__target_box_collider.bounds.center
+
             #print(target_position)
             # self._parent.transform.position = Vector2(target_position[0] - self.__rb.material.source_rect.width / 2,
             #                                           target_position[1] - self.__rb.material.source_rect.height / 2)

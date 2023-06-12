@@ -67,7 +67,7 @@ initialise_menu(main_menu_scene, GameConstants.Menu.MATERIAL_MAIN_MENU, GameCons
                 [GameConstants.Button.START_BUTTON, GameConstants.Button.CONTROLS_BUTTON, GameConstants.Button.SOUND_BUTTON,
                  GameConstants.Button.QUIT_BUTTON])
 initialise_menu(pause_menu_scene, GameConstants.Menu.MATERIAL_PAUSE_MENU, "Paused",
-                [GameConstants.Button.RESUME_BUTTON, GameConstants.Button.LEVELS_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
+                [GameConstants.Button.RESUME_BUTTON, GameConstants.Button.CONTROLS_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
 initialise_menu(sound_menu_scene, GameConstants.Menu.MATERIAL_SOUND_MENU, "Sound",
                 [GameConstants.Button.MUTE_BUTTON, GameConstants.Button.UNMUTE_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
 initialise_menu(end_level_menu_scene, GameConstants.Menu.MATERIAL_DEATH_MENU, "You Died",
@@ -125,9 +125,9 @@ while running:
     pygame.display.update()
     game_time.limit_fps(60)
 
-    # elapsed_time = game_time.elapsed_time
-    # fps = game_time.fps()
-    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+    elapsed_time = game_time.elapsed_time
+    fps = game_time.fps()
+    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     #print(player.transform.position.x, ", ", player.transform.position.y)
 

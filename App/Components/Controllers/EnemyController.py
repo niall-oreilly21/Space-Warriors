@@ -53,6 +53,7 @@ class EnemyController(FollowController):
 
     def __check_enemy_health(self):
         if self.parent.health <= 0:
+            self.parent.health = 0
             Application.ActiveScene.remove(self.parent.health_bar)
             Application.ActiveScene.remove(self.parent)
             GameConstants.EVENT_DISPATCHER.dispatch_event(

@@ -5,3 +5,6 @@ class Application:
     ActiveCamera = None
     Player = None
     GameStarted = False
+    EarthComplete = False
+    MarsComplete = False
+    SaturnComplete = False
