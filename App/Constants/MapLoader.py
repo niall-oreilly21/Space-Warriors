@@ -217,9 +217,9 @@ class MapLoader:
             scene.add(self.__player)
             scene.add(self.__player_health_bar)
 
-            if not scene.contains(self.__pet):
-                if self.__pet.get_component(PetController).adopted:
-                    scene.add(self.__pet)
+        if not scene.contains(self.__pet):
+            if self.__pet.get_component(PetController).adopted:
+                scene.add(self.__pet)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
