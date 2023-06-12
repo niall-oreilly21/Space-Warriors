@@ -11,7 +11,7 @@ from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Components.Controllers.PetController import PetController
 from App.Components.Controllers.PlayerController import PlayerController
 from App.Components.Controllers.ZapEnemyController import ZapEnemyController
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.EntityConstants import EntityConstants
 from App.Constants.GameObjectConstants import GameObjectConstants
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -38,9 +38,9 @@ class MapLoader:
         self.__ui_helper_texts = ui_helper_texts
         self.__enemies = \
             {
-                Constants.Scene.EARTH: [],
-                Constants.Scene.MARS: [],
-                Constants.Scene.SATURN: []
+                GameConstants.Scene.EARTH: [],
+                GameConstants.Scene.MARS: [],
+                GameConstants.Scene.SATURN: []
             }
 
         self.__load_player_components()
@@ -52,22 +52,22 @@ class MapLoader:
         player_box_collider.scale = Vector2(1, 0.5)
         player_box_collider.offset = Vector2(0, 20)
         self.__player.add_component(player_box_collider)
-        material_player = Constants.Player.MATERIAL_GIRL
+        material_player = GameConstants.Player.MATERIAL_GIRL
         self.__player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
-        self.__player.add_component(SpriteAnimator2D("player", Constants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                              ActiveTake.PLAYER_IDLE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
-        player_controller = PlayerController("Player movement", Constants.Player.MOVE_SPEED,
-                                             Constants.Player.MOVE_SPEED, player_box_collider)
+        self.__player.add_component(SpriteAnimator2D("player", GameConstants.Player.PLAYER_ANIMATOR_INFO, material_player,
+                                                     ActiveTake.PLAYER_IDLE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
+        player_controller = PlayerController("Player movement", GameConstants.Player.MOVE_SPEED,
+                                             GameConstants.Player.MOVE_SPEED, player_box_collider)
         self.__player.add_component(player_controller)
         player_collider = PlayerCollider("Players attack collider")
         self.__player.add_component(player_collider)
 
     def __load_pet_components(self):
-        material_pet = Constants.PetDog.MATERIAL_PET
+        material_pet = GameConstants.PetDog.MATERIAL_PET
         self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
         self.__pet.get_component(SpriteRenderer2D).flip_x = True
-        self.__pet.add_component(SpriteAnimator2D("PetAnimator", Constants.PetDog.PET_ANIMATOR_INFO, material_pet,
-                                           ActiveTake.PET_DOG_SIT, Constants.CHARACTER_ANIMATOR_MOVE_SPEED))
+        self.__pet.add_component(SpriteAnimator2D("PetAnimator", GameConstants.PetDog.PET_ANIMATOR_INFO, material_pet,
+                                                  ActiveTake.PET_DOG_SIT, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
         self.__pet.get_component(SpriteAnimator2D).is_infinite = True
         self.__pet.add_component(Rigidbody2D("PetRigidbody"))
         self.__pet.add_component(PetController("PetMovement", self.__player, 25))
@@ -79,12 +79,12 @@ class MapLoader:
         tileset = Tileset("Assets/SpriteSheets/Tilesets/plain_tileset2.png", 36, 36)
 
         # Add tiles to the tileset
-        tileset.add_tile(Tile("Grass", Constants.Tile.GRASS, Vector2(216, 12)))
-        tileset.add_tile(Tile("Water", Constants.Tile.WATER, Vector2(264, 156)))
-        tileset.add_tile(Tile("Dark Grass", Constants.Tile.DARK_GRASS, Vector2(216, 108)))
-        tileset.add_tile(Tile("Dirt", Constants.Tile.DIRT, Vector2(308, 12)))
-        tileset.add_tile(Tile("Sand", Constants.Tile.SAND, Vector2(216, 156)))
-        tileset.add_tile(Tile("CoarseDirt", Constants.Tile.COARSE_DIRT, Vector2(216, 108)))
+        tileset.add_tile(Tile("Grass", GameConstants.Tile.GRASS, Vector2(216, 12)))
+        tileset.add_tile(Tile("Water", GameConstants.Tile.WATER, Vector2(264, 156)))
+        tileset.add_tile(Tile("Dark Grass", GameConstants.Tile.DARK_GRASS, Vector2(216, 108)))
+        tileset.add_tile(Tile("Dirt", GameConstants.Tile.DIRT, Vector2(308, 12)))
+        tileset.add_tile(Tile("Sand", GameConstants.Tile.SAND, Vector2(216, 156)))
+        tileset.add_tile(Tile("CoarseDirt", GameConstants.Tile.COARSE_DIRT, Vector2(216, 108)))
         tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308, 12)))
         tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
         tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
@@ -103,13 +103,13 @@ class MapLoader:
         width = 110
         height = 120
 
-        if scene.name == Constants.Scene.EARTH:
+        if scene.name == GameConstants.Scene.EARTH:
             self.__load_planet_earth_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, None, None)
-        elif scene.name == Constants.Scene.MARS:
+        elif scene.name == GameConstants.Scene.MARS:
             self.__load_planet_mars_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, [255, 100, 150], 220)
-        elif scene.name == Constants.Scene.SATURN:
+        elif scene.name == GameConstants.Scene.SATURN:
             self.__load_planet_saturn_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
 
@@ -120,7 +120,7 @@ class MapLoader:
                 y = object["y"]
                 id = object["t"]["id"]
                 if id == 5:
-                    if scene.name is Constants.Scene.EARTH:
+                    if scene.name is GameConstants.Scene.EARTH:
                         tree_object = random.choice(
                             [GameObjectConstants.Foliage.TALL_TREE.clone(),
                              GameObjectConstants.Foliage.LOW_TREE.clone()])
@@ -135,7 +135,7 @@ class MapLoader:
                         tree_object.transform.position = Vector2(x * 71,
                                                                  y * 71)  # starting area forces every tree to one point
                         scene.add(tree_object)
-                    elif scene.name is Constants.Scene.SATURN:
+                    elif scene.name is GameConstants.Scene.SATURN:
                         tree_object = GameObjectConstants.NaturalStructures.ROCK_THREE.clone()
                         tree_collider = BoxCollider2D("TreeCollider")
                         tree_object.add_component(tree_collider)
@@ -143,7 +143,7 @@ class MapLoader:
                                                                  y * 71)  # starting area forces every tree to one point
                         scene.add(tree_object)
                 elif id == 15:
-                    if scene.name is Constants.Scene.EARTH:
+                    if scene.name is GameConstants.Scene.EARTH:
                         bush_object = random.choice(
                             [GameObjectConstants.Foliage.BUSH_ONE.clone(), GameObjectConstants.Foliage.BUSH_TWO.clone(),
                              GameObjectConstants.Foliage.BUSH_FOUR.clone(),
@@ -154,13 +154,13 @@ class MapLoader:
                             bush_object.transform.scale = Vector2(scale, scale)
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
-                    elif scene.name is Constants.Scene.MARS:
+                    elif scene.name is GameConstants.Scene.MARS:
                         bush_object = random.choice([GameObjectConstants.Foliage.BUSH_THREE.clone(),
                                                      GameObjectConstants.Foliage.DEAD_BUSH.clone()])
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         bush_object.transform.position = Vector2(x * 72, y * 72)
                         scene.add(bush_object)
-                    elif scene.name is Constants.Scene.SATURN:
+                    elif scene.name is GameConstants.Scene.SATURN:
                         bush_object = GameObjectConstants.Foliage.DEAD_BUSH.clone()
                         bush_object.add_component(BoxCollider2D("BushCollider"))
                         bush_object.transform.position = Vector2(x * 72, y * 72)
@@ -198,7 +198,7 @@ class MapLoader:
         for x in range(height):
             row = []
             for z in range(width):
-                tile = TileAttributes(Constants.Tile.WATER, False, color, alpha)
+                tile = TileAttributes(GameConstants.Tile.WATER, False, color, alpha)
                 row.append(tile)
             map_data.append(row)
 
@@ -207,7 +207,7 @@ class MapLoader:
                 x = ground["x"]
                 y = ground["y"]
                 s_id = ground["s"]["id"]
-                if s_id == Constants.Tile.WATER:
+                if s_id == GameConstants.Tile.WATER:
                     map_data[y][x] = TileAttributes(s_id, True, color, alpha)
                 else:
                     map_data[y][x] = TileAttributes(s_id, False, color, alpha)
@@ -251,13 +251,13 @@ class MapLoader:
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
-        enemy.add_component(EnemyController("Enemy movement", self.__player, Constants.EnemyRat.MOVE_SPEED, 400))
+        enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 400))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, Constants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -266,7 +266,7 @@ class MapLoader:
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
         enemy.add_component(
-            BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+            BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
         scene.add(gun)
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
@@ -278,7 +278,7 @@ class MapLoader:
         boss.transform.scale = Vector2(5, 5)
         boss.transform.position = Vector2(3207.8, 4013)
         boss.add_component(
-            BossEnemyController("Enemy movement", self.__player, Constants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+            BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
         boss.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
 
     def __load_planet_earth_specifics(self, scene):

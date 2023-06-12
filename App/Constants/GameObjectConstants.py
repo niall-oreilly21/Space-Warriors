@@ -5,7 +5,7 @@ from pygame import Vector2
 
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from App.Constants.Application import Application
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -239,51 +239,51 @@ class GameObjectConstants:
         POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
                                GameObjectType.Static, GameObjectCategory.PowerUp)
-        texture_material = Constants.PowerUp.MATERIAL_POTION_SPEED
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_SPEED
         POTION_SPEED.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_SPEED.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        POTION_SPEED.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                     texture_material, ActiveTake.POTION,
-                                                    Constants.PowerUp.ANIMATION_SPEED))
+                                                    GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = Constants.PowerUp.MATERIAL_POTION_ATTACK
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_ATTACK
         POTION_ATTACK.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_ATTACK.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        POTION_ATTACK.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                      texture_material, ActiveTake.POTION,
-                                                     Constants.PowerUp.ANIMATION_SPEED))
+                                                     GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = Constants.PowerUp.MATERIAL_POTION_DEFENSE
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_DEFENSE
         POTION_DEFENSE.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                       texture_material, ActiveTake.POTION,
-                                                      Constants.PowerUp.ANIMATION_SPEED))
+                                                      GameConstants.PowerUp.ANIMATION_SPEED))
 
         POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = Constants.PowerUp.MATERIAL_POTION_HEAL
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_HEAL
         POTION_HEAL.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_HEAL.add_component(SpriteAnimator2D("Potion", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        POTION_HEAL.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                    texture_material, ActiveTake.POTION,
-                                                   Constants.PowerUp.ANIMATION_SPEED))
+                                                   GameConstants.PowerUp.ANIMATION_SPEED))
 
         RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = Constants.PowerUp.MATERIAL_RANDOM
+        texture_material = GameConstants.PowerUp.MATERIAL_RANDOM
         RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                        texture_material, ActiveTake.RANDOM,
-                                                       Constants.PowerUp.ANIMATION_SPEED))
+                                                       GameConstants.PowerUp.ANIMATION_SPEED))
 
         NIGHT_VISION_POWER_UP = PowerUp("NightVisionPowerUp", PowerUpType.NightVision,
                                         Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = Constants.PowerUp.MATERIAL_NIGHT_VISION
+        texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
         NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", Constants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                              texture_material, ActiveTake.NIGHT_VISION,
-                                                             Constants.PowerUp.ANIMATION_SPEED))
+                                                             GameConstants.PowerUp.ANIMATION_SPEED))
 
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
@@ -295,19 +295,19 @@ class GameObjectConstants:
         Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
     class Cameras:
-        __MAIN_MENU_CAMERA_COMPONENT = Camera(Constants.Cameras.MENU_CAMERA, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT)
-        MAIN_MENU_CAMERA = GameObject(Constants.Cameras.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)),GameObjectType.Static, GameObjectCategory.Menu)
+        __MAIN_MENU_CAMERA_COMPONENT = Camera(GameConstants.Cameras.MENU_CAMERA, GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT)
+        MAIN_MENU_CAMERA = GameObject(GameConstants.Cameras.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Static, GameObjectCategory.Menu)
         MAIN_MENU_CAMERA.add_component(__MAIN_MENU_CAMERA_COMPONENT)
 
         GAME_CAMERA = MAIN_MENU_CAMERA.clone()
-        GAME_CAMERA.get_component(Camera).name = Constants.Cameras.GAME_CAMERA
-        GAME_CAMERA.name = Constants.Cameras.GAME_CAMERA
+        GAME_CAMERA.get_component(Camera).name = GameConstants.Cameras.GAME_CAMERA
+        GAME_CAMERA.name = GameConstants.Cameras.GAME_CAMERA
 
     class UiHelperTexts:
         UI_HELPER_TEXT_FONT_PATH = "Assets/Fonts/VCR_OSD_MONO.ttf"
-        UI_TEXT_HELPER_BOTTOM = GameObject(Constants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
+        UI_TEXT_HELPER_BOTTOM = GameObject(GameConstants.UITextPrompts.UI_TEXT_BOTTOM, Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static, GameObjectCategory.UIPrompts)
         UI_TEXT_HELPER_RIGHT = UI_TEXT_HELPER_BOTTOM.clone()
-        UI_TEXT_HELPER_RIGHT.name = Constants.UITextPrompts.UI_TEXT_RIGHT
+        UI_TEXT_HELPER_RIGHT.name = GameConstants.UITextPrompts.UI_TEXT_RIGHT
         UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_RIGHT)
 
     class HealthBar:
