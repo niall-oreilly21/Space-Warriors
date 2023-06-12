@@ -16,6 +16,21 @@ from Engine.Other.Enums.GameObjectEnums import PowerUpType
 class PowerUpCollider(Collider):
     def __init__(self, name):
         super().__init__(name)
+        self.__current_speed_time = 0
+        self.__current_attack_time = 0
+        self.__current_defense_time = 0
+        self.__current_night_vision_time = 0
+
+        self.__text_shown_time = 0
+        self.__text_shown = False
+
+        self.__speed_activated = False
+        self.__attack_activated = False
+        self.__defense_activated = False
+        self.__night_vision_activated = False
+
+        self.__text_time = 10000
+        self.__total_time = 10000
 
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
@@ -78,6 +93,7 @@ class PowerUpCollider(Collider):
                 self.show_text(PowerUpType.Attack)
 
             elif power_up_type == PowerUpType.Speed:
+                print("Yes")
                 player.get_component(SpriteAnimator2D).fps += self.parent.power_up_value
                 player_speed_x = player.get_component(PlayerController).speed.x
                 player_speed_y = player.get_component(PlayerController).speed.y
@@ -131,3 +147,47 @@ class PowerUpCollider(Collider):
 
     def clone(self):
         return PowerUpCollider(self.name)
+
+    def update(self, game_time):
+        #print(self.__speed_activated)
+        # Power up activation
+        if self.__attack_activated:
+            self.__current_attack_time += game_time.elapsed_time
+            if self.__current_attack_time >= self.__total_time:
+                self.__current_attack_time = 0
+                self.__attack_activated = False
+                Application.Player.attack_damage = GameConstants.Player.DEFAULT_ATTACK_DAMAGE
+
+        if self.__defense_activated:
+            self.__current_defense_time += game_time.elapsed_time
+            if self.__current_defense_time >= self.__total_time:
+                self.__current_defense_time = 0
+                self.__defense_activated = False
+                Application.Player.damage_cooldown = GameConstants.Player.DAMAGE_COOLDOWN
+
+        if self.__speed_activated:
+            print("im sonic zip zip")
+            print(Application.Player.get_component(PlayerController).speed)
+            self.__current_speed_time += game_time.elapsed_time
+            if self.__current_speed_time >= self.__total_time:
+                self.__current_speed_time = 0
+                self.__speed_activated = False
+                Application.Player.get_component(PlayerController).speed = Vector2(GameConstants.Player.MOVE_SPEED,
+                                                                            GameConstants.Player.MOVE_SPEED)
+                print(Application.Player.get_component(PlayerController).speed)
+                Application.Player.get_component(SpriteAnimator2D).fps = GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED
+
+        if self.__night_vision_activated:
+            self.__current_night_vision_time += game_time.elapsed_time
+            if self.__current_night_vision_time >= self.__total_time:
+                self.__current_night_vision_time = 0
+                self.__night_vision_activated = False
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager,
+                                                                        EventActionType.TurnSpotLightOn))
+
+        # Show power up text
+        if self.__text_shown:
+            self.__text_shown_time += game_time.elapsed_time
+            if self.__text_shown_time >= self.__text_time:
+                self.__text_shown_time = 0
+                self.__text_shown = False
