@@ -336,7 +336,7 @@ class GameConstants:
         MENU_MUSIC_FILEPATH = "Assets/Sounds/background_music.mp3"
         BACKGROUND_MUSIC_EARTH_FILEPATH = "Assets/Sounds/planet_earth_music.wav"
         BACKGROUND_MUSIC_MARS_FILEPATH = "Assets/Sounds/planet_mars_music.mp3"
-        BACKGROUND_MUSIC_SATURN_FILEPATH = "Assets/Sounds/planet_saturn_music.mp3"
+        BACKGROUND_MUSIC_SATURN_FILEPATH = "Assets/Sounds/planet_c_music.mp3"
         BULLET_SOUND_FILEPATH = "Assets/Sounds/gun.wav"
         ZAP_SOUND_FILEPATH = "Assets/Sounds/zap.wav"
         TELEPORT_SOUND_FILEPATH = "Assets/Sounds/teleport.wav"
