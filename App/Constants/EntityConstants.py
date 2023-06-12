@@ -58,9 +58,9 @@ class EntityConstants:
                                  ActiveTake.ENEMY_ALIEN_MOVE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED)),
 
         }
-        #
 
-        enemy = Character("Enemy", 20, 10, 1, Vector2(0, 0), Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
+        enemy = Character("Enemy", GameConstants.EnemyRat.HEALTH, GameConstants.EnemyRat.ATTACK_DAMAGE, 1, Vector2(0, 0),
+                          Transform2D(Vector2(0, 0), 0, Vector2(1.5, 1.5)),
                           GameObjectType.Dynamic, GameObjectCategory.Rat)
         enemy.add_component(BoxCollider2D("Box-1"))
         enemy.add_component(Rigidbody2D("Rigid"))
@@ -88,6 +88,8 @@ class EntityConstants:
                                                               Vector2(2540, 3500)]
         WOLF_ENEMY.add_component(enemy_sprites[WOLF_ENEMY_NAME][0].clone())
         WOLF_ENEMY.add_component(enemy_sprites[WOLF_ENEMY_NAME][1].clone())
+        WOLF_ENEMY.health = GameConstants.EnemyWolf.HEALTH
+        WOLF_ENEMY.attack_damage = GameConstants.EnemyWolf.ATTACK_DAMAGE
 
         ALIEN_ENEMY = enemy.clone()
 
@@ -99,6 +101,8 @@ class EntityConstants:
                                                                Vector2(4110, 3050), Vector2(3580, 3050)]
         ALIEN_ENEMY.add_component(enemy_sprites[ALIEN_ENEMY_NAME][0].clone())
         ALIEN_ENEMY.add_component(enemy_sprites[ALIEN_ENEMY_NAME][1].clone())
+        ALIEN_ENEMY.health = GameConstants.EnemyAlien.HEALTH
+        ALIEN_ENEMY.attack_damage = GameConstants.EnemyAlien.ATTACK_DAMAGE
 
         ENEMY_WAYPOINTS = {
             RAT_ENEMY_NAME: [

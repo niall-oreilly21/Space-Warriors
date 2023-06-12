@@ -197,10 +197,6 @@ class PlayerCollider(Collider):
             if Application.ActiveScene.contains(colliding_game_object):
                 Application.ActiveScene.remove(colliding_game_object)
 
-            GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-
     def update(self, game_time):
         # Power up activation
         if self.__attack_activated:
@@ -248,3 +244,19 @@ class PlayerCollider(Collider):
         GameConstants.EVENT_DISPATCHER.dispatch_event(
             EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                       ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+
+        if Application.ActiveScene.name == GameConstants.Scene.EARTH and Application.EarthComplete:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                          ["All enemies are dead! Go to the teleporter to save another planet.",
+                           GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        if Application.ActiveScene.name == GameConstants.Scene.MARS and Application.MarsComplete:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                          ["All enemies are dead! Go to the teleporter to save another planet.",
+                           GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        if Application.ActiveScene.name == GameConstants.Scene.SATURN and Application.SaturnComplete:
+            GameConstants.EVENT_DISPATCHER.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                          ["All enemies are dead! Go to the teleporter to save another planet.",
+                           GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))

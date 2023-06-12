@@ -41,7 +41,6 @@ class ButtonCollider2D(BoxCollider2D):
                                                                     EventActionType.ExitGame))
         elif self._parent.name == GameConstants.Button.RESUME_BUTTON:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.SetToLastActiveScene))
-
         if self._parent.name == GameConstants.Button.MAIN_MENU_BUTTON:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                     EventActionType.MainMenuScene))
@@ -76,8 +75,15 @@ class ButtonCollider2D(BoxCollider2D):
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                     EventActionType.ControlsMenuScene))
         elif self._parent.name == GameConstants.Button.BACK_BUTTON:
-            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
-                                                                    EventActionType.MainMenuScene))
+            if Application.ActiveScene.name == GameConstants.Scene.CHARACTER_SELECTION_MENU:
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                        EventActionType.MainMenuScene))
+            elif Application.ActiveScene.name == GameConstants.Scene.LEVEL_MENU:
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                        EventActionType.CharacterSelectionMenuScene))
+            else:
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
+                                                                        EventActionType.SetToLastActiveScene))
         elif self._parent.name == GameConstants.Button.LEVELS_BUTTON:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager,
                                                                     EventActionType.LevelScene))
