@@ -21,6 +21,14 @@ class TextMaterial2D(Material2D):
     def text(self, text):
         self.__text = text
 
+    @property
+    def text_offset(self):
+        return self.__text_offset
+
+    @text_offset.setter
+    def text_offset(self, text_offset):
+        self.__text_offset = text_offset
+
     def _transform_material(self, surface, transform):
         rotated_text_surface = self._rotate_surface(surface, transform.rotation)
 
