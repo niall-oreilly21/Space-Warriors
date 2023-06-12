@@ -9,7 +9,8 @@ class ZapEnemyController(EnemyController):
         super().__init__(name, target, speed, min_distance_to_target)
         self.__zap_speed_multiplier = zap_speed_multiplier
         self.__total_elapsed_time = 0
-        self.__zap_interval = zap_interval * 1000
+        self.__initial_zap_interval = zap_interval
+        self.__zap_interval = self.__initial_zap_interval * 1000
         self.__initial_speed = speed
 
     def start(self):
@@ -20,13 +21,13 @@ class ZapEnemyController(EnemyController):
         self._speed = self.__initial_speed
 
         self.__total_elapsed_time += game_time.elapsed_time
-
+        print(self.__zap_interval)
         if self.__total_elapsed_time >= self.__zap_interval:
+
             GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [GameConstants.Music.ZAP_SOUND, None]))
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [GameConstants.Music.ZAP_SOUND, False]))
             self._speed *= self.__zap_speed_multiplier
             self.__total_elapsed_time = 0
 
     def clone(self):
-        return ZapEnemyController(self.name, self._target, self._speed, self._min_distance_to_target, self.__zap_speed_multiplier, self.__zap_interval)
+        return ZapEnemyController(self.name, self._target, self._speed, self._min_distance_to_target, self.__zap_speed_multiplier, self.__initial_zap_interval)
