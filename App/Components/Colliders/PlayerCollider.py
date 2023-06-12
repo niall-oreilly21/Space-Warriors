@@ -19,24 +19,10 @@ from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectCategory, PowerUpType
 
+
 class PlayerCollider(Collider):
     def __init__(self, name):
         super().__init__(name)
-        self.__current_speed_time = 0
-        self.__current_attack_time = 0
-        self.__current_defense_time = 0
-        self.__current_night_vision_time = 0
-
-        self.__text_shown_time = 0
-        self.__text_shown = False
-
-        self.__speed_activated = False
-        self.__attack_activated = False
-        self.__defense_activated = False
-        self.__night_vision_activated = False
-
-        self.__text_time = 10000
-        self.__total_time = 10000
 
     def show_text(self, colliding_game_object, power_up_type):
         # Show power up text
@@ -92,7 +78,6 @@ class PlayerCollider(Collider):
                 else:
                     colliding_game_object.is_damaged = False
 
-
         # Player and pet collide
         if colliding_game_object.game_object_category == GameObjectCategory.Pet:
             GameConstants.EVENT_DISPATCHER.dispatch_event(
@@ -104,65 +89,24 @@ class PlayerCollider(Collider):
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [colliding_game_object.get_component(BoxCollider2D)]))
 
                 colliding_game_object.remove_component(BoxCollider2D)
-                GameConstants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Your dog loves you <3!",
-                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                self.__text_shown = True
-                self.__text_shown_time = 0
-                GameConstants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["He will help you in battles and heal you every 30 secs!",
-                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                self.__text_shown = True
-                self.__text_shown_time = 0
-                GameConstants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Attack damage +3",
-                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                self.__text_shown = True
-                self.__text_shown_time = 0
-
-
-    def update(self, game_time):
-        # Power up activation
-        if self.__attack_activated:
-            self.__current_attack_time += game_time.elapsed_time
-            if self.__current_attack_time >= self.__total_time:
-                self.__current_attack_time = 0
-                self.__attack_activated = False
-                self.parent.attack_damage = GameConstants.Player.DEFAULT_ATTACK_DAMAGE
-
-        if self.__defense_activated:
-            self.__current_defense_time += game_time.elapsed_time
-            if self.__current_defense_time >= self.__total_time:
-                self.__current_defense_time = 0
-                self.__defense_activated = False
-                self.parent.damage_cooldown = GameConstants.Player.DAMAGE_COOLDOWN
-
-        if self.__speed_activated:
-            self.__current_speed_time += game_time.elapsed_time
-            if self.__current_speed_time >= self.__total_time:
-                self.__current_speed_time = 0
-                self.__speed_activated = False
-                self.parent.get_component(PlayerController).speed = Vector2(GameConstants.Player.MOVE_SPEED,
-                                                                            GameConstants.Player.MOVE_SPEED)
-                self.parent.get_component(SpriteAnimator2D).fps = GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED
-
-        if self.__night_vision_activated:
-            self.__current_night_vision_time += game_time.elapsed_time
-            if self.__current_night_vision_time >= self.__total_time:
-                self.__current_night_vision_time = 0
-                self.__night_vision_activated = False
-                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager,
-                                                                        EventActionType.TurnSpotLightOn))
-
-        # Show power up text
-        if self.__text_shown:
-            self.__text_shown_time += game_time.elapsed_time
-            if self.__text_shown_time >= self.__text_time:
-                self.__text_shown_time = 0
-                self.__text_shown = False
+                # GameConstants.EVENT_DISPATCHER.dispatch_event(
+                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                #               ["Your dog loves you <3!",
+                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+                # self.__text_shown = True
+                # self.__text_shown_time = 0
+                # GameConstants.EVENT_DISPATCHER.dispatch_event(
+                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                #               ["He will help you in battles and heal you every 30 secs!",
+                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+                # self.__text_shown = True
+                # self.__text_shown_time = 0
+                # GameConstants.EVENT_DISPATCHER.dispatch_event(
+                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                #               ["Attack damage +3",
+                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+                # self.__text_shown = True
+                # self.__text_shown_time = 0
 
 
     # def handle_collision_exit(self):

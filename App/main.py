@@ -125,9 +125,9 @@ while running:
     pygame.display.update()
     game_time.limit_fps(60)
 
-    elapsed_time = game_time.elapsed_time
-    fps = game_time.fps()
-    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+    # elapsed_time = game_time.elapsed_time
+    # fps = game_time.fps()
+    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     #print(player.transform.position.x, ", ", player.transform.position.y)
 

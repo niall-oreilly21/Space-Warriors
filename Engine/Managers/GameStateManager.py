@@ -125,6 +125,10 @@ class GameStateManager(Manager):
         self.__check_pause_menu()
         self.__input_handler.update()
         self.__handle_level_complete()
+        self.__handle_all_levels_complete()
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                      [f"Enemies count: {self.__enemies_in_scene_count}", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
 
     def __load_level(self):
         self.__dispatch_events_for_load_up_level()
@@ -148,3 +152,11 @@ class GameStateManager(Manager):
                 self._event_dispatcher.dispatch_event(
                     EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene,
                               [GameConstants.Menu.END_LEVEL_COMPLETE_MENU]))
+
+    def __handle_all_levels_complete(self):
+        if Application.EarthComplete and Application.ActiveScene.name == GameConstants.Scene.EARTH\
+                or Application.MarsComplete and Application.ActiveScene.name == GameConstants.Scene.MARS\
+                or Application.SaturnComplete and Application.ActiveScene.name == GameConstants.Scene.SATURN:
+            self._event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                          ["Press E around the teleporter to save another planet!", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
