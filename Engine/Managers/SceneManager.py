@@ -74,7 +74,7 @@ class SceneManager(Manager):
             end_level_scene_text = event_data.parameters[0]
 
             self.__set_end_level_menu_title(end_level_scene_text)
-            #self.__play_music(Application.ActiveMusic, Constants.Music.MENU_MUSIC)
+            self.__play_music(Application.ActiveMusic, GameConstants.Music.MENU_MUSIC)
 
         elif event_data.event_action_type == EventActionType.SoundMenuScene:
             self.__set_menu_scene(GameConstants.Scene.SOUND_MENU)

@@ -4,7 +4,7 @@ from pygame import Vector2
 from App.Components.Controllers.EnemyController import EnemyController
 from App.Components.Controllers.EnemyHealthBarController import EnemyHealthBarController
 from App.Constants.Application import Application
-from App.Constants.Constants import Constants
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
@@ -26,10 +26,10 @@ class EntityConstants:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
         PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
         PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
-        PLAYER = Character("Player", Constants.Player.DEFAULT_HEALTH, Constants.Player.DEFAULT_ATTACK_DAMAGE,
-                   Constants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
-                   Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
-                   GameObjectType.Dynamic, GameObjectCategory.Player)
+        PLAYER = Character("Player", GameConstants.Player.DEFAULT_HEALTH, GameConstants.Player.DEFAULT_ATTACK_DAMAGE,
+                           GameConstants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
+                           Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
+                           GameObjectType.Dynamic, GameObjectCategory.Player)
 
     class Pet:
         PET = GameObject("PetDog", Transform2D(Vector2(7210, 5500), 0, Vector2(1.2, 1.2)), GameObjectType.Dynamic,GameObjectCategory.Pet)
@@ -40,22 +40,22 @@ class EntityConstants:
         ALIEN_ENEMY_NAME = "alien enemy"
         enemy_sprites = {
             RAT_ENEMY_NAME: (
-                SpriteRenderer2D(RAT_ENEMY_NAME + "Renderer", Constants.EnemyRat.MATERIAL_ENEMY1, RendererLayers.Enemy),
-                SpriteAnimator2D(RAT_ENEMY_NAME, Constants.EnemyRat.ENEMY_ANIMATOR_INFO,
-                                 Constants.EnemyRat.MATERIAL_ENEMY1,
-                                 ActiveTake.ENEMY_RAT_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED)),
+                SpriteRenderer2D(RAT_ENEMY_NAME + "Renderer", GameConstants.EnemyRat.MATERIAL_ENEMY1, RendererLayers.Enemy),
+                SpriteAnimator2D(RAT_ENEMY_NAME, GameConstants.EnemyRat.ENEMY_ANIMATOR_INFO,
+                                 GameConstants.EnemyRat.MATERIAL_ENEMY1,
+                                 ActiveTake.ENEMY_RAT_MOVE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED)),
             WOLF_ENEMY_NAME: (
-                SpriteRenderer2D(WOLF_ENEMY_NAME + "Renderer", Constants.EnemyWolf.MATERIAL_ENEMY1,
+                SpriteRenderer2D(WOLF_ENEMY_NAME + "Renderer", GameConstants.EnemyWolf.MATERIAL_ENEMY1,
                                  RendererLayers.Enemy),
-                SpriteAnimator2D(WOLF_ENEMY_NAME, Constants.EnemyWolf.ENEMY_ANIMATOR_INFO,
-                                 Constants.EnemyWolf.MATERIAL_ENEMY1, ActiveTake.ENEMY_WOLF_MOVE_DOWN,
-                                 Constants.CHARACTER_ANIMATOR_MOVE_SPEED)),
+                SpriteAnimator2D(WOLF_ENEMY_NAME, GameConstants.EnemyWolf.ENEMY_ANIMATOR_INFO,
+                                 GameConstants.EnemyWolf.MATERIAL_ENEMY1, ActiveTake.ENEMY_WOLF_MOVE_DOWN,
+                                 GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED)),
             ALIEN_ENEMY_NAME: (
-                SpriteRenderer2D(ALIEN_ENEMY_NAME + "Renderer", Constants.EnemyAlien.MATERIAL_ENEMY1,
+                SpriteRenderer2D(ALIEN_ENEMY_NAME + "Renderer", GameConstants.EnemyAlien.MATERIAL_ENEMY1,
                                  RendererLayers.Enemy),
-                SpriteAnimator2D(ALIEN_ENEMY_NAME, Constants.EnemyAlien.ENEMY_ANIMATOR_INFO,
-                                 Constants.EnemyAlien.MATERIAL_ENEMY1,
-                                 ActiveTake.ENEMY_ALIEN_MOVE_DOWN, Constants.CHARACTER_ANIMATOR_MOVE_SPEED)),
+                SpriteAnimator2D(ALIEN_ENEMY_NAME, GameConstants.EnemyAlien.ENEMY_ANIMATOR_INFO,
+                                 GameConstants.EnemyAlien.MATERIAL_ENEMY1,
+                                 ActiveTake.ENEMY_ALIEN_MOVE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED)),
 
         }
         #
@@ -102,7 +102,7 @@ class EntityConstants:
 
         ENEMY_WAYPOINTS = {
             RAT_ENEMY_NAME: [
-                [Vector2(4000, 3000), Vector2(4500, 3000), Vector2(4500, 3100), Vector2(3800, 3100)],
+                [Vector2(4000, 3000), Vector2(2600, 4000), Vector2(4500, 3100), Vector2(3800, 3100)],
                 [Vector2(4200, 3200), Vector2(4500, 3200), Vector2(4500, 3200), Vector2(3800, 3200)],
                 [Vector2(4700, 2300), Vector2(5300, 2300), Vector2(5300, 1800), Vector2(4700, 1800)],
                 [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)],
