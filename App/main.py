@@ -70,7 +70,7 @@ initialise_menu(pause_menu_scene, GameConstants.Menu.MATERIAL_PAUSE_MENU, "Pause
 initialise_menu(sound_menu_scene, GameConstants.Menu.MATERIAL_SOUND_MENU, "Sound",
                 [GameConstants.Button.MUTE_BUTTON, GameConstants.Button.UNMUTE_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
 initialise_menu(end_level_menu_scene, GameConstants.Menu.MATERIAL_DEATH_MENU, "You Died",
-                [GameConstants.Button.RESTART_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
+                [GameConstants.Button.RESTART_BUTTON, GameConstants.Button.LEVELS_BUTTON, GameConstants.Button.MAIN_MENU_BUTTON])
 initialise_character_selection_menu(character_selection_menu_scene)
 initialise_level_menu(level_menu_scene)
 initialise_controls_menu(controls_menu_scene)
