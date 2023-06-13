@@ -191,12 +191,9 @@ class MapLoader:
                                                          GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     else:
                         power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),

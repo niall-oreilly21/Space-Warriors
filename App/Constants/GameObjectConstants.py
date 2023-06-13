@@ -7,7 +7,7 @@ from App.Components.Colliders.PowerUpCollider import PowerUpCollider
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
 from App.Constants.GameConstants import GameConstants
-from App.Components.Colliders.HouseCollider import HouseCollider
+from App.Constants.Application import Application
 from Engine.GameObjects.Components.Cameras.Camera import Camera
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.GameObject import GameObject
@@ -286,10 +286,12 @@ class GameObjectConstants:
         layer = RendererLayers.WorldObjects
         __POTION_SCALE = 0.4
         __SPEED_COLLIDER_POWER_UP = PowerUpCollider("Potion Speed Collider", 1, 6, "Press E to increase speed")
-        __ATTACK_COLLIDER_POWER_UP = PowerUpCollider("Potion Attack Collider", 1, 6, "Press E to increase attack damage")
+        __ATTACK_COLLIDER_POWER_UP = PowerUpCollider("Potion Attack Collider", 1, 6,
+                                                     "Press E to increase attack damage")
         __DEFENSE_COLLIDER_POWER_UP = PowerUpCollider("Potion Defense Collider", 1, 6, "Press E to increase defense")
         __HEAL_COLLIDER_POWER_UP = PowerUpCollider("Potion Heal Collider", 1, 6, "Press E to heal")
-        __NIGHT_COLLIDER_POWER_UP = PowerUpCollider("Night Vision Collider", 0, 0, "Press E to equip night vision goggles")
+        __NIGHT_COLLIDER_POWER_UP = PowerUpCollider("Night Vision Collider", 0, 0,
+                                                    "Press E to equip night vision goggles")
         __RANDOM_COLLIDER_POWER_UP = PowerUpCollider("Random Collider", 0, 0, "Press E to get a random power up")
 
         SPEED_POWER_UP = PowerUp("PotionSpeed", PowerUpType.Speed,
@@ -346,6 +348,7 @@ class GameObjectConstants:
         NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                              texture_material, ActiveTake.NIGHT_VISION,
                                                              GameConstants.PowerUp.ANIMATION_SPEED))
+
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
 
