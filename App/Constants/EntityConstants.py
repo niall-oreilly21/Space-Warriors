@@ -26,7 +26,7 @@ class EntityConstants:
         PLAYER_INITIAL_POSITION_EARTH = Vector2(2900, 4900)
         PLAYER_INITIAL_POSITION_MARS = Vector2(3640, 4700)
         PLAYER_INITIAL_POSITION_SATURN = Vector2(2550, 3500)
-        PLAYER_INITIAL_POSITION_HOUSE = Vector2(1000, 900)
+        PLAYER_INITIAL_POSITION_HOUSE = Vector2(459, 418)
         PLAYER = Character("Player", GameConstants.Player.DEFAULT_HEALTH, GameConstants.Player.DEFAULT_ATTACK_DAMAGE,
                            GameConstants.Player.DAMAGE_COOLDOWN, Vector2(2900, 4900),
                            Transform2D(Vector2(2900, 4900), 0, Vector2(1.2, 1.2)),
@@ -105,20 +105,25 @@ class EntityConstants:
         ALIEN_ENEMY.health = GameConstants.EnemyAlien.HEALTH
         ALIEN_ENEMY.attack_damage = GameConstants.EnemyAlien.ATTACK_DAMAGE
 
+        HOUSE_RAT_ENEMY_NAME = "HouseRat"
+
         ENEMY_WAYPOINTS = {
+            HOUSE_RAT_ENEMY_NAME: [
+                [Vector2(100, 0), Vector2(400, 0)],
+                [Vector2(840, 0), Vector2(840, 200)]
+            ],
             RAT_ENEMY_NAME: [
                 [Vector2(4000, 3000), Vector2(2600, 4000), Vector2(4500, 3100), Vector2(3800, 3100)],
                 [Vector2(4200, 3200), Vector2(4500, 3200), Vector2(4500, 3200), Vector2(3800, 3200)],
                 [Vector2(4700, 2300), Vector2(5300, 2300), Vector2(5300, 1800), Vector2(4700, 1800)],
                 [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)],
                 [Vector2(3000, 4000), Vector2(3500, 4200), Vector2(3500, 4100), Vector2(2800, 4200)],
-                [Vector2(2200, 3200), Vector2(2500, 3200), Vector2(2700, 3200), Vector2(1900, 3200)],
+                [Vector2(2736, 2855), Vector2(3120, 2855)],
                 [Vector2(4700, 5300), Vector2(5300, 5300), Vector2(5300, 4800), Vector2(4700, 4800)],
                 [Vector2(4800, 2400), Vector2(5200, 2400), Vector2(5200, 1900), Vector2(4800, 1900)],
                 [Vector2(2000, 2000), Vector2(2200, 2100), Vector2(2400, 2000), Vector2(2600, 2100)],
                 [Vector2(2000, 4200), Vector2(2200, 4200), Vector2(2400, 4200), Vector2(2600, 4200)],
                 [Vector2(5500, 5500), Vector2(5900, 5700), Vector2(6000, 5500), Vector2(5500, 1800)],
-                [Vector2(4800, 5500), Vector2(5200, 5500), Vector2(5200, 5600), Vector2(4800, 5600)],
                 [Vector2(5800, 2800), Vector2(5000, 5500)],
                 [Vector2(3071, 2602), Vector2(2752, 2602)],
                 [Vector2(4052, 1328), Vector2(3700, 1328)],

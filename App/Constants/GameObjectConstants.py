@@ -38,6 +38,7 @@ couch_image = pygame.image.load("Assets/SpriteSheets/Tilesets/couch.png")
 door_image = pygame.image.load("Assets/SpriteSheets/Tilesets/door.png")
 window_image = pygame.image.load("Assets/SpriteSheets/Tilesets/window.png")
 
+
 class GameObjectConstants:
     class Foliage:
         layer = RendererLayers.WorldObjects
@@ -161,48 +162,45 @@ class GameObjectConstants:
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
 
-        BUILDING = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1,0.1)), GameObjectType.Static,
-                              GameObjectCategory.Player)
+        BUILDING = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
+                              GameObjectCategory.Environment)
         object_frame = building_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         BUILDING.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         BUILDING.add_component(BoxCollider2D("Box-3"))
 
         DOOR = GameObject("Door", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                         GameObjectCategory.Player)
+                          GameObjectCategory.Environment)
         object_frame = door_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         DOOR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         DOOR.add_component(BoxCollider2D("Box-3"))
 
         WINDOW = GameObject("Window", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                          GameObjectCategory.Player)
+                            GameObjectCategory.Environment)
         object_frame = window_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         WINDOW.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
         BED = GameObject("Bed", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                              GameObjectCategory.Player)
+                         GameObjectCategory.Environment)
         object_frame = bed_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         BED.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         BED.add_component(BoxCollider2D("Box-3"))
 
         TABLE = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                         GameObjectCategory.Player)
+                           GameObjectCategory.Environment)
         object_frame = table_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         TABLE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        TABLE.add_component(BoxCollider2D("Box-3"))
 
         COUCH = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                           GameObjectCategory.Player)
+                           GameObjectCategory.Environment)
         object_frame = couch_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         COUCH.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         COUCH.add_component(BoxCollider2D("Box-3"))
-
-
 
         # Earth Ruins
         RUIN_ONE = GameObject("RuinOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
@@ -337,9 +335,10 @@ class GameObjectConstants:
         texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
         NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
         RANDOM_POWER_UP.add_component(PowerUpCollider("Night Vision Collider"))
-        NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                             texture_material, ActiveTake.NIGHT_VISION,
-                                                             GameConstants.PowerUp.ANIMATION_SPEED))
+        NIGHT_VISION_POWER_UP.add_component(
+            SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                             texture_material, ActiveTake.NIGHT_VISION,
+                             GameConstants.PowerUp.ANIMATION_SPEED))
 
     class Gun:
         texture = pygame.image.load("Assets/SpriteSheets/fire_ball_image.png")
@@ -351,8 +350,11 @@ class GameObjectConstants:
         Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
     class Cameras:
-        __MAIN_MENU_CAMERA_COMPONENT = Camera(GameConstants.Cameras.MENU_CAMERA, GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT)
-        MAIN_MENU_CAMERA = GameObject(GameConstants.Cameras.MENU_CAMERA, Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Static, GameObjectCategory.Menu)
+        __MAIN_MENU_CAMERA_COMPONENT = Camera(GameConstants.Cameras.MENU_CAMERA, GameConstants.VIEWPORT_WIDTH,
+                                              GameConstants.VIEWPORT_HEIGHT)
+        MAIN_MENU_CAMERA = GameObject(GameConstants.Cameras.MENU_CAMERA,
+                                      Transform2D(Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)), GameObjectType.Static,
+                                      GameObjectCategory.Menu)
         MAIN_MENU_CAMERA.add_component(__MAIN_MENU_CAMERA_COMPONENT)
 
         GAME_CAMERA = MAIN_MENU_CAMERA.clone()
@@ -374,10 +376,14 @@ class GameObjectConstants:
         __HEALTH_BAR_IMAGE_BASE_PATH = "Assets/UI/HealthBars/"
         __HEALTH_BAR_IMAGE_END_PATH = "_health_bar.png"
 
-        __PLAYER_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "player" + __HEALTH_BAR_IMAGE_END_PATH)
-        RAT_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "rat" + __HEALTH_BAR_IMAGE_END_PATH)
-        WOLF_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "wolf" + __HEALTH_BAR_IMAGE_END_PATH)
-        ALIEN_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(__HEALTH_BAR_IMAGE_BASE_PATH + "alien" + __HEALTH_BAR_IMAGE_END_PATH)
+        __PLAYER_HEALTH_BAR_IMAGE = pygame.image.load(
+            __HEALTH_BAR_IMAGE_BASE_PATH + "player" + __HEALTH_BAR_IMAGE_END_PATH)
+        RAT_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(
+            __HEALTH_BAR_IMAGE_BASE_PATH + "rat" + __HEALTH_BAR_IMAGE_END_PATH)
+        WOLF_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(
+            __HEALTH_BAR_IMAGE_BASE_PATH + "wolf" + __HEALTH_BAR_IMAGE_END_PATH)
+        ALIEN_ENEMY_HEALTH_BAR_IMAGE = pygame.image.load(
+            __HEALTH_BAR_IMAGE_BASE_PATH + "alien" + __HEALTH_BAR_IMAGE_END_PATH)
 
         __PLAYER_MATERIAL_HEALTH_BAR = TextureMaterial2D(__PLAYER_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
         __ENEMY_MATERIAL_HEALTH_BAR = TextureMaterial2D(ALIEN_ENEMY_HEALTH_BAR_IMAGE, None, Vector2(0, 0), None)
@@ -388,17 +394,26 @@ class GameObjectConstants:
         __RECT_MATERIAL_ENEMY_HEALTH_BAR_BACKGROUND = RectMaterial2D(375, 50, (0, 0, 0), 255, Vector2(58, 28))
         __RECT_MATERIAL_ENEMY_HEALTH_BAR = RectMaterial2D(375, 50, (0, 224, 79), 255, Vector2(58, 28))
 
-        PLAYER_HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)), GameObjectType.Static, GameObjectCategory.UI)
+        PLAYER_HEALTH_BAR = GameObject("Health Bar", Transform2D(Vector2(0, -15), 0, Vector2(0.7, 0.7)),
+                                       GameObjectType.Static, GameObjectCategory.UI)
 
-        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __PLAYER_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
-        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_PLAYER_HEALTH_BAR_BACKGROUND, RendererLayers.UIBackground))
-        PLAYER_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_PLAYER_HEALTH_BAR, RendererLayers.UI))
+        PLAYER_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Texture", __PLAYER_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar))
+        PLAYER_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_PLAYER_HEALTH_BAR_BACKGROUND,
+                       RendererLayers.UIBackground))
+        PLAYER_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_PLAYER_HEALTH_BAR, RendererLayers.UI))
 
-        ENEMY_HEALTH_BAR = GameObject("Enemy Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)), GameObjectType.Dynamic, GameObjectCategory.EnemyHealthUI)
-        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Texture", __ENEMY_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
-        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_ENEMY_HEALTH_BAR_BACKGROUND,RendererLayers.UIBackground, False))
-        ENEMY_HEALTH_BAR.add_component(Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_ENEMY_HEALTH_BAR, RendererLayers.UI, False))
-
+        ENEMY_HEALTH_BAR = GameObject("Enemy Health Bar", Transform2D(Vector2(0, 0), 0, Vector2(0.3, 0.3)),
+                                      GameObjectType.Dynamic, GameObjectCategory.EnemyHealthUI)
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Texture", __ENEMY_MATERIAL_HEALTH_BAR, RendererLayers.UIHealthBar, False))
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect Background", __RECT_MATERIAL_ENEMY_HEALTH_BAR_BACKGROUND,
+                       RendererLayers.UIBackground, False))
+        ENEMY_HEALTH_BAR.add_component(
+            Renderer2D("Health Bar Renderer Rect", __RECT_MATERIAL_ENEMY_HEALTH_BAR, RendererLayers.UI, False))
 
     class Teleporter:
         __TELEPORTER_HEIGHT = 368

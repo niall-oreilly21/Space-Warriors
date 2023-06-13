@@ -117,7 +117,7 @@ class MapLoader:
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
         elif scene.name == GameConstants.Scene.HOUSE_SCENE:
             self.__load_house_specifics(scene)
-            self.__color_tiles(map_data, tile_data, 33, 14, [255, 255, 255], 255)
+            self.__color_tiles(map_data, tile_data, 15, 10, [255, 255, 255], 255)
 
         # Object generation
         for object in object_data:
@@ -232,6 +232,8 @@ class MapLoader:
                 s_id = ground["s"]["id"]
                 if s_id == GameConstants.Tile.WATER:
                     map_data[y][x] = TileAttributes(s_id, True, color, alpha)
+                elif s_id == 8:
+                    map_data[y][x] = TileAttributes(GameConstants.Tile.WOOD, True, (0, 0, 0), 255)
                 else:
                     map_data[y][x] = TileAttributes(s_id, False, color, alpha)
 
@@ -402,47 +404,49 @@ class MapLoader:
 
     def __load_house_specifics(self, scene):
 
-        enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.initial_position = Vector2(10000, 10000)
+        enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
+        enemy.initial_position = Vector2(0, 0)
         enemy.add_component(
-            EnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600))
+            EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 600))
 
         door = GameObjectConstants.UnnaturalStructures.DOOR.clone()
-        door.transform.position = Vector2(1000, 950)
+        door.transform.position = Vector2(471, 580)
         door.transform.scale = Vector2(.4, .4)
         scene.add(door)
 
         bed = GameObjectConstants.UnnaturalStructures.BED.clone()
-        bed.transform.position = Vector2(500, 0)
+        bed.transform.position = Vector2(322, 72)
         bed.transform.scale = Vector2(.2,.2)
         scene.add(bed)
 
         table = GameObjectConstants.UnnaturalStructures.TABLE.clone()
-        table.transform.position = Vector2(1000,500)
+        table.transform.position = Vector2(247, 282)
         table.transform.scale = Vector2(.3,.3)
         scene.add(table)
 
         couch = GameObjectConstants.UnnaturalStructures.COUCH.clone()
-        couch.transform.position = Vector2(1400, 0)
+        couch.transform.position = Vector2(814, 342)
         couch.transform.scale = Vector2(.4, .4)
+        couch.transform.rotation = -90
         scene.add(couch)
 
         window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
-        window.transform.position = Vector2(1000, -60)
+        window.transform.position = Vector2(122, 12)
         window.transform.scale = Vector2(.5,.5)
         scene.add(window)
 
         window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
-        window.transform.position = Vector2(2000, -60)
+        window.transform.position = Vector2(650, 12)
         window.transform.scale = Vector2(.5,.5)
         scene.add(window)
 
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(1000, 142)
+        window.transform.scale = Vector2(.5, .5)
+        window.transform.rotation = -90
+        scene.add(window)
 
-
-
-
-
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def __load_teleporter(self, scene, position):
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
@@ -457,7 +461,10 @@ class MapLoader:
         enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
         enemy_health_bar_texture = GameObjectConstants.HealthBar.ALIEN_ENEMY_HEALTH_BAR_IMAGE
         if enemy_type == GameObjectCategory.Rat:
-            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+            if scene.name == GameConstants.Scene.HOUSE_SCENE:
+                enemy_type_name = EntityConstants.Enemy.HOUSE_RAT_ENEMY_NAME
+            else:
+                enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
             enemy_health_bar_texture = GameObjectConstants.HealthBar.RAT_ENEMY_HEALTH_BAR_IMAGE
         elif enemy_type == GameObjectCategory.Wolf:
             enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
