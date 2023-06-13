@@ -54,8 +54,6 @@ class PowerUpCollider(Collider):
     def __handle_power_up_selected(self, player, power_up_type):
         if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
             self.__power_up_activated = True
-            # self.is_colliding = False
-            # player.get_component(Collider).is_colliding = False
 
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
@@ -112,9 +110,8 @@ class PowerUpCollider(Collider):
         if power_up_type == PowerUpType.NightVision:
             ui_text = "Night vision on"
 
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
         self.__text_shown = True
         self.__text_shown_time = 0
 
@@ -153,7 +150,6 @@ class PowerUpCollider(Collider):
 
     def handle_collision_exit(self):
         GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
 
     def clone(self):
         return PowerUpCollider(self.name, self.__min_power_up_value, self.__max_power_up_value, self.__prompt_text)
