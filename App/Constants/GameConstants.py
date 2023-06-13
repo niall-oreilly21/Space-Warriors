@@ -337,6 +337,10 @@ class GameConstants:
         POTION_DRINK_SOUND = "PotionDrinkSound"
         PLAYER_ATTACK_SOUND = "PlayerAttackSound"
         BUTTON_SOUND = "ButtonSound"
+        FOOTSTEP_SOUND = "FootStepSound"
+        DOG_BARK_SOUND = "DogBarkSound"
+        DOOR_SOUND = "DoorSound"
+        ENEMY_ATTACK_SOUND = "EnemyAttackSound"
 
     class MusicFilePath:
         MENU_MUSIC_FILEPATH = "Assets/Sounds/background_music.mp3"
@@ -351,6 +355,10 @@ class GameConstants:
         POTION_DRINK_SOUND_FILEPATH = "Assets/Sounds/potion.wav"
         PLAYER_ATTACK_SOUND_FILEPATH = "Assets/Sounds/sword_swish.wav"
         BUTTON_SOUND_FILEPATH = "Assets/Sounds/button.wav"
+        FOOTSTEP_SOUND_FILEPATH = "Assets/Sounds/foot_step.wav"
+        DOG_BARK_SOUND_FILEPATH = "Assets/Sounds/dog_bark.wav"
+        DOOR_SOUND_FILEPATH = "Assets/Sounds/door_opening.wav"
+        ENEMY_ATTACK_SOUND_FILEPATH = "Assets/Sounds/enemy_attack.wav"
 
     class Map:
         BASE_PATH = "Assets/JSON/"
