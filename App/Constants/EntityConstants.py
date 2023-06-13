@@ -135,13 +135,11 @@ class EntityConstants:
                 [Vector2(1637, 3372), Vector2(1885, 3195), Vector2(1583, 2845), Vector2(1976, 2405)],
                 [Vector2(4700, 1467), Vector2(5014, 1663), Vector2(5668, 1834), Vector2(6875, 1366)],
                 [Vector2(5546, 2034), Vector2(4706, 2034), Vector2(5252, 2193), Vector2(5423, 2518)],
-                [Vector2(5375, 3665), Vector2(4934, 4539), Vector2(5601, 4803), Vector2(5761, 5533)],
                 [Vector2(3770, 2004), Vector2(3770, 1700), Vector2(4174, 1700), Vector2(4174, 2034)],
                 [Vector2(1848, 1231), Vector2(3061, 1231)],
                 [Vector2(1769, 5521), Vector2(3311, 5916)],
                 [Vector2(5112, 1943), Vector2(5112, 2817)],
                 [Vector2(3962, 3389), Vector2(3962, 4000)],
-                [Vector2(4066, 5800), Vector2(5188, 5500)]
             ],
             ALIEN_ENEMY_NAME: [
                 [Vector2(2355, 1841), Vector2(2500, 1841)],
