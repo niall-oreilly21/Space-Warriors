@@ -162,12 +162,14 @@ class GameObjectConstants:
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
 
-        BUILDING = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
-                              GameObjectCategory.Environment)
+        HOUSE = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
+                           GameObjectCategory.House)
         object_frame = building_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
-        BUILDING.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        BUILDING.add_component(BoxCollider2D("Box-3"))
+        HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        house_box_collider = BoxCollider2D("Box-3")
+        HOUSE.add_component(house_box_collider)
+        HOUSE.add_component(HouseCollider("House Collider"))
 
         DOOR = GameObject("Door", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                           GameObjectCategory.Environment)

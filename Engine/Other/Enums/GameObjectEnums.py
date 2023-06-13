@@ -24,6 +24,7 @@ class GameObjectCategory(Enum):
     Gun = 14
     EnemyHealthUI = 15
     MenuTitle = 16
+    House = 17
 
 
 class GameObjectDirection(Enum):

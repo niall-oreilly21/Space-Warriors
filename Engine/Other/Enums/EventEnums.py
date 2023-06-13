@@ -52,3 +52,4 @@ class EventActionType:
     ControlsMenuScene = 41
     SetRendererQuadTreeTarget = 44
     RemoveEnemyFromScene = 45
+    HouseScene = 46

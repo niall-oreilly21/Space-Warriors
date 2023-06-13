@@ -30,15 +30,12 @@ class TeleporterCollider(Collider):
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.LevelScene))
 
     def __check_teleporter_input(self):
-        if Application.ActiveScene.name == GameConstants.Scene.EARTH \
-                or Application.ActiveScene.name == GameConstants.Scene.MARS \
-                or Application.ActiveScene.name == GameConstants.Scene.SATURN:
-            if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
-                Application.ActiveScene.remove(Application.Player)
+        if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+            Application.ActiveScene.remove(Application.Player)
 
-                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
-                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
-                self.__animator.set_active_take(ActiveTake.TELEPORT)
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
+            self.__animator.set_active_take(ActiveTake.TELEPORT)
 
     def clone(self):
         return TeleporterCollider(self.name)

@@ -42,7 +42,7 @@ class MapLoader:
                 GameConstants.Scene.EARTH: [],
                 GameConstants.Scene.MARS: [],
                 GameConstants.Scene.SATURN: [],
-                GameConstants.Scene.HOUSE_SCENE: []
+                GameConstants.Scene.HOUSE: []
             }
 
         self.__load_player_components()
@@ -115,7 +115,7 @@ class MapLoader:
         elif scene.name == GameConstants.Scene.SATURN:
             self.__load_planet_saturn_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
-        elif scene.name == GameConstants.Scene.HOUSE_SCENE:
+        elif scene.name == GameConstants.Scene.HOUSE:
             self.__load_house_specifics(scene)
             self.__color_tiles(map_data, tile_data, 15, 10, [255, 255, 255], 255)
 
@@ -314,10 +314,10 @@ class MapLoader:
         ruin.transform.position = Vector2(2050, 2600)
         scene.add(ruin)
 
-        building = GameObjectConstants.UnnaturalStructures.BUILDING.clone()
-        building.transform.position = Vector2(2700, 2400)
-        building.transform.scale = Vector2(0.6,0.6)
-        scene.add(building)
+        house = GameObjectConstants.UnnaturalStructures.HOUSE.clone()
+        house.transform.position = Vector2(2700, 2400)
+        house.transform.scale = Vector2(0.6,0.6)
+        scene.add(house)
 
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_TWO.clone()
         ruin.transform.position = Vector2(4200, 1900)
@@ -331,10 +331,6 @@ class MapLoader:
         statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
         statue.transform.position = Vector2(2800, 4700)
         scene.add(statue)
-
-        teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-        teleporter.transform.position = Vector2(2600, 4800)
-        scene.add(teleporter)
 
         bridge_x = 6406
         bridge_y = 5463
