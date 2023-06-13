@@ -31,10 +31,11 @@ class PowerUpCollider(Collider):
 
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
-            if self.parent is PowerUpType.Random:
+            if self.parent.power_up_type is PowerUpType.Random:
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,[self.__prompt_text, GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
                 random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack, PowerUpType.Defense])
+
                 if random_type == PowerUpType.Heal:
                     self._parent.power_up_value = min(random.randint(-8, 10), random.randint(-8, 10))
                 else:
@@ -111,7 +112,8 @@ class PowerUpCollider(Collider):
             ui_text = "Night vision on"
 
         GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
+
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
         self.__text_shown = True
         self.__text_shown_time = 0
 
@@ -150,6 +152,7 @@ class PowerUpCollider(Collider):
 
     def handle_collision_exit(self):
         GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
 
     def clone(self):
         return PowerUpCollider(self.name, self.__min_power_up_value, self.__max_power_up_value, self.__prompt_text)
