@@ -12,7 +12,6 @@ class HouseCollider(Collider):
     def __init__(self, name):
         super().__init__(name)
 
-
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to enter the house", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
