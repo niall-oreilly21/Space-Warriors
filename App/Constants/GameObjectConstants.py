@@ -3,6 +3,7 @@ from random import randint
 import pygame
 from pygame import Vector2
 
+from App.Components.Colliders.HouseCollider import HouseCollider
 from App.Components.Colliders.PowerUpCollider import PowerUpCollider
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
@@ -159,12 +160,14 @@ class GameObjectConstants:
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
 
-        BUILDING = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1,0.1)), GameObjectType.Static,
-                              GameObjectCategory.Player)
+        HOUSE = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1,0.1)), GameObjectType.Static,
+                              GameObjectCategory.House)
         object_frame = building_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
-        BUILDING.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        BUILDING.add_component(BoxCollider2D("Box-3"))
+        HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        house_box_collider = BoxCollider2D("Box-3")
+        HOUSE.add_component(house_box_collider)
+        HOUSE.add_component(HouseCollider("House Collider"))
 
         BED = GameObject("Bed", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                               GameObjectCategory.Player)
@@ -270,49 +273,53 @@ class GameObjectConstants:
     class Consumables:
         layer = RendererLayers.WorldObjects
         __POTION_SCALE = 0.4
+        __SPEED_COLLIDER_POWER_UP = PowerUpCollider("Potion Speed Collider", 1, 6, "Press E to increase speed")
+        __ATTACK_COLLIDER_POWER_UP = PowerUpCollider("Potion Attack Collider", 1, 6, "Press E to increase attack damage")
+        __DEFENSE_COLLIDER_POWER_UP = PowerUpCollider("Potion Defense Collider", 1, 6, "Press E to increase defense")
+        __HEAL_COLLIDER_POWER_UP = PowerUpCollider("Potion Heal Collider", 1, 6, "Press E to heal")
 
-        POTION_SPEED = PowerUp("PotionSpeed", PowerUpType.Speed,
-                               Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
-                               GameObjectType.Static, GameObjectCategory.PowerUp)
+        SPEED_POWER_UP = PowerUp("PotionSpeed", PowerUpType.Speed,
+                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
+                                 GameObjectType.Static, GameObjectCategory.PowerUp)
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_SPEED
-        POTION_SPEED.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_SPEED.add_component(PowerUpCollider("Potion Speed Collider"))
-        POTION_SPEED.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                    texture_material, ActiveTake.POTION,
-                                                    GameConstants.PowerUp.ANIMATION_SPEED))
-
-        POTION_ATTACK = PowerUp("PotionAttack", PowerUpType.Attack,
-                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = GameConstants.PowerUp.MATERIAL_POTION_ATTACK
-        POTION_ATTACK.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_ATTACK.add_component(PowerUpCollider("Potion Speed Collider"))
-        POTION_ATTACK.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                     texture_material, ActiveTake.POTION,
-                                                     GameConstants.PowerUp.ANIMATION_SPEED))
-
-        POTION_DEFENSE = PowerUp("PotionDefense", PowerUpType.Defense,
-                                 Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
-        texture_material = GameConstants.PowerUp.MATERIAL_POTION_DEFENSE
-        POTION_DEFENSE.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_DEFENSE.add_component(PowerUpCollider("Potion Attack Collider"))
-        POTION_DEFENSE.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+        SPEED_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        SPEED_POWER_UP.add_component(__SPEED_COLLIDER_POWER_UP)
+        SPEED_POWER_UP.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                       texture_material, ActiveTake.POTION,
                                                       GameConstants.PowerUp.ANIMATION_SPEED))
 
-        POTION_HEAL = PowerUp("PotionHeal", PowerUpType.Heal,
-                              Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
+        ATTACK_POWER_UP = PowerUp("PotionAttack", PowerUpType.Attack,
+                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_ATTACK
+        ATTACK_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        ATTACK_POWER_UP.add_component(__ATTACK_COLLIDER_POWER_UP)
+        ATTACK_POWER_UP.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                       texture_material, ActiveTake.POTION,
+                                                       GameConstants.PowerUp.ANIMATION_SPEED))
+
+        DEFENSE_POWER_UP = PowerUp("PotionDefense", PowerUpType.Defense,
+                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
+        texture_material = GameConstants.PowerUp.MATERIAL_POTION_DEFENSE
+        DEFENSE_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        DEFENSE_POWER_UP.add_component(__DEFENSE_COLLIDER_POWER_UP)
+        DEFENSE_POWER_UP.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                        texture_material, ActiveTake.POTION,
+                                                        GameConstants.PowerUp.ANIMATION_SPEED))
+
+        HEAL_POWER_UP = PowerUp("PotionHeal", PowerUpType.Heal,
+                                Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_POTION_HEAL
-        POTION_HEAL.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        POTION_HEAL.add_component(PowerUpCollider("Potion Heal Collider"))
-        POTION_HEAL.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
-                                                   texture_material, ActiveTake.POTION,
-                                                   GameConstants.PowerUp.ANIMATION_SPEED))
+        HEAL_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
+        HEAL_POWER_UP.add_component(__HEAL_COLLIDER_POWER_UP)
+        HEAL_POWER_UP.add_component(SpriteAnimator2D("Potion", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
+                                                     texture_material, ActiveTake.POTION,
+                                                     GameConstants.PowerUp.ANIMATION_SPEED))
 
         RANDOM_POWER_UP = PowerUp("RandomPowerUp", PowerUpType.Random,
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_RANDOM
         RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(PowerUpCollider("Random Power Up Collider"))
+        #RANDOM_POWER_UP.add_component(PowerUpCollider("Random Power Up Collider"))
         RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                        texture_material, ActiveTake.RANDOM,
                                                        GameConstants.PowerUp.ANIMATION_SPEED))
@@ -321,7 +328,7 @@ class GameObjectConstants:
                                         Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
         NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(PowerUpCollider("Night Vision Collider"))
+        #RANDOM_POWER_UP.add_component(PowerUpCollider("Night Vision Collider"))
         NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                              texture_material, ActiveTake.NIGHT_VISION,
                                                              GameConstants.PowerUp.ANIMATION_SPEED))

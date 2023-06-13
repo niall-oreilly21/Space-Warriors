@@ -312,7 +312,7 @@ class GameConstants:
         SATURN = "SaturnScene"
         CHARACTER_SELECTION_MENU = "CharacterSelectionMenuScene"
         CONTROLS_MENU = "ControlsMenu"
-        HOUSE_SCENE = "HouseScene"
+        HOUSE = "HouseScene"
 
     class QuadTree:
         MAP_DIMENSIONS = pygame.Rect(0, 0, 110 * 72, 120 * 72)

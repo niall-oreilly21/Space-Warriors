@@ -16,7 +16,7 @@ from Engine.Other.Enums.GameObjectEnums import PowerUpType
 
 
 class PowerUpCollider(Collider):
-    def __init__(self, name):
+    def __init__(self, name, min_power_up_value, max_power_up_value, __prompt_text):
         super().__init__(name)
         self.__current_elapsed_time = 0
         self.__text_shown_time = 0
@@ -25,28 +25,29 @@ class PowerUpCollider(Collider):
         self.__power_up_activated = False
         self.__text_time = 10000
         self.__total_time = 10000
+        self.__min_power_up_value = min_power_up_value
+        self.__max_power_up_value = max_power_up_value
+        self.__prompt_text = __prompt_text
 
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
+            self.__handle_power_up_collision()
+
             if self.parent.power_up_type == PowerUpType.Heal:
-                self.__handle_power_up_collision(5, 15, "Press E to heal")
                 self.__handle_power_up_selected(colliding_game_object, PowerUpType.Heal)
 
             elif self.parent.power_up_type == PowerUpType.Attack:
-                self.__handle_power_up_collision(1, 5, "Press E to increase attack damage")
                 self.__handle_power_up_selected(colliding_game_object, PowerUpType.Attack)
 
             elif self.parent.power_up_type == PowerUpType.Defense:
-                self.__handle_power_up_collision(1, 5, "Press E to increase defense")
                 self.__handle_power_up_selected(colliding_game_object, PowerUpType.Defense)
 
             elif self.parent.power_up_type == PowerUpType.Speed:
-                self.__handle_power_up_collision(5, 5, "Press E to increase speed")
                 self.__handle_power_up_selected(colliding_game_object, PowerUpType.Speed)
 
             elif self.parent.power_up_type == PowerUpType.NightVision:
-                self.__handle_power_up_collision(0, 0, "Press E to equip night vision goggles")
                 self.__handle_power_up_selected(colliding_game_object, PowerUpType.NightVision)
+
 
             else:
                 GameConstants.EVENT_DISPATCHER.dispatch_event(
@@ -61,13 +62,12 @@ class PowerUpCollider(Collider):
 
                 self.__handle_power_up_selected(colliding_game_object, random_type)
 
-    def __handle_power_up_collision(self, min_value, max_value, prompt_text):
-        self.parent.power_up_value = random.randint(min_value, max_value)
+    def __handle_power_up_collision(self):
+        self.parent.power_up_value = random.randint(self.__max_power_up_value, self.__max_power_up_value)
         GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, [prompt_text, GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, [self.__prompt_text, GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
     def __handle_power_up_selected(self, player, power_up_type):
-
         if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
             self.__power_up_activated = True
 
@@ -108,8 +108,6 @@ class PowerUpCollider(Collider):
             self.parent.remove_component(BoxCollider2D)
 
 
-
-
     def show_text(self, power_up_type):
         # Show power up text
         symbol = ""
@@ -134,17 +132,6 @@ class PowerUpCollider(Collider):
                       [ui_text, GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
         self.__text_shown = True
         self.__text_shown_time = 0
-
-    def handle_collision_exit(self):
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
-
-    def clone(self):
-        return PowerUpCollider(self.name)
 
     def update(self, game_time):
 
@@ -180,3 +167,14 @@ class PowerUpCollider(Collider):
             if self.__text_shown_time >= self.__text_time:
                 self.__text_shown_time = 0
                 self.__text_shown = False
+
+    def handle_collision_exit(self):
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                      ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
+
+    def clone(self):
+        return PowerUpCollider(self.name, self.__min_power_up_value, self.__max_power_up_value, self.__prompt_text)
