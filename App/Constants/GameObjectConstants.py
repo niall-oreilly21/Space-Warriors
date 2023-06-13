@@ -119,7 +119,7 @@ class GameObjectConstants:
         LILYPAD_TWO.add_component(Renderer2D("Renderer-2", texture_material, layer))
 
     class NaturalStructures:
-        structures_layer = RendererLayers.BelowPlayer
+        structures_layer = RendererLayers.Structures
         BOULDER = GameObject("Boulder", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                              GameObjectCategory.Environment)
         object_frame = image.subsurface(pygame.Rect(129, 146, 13, 12))
@@ -139,21 +139,12 @@ class GameObjectConstants:
         object_frame = rocks_image.subsurface(pygame.Rect(193, 6, 62, 52))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         ROCK_ONE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # ROCK_ONE.add_component(BoxCollider2D("Box-3"))
-
-        # ROCK_TWO = GameObject("RockTwo", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
-        #                       GameObjectCategory.Player)
-        # object_frame = rocks_image.subsurface(pygame.Rect(67, 2, 58, 57))
-        # texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
-        # ROCK_TWO.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # ROCK_TWO.add_component(BoxCollider2D("Box-3"))
 
         ROCK_THREE = GameObject("RockThree", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
                                 GameObjectCategory.Player)
         object_frame = rocks_image.subsurface(pygame.Rect(192, 67, 64, 58))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         ROCK_THREE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # ROCK_THREE.add_component(BoxCollider2D("Box-3"))
 
         ISLAND = GameObject("Island", Transform2D(Vector2(0, 0), 0, Vector2(3.5, 3)), GameObjectType.Static,
                             GameObjectCategory.Environment)
@@ -162,13 +153,13 @@ class GameObjectConstants:
         ISLAND.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
 
     class UnnaturalStructures:
-        structures_layer = RendererLayers.BelowPlayer
+        structures_layer = RendererLayers.Structures
 
-        HOUSE = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
+        HOUSE = GameObject("House Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
                            GameObjectCategory.House)
         object_frame = building_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
-        HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        HOUSE.add_component(Renderer2D("Renderer-2", texture_material, RendererLayers.House))
         house_box_collider = BoxCollider2D("Box-3")
         house_box_collider.scale = Vector2(0.15, 0.2)
         house_box_collider.offset = Vector2(3, 175)
@@ -359,9 +350,9 @@ class GameObjectConstants:
 
         material = TextureMaterial2D(texture, None, None, 255)
 
-        colors = [None]
-        bullet_prefab = Bullet("Bullet", material, 1, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)))
-        Gun = Gun("Gun", bullet_prefab, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
+        colors = [(255,255,0), (0,255,0), None]
+        __BULLET_PREFAB = Bullet("Bullet", material, 5, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.13, 0.13)))
+        GUN = Gun("Gun", __BULLET_PREFAB, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
     class Cameras:
         __MAIN_MENU_CAMERA_COMPONENT = Camera(GameConstants.Cameras.MENU_CAMERA, GameConstants.VIEWPORT_WIDTH,
@@ -380,11 +371,11 @@ class GameObjectConstants:
         UI_TEXT_HELPER_BOTTOM = GameObject(GameConstants.UITextPrompts.UI_TEXT_BOTTOM,
                                            Transform2D(Vector2(0, 0), 0, Vector2(1, 1)),
                                            GameObjectType.Static, GameObjectCategory.UIPrompts)
+        UI_TEXT_HELPER_ENEMY_COUNT = UI_TEXT_HELPER_BOTTOM.clone()
+        UI_TEXT_HELPER_ENEMY_COUNT.name = GameConstants.UITextPrompts.UI_TEXT_ENEMY_COUNT
         UI_TEXT_HELPER_RIGHT = UI_TEXT_HELPER_BOTTOM.clone()
         UI_TEXT_HELPER_RIGHT.name = GameConstants.UITextPrompts.UI_TEXT_RIGHT
-        UI_TEXT_HELPER_RIGHT2 = UI_TEXT_HELPER_BOTTOM.clone()
-        UI_TEXT_HELPER_RIGHT2.name = GameConstants.UITextPrompts.UI_TEXT_RIGHT2
-        UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_RIGHT, UI_TEXT_HELPER_RIGHT2)
+        UI_HELPER_TEXTS = (UI_TEXT_HELPER_BOTTOM, UI_TEXT_HELPER_ENEMY_COUNT, UI_TEXT_HELPER_RIGHT)
 
     class HealthBar:
         __HEALTH_BAR_IMAGE_BASE_PATH = "Assets/UI/HealthBars/"

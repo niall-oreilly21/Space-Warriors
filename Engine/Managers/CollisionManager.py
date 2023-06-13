@@ -162,7 +162,7 @@ class CollisionManager(QuadTreeManager):
             if collider_two:
                 collider_two.is_colliding = True
             self.__handle_collision_responses(collider_one, collider_two, collider_one_entity, collider_two_entity)
-            self.__change_collision_layers_for_trees(collider_one_entity, collider_two_entity, RendererLayers.BelowPlayer)
+            self.__change_collision_layers_for_trees(collider_one_entity, collider_two_entity, RendererLayers.Structures)
 
             self.__handle_collision_physics(collider_one_entity, collider_two_entity)
         else:
