@@ -142,6 +142,7 @@ class EntityConstants:
                 [Vector2(3962, 3389), Vector2(3962, 4000)],
             ],
             ALIEN_ENEMY_NAME: [
+                [Vector2(2355, 1841), Vector2(2500, 1841)],#Boss
                 [Vector2(2355, 1841), Vector2(2500, 1841)],
                 [Vector2(1970, 5580), Vector2(2272, 5368), Vector2(2575, 5527), Vector2(1981, 5188)],
                 [Vector2(5297, 4770), Vector2(4827, 4770), Vector2(4911, 4913), Vector2(4547, 4913)],

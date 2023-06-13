@@ -196,8 +196,10 @@ class MapLoader:
                     else:
                         power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
@@ -283,6 +285,23 @@ class MapLoader:
         self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
         scene.add(enemy)
 
+        if scene.name is GameConstants.Scene.SATURN:
+            self.create_boss(self.__enemies[scene.name][0], scene)
+
+    def create_boss(self, enemy, scene):
+        init_pos = 3200, 4000
+        enemy.initial_position = Vector2(init_pos)
+        enemy.initial_health = GameConstants.EnemyAlien.BOSS_HEALTH
+        enemy.transform.scale = GameConstants.EnemyAlien.BOSS_SCALE
+        enemy.transform.position = Vector2(3207.8, 4013)
+        gun = GameObjectConstants.Gun.GUN.clone()
+
+        gun.add_component(GunController("Enemy Gun Controller", enemy))
+        scene.add(gun)
+        enemy.remove_component(EnemyController)
+        enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.BOSS_SPEED, 800, 200, gun))
+        enemy.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
+
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 400))
@@ -295,27 +314,12 @@ class MapLoader:
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
+
     def load_planet_saturn_enemies(self, scene):
-        gun = GameObjectConstants.Gun.Gun
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
-        enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
-
-        gun.add_component(GunController("Enemy Gun Controller", enemy))
-        scene.add(gun)
-
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
-
-        # Boss?
-        init_pos = 3200, 4000
-        boss = EntityConstants.Enemy.ALIEN_ENEMY
-        boss.initial_position = Vector2(init_pos)
-        boss.transform.scale = Vector2(5, 5)
-        boss.transform.position = Vector2(3207.8, 4013)
-        boss.add_component(
-            BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
-        boss.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
-
     def __load_planet_earth_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_ONE.clone()
         ruin.transform.position = Vector2(2050, 2600)
@@ -363,7 +367,7 @@ class MapLoader:
         scene.add(bridge4)
 
         scene.add(self.__pet)
-        self.__load_teleporter(scene, Vector2(584, 6350.2))
+        self.__load_teleporter(scene, Vector2(2600, 4800))
         self.__load_ui_texts(scene)
 
     def __load_planet_mars_specifics(self, scene):
@@ -476,6 +480,21 @@ class MapLoader:
 
         for waypoints in enemy_waypoints[enemy_type_name]:
             new_enemy = enemy.clone()
+            if enemy_type == GameObjectCategory.Rat:
+                random_material = random.choice([GameConstants.EnemyRat.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyRat.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyRat.MATERIAL_ENEMY3])
+            elif enemy_type == GameObjectCategory.Wolf:
+                random_material = random.choice([GameConstants.EnemyWolf.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyWolf.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyWolf.MATERIAL_ENEMY3])
+            else:
+                random_material = random.choice([GameConstants.EnemyAlien.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyAlien.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyAlien.MATERIAL_ENEMY3])
+            new_enemy.get_component(Renderer2D).material = random_material
+            new_enemy.get_component(SpriteAnimator2D).material = random_material
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
-            self.__add_enemy_to_scene(new_enemy,enemy_health_bar_texture, scene)
+            self.__add_enemy_to_scene(new_enemy, enemy_health_bar_texture, scene)
+

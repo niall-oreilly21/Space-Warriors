@@ -1,7 +1,7 @@
 import random
 
 from Engine.GameObjects.GameObject import GameObject
-from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory, PowerUpType
+from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory
 
 
 class PowerUp(GameObject):

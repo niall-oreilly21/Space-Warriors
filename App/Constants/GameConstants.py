@@ -175,7 +175,10 @@ class GameConstants:
 
     class EnemyAlien:
         MOVE_SPEED = 6
+        BOSS_SPEED = 1
         ATTACK_DAMAGE = 3
+        BOSS_SCALE = Vector2(3,3)
+        BOSS_HEALTH = 100
         HEALTH = 50
 
         __ENEMY_MOVE_X_FRAME_RECTS = [
@@ -368,7 +371,7 @@ class GameConstants:
     class UITextPrompts:
         UI_TEXT_BOTTOM = "UITextBottom"
         UI_TEXT_RIGHT = "UITextRight"
-        UI_TEXT_RIGHT2 = "UITextRight2"
+        UI_TEXT_ENEMY_COUNT = "UITextEnemyCount"
 
     class PowerUp:
         __POTION_FRAME_RECTS = [pygame.Rect(14, 0, 72, 84), pygame.Rect(103, 0, 60, 84), pygame.Rect(180, 0, 50, 84),

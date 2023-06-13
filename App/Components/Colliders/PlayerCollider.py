@@ -89,27 +89,4 @@ class PlayerCollider(Collider):
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [colliding_game_object.get_component(BoxCollider2D)]))
 
                 colliding_game_object.remove_component(BoxCollider2D)
-                # GameConstants.EVENT_DISPATCHER.dispatch_event(
-                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                #               ["Your dog loves you <3!",
-                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                # self.__text_shown = True
-                # self.__text_shown_time = 0
-                # GameConstants.EVENT_DISPATCHER.dispatch_event(
-                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                #               ["He will help you in battles and heal you every 30 secs!",
-                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                # self.__text_shown = True
-                # self.__text_shown_time = 0
-                # GameConstants.EVENT_DISPATCHER.dispatch_event(
-                #     EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                #               ["Attack damage +3",
-                #                GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
-                # self.__text_shown = True
-                # self.__text_shown_time = 0
 
-
-    # def handle_collision_exit(self):
-    #     GameConstants.EVENT_DISPATCHER.dispatch_event(
-    #         EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-    #                   ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
