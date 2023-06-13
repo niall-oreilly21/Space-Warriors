@@ -46,8 +46,6 @@ class PowerUpCollider(Collider):
                 self.__handle_power_up_selected(colliding_game_object, self._parent.power_up_type)
 
 
-
-
     def __handle_power_up_collision(self):
         self.parent.power_up_value = random.randint(self.__max_power_up_value, self.__max_power_up_value)
         GameConstants.EVENT_DISPATCHER.dispatch_event(
@@ -56,6 +54,8 @@ class PowerUpCollider(Collider):
     def __handle_power_up_selected(self, player, power_up_type):
         if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
             self.__power_up_activated = True
+            # self.is_colliding = False
+            # player.get_component(Collider).is_colliding = False
 
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,

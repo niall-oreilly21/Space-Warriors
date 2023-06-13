@@ -180,26 +180,23 @@ class MapLoader:
                     scene.add(lilypad_object)
                 elif id == 1:
                     if scene.name is GameConstants.Scene.EARTH:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     elif scene.name is GameConstants.Scene.MARS:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     else:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
@@ -457,7 +454,7 @@ class MapLoader:
         enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
         enemy_health_bar_texture = GameObjectConstants.HealthBar.ALIEN_ENEMY_HEALTH_BAR_IMAGE
         if enemy_type == GameObjectCategory.Rat:
-            if scene.name == GameConstants.Scene.HOUSE_SCENE:
+            if scene.name == GameConstants.Scene.HOUSE:
                 enemy_type_name = EntityConstants.Enemy.HOUSE_RAT_ENEMY_NAME
             else:
                 enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME

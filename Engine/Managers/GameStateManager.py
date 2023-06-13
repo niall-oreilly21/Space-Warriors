@@ -118,7 +118,7 @@ class GameStateManager(Manager):
         if Application.ActiveScene.name == GameConstants.Scene.EARTH \
                 or Application.ActiveScene.name == GameConstants.Scene.MARS \
                 or Application.ActiveScene.name == GameConstants.Scene.SATURN \
-                or Application.ActiveScene.name == GameConstants.Scene.HOUSE_SCENE:
+                or Application.ActiveScene.name == GameConstants.Scene.HOUSE:
             if self.__input_handler.is_tap(pygame.K_ESCAPE, 100):
                 self._event_dispatcher.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.PauseMenuScene))
 
