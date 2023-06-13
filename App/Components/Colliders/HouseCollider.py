@@ -9,20 +9,16 @@ from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
 class HouseCollider(Collider):
 
-    def __init__(self, name):
+    def __init__(self, name, scene_event_action_type):
+        self.__scene_event_action_type = scene_event_action_type
         super().__init__(name)
 
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
-            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["Press E to enter the house", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-            self.__check_house_open()
-
-    def __check_house_open(self):
-            if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
-                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, EventActionType.HouseScene))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, self.__scene_event_action_type))
 
     def clone(self):
-        return HouseCollider(self.name)
+        return HouseCollider(self.name, self.__scene_event_action_type)
 
     def handle_collision_exit(self):
         GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))

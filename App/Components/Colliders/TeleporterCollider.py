@@ -41,9 +41,7 @@ class TeleporterCollider(Collider):
         return TeleporterCollider(self.name)
 
     def handle_collision_exit(self):
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
 
 
