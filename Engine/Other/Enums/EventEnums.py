@@ -53,3 +53,5 @@ class EventActionType:
     SetRendererQuadTreeTarget = 44
     RemoveEnemyFromScene = 45
     HouseScene = 46
+    SetUpHouseLevel = 47
+    ReloadEarthScene = 49

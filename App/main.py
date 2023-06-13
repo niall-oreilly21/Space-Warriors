@@ -40,15 +40,18 @@ pet = EntityConstants.Pet.PET
 
 GameConstants.INPUT_HANDLER = InputHandler()
 GameConstants.EVENT_DISPATCHER = EventDispatcher()
-map_loader = MapLoader(player, GameObjectConstants.HealthBar.PLAYER_HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS)
+
 
 scene_manager = SceneManager(GameConstants.EVENT_DISPATCHER)
 sound_manager = SoundManager(GameConstants.EVENT_DISPATCHER)
 camera_manager = CameraManager(screen, scene_manager, GameConstants.EVENT_DISPATCHER)
 collision_manager = CollisionManager(GameConstants.QuadTree.MAP_DIMENSIONS, player, GameConstants.QuadTree.COLLISION_RANGE_WIDTH, GameConstants.QuadTree.COLLISION_RANGE_HEIGHT, GameConstants.QuadTree.QUAD_TREE_SIZE, GameConstants.EVENT_DISPATCHER)
+
+map_loader = MapLoader(player, GameObjectConstants.HealthBar.PLAYER_HEALTH_BAR, pet, GameObjectConstants.UiHelperTexts.UI_HELPER_TEXTS, scene_manager)
 game_state_manager = GameStateManager(GameConstants.EVENT_DISPATCHER, InputHandler(), map_loader)
 render_manager = RendererManager(screen, GameConstants.EVENT_DISPATCHER, GameConstants.QuadTree.MAP_DIMENSIONS, player, GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, GameConstants.QuadTree.QUAD_TREE_SIZE)
 update_managers = [scene_manager, camera_manager, collision_manager, game_state_manager]
+
 
 scene_loader = SceneLoader(scene_manager)
 earth_scene = scene_loader.initialise_menu_scene(GameConstants.Scene.EARTH)
@@ -124,11 +127,5 @@ while running:
 
     pygame.display.update()
     game_time.limit_fps(60)
-
-    # elapsed_time = game_time.elapsed_time
-    # fps = game_time.fps()
-    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
-
-    #print(player.transform.position.x, ", ", player.transform.position.y)
 
 pygame.quit()

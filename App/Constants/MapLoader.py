@@ -31,7 +31,7 @@ from Engine.Other.Enums.RendererLayers import RendererLayers
 
 
 class MapLoader:
-    def __init__(self, player, player_health_bar, pet, ui_helper_texts):
+    def __init__(self, player, player_health_bar, pet, ui_helper_texts, scene_manager):
         self.__player = player
         self.__player_health_bar = player_health_bar
         self.__player_health_bar.add_component(HealthBarController("Player Health Bar Controller", self.__player))
@@ -47,6 +47,7 @@ class MapLoader:
 
         self.__load_player_components()
         self.__load_pet_components()
+        self.__scene_manager = scene_manager
 
     def __load_player_components(self):
         self.__player.add_component(Rigidbody2D("Rigid"))
@@ -247,15 +248,24 @@ class MapLoader:
         scene.start()
         return len(self.__enemies[scene.name])
 
-    def __check_enemy_in_scene(self, scene):
-        if self.__enemies[scene.name] is not None:
-            for enemy in self.__enemies[scene.name]:
-                enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
+    def load_house_dynamic_objects(self):
+        scene = self.__scene_manager.set_active_scene(GameConstants.Scene.HOUSE)
+        scene.add(self.__player)
+        scene.add(self.__player_health_bar)
 
-                if not scene.contains(enemy):
-                    scene.add(enemy)
-        else:
-            print(scene.name)
+        self.__check_enemy_in_scene(scene)
+        scene.start()
+        self.__scene_manager.set_active_scene(GameConstants.Scene.EARTH)
+        return len(self.__enemies[scene.name])
+
+
+    def __check_enemy_in_scene(self, scene):
+        for enemy in self.__enemies[scene.name]:
+            enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
+
+            if not scene.contains(enemy):
+                scene.add(enemy)
+
     def __add_enemy_health_bar_to_scene(self, enemy, enemy_health_bar_texture, scene):
         health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
         self.__set_texture_for_enemy_health_bar(health_bar, enemy_health_bar_texture)
@@ -440,6 +450,7 @@ class MapLoader:
         scene.add(window)
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
+        self.__load_ui_texts(scene)
 
     def __load_teleporter(self, scene, position):
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()

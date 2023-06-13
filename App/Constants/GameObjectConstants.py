@@ -23,6 +23,7 @@ from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Graphics.Sprites.Take import Take
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.EventEnums import EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectType, GameObjectCategory, PowerUpType
 from Engine.Other.Transform2D import Transform2D
 from Engine.Other.Enums.RendererLayers import RendererLayers
@@ -170,7 +171,7 @@ class GameObjectConstants:
         HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         house_box_collider = BoxCollider2D("Box-3")
         HOUSE.add_component(house_box_collider)
-        HOUSE.add_component(HouseCollider("House Collider"))
+        HOUSE.add_component(HouseCollider("House Outside Collider", EventActionType.HouseScene))
 
         DOOR = GameObject("Door", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                           GameObjectCategory.Environment)
@@ -178,6 +179,7 @@ class GameObjectConstants:
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         DOOR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         DOOR.add_component(BoxCollider2D("Box-3"))
+        DOOR.add_component( HouseCollider("House Inside Collider", EventActionType.EarthScene))
 
         WINDOW = GameObject("Window", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
                             GameObjectCategory.Environment)

@@ -1,4 +1,5 @@
 import pygame
+from pygame import Vector2
 
 from App.Constants.Application import Application
 from App.Constants.GameConstants import GameConstants
@@ -36,11 +37,17 @@ class GameStateManager(Manager):
         elif event_data.event_action_type == EventActionType.SetUpLevel:
             self.__set_up_level()
 
+        elif event_data.event_action_type == EventActionType.SetUpHouseLevel:
+            self.__set_up_base_level()
+
         elif event_data.event_action_type == EventActionType.LoadLevel:
             self.__load_level()
 
         elif event_data.event_action_type == EventActionType.RemoveEnemyFromScene:
             self.__enemies_in_scene_count -= 1
+
+        elif event_data.event_action_type == EventActionType.ReloadEarthScene:
+            self.__reload_earth_scene()
 
     def __set_ui_text(self, ui_text, ui_text_game_object_name):
 
@@ -56,12 +63,28 @@ class GameStateManager(Manager):
 
     def __set_up_level(self):
         Application.GameStarted = False
-        self.__enemies_in_scene_count = self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+        if Application.ActiveScene.name is GameConstants.Scene.EARTH:
+            self.__enemies_in_scene_count = self.__map_loader.load_house_dynamic_objects()
+            self.__enemies_in_scene_count += self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+        else:
+            self.__enemies_in_scene_count = self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
+
         Application.GameStarted = True
-        self.__dispatch_events_for_set_up_level()
+        self.__set_up_base_level()
+
+    def __reload_earth_scene(self):
+        Application.Player.transform.position = Vector2(2945, 2860)
+        print("YES")
+        self.__set_up_events()
+
+    def __set_up_base_level(self):
+        self.__set_up_events()
         self.__position_characters_for_level()
-        self.__set_up_teleporter_for_level()
+
+    def __set_up_events(self):
+        self.__dispatch_events_for_set_up_level()
         self.__get_ui_text_helpers()
+
 
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)

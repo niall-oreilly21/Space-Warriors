@@ -33,11 +33,16 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.EarthScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            Application.LastActiveScene = Application.ActiveScene
             self.set_active_scene(GameConstants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
-            self.__check_turn_off_spotlight()
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
-            self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_EARTH)
+
+            if Application.LastActiveScene.name is GameConstants.Scene.HOUSE:
+                self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.ReloadEarthScene))
+
+            else:
+                self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+                self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_EARTH)
 
         elif event_data.event_action_type == EventActionType.MarsScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
@@ -50,15 +55,13 @@ class SceneManager(Manager):
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(GameConstants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
-            self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_SATURN)
 
         elif event_data.event_action_type == EventActionType.HouseScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(GameConstants.Scene.HOUSE)
-            self._event_dispatcher.dispatch_event(
-                EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpHouseLevel))
             Application.ActiveScene = self.__active_scene
 
         elif event_data.event_action_type == EventActionType.LevelScene:
@@ -173,8 +176,9 @@ class SceneManager(Manager):
 
     def __check_level_scene(self):
         return self.__active_scene.name is GameConstants.Scene.EARTH or\
-        self.__active_scene.name == GameConstants.Scene.MARS or\
-        self.__active_scene.name == GameConstants.Scene.SATURN
+        self.__active_scene.name is GameConstants.Scene.MARS or\
+        self.__active_scene.name is GameConstants.Scene.SATURN or \
+        self.__active_scene.name is GameConstants.Scene.HOUSE
 
     def set_active_scene(self, name):
         name = name.strip().lower()
@@ -188,6 +192,7 @@ class SceneManager(Manager):
             return False
         self.__scenes[name] = scene
         return True
+
 
     def update(self, game_time):
         if self.__active_scene is not None:
