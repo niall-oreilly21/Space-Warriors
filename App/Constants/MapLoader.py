@@ -42,7 +42,7 @@ class MapLoader:
                 GameConstants.Scene.EARTH: [],
                 GameConstants.Scene.MARS: [],
                 GameConstants.Scene.SATURN: [],
-                GameConstants.Scene.HOUSE_SCENE: []
+                GameConstants.Scene.HOUSE: []
             }
 
         self.__load_player_components()
@@ -115,7 +115,7 @@ class MapLoader:
         elif scene.name == GameConstants.Scene.SATURN:
             self.__load_planet_saturn_specifics(scene)
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
-        elif scene.name == GameConstants.Scene.HOUSE_SCENE:
+        elif scene.name == GameConstants.Scene.HOUSE:
             self.__load_house_specifics(scene)
             self.__color_tiles(map_data, tile_data, 33, 14, [255, 255, 255], 255)
 
@@ -180,24 +180,24 @@ class MapLoader:
                     scene.add(lilypad_object)
                 elif id == 1:
                     if scene.name is GameConstants.Scene.EARTH:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     elif scene.name is GameConstants.Scene.MARS:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     else:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
-                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
-                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
-                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
@@ -310,10 +310,10 @@ class MapLoader:
         ruin.transform.position = Vector2(2050, 2600)
         scene.add(ruin)
 
-        building = GameObjectConstants.UnnaturalStructures.BUILDING.clone()
-        building.transform.position = Vector2(2700, 2400)
-        building.transform.scale = Vector2(0.6,0.6)
-        scene.add(building)
+        house = GameObjectConstants.UnnaturalStructures.HOUSE.clone()
+        house.transform.position = Vector2(2700, 2400)
+        house.transform.scale = Vector2(0.6,0.6)
+        scene.add(house)
 
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_TWO.clone()
         ruin.transform.position = Vector2(4200, 1900)
@@ -327,10 +327,6 @@ class MapLoader:
         statue = GameObjectConstants.UnnaturalStructures.STATUE.clone()
         statue.transform.position = Vector2(2800, 4700)
         scene.add(statue)
-
-        teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
-        teleporter.transform.position = Vector2(2600, 4800)
-        scene.add(teleporter)
 
         bridge_x = 6406
         bridge_y = 5463
@@ -355,8 +351,7 @@ class MapLoader:
         bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
         scene.add(bridge4)
 
-        scene.add(self.__pet)
-        self.__load_teleporter(scene, Vector2(584, 6350.2))
+        self.__load_teleporter(scene, Vector2(2600, 4800))
         self.__load_ui_texts(scene)
 
     def __load_planet_mars_specifics(self, scene):
@@ -402,8 +397,7 @@ class MapLoader:
 
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
         enemy.initial_position = Vector2(10000, 10000)
-        enemy.add_component(
-            ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
 
         bed = GameObjectConstants.UnnaturalStructures.BED.clone()
         bed.transform.position = Vector2(500, 0)

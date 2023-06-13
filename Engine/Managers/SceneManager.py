@@ -33,7 +33,7 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.EarthScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
-            self.set_active_scene(GameConstants.Scene.HOUSE_SCENE)
+            self.set_active_scene(GameConstants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
             self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
@@ -53,6 +53,13 @@ class SceneManager(Manager):
             self.__check_turn_off_spotlight()
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_SATURN)
+
+        elif event_data.event_action_type == EventActionType.HouseScene:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
+            self.set_active_scene(GameConstants.Scene.HOUSE)
+            self._event_dispatcher.dispatch_event(
+                EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
+            Application.ActiveScene = self.__active_scene
 
         elif event_data.event_action_type == EventActionType.LevelScene:
             self.__set_menu_scene(GameConstants.Scene.LEVEL_MENU)
