@@ -63,10 +63,8 @@ class PlayerController(Component, IMoveable):
                 or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_UP\
                 or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_DOWN:
             if not self.__animator.is_animation_complete:
-                # Animation is still playing, stop movement
                 return
         else:
-            # Animation is complete, switch to the next take
             self._set_idle_animation()
 
         self.__input_handler.update()
@@ -76,11 +74,6 @@ class PlayerController(Component, IMoveable):
         self._move_down()
         self._attack()
         self._faint()
-        #
-        # if self.parent.is_damaged:
-        #     self.parent.get_component(Renderer2D).material.alpha = 150
-        # else:
-        #     self.parent.get_component(Renderer2D).material.alpha = 225
 
     def _move_left(self):
         self._set_idle_animation()
@@ -148,7 +141,7 @@ class PlayerController(Component, IMoveable):
 
             self.__is_attacking = True
             GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, ["AttackSound"]))
+                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [GameConstants.Music.PLAYER_ATTACK_SOUND, False]))
             attack_collider = AttackBoxCollider2D("Attack box collider", self)
             self.parent.add_component(attack_collider)
 
@@ -166,9 +159,9 @@ class PlayerController(Component, IMoveable):
                 self.parent.add_component(self.__box_collider)
 
     def _faint(self):
-
         if self.parent.health <= 0:
             self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.PLAYER_DEATH_SOUND, False]))
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_DEATH_MENU]))
 

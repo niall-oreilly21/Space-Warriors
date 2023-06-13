@@ -16,6 +16,7 @@ class HouseCollider(Collider):
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SceneManager, self.__scene_event_action_type))
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [GameConstants.Music.DOOR_SOUND, False]))
 
     def clone(self):
         return HouseCollider(self.name, self.__scene_event_action_type)

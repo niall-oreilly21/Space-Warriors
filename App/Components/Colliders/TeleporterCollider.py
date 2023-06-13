@@ -32,7 +32,7 @@ class TeleporterCollider(Collider):
     def __check_teleporter_input(self):
         if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
             Application.ActiveScene.remove(Application.Player)
-
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.TELEPORT_SOUND, False]))
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [self._parent]))
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CameraManager, EventActionType.SetCameraTarget, [self._parent]))
             self.__animator.set_active_take(ActiveTake.TELEPORT)

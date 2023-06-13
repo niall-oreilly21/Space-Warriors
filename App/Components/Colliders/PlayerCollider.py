@@ -59,7 +59,6 @@ class PlayerCollider(Collider):
             if current_time - self.parent.last_damage_time >= self.parent.damage_cooldown:
                 self.parent.is_damaged = True
                 self.parent.damage(colliding_game_object.attack_damage)
-                print("Health: ", self.parent.health)
                 self.parent.last_damage_time = current_time
 
             else:
@@ -74,7 +73,6 @@ class PlayerCollider(Collider):
                     colliding_game_object.is_damaged = True
                     colliding_game_object.damage(self.parent.attack_damage)
                     colliding_game_object.last_damage_time = current_time
-                    print("Enemy health: ", colliding_game_object.health)
                 else:
                     colliding_game_object.is_damaged = False
 
@@ -84,6 +82,8 @@ class PlayerCollider(Collider):
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                           ["You found a stranded dog! Press E to adopt", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
             if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.DOG_BARK_SOUND, False]))
+
                 colliding_game_object.get_component(PetController).adopt()
 
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.CollisionManager, EventActionType.RemoveColliderFromQuadTree, [colliding_game_object.get_component(BoxCollider2D)]))

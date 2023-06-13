@@ -10,23 +10,11 @@ class GunController(FollowController):
         super().__init__(name, target)
         self.__target_box_collider = None
 
-    def start(self):
-        self.__target_box_collider = self._target.get_component(BoxCollider2D)
-        self.__rb = self._target.get_component(Renderer2D)
-
     def update(self, game_time):
        self._follow_target()
 
     def _follow_target(self):
-        if self.__target_box_collider:
-            #print(self._parent.transform.position)
-
-            #target_position = self.__target_box_collider.bounds.center
-
-            #print(target_position)
-            # self._parent.transform.position = Vector2(target_position[0] - self.__rb.material.source_rect.width / 2,
-            #                                           target_position[1] - self.__rb.material.source_rect.height / 2)
-            self._parent.transform.position = self.target.transform.position
+        self._parent.transform.position = self.target.transform.position
 
 
     def clone(self):

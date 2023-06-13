@@ -2,17 +2,22 @@ import pygame
 from pygame import Vector2
 
 from App.Components.Controllers.PlayerController import PlayerController
+from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
+from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.ActiveTake import ActiveTake
+from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 from Engine.Other.Enums.GameObjectEnums import GameObjectDirection
 
 
 class PetController(Component):
     def __init__(self, name, target_object, speed):
         super().__init__(name)
+        self.__total_elapsed_time = 0
+        self.__total_time = 6000
         self.__animator = None
         self.__rend = None
         self.__target_object = target_object
@@ -44,6 +49,7 @@ class PetController(Component):
             direction.normalize()
 
         if self.__adopted:
+            self.__dog_bark(game_time)
             self.__rigidbody.velocity = direction * self.__speed * 0.0001
 
             target_previous_direction = self.__target_object.get_component(PlayerController).previous_direction
@@ -77,3 +83,14 @@ class PetController(Component):
 
                 # Update the position
                 self._transform.position += movement_amount
+
+    def __dog_bark(self, game_time):
+        self.__total_elapsed_time += game_time.elapsed_time
+
+        if self.__total_elapsed_time >= self.__total_time:
+            self.__total_elapsed_time = 0
+            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.DOG_BARK_SOUND, False]))
+
+
+
+

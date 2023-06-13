@@ -286,9 +286,9 @@ class MapLoader:
         scene.add(enemy)
 
         if scene.name is GameConstants.Scene.SATURN:
-            self.create_boss(self.__enemies[scene.name][0], scene)
+            self.__create_boss(self.__enemies[scene.name][0], scene)
 
-    def create_boss(self, enemy, scene):
+    def __create_boss(self, enemy, scene):
         init_pos = 3200, 4000
         enemy.initial_position = Vector2(init_pos)
         enemy.initial_health = GameConstants.EnemyAlien.BOSS_HEALTH
@@ -318,7 +318,7 @@ class MapLoader:
     def load_planet_saturn_enemies(self, scene):
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
+        enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600))
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
     def __load_planet_earth_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_ONE.clone()

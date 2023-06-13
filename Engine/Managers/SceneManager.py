@@ -32,7 +32,6 @@ class SceneManager(Manager):
             sys.exit()
 
         elif event_data.event_action_type == EventActionType.EarthScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             Application.LastActiveScene = Application.ActiveScene
             self.set_active_scene(GameConstants.Scene.EARTH)
             Application.ActiveScene = self.__active_scene
@@ -45,21 +44,18 @@ class SceneManager(Manager):
                 self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_EARTH)
 
         elif event_data.event_action_type == EventActionType.MarsScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(GameConstants.Scene.MARS)
             Application.ActiveScene = self.__active_scene
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_MARS)
 
         elif event_data.event_action_type == EventActionType.SaturnScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(GameConstants.Scene.SATURN)
             Application.ActiveScene = self.__active_scene
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             self.__play_music(GameConstants.Music.MENU_MUSIC, GameConstants.Music.BACKGROUND_MUSIC_SATURN)
 
         elif event_data.event_action_type == EventActionType.HouseScene:
-            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.DebugModeOn))
             self.set_active_scene(GameConstants.Scene.HOUSE)
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpHouseLevel))
             Application.ActiveScene = self.__active_scene
