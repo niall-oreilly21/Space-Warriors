@@ -3,6 +3,7 @@ from random import randint
 import pygame
 from pygame import Vector2
 
+from App.Components.Colliders.HouseCollider import HouseCollider
 from App.Components.Colliders.PowerUpCollider import PowerUpCollider
 from App.Components.Colliders.TeleporterCollider import TeleporterCollider
 from App.Components.Controllers.HealthBarController import HealthBarController
