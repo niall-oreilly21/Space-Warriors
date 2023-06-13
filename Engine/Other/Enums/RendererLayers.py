@@ -1,11 +1,11 @@
 class RendererLayers:
     Background = 0
     WorldObjects = 1
-    Enemy = 2
     BelowPlayer = 3
-    Player = 4
-    AbovePlayer = 5
-    UIBackground = 6
-    UI = 7
-    UIHealthBar = 8
-    Bullet = 9
+    Enemy = 4
+    Player = 5
+    AbovePlayer = 6
+    UIBackground = 7
+    UI = 8
+    UIHealthBar = 9
+    Bullet = 10

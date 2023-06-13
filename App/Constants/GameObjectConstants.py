@@ -36,6 +36,9 @@ building_image = pygame.image.load("Assets/SpriteSheets/Tilesets/building_1.png"
 bed_image = pygame.image.load("Assets/SpriteSheets/Tilesets/bed.png")
 table_image = pygame.image.load("Assets/SpriteSheets/Tilesets/table.png")
 couch_image = pygame.image.load("Assets/SpriteSheets/Tilesets/couch.png")
+door_image = pygame.image.load("Assets/SpriteSheets/Tilesets/door.png")
+window_image = pygame.image.load("Assets/SpriteSheets/Tilesets/window.png")
+
 
 class GameObjectConstants:
     class Foliage:
@@ -160,8 +163,8 @@ class GameObjectConstants:
     class UnnaturalStructures:
         structures_layer = RendererLayers.BelowPlayer
 
-        HOUSE = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1,0.1)), GameObjectType.Static,
-                              GameObjectCategory.House)
+        HOUSE = GameObject("Building", Transform2D(Vector2(0, 0), 0, Vector2(0.1, 0.1)), GameObjectType.Static,
+                           GameObjectCategory.House)
         object_frame = building_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
@@ -169,28 +172,39 @@ class GameObjectConstants:
         HOUSE.add_component(house_box_collider)
         HOUSE.add_component(HouseCollider("House Collider"))
 
+        DOOR = GameObject("Door", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                          GameObjectCategory.Environment)
+        object_frame = door_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        DOOR.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+        DOOR.add_component(BoxCollider2D("Box-3"))
+
+        WINDOW = GameObject("Window", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
+                            GameObjectCategory.Environment)
+        object_frame = window_image
+        texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
+        WINDOW.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
+
         BED = GameObject("Bed", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                              GameObjectCategory.Player)
+                         GameObjectCategory.Environment)
         object_frame = bed_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         BED.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         BED.add_component(BoxCollider2D("Box-3"))
 
         TABLE = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                         GameObjectCategory.Player)
+                           GameObjectCategory.Environment)
         object_frame = table_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         TABLE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         TABLE.add_component(BoxCollider2D("Box-3"))
 
         COUCH = GameObject("Table", Transform2D(Vector2(0, 0), 0, Vector2(1, 1)), GameObjectType.Static,
-                           GameObjectCategory.Player)
+                           GameObjectCategory.Environment)
         object_frame = couch_image
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         COUCH.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         COUCH.add_component(BoxCollider2D("Box-3"))
-
-
 
         # Earth Ruins
         RUIN_ONE = GameObject("RuinOne", Transform2D(Vector2(0, 0), 0, Vector2(2, 2)), GameObjectType.Static,
@@ -277,8 +291,6 @@ class GameObjectConstants:
         __ATTACK_COLLIDER_POWER_UP = PowerUpCollider("Potion Attack Collider", 1, 6, "Press E to increase attack damage")
         __DEFENSE_COLLIDER_POWER_UP = PowerUpCollider("Potion Defense Collider", 1, 6, "Press E to increase defense")
         __HEAL_COLLIDER_POWER_UP = PowerUpCollider("Potion Heal Collider", 1, 6, "Press E to heal")
-        __NIGHT_COLLIDER_POWER_UP = PowerUpCollider("Night Vision Collider", 0, 0, "Press E to equip night vision goggles")
-        __RANDOM_COLLIDER_POWER_UP = PowerUpCollider("Random Collider", 0, 0, "Press E to get a random power up")
 
         SPEED_POWER_UP = PowerUp("PotionSpeed", PowerUpType.Speed,
                                  Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)),
@@ -321,7 +333,7 @@ class GameObjectConstants:
                                   Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_RANDOM
         RANDOM_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(__RANDOM_COLLIDER_POWER_UP)
+        #RANDOM_POWER_UP.add_component(PowerUpCollider("Random Power Up Collider"))
         RANDOM_POWER_UP.add_component(SpriteAnimator2D("Random", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                        texture_material, ActiveTake.RANDOM,
                                                        GameConstants.PowerUp.ANIMATION_SPEED))
@@ -330,7 +342,7 @@ class GameObjectConstants:
                                         Transform2D(Vector2(0, 0), 0, Vector2(__POTION_SCALE, __POTION_SCALE)))
         texture_material = GameConstants.PowerUp.MATERIAL_NIGHT_VISION
         NIGHT_VISION_POWER_UP.add_component(SpriteRenderer2D("Renderer-2", texture_material, layer))
-        RANDOM_POWER_UP.add_component(__NIGHT_COLLIDER_POWER_UP)
+        #RANDOM_POWER_UP.add_component(PowerUpCollider("Night Vision Collider"))
         NIGHT_VISION_POWER_UP.add_component(SpriteAnimator2D("NightVision", GameConstants.PowerUp.POWER_UP_ANIMATOR_INFO,
                                                              texture_material, ActiveTake.NIGHT_VISION,
                                                              GameConstants.PowerUp.ANIMATION_SPEED))

@@ -117,7 +117,7 @@ class MapLoader:
             self.__color_tiles(map_data, tile_data, width, height, [255, 255, 0], 150)
         elif scene.name == GameConstants.Scene.HOUSE:
             self.__load_house_specifics(scene)
-            self.__color_tiles(map_data, tile_data, 33, 14, [255, 255, 255], 255)
+            self.__color_tiles(map_data, tile_data, 15, 10, [255, 255, 255], 255)
 
         # Object generation
         for object in object_data:
@@ -180,24 +180,26 @@ class MapLoader:
                     scene.add(lilypad_object)
                 elif id == 1:
                     if scene.name is GameConstants.Scene.EARTH:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     elif scene.name is GameConstants.Scene.MARS:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     else:
-                        power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.HEAL_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
-                                                         GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
+                        power_up_object = random.choice([GameObjectConstants.Consumables.POTION_SPEED.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_HEAL.clone(),
+                                                         GameObjectConstants.Consumables.POTION_ATTACK.clone(),
+                                                         GameObjectConstants.Consumables.POTION_DEFENSE.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone()])
                     power_up_object.transform.position = Vector2(x * 72.5, y * 72.5)
                     power_up_collider = BoxCollider2D("PowerUpCollider")
@@ -230,6 +232,8 @@ class MapLoader:
                 s_id = ground["s"]["id"]
                 if s_id == GameConstants.Tile.WATER:
                     map_data[y][x] = TileAttributes(s_id, True, color, alpha)
+                elif s_id == 8:
+                    map_data[y][x] = TileAttributes(GameConstants.Tile.WOOD, True, (0, 0, 0), 255)
                 else:
                     map_data[y][x] = TileAttributes(s_id, False, color, alpha)
 
@@ -351,7 +355,8 @@ class MapLoader:
         bridge4.transform.position = Vector2(bridge_x + 47 * 5, bridge_y)
         scene.add(bridge4)
 
-        self.__load_teleporter(scene, Vector2(2600, 4800))
+        scene.add(self.__pet)
+        self.__load_teleporter(scene, Vector2(584, 6350.2))
         self.__load_ui_texts(scene)
 
     def __load_planet_mars_specifics(self, scene):
@@ -395,30 +400,49 @@ class MapLoader:
 
     def __load_house_specifics(self, scene):
 
-        enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.initial_position = Vector2(10000, 10000)
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 3))
+        enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
+        enemy.initial_position = Vector2(0, 0)
+        enemy.add_component(
+            EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 600))
+
+        door = GameObjectConstants.UnnaturalStructures.DOOR.clone()
+        door.transform.position = Vector2(471, 580)
+        door.transform.scale = Vector2(.4, .4)
+        scene.add(door)
 
         bed = GameObjectConstants.UnnaturalStructures.BED.clone()
-        bed.transform.position = Vector2(500, 0)
+        bed.transform.position = Vector2(322, 72)
         bed.transform.scale = Vector2(.2,.2)
         scene.add(bed)
 
         table = GameObjectConstants.UnnaturalStructures.TABLE.clone()
-        table.transform.position = Vector2(1000,500)
+        table.transform.position = Vector2(247, 282)
         table.transform.scale = Vector2(.3,.3)
         scene.add(table)
 
         couch = GameObjectConstants.UnnaturalStructures.COUCH.clone()
-        couch.transform.position = Vector2(1400, 0)
+        couch.transform.position = Vector2(814, 342)
         couch.transform.scale = Vector2(.4, .4)
+        couch.transform.rotation = -90
         scene.add(couch)
 
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(122, 12)
+        window.transform.scale = Vector2(.5,.5)
+        scene.add(window)
 
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(650, 12)
+        window.transform.scale = Vector2(.5,.5)
+        scene.add(window)
 
+        window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
+        window.transform.position = Vector2(1000, 142)
+        window.transform.scale = Vector2(.5, .5)
+        window.transform.rotation = -90
+        scene.add(window)
 
-
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def __load_teleporter(self, scene, position):
         teleporter = GameObjectConstants.Teleporter.TELEPORTER.clone()
@@ -433,7 +457,10 @@ class MapLoader:
         enemy_type_name = EntityConstants.Enemy.ALIEN_ENEMY_NAME
         enemy_health_bar_texture = GameObjectConstants.HealthBar.ALIEN_ENEMY_HEALTH_BAR_IMAGE
         if enemy_type == GameObjectCategory.Rat:
-            enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
+            if scene.name == GameConstants.Scene.HOUSE_SCENE:
+                enemy_type_name = EntityConstants.Enemy.HOUSE_RAT_ENEMY_NAME
+            else:
+                enemy_type_name = EntityConstants.Enemy.RAT_ENEMY_NAME
             enemy_health_bar_texture = GameObjectConstants.HealthBar.RAT_ENEMY_HEALTH_BAR_IMAGE
         elif enemy_type == GameObjectCategory.Wolf:
             enemy_type_name = EntityConstants.Enemy.WOLF_ENEMY_NAME
