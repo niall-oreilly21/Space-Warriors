@@ -31,36 +31,22 @@ class PowerUpCollider(Collider):
 
     def handle_response(self, colliding_game_object):
         if colliding_game_object == Application.Player:
-            self.__handle_power_up_collision()
+            if self.parent is PowerUpType.Random:
+                GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,[self.__prompt_text, GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
 
-            if self.parent.power_up_type == PowerUpType.Heal:
-                self.__handle_power_up_selected(colliding_game_object, PowerUpType.Heal)
-
-            elif self.parent.power_up_type == PowerUpType.Attack:
-                self.__handle_power_up_selected(colliding_game_object, PowerUpType.Attack)
-
-            elif self.parent.power_up_type == PowerUpType.Defense:
-                self.__handle_power_up_selected(colliding_game_object, PowerUpType.Defense)
-
-            elif self.parent.power_up_type == PowerUpType.Speed:
-                self.__handle_power_up_selected(colliding_game_object, PowerUpType.Speed)
-
-            elif self.parent.power_up_type == PowerUpType.NightVision:
-                self.__handle_power_up_selected(colliding_game_object, PowerUpType.NightVision)
-
-
-            else:
-                GameConstants.EVENT_DISPATCHER.dispatch_event(
-                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                              ["Press E to get a random power up", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-                random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack,
-                                             PowerUpType.Defense])
+                random_type = random.choice([PowerUpType.Heal, PowerUpType.Speed, PowerUpType.Attack, PowerUpType.Defense])
                 if random_type == PowerUpType.Heal:
-                    colliding_game_object.power_up_value = min(random.randint(-8, 10), random.randint(-8, 10))
+                    self._parent.power_up_value = min(random.randint(-8, 10), random.randint(-8, 10))
                 else:
-                    colliding_game_object.power_up_value = min(random.randint(-3, 3), random.randint(-3, 3))
+                    self._parent.power_up_value = min(random.randint(-3, 3), random.randint(-3, 3))
 
                 self.__handle_power_up_selected(colliding_game_object, random_type)
+            else:
+                self.__handle_power_up_collision()
+                self.__handle_power_up_selected(colliding_game_object, self._parent.power_up_type)
+
+
+
 
     def __handle_power_up_collision(self):
         self.parent.power_up_value = random.randint(self.__max_power_up_value, self.__max_power_up_value)
@@ -77,7 +63,6 @@ class PowerUpCollider(Collider):
 
             if power_up_type == PowerUpType.Heal:
                 player.health += self.parent.power_up_value
-
                 self.show_text(PowerUpType.Heal)
 
             elif power_up_type == PowerUpType.Defense:
@@ -160,8 +145,6 @@ class PowerUpCollider(Collider):
                 if Application.ActiveScene.contains(self.parent):
                     Application.ActiveScene.remove(self.parent)
 
-
-        # Show power up text
         if self.__text_shown:
             self.__text_shown_time += game_time.elapsed_time
             if self.__text_shown_time >= self.__text_time:
@@ -169,12 +152,8 @@ class PowerUpCollider(Collider):
                 self.__text_shown = False
 
     def handle_collision_exit(self):
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper, ["", GameConstants.UITextPrompts.UI_TEXT_RIGHT2]))
 
     def clone(self):
         return PowerUpCollider(self.name, self.__min_power_up_value, self.__max_power_up_value, self.__prompt_text)
