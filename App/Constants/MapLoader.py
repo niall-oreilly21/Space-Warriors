@@ -305,21 +305,25 @@ class MapLoader:
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 400))
-
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
         enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
-
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
 
     def load_planet_saturn_enemies(self, scene):
-
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
         enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600))
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Alien, enemy, scene)
+
+    def load_house_enemies(self, scene):
+        enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
+        enemy.initial_position = Vector2(0, 0)
+        enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 600))
+        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
+
     def __load_planet_earth_specifics(self, scene):
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_ONE.clone()
         ruin.transform.position = Vector2(2050, 2600)
@@ -410,12 +414,6 @@ class MapLoader:
         self.__load_ui_texts(scene)
 
     def __load_house_specifics(self, scene):
-
-        enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
-        enemy.initial_position = Vector2(0, 0)
-        enemy.add_component(
-            EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 600))
-
         door = GameObjectConstants.UnnaturalStructures.DOOR.clone()
         door.transform.position = Vector2(471, 580)
         door.transform.scale = Vector2(.4, .4)
@@ -452,8 +450,6 @@ class MapLoader:
         window.transform.scale = Vector2(.5, .5)
         window.transform.rotation = -90
         scene.add(window)
-
-        self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
         self.__load_ui_texts(scene)
 
     def __load_teleporter(self, scene, position):

@@ -88,6 +88,7 @@ map_loader.map_load(house_scene, GameConstants.Map.BASE_PATH + GameConstants.Sce
 map_loader.load_planet_earth_enemies(earth_scene)
 map_loader.load_planet_mars_enemies(mars_scene)
 map_loader.load_planet_saturn_enemies(saturn_scene)
+map_loader.load_house_enemies(house_scene)
 load_sound(sound_manager)
 
 camera_manager.set_active_camera(GameConstants.Cameras.MENU_CAMERA)
