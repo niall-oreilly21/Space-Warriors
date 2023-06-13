@@ -1,3 +1,4 @@
+from App.Components.Colliders.AttackBoxCollider2D import AttackBoxCollider2D
 from App.Constants.Application import Application
 from Engine.GameObjects.Character import Character
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
@@ -89,7 +90,8 @@ class CollisionManager(QuadTreeManager):
 
     def __ignore_physics_collisions(self, collider_one_entity, collider_two_entity):
         return collider_one_entity.game_object_category is GameObjectCategory.Teleporter or collider_two_entity.game_object_category is GameObjectCategory.Teleporter \
-        or collider_one_entity.game_object_category is GameObjectCategory.PowerUp or collider_two_entity.game_object_category is GameObjectCategory.PowerUp
+        or collider_one_entity.game_object_category is GameObjectCategory.PowerUp or collider_two_entity.game_object_category is GameObjectCategory.PowerUp \
+        or isinstance(collider_one_entity.get_component(BoxCollider2D), AttackBoxCollider2D) or isinstance(collider_two_entity.get_component(BoxCollider2D), AttackBoxCollider2D)
 
 
     def __handle_collision_physics(self, collider_one_entity, collider_two_entity):
