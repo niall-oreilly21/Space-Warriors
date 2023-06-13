@@ -24,7 +24,7 @@ class GameConstants:
         WIDTH = 29
 
         DEFAULT_HEALTH = 100
-        DEFAULT_ATTACK_DAMAGE = 8
+        DEFAULT_ATTACK_DAMAGE = 10
 
         MOVE_SPEED = 0.2
         DAMAGE_COOLDOWN = 1
@@ -135,7 +135,7 @@ class GameConstants:
 
     class EnemyRat:
         MOVE_SPEED = 2
-        ATTACK_DAMAGE = 3
+        ATTACK_DAMAGE = 1
         HEALTH = 40
 
         __MOVE_X_Y = 715
@@ -175,7 +175,7 @@ class GameConstants:
 
     class EnemyAlien:
         MOVE_SPEED = 6
-        ATTACK_DAMAGE = 5
+        ATTACK_DAMAGE = 3
         HEALTH = 50
 
         __ENEMY_MOVE_X_FRAME_RECTS = [

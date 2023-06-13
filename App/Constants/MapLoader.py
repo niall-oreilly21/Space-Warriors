@@ -56,8 +56,9 @@ class MapLoader:
         self.__player.add_component(player_box_collider)
         material_player = GameConstants.Player.MATERIAL_GIRL
         self.__player.add_component(SpriteRenderer2D("player", material_player, RendererLayers.Player))
-        self.__player.add_component(SpriteAnimator2D("player", GameConstants.Player.PLAYER_ANIMATOR_INFO, material_player,
-                                                     ActiveTake.PLAYER_IDLE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
+        self.__player.add_component(
+            SpriteAnimator2D("player", GameConstants.Player.PLAYER_ANIMATOR_INFO, material_player,
+                             ActiveTake.PLAYER_IDLE_DOWN, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
         player_controller = PlayerController("Player movement", GameConstants.Player.MOVE_SPEED,
                                              GameConstants.Player.MOVE_SPEED, player_box_collider)
         self.__player.add_component(player_controller)
@@ -90,7 +91,7 @@ class MapLoader:
         tileset.add_tile(Tile("SaturnDirt", 10, Vector2(308, 12)))
         tileset.add_tile(Tile("SaturnSand", 7, Vector2(216, 156)))
         tileset.add_tile(Tile("SaturnSpawnRegion", 4, Vector2(216, 156)))
-        tileset.add_tile(Tile("Wood", GameConstants.Tile.DARK_GRASS, Vector2(307,60)))
+        tileset.add_tile(Tile("Wood", GameConstants.Tile.DARK_GRASS, Vector2(307, 60)))
 
         map_data = []
 
@@ -254,8 +255,7 @@ class MapLoader:
 
                 if not scene.contains(enemy):
                     scene.add(enemy)
-        else:
-            print(scene.name)
+
     def __add_enemy_health_bar_to_scene(self, enemy, enemy_health_bar_texture, scene):
         health_bar = GameObjectConstants.HealthBar.ENEMY_HEALTH_BAR.clone()
         self.__set_texture_for_enemy_health_bar(health_bar, enemy_health_bar_texture)
@@ -270,7 +270,7 @@ class MapLoader:
 
     def __add_enemy_to_scene(self, enemy, enemy_health_bar_texture, scene):
         self.__enemies[scene.name].append(enemy)
-        self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
+        self.__add_enemy_health_bar_to_scene(enemy, enemy_health_bar_texture, scene)
         scene.add(enemy)
 
     def load_planet_earth_enemies(self, scene):
@@ -281,7 +281,8 @@ class MapLoader:
 
     def load_planet_mars_enemies(self, scene):
         enemy = EntityConstants.Enemy.WOLF_ENEMY.clone()
-        enemy.add_component(ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
+        enemy.add_component(
+            ZapEnemyController("Enemy movement", self.__player, GameConstants.EnemyWolf.MOVE_SPEED, 600, 20, 4))
 
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Wolf, enemy, scene)
 
@@ -289,7 +290,8 @@ class MapLoader:
         gun = GameObjectConstants.Gun.Gun
 
         enemy = EntityConstants.Enemy.ALIEN_ENEMY.clone()
-        enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
+        enemy.add_component(
+            BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.MOVE_SPEED, 800, 10, gun))
 
         gun.add_component(GunController("Enemy Gun Controller", enemy))
         scene.add(gun)
@@ -313,7 +315,7 @@ class MapLoader:
 
         house = GameObjectConstants.UnnaturalStructures.HOUSE.clone()
         house.transform.position = Vector2(2700, 2400)
-        house.transform.scale = Vector2(0.6,0.6)
+        house.transform.scale = Vector2(0.6, 0.6)
         scene.add(house)
 
         ruin = GameObjectConstants.UnnaturalStructures.RUIN_TWO.clone()
@@ -353,7 +355,7 @@ class MapLoader:
         scene.add(bridge4)
 
         scene.add(self.__pet)
-        self.__load_teleporter(scene, Vector2(584, 6350.2))
+        self.__load_teleporter(scene, Vector2(2600, 4800))
         self.__load_ui_texts(scene)
 
     def __load_planet_mars_specifics(self, scene):
@@ -409,12 +411,12 @@ class MapLoader:
 
         bed = GameObjectConstants.UnnaturalStructures.BED.clone()
         bed.transform.position = Vector2(322, 72)
-        bed.transform.scale = Vector2(.2,.2)
+        bed.transform.scale = Vector2(.2, .2)
         scene.add(bed)
 
         table = GameObjectConstants.UnnaturalStructures.TABLE.clone()
         table.transform.position = Vector2(247, 282)
-        table.transform.scale = Vector2(.3,.3)
+        table.transform.scale = Vector2(.3, .3)
         scene.add(table)
 
         couch = GameObjectConstants.UnnaturalStructures.COUCH.clone()
@@ -425,12 +427,12 @@ class MapLoader:
 
         window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
         window.transform.position = Vector2(122, 12)
-        window.transform.scale = Vector2(.5,.5)
+        window.transform.scale = Vector2(.5, .5)
         scene.add(window)
 
         window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
         window.transform.position = Vector2(650, 12)
-        window.transform.scale = Vector2(.5,.5)
+        window.transform.scale = Vector2(.5, .5)
         scene.add(window)
 
         window = GameObjectConstants.UnnaturalStructures.WINDOW.clone()
@@ -465,6 +467,20 @@ class MapLoader:
 
         for waypoints in enemy_waypoints[enemy_type_name]:
             new_enemy = enemy.clone()
+            if enemy_type == GameObjectCategory.Rat:
+                random_material = random.choice([GameConstants.EnemyRat.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyRat.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyRat.MATERIAL_ENEMY3])
+            elif enemy_type == GameObjectCategory.Wolf:
+                random_material = random.choice([GameConstants.EnemyWolf.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyWolf.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyWolf.MATERIAL_ENEMY3])
+            else:
+                random_material = random.choice([GameConstants.EnemyAlien.MATERIAL_ENEMY1,
+                                                 GameConstants.EnemyAlien.MATERIAL_ENEMY2,
+                                                 GameConstants.EnemyAlien.MATERIAL_ENEMY3])
+            new_enemy.get_component(Renderer2D).material = random_material
+            new_enemy.get_component(SpriteAnimator2D).material = random_material
             new_enemy.initial_position = waypoints[0]
             new_enemy.get_component(WaypointFinder).waypoints = waypoints
-            self.__add_enemy_to_scene(new_enemy,enemy_health_bar_texture, scene)
+            self.__add_enemy_to_scene(new_enemy, enemy_health_bar_texture, scene)

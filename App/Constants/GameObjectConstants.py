@@ -169,6 +169,8 @@ class GameObjectConstants:
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         HOUSE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
         house_box_collider = BoxCollider2D("Box-3")
+        house_box_collider.scale = Vector2(0.15, 0.2)
+        house_box_collider.offset = Vector2(3, 175)
         HOUSE.add_component(house_box_collider)
         HOUSE.add_component(HouseCollider("House Collider"))
 

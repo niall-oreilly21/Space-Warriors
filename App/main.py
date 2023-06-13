@@ -88,9 +88,9 @@ map_loader.load_planet_saturn_enemies(saturn_scene)
 load_sound(sound_manager)
 
 camera_manager.set_active_camera(GameConstants.Cameras.MENU_CAMERA)
-scene_manager.set_active_scene(GameConstants.Scene.MAIN_MENU)
+scene_manager.set_active_scene(GameConstants.Scene.LEVEL_MENU)
 
-Application.ActiveScene = main_menu_scene
+Application.ActiveScene = level_menu_scene
 Application.ActiveCamera = camera_manager.active_camera
 Application.Player = player
 
@@ -125,9 +125,9 @@ while running:
     pygame.display.update()
     game_time.limit_fps(60)
 
-    # elapsed_time = game_time.elapsed_time
-    # fps = game_time.fps()
-    # print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
+    elapsed_time = game_time.elapsed_time
+    fps = game_time.fps()
+    print(f"Elapsed Time: {elapsed_time} ms, FPS: {fps}")
 
     #print(player.transform.position.x, ", ", player.transform.position.y)
 
