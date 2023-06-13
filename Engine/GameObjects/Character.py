@@ -33,6 +33,10 @@ class Character(GameObject, IDamageable, ICloneable):
     def initial_health(self):
         return self.__initial_health
 
+    @initial_health.setter
+    def initial_health(self, initial_health):
+        self.__initial_health = initial_health
+
     def reset_health(self):
         self.__health = self.__initial_health
 
