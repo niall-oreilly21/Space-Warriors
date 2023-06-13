@@ -21,6 +21,7 @@ class GameStateManager(Manager):
         self.__ui_helper_texts = []
         self.__map_loader = map_loader
         self.__enemies_in_scene_count = GameConstants.DEFAULT_ENEMIES
+        self.__level_complete = False
 
     def _subscribe_to_events(self):
         self._event_dispatcher.add_listener(EventCategoryType.GameStateManager, self._handle_events)
@@ -70,11 +71,11 @@ class GameStateManager(Manager):
             self.__enemies_in_scene_count = self.__map_loader.load_planet_dynamic_objects(Application.ActiveScene)
 
         Application.GameStarted = True
+        self.__level_complete = False
         self.__set_up_base_level()
 
     def __reload_earth_scene(self):
         Application.Player.transform.position = Vector2(2945, 2860)
-        print("YES")
         self.__set_up_events()
 
     def __set_up_base_level(self):
@@ -125,7 +126,8 @@ class GameStateManager(Manager):
         self.__dispatch_events_for_load_up_level()
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.CollisionManager,EventActionType.SetUpColliders))
         self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetUpRenderers))
-        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.SetRendererQuadTreeTarget, [Application.Player]))
+        self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["",GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
         self.__check_turn_on_spotlight()
 
     def __dispatch_events_for_load_up_level(self):
@@ -150,9 +152,14 @@ class GameStateManager(Manager):
         self.__input_handler.update()
         self.__handle_level_complete()
         self.__handle_all_levels_complete()
-        GameConstants.EVENT_DISPATCHER.dispatch_event(
-            EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                      [f"Enemies count: {self.__enemies_in_scene_count}", GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
+
+        enemy_text = f"Enemies count: {self.__enemies_in_scene_count}"
+
+        if self.__enemies_in_scene_count == GameConstants.DEFAULT_ENEMIES:
+            enemy_text = f"Enemies count: {0}"
+
+
+        GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,[enemy_text, GameConstants.UITextPrompts.UI_TEXT_ENEMY_COUNT]))
 
     def __load_level(self):
         self.__dispatch_events_for_load_up_level()
@@ -163,7 +170,8 @@ class GameStateManager(Manager):
 
     def __handle_level_complete(self):
         if self.__enemies_in_scene_count <= 0:
-            if Application.ActiveScene.name is GameConstants.Scene.EARTH:
+            self.__level_complete = True
+            if Application.ActiveScene.name is GameConstants.Scene.EARTH or Application.ActiveScene.name is GameConstants.Scene.HOUSE:
                 Application.EarthComplete = True
             if Application.ActiveScene.name is GameConstants.Scene.MARS:
                 Application.MarsComplete = True
@@ -178,9 +186,5 @@ class GameStateManager(Manager):
                               [GameConstants.Menu.END_LEVEL_COMPLETE_MENU]))
 
     def __handle_all_levels_complete(self):
-        if Application.EarthComplete and Application.ActiveScene.name == GameConstants.Scene.EARTH\
-                or Application.MarsComplete and Application.ActiveScene.name == GameConstants.Scene.MARS\
-                or Application.SaturnComplete and Application.ActiveScene.name == GameConstants.Scene.SATURN:
-            self._event_dispatcher.dispatch_event(
-                EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
-                          ["Press E around the teleporter to save another planet!", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+        if self.__level_complete:
+            self._event_dispatcher.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,["Press E around the teleporter to save another planet!", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
