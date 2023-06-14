@@ -33,6 +33,7 @@ class PlayerController(Component, IMoveable):
         self.__is_attacking = False
         self.__previous_direction = GameObjectEnums.GameObjectDirection.Down
         self.__box_collider = box_collider
+        self.__freeze_movement = False
 
     @property
     def previous_direction(self):
@@ -55,9 +56,11 @@ class PlayerController(Component, IMoveable):
         self.__rb = self._parent.get_component(Rigidbody2D)
         self.__rend = self._parent.get_component(SpriteRenderer2D)
         self.__animator = self._parent.get_component(SpriteAnimator2D)
+        self.__freeze_movement = False
 
     def update(self, game_time):
         self.__rb.velocity = Vector2(0, 0)
+        self.__handle_faint()
 
         if self.__animator.active_take == ActiveTake.PLAYER_ATTACK_X \
                 or self.__animator.active_take == ActiveTake.PLAYER_ATTACK_UP\
@@ -68,12 +71,15 @@ class PlayerController(Component, IMoveable):
             self._set_idle_animation()
 
         self.__input_handler.update()
-        self._move_left()
-        self._move_right()
-        self._move_up()
-        self._move_down()
-        self._attack()
-        self._faint()
+        if not self.__freeze_movement:
+            self._move_left()
+            self._move_right()
+            self._move_up()
+            self._move_down()
+            self._attack()
+        self.__faint()
+
+
 
     def _move_left(self):
         self._set_idle_animation()
@@ -158,10 +164,16 @@ class PlayerController(Component, IMoveable):
                 self.parent.remove_component(AttackBoxCollider2D)
                 self.parent.add_component(self.__box_collider)
 
-    def _faint(self):
+    def __faint(self):
         if self.parent.health <= 0:
-            self.__animator.set_active_take(ActiveTake.PLAYER_IDLE_DOWN)
+            self.__freeze_movement = True
+            self.__animator.set_active_take(ActiveTake.PLAYER_FAINT)
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.PLAYER_DEATH_SOUND, False]))
+
+    def __handle_faint(self):
+        if self.__animator.is_animation_complete:
             GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene, [GameConstants.Menu.END_LEVEL_DEATH_MENU]))
+                EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene,
+                          [GameConstants.Menu.END_LEVEL_DEATH_MENU]))
+
 
