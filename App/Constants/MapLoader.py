@@ -255,11 +255,10 @@ class MapLoader:
         scene.add(self.__player)
         scene.add(self.__player_health_bar)
 
-        self.__check_enemy_in_scene(scene)
+        # self.__check_enemy_in_scene(scene)
         scene.start()
         self.__scene_manager.set_active_scene(GameConstants.Scene.EARTH)
         return len(self.__enemies[scene.name])
-
 
     def __check_enemy_in_scene(self, scene):
         for enemy in self.__enemies[scene.name]:
@@ -320,7 +319,6 @@ class MapLoader:
 
     def load_house_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
-        enemy.initial_position = Vector2(0, 0)
         enemy.add_component(EnemyController("Enemy movement", self.__player, GameConstants.EnemyRat.MOVE_SPEED, 600))
         self.load_enemies(EntityConstants.Enemy.ENEMY_WAYPOINTS, GameObjectCategory.Rat, enemy, scene)
 
