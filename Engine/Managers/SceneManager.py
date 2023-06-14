@@ -65,16 +65,14 @@ class SceneManager(Manager):
 
         elif event_data.event_action_type == EventActionType.PauseMenuScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
-            self.__check_turn_off_spotlight()
             self.__dispatch_menu_events()
-            Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(GameConstants.Scene.PAUSE_MENU)
+            self.__check_turn_off_spotlight()
             self.__play_music(Application.ActiveMusic, GameConstants.Music.MENU_MUSIC)
 
         elif event_data.event_action_type == EventActionType.EndLevelScene:
             self._event_dispatcher.dispatch_event(EventData(EventCategoryType.RendererManager, EventActionType.IsMenu))
             self.__dispatch_menu_events()
-            Application.LastActiveScene = self.__active_scene
             self.__set_menu_scene(GameConstants.Scene.END_LEVEL_MENU)
             end_level_scene_text = event_data.parameters[0]
 
