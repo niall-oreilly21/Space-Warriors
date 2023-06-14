@@ -82,6 +82,14 @@ class PlayerCollider(Collider):
                 EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
                           ["You found a stranded dog! Press E to adopt", GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
             if GameConstants.INPUT_HANDLER.is_tap(pygame.K_e, 100):
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["",
+                               GameConstants.UITextPrompts.UI_TEXT_BOTTOM]))
+                GameConstants.EVENT_DISPATCHER.dispatch_event(
+                    EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,
+                              ["Attack damage +3",
+                               GameConstants.UITextPrompts.UI_TEXT_RIGHT]))
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.DOG_BARK_SOUND, False]))
 
                 colliding_game_object.get_component(PetController).adopt()

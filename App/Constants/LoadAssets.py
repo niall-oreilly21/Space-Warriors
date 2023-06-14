@@ -30,8 +30,9 @@ def load_sound(sound_manager):
     sound_manager.set_sound_volume(GameConstants.Music.BACKGROUND_MUSIC_EARTH, .05)
     sound_manager.set_sound_volume(GameConstants.Music.BACKGROUND_MUSIC_MARS, .05)
     sound_manager.set_sound_volume(GameConstants.Music.BACKGROUND_MUSIC_SATURN, .05)
-    sound_manager.set_sound_volume(GameConstants.Music.PLAYER_ATTACK_SOUND, .05)
+    sound_manager.set_sound_volume(GameConstants.Music.PLAYER_ATTACK_SOUND, 1)
     sound_manager.set_sound_volume(GameConstants.Music.POTION_DRINK_SOUND, 1)
+    sound_manager.set_sound_volume(GameConstants.Music.TELEPORT_SOUND, 1)
     GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound, [GameConstants.Music.MENU_MUSIC]))
 
 def load_cameras(camera_manager, player):
@@ -51,7 +52,7 @@ def load_fonts():
                                                         (255, 255, 255))
     TEXT_MATERIAL_UI_TEXT_HELPER_RIGHT = TextMaterial2D(GameObjectConstants.UiHelperTexts.UI_HELPER_TEXT_FONT_PATH, 30,
                                                         "",
-                                                        Vector2(GameConstants.VIEWPORT_WIDTH - 175, 145),
+                                                        Vector2(GameConstants.VIEWPORT_WIDTH - 185, 145),
                                                         (255, 255, 255))
     GameObjectConstants.UiHelperTexts.UI_TEXT_HELPER_BOTTOM.add_component(
         Renderer2D("Renderer-1", TEXT_MATERIAL_UI_TEXT_HELPER_BOTTOM, RendererLayers.UI))
