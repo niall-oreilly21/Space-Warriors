@@ -104,7 +104,9 @@ class GameStateManager(Manager):
                     self.__reset_player_position()
 
                 game_object.reset_position()
-                game_object.reset_health()
+
+                if Application.ActiveScene.name != GameConstants.Scene.HOUSE:
+                    game_object.reset_health()
 
     def __reset_player_position(self):
         if Application.ActiveScene.name is GameConstants.Scene.EARTH:

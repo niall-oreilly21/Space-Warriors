@@ -255,7 +255,7 @@ class MapLoader:
         scene.add(self.__player)
         scene.add(self.__player_health_bar)
 
-        self.__check_enemy_in_scene(scene)
+        # self.__check_enemy_in_scene(scene)
         scene.start()
         self.__scene_manager.set_active_scene(GameConstants.Scene.EARTH)
         return len(self.__enemies[scene.name])
