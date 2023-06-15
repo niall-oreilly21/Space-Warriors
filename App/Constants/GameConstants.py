@@ -178,7 +178,8 @@ class GameConstants:
         BOSS_SPEED = 1
         ATTACK_DAMAGE = 3
         BOSS_SCALE = Vector2(3,3)
-        BOSS_HEALTH = 100
+        BOSS_HEALTH = 150
+        BOSS_ATTACK_DAMAGE = 5
         HEALTH = 50
 
         __ENEMY_MOVE_X_FRAME_RECTS = [
@@ -202,15 +203,39 @@ class GameConstants:
         ]
         __ENEMY_MOVE_UP = Take(ActiveTake.ENEMY_ALIEN_MOVE_UP, __ENEMY_MOVE_UP_FRAME_RECTS)
 
-        ENEMY_ANIMATOR_INFO = [__ENEMY_MOVE_X, __ENEMY_MOVE_DOWN, __ENEMY_MOVE_UP]
+        __BOSS_MOVE_X_FRAME_RECTS = [
+            pygame.Rect(84, 721, 26, 45), pygame.Rect(149, 720, 23, 45), pygame.Rect(206, 720, 28, 45),
+            pygame.Rect(267, 720, 31, 46), pygame.Rect(327, 721, 37, 45), pygame.Rect(395, 720, 31, 46),
+            pygame.Rect(464, 720, 25, 46), pygame.Rect(532, 720, 21, 46)
+        ]
+        __BOSS_MOVE_X = Take(ActiveTake.BOSS_ALIEN_MOVE_X, __BOSS_MOVE_X_FRAME_RECTS)
+
+        __BOSS_MOVE_UP_FRAME_RECTS = [
+            pygame.Rect(80, 529, 31, 44), pygame.Rect(144, 529, 31, 45), pygame.Rect(208, 530, 30, 45),
+            pygame.Rect(271, 529, 32, 45), pygame.Rect(335, 529, 32, 44), pygame.Rect(400, 529, 31, 45),
+            pygame.Rect(465, 530, 30, 45), pygame.Rect(528, 529, 31, 45)
+        ]
+        __BOSS_MOVE_UP = Take(ActiveTake.BOSS_ALIEN_MOVE_UP, __BOSS_MOVE_UP_FRAME_RECTS)
+
+        __BOSS_MOVE_DOWN_FRAME_RECTS = [
+            pygame.Rect(81, 657, 31, 47), pygame.Rect(145, 657, 31, 46), pygame.Rect(210, 658, 31, 45),
+            pygame.Rect(273, 657, 31, 47), pygame.Rect(337, 657, 32, 47), pygame.Rect(401, 657, 32, 46),
+            pygame.Rect(465, 658, 31, 45), pygame.Rect(529, 657, 32, 47)
+        ]
+        __BOSS_MOVE_DOWN = Take(ActiveTake.BOSS_ALIEN_MOVE_DOWN, __BOSS_MOVE_DOWN_FRAME_RECTS)
+
+        ENEMY_ANIMATOR_INFO = [__ENEMY_MOVE_X, __ENEMY_MOVE_DOWN, __ENEMY_MOVE_UP, __BOSS_MOVE_X, __BOSS_MOVE_UP,
+                               __BOSS_MOVE_DOWN]
 
         __ENEMY_SPRITE_SHEET_1 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien1.png")
         __ENEMY_SPRITE_SHEET_2 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien2.png")
         __ENEMY_SPRITE_SHEET_3 = pygame.image.load("Assets/SpriteSheets/Characters/enemy_alien3.png")
+        __BOSS_SPRITE_SHEET = pygame.image.load("Assets/SpriteSheets/Characters/boss_alien.png")
 
         MATERIAL_ENEMY1 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_1, None, Vector2(0, 0), None)
         MATERIAL_ENEMY2 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_2, None, Vector2(0, 0), None)
         MATERIAL_ENEMY3 = TextureMaterial2D(__ENEMY_SPRITE_SHEET_3, None, Vector2(0, 0), None)
+        MATERIAL_BOSS = TextureMaterial2D(__BOSS_SPRITE_SHEET, None, Vector2(0, 0), None)
 
     class PetDog:
         __PET_WALK_FRAME_RECTS = [
