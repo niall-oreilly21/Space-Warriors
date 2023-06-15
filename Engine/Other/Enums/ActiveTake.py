@@ -33,3 +33,6 @@ class ActiveTake(Enum):
     RANDOM = 28
     NIGHT_VISION = 29
     PLAYER_FAINT = 30
+    BOSS_ALIEN_MOVE_X = 31
+    BOSS_ALIEN_MOVE_UP = 32
+    BOSS_ALIEN_MOVE_DOWN = 33
