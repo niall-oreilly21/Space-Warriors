@@ -131,24 +131,30 @@ class EnemyController(FollowController):
             return ActiveTake.ENEMY_RAT_MOVE_X
         elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_X
-        else:
+        elif self.parent.game_object_category == GameObjectCategory.Alien:
             return ActiveTake.ENEMY_ALIEN_MOVE_X
+        else:
+            return ActiveTake.BOSS_ALIEN_MOVE_X
 
     def move_up_active_take(self):
         if self.parent.game_object_category == GameObjectCategory.Rat:
             return ActiveTake.ENEMY_RAT_MOVE_UP
         elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_UP
-        else:
+        elif self.parent.game_object_category == GameObjectCategory.Alien:
             return ActiveTake.ENEMY_ALIEN_MOVE_UP
+        else:
+            return ActiveTake.BOSS_ALIEN_MOVE_UP
 
     def move_down_active_take(self):
         if self.parent.game_object_category == GameObjectCategory.Rat:
             return ActiveTake.ENEMY_RAT_MOVE_DOWN
         elif self.parent.game_object_category == GameObjectCategory.Wolf:
             return ActiveTake.ENEMY_WOLF_MOVE_DOWN
-        else:
+        elif self.parent.game_object_category == GameObjectCategory.Alien:
             return ActiveTake.ENEMY_ALIEN_MOVE_DOWN
+        else:
+            return ActiveTake.BOSS_ALIEN_MOVE_DOWN
 
     def clone(self):
         return EnemyController(self.name, self.__target, self._speed, self._min_distance_to_target)

@@ -288,11 +288,15 @@ class MapLoader:
             self.__create_boss(self.__enemies[scene.name][0], scene)
 
     def __create_boss(self, enemy, scene):
+        enemy.game_object_category = GameObjectCategory.Boss
         init_pos = 3200, 4000
         enemy.initial_position = Vector2(init_pos)
         enemy.initial_health = GameConstants.EnemyAlien.BOSS_HEALTH
         enemy.transform.scale = GameConstants.EnemyAlien.BOSS_SCALE
+        enemy.attack_damage = GameConstants.EnemyAlien.BOSS_ATTACK_DAMAGE
         enemy.transform.position = Vector2(3207.8, 4013)
+        enemy.get_component(Renderer2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
+        enemy.get_component(SpriteAnimator2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
         gun = GameObjectConstants.Gun.GUN.clone()
 
         gun.add_component(GunController("Enemy Gun Controller", enemy))
