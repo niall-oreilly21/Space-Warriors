@@ -81,6 +81,7 @@ class GameStateManager(Manager):
     def __set_up_base_level(self):
         self.__set_up_events()
         self.__position_characters_for_level()
+        self.__map_loader.load_pet(Application.ActiveScene)
 
     def __set_up_events(self):
         self.__dispatch_events_for_set_up_level()
@@ -90,7 +91,7 @@ class GameStateManager(Manager):
     def __set_up_teleporter_for_level(self):
         teleporters = Application.ActiveScene.find_all_by_category(GameObjectType.Static, GameObjectCategory.Teleporter)
 
-        if len(teleporters) <= 0:
+        if not teleporters:
             return
 
         teleporters[0].get_component(SpriteAnimator2D).set_active_take(ActiveTake.TELEPORT_IDLE)
@@ -159,7 +160,6 @@ class GameStateManager(Manager):
 
         if self.__enemies_in_scene_count == GameConstants.DEFAULT_ENEMIES:
             enemy_text = f"Enemies count: {0}"
-
 
         GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUITextHelper,[enemy_text, GameConstants.UITextPrompts.UI_TEXT_ENEMY_COUNT]))
 
