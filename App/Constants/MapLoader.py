@@ -48,6 +48,7 @@ class MapLoader:
         self.__load_player_components()
         self.__load_pet_components()
         self.__scene_manager = scene_manager
+        self.__boss = None
 
     def __load_player_components(self):
         self.__player.add_component(Rigidbody2D("Rigid"))
@@ -67,7 +68,7 @@ class MapLoader:
 
     def __load_pet_components(self):
         material_pet = GameConstants.PetDog.MATERIAL_PET
-        self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Player))
+        self.__pet.add_component(SpriteRenderer2D("PetRenderer", material_pet, RendererLayers.Pet))
         self.__pet.get_component(SpriteRenderer2D).flip_x = True
         self.__pet.add_component(SpriteAnimator2D("PetAnimator", GameConstants.PetDog.PET_ANIMATOR_INFO, material_pet,
                                                   ActiveTake.PET_DOG_SIT, GameConstants.CHARACTER_ANIMATOR_MOVE_SPEED))
@@ -192,6 +193,9 @@ class MapLoader:
                                                          GameObjectConstants.Consumables.ATTACK_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.DEFENSE_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.RANDOM_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
+                                                         GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone(),
                                                          GameObjectConstants.Consumables.NIGHT_VISION_POWER_UP.clone()])
                     else:
                         power_up_object = random.choice([GameObjectConstants.Consumables.SPEED_POWER_UP.clone(),
@@ -242,20 +246,26 @@ class MapLoader:
             scene.add(self.__player)
             scene.add(self.__player_health_bar)
 
-        if not scene.contains(self.__pet):
-            if self.__pet.get_component(PetController).adopted:
-                scene.add(self.__pet)
+        if scene.name is GameConstants.Scene.SATURN:
+            if self.__boss is None:
+                self.__create_boss(self.__enemies[scene.name][0], scene)
 
         self.__check_enemy_in_scene(scene)
         scene.start()
         return len(self.__enemies[scene.name])
+
+    def load_pet(self, scene):
+        if not scene.contains(self.__pet):
+            scene.add(self.__pet)
+
+        if self.__pet.get_component(PetController).adopted:
+            self.__pet.transform.position = self.__player.transform.position
 
     def load_house_dynamic_objects(self):
         scene = self.__scene_manager.set_active_scene(GameConstants.Scene.HOUSE)
         scene.add(self.__player)
         scene.add(self.__player_health_bar)
 
-        # self.__check_enemy_in_scene(scene)
         scene.start()
         self.__scene_manager.set_active_scene(GameConstants.Scene.EARTH)
         return len(self.__enemies[scene.name])
@@ -284,26 +294,28 @@ class MapLoader:
         self.__add_enemy_health_bar_to_scene(enemy,enemy_health_bar_texture, scene)
         scene.add(enemy)
 
-        if scene.name is GameConstants.Scene.SATURN:
-            self.__create_boss(self.__enemies[scene.name][0], scene)
-
     def __create_boss(self, enemy, scene):
-        enemy.game_object_category = GameObjectCategory.Boss
-        init_pos = 3200, 4000
-        enemy.initial_position = Vector2(init_pos)
-        enemy.initial_health = GameConstants.EnemyAlien.BOSS_HEALTH
-        enemy.transform.scale = GameConstants.EnemyAlien.BOSS_SCALE
-        enemy.attack_damage = GameConstants.EnemyAlien.BOSS_ATTACK_DAMAGE
-        enemy.transform.position = Vector2(3207.8, 4013)
-        enemy.get_component(Renderer2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
-        enemy.get_component(SpriteAnimator2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
-        gun = GameObjectConstants.Gun.GUN.clone()
+        if scene.contains(enemy):
+            scene.remove(enemy)
+            enemy.name = GameConstants.EnemyAlien.BOSS_NAME
+            init_pos = 3200, 4000
+            enemy.initial_position = Vector2(init_pos)
+            enemy.initial_health = GameConstants.EnemyAlien.BOSS_HEALTH
+            enemy.transform.scale = GameConstants.EnemyAlien.BOSS_SCALE
+            enemy.attack_damage = GameConstants.EnemyAlien.BOSS_ATTACK_DAMAGE
+            enemy.transform.position = Vector2(3207.8, 4013)
+            enemy.get_component(Renderer2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
+            enemy.get_component(SpriteAnimator2D).material = GameConstants.EnemyAlien.MATERIAL_BOSS
 
-        gun.add_component(GunController("Enemy Gun Controller", enemy))
-        scene.add(gun)
-        enemy.remove_component(EnemyController)
-        enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.BOSS_SPEED, 800, 200, gun))
-        enemy.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
+            gun = GameObjectConstants.Gun.GUN.clone()
+            gun.add_component(GunController("Enemy Gun Controller", enemy))
+            scene.add(gun)
+            enemy.remove_component(EnemyController)
+            enemy.add_component(BossEnemyController("Enemy movement", self.__player, GameConstants.EnemyAlien.BOSS_SPEED, 800, 200, gun))
+            enemy.get_component(WaypointFinder).waypoints = [Vector2(init_pos), Vector2(3000, 4000)]
+            self.__boss = enemy
+            scene.add(enemy)
+
 
     def load_planet_earth_enemies(self, scene):
         enemy = EntityConstants.Enemy.RAT_ENEMY.clone()
