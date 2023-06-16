@@ -1,9 +1,12 @@
 from App.Components.Controllers.EnemyController import EnemyController
+from App.Constants.Application import Application
+from App.Constants.GameConstants import GameConstants
+
 
 class BossEnemyController(EnemyController):
     def __init__(self, name, target, speed, min_distance_to_target, min_distance_to_stop_firing, gun):
         super().__init__(name, target, speed, min_distance_to_target)
-        self._gun = gun
+        self.__gun = gun
         self.__min_distance_to_stop_firing = min_distance_to_stop_firing
 
     def start(self):
@@ -16,8 +19,13 @@ class BossEnemyController(EnemyController):
         super()._follow_target()
 
         if self._distance_from_target >= self.__min_distance_to_stop_firing:
-            self._gun.fire(self._direction)
+            self.__gun.fire(self._direction)
+
+    def _kill_enemy(self):
+        Application.ActiveScene.remove(self.__gun)
+
+        super()._kill_enemy()
 
 
     def clone(self):
-        return BossEnemyController(self.name, self._target, self._speed, self._min_distance_to_target, self.__min_distance_to_stop_firing, self._gun)
+        return BossEnemyController(self.name, self._target, self._speed, self._min_distance_to_target, self.__min_distance_to_stop_firing, self.__gun)

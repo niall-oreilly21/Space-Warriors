@@ -54,14 +54,20 @@ class EnemyController(FollowController):
     def __check_enemy_health(self):
         if self.parent.health <= 0:
             self.parent.health = 0
-            Application.ActiveScene.remove(self.parent.health_bar)
-            Application.ActiveScene.remove(self.parent)
-            GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
-                          [GameConstants.Music.ENEMY_DEATH_SOUND, False]))
-            GameConstants.EVENT_DISPATCHER.dispatch_event(
-                EventData(EventCategoryType.GameStateManager, EventActionType.RemoveEnemyFromScene)
-            )
+
+            self._kill_enemy()
+
+    def _kill_enemy(self):
+        Application.ActiveScene.remove(self.parent.health_bar)
+
+        Application.ActiveScene.remove(self.parent)
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                      [GameConstants.Music.ENEMY_DEATH_SOUND, False]))
+        GameConstants.EVENT_DISPATCHER.dispatch_event(
+            EventData(EventCategoryType.GameStateManager, EventActionType.RemoveEnemyFromScene)
+        )
+
 
     def _follow_target(self):
         self.calculate_movement_direction(self.__target.transform.position, self.transform.position)
