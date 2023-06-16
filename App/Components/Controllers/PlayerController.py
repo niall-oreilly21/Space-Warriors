@@ -20,6 +20,7 @@ class PlayerController(Component, IMoveable):
 
     def __init__(self, name, speed_x, speed_y, box_collider):
         super().__init__(name)
+        self.__is_fainting = False
         self.__input_handler = InputHandler()
         self.__speed_x = speed_x
         self.__speed_y = speed_y
@@ -161,15 +162,23 @@ class PlayerController(Component, IMoveable):
                 self.parent.add_component(self.__box_collider)
 
     def __faint(self):
-        if self.parent.health <= 0:
-            self.__freeze_movement = True
-            self.__animator.set_active_take(ActiveTake.PLAYER_FAINT)
-            GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.PLAYER_DEATH_SOUND, False]))
+            if self.parent.health <= 0:
+                self.__freeze_movement = True
+                self.__animator.set_active_take(ActiveTake.PLAYER_FAINT)
+
+                if not self.__is_fainting:
+                    GameConstants.EVENT_DISPATCHER.dispatch_event(
+                        EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,
+                              [GameConstants.Music.PLAYER_DEATH_SOUND, False]))
+                    self.__is_fainting = True
+
 
     def __handle_faint(self):
         if self.__animator.is_animation_complete and self.__freeze_movement is True:
+            self.__is_fainting = False
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene,
                           [GameConstants.Menu.END_LEVEL_DEATH_MENU]))
+
 
 
