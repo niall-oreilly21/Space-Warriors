@@ -4,9 +4,7 @@ import pygame
 
 from App.Constants.Application import Application
 from App.Constants.GameConstants import GameConstants
-from Engine.GameObjects.Components.Cameras.ThirdPersonController import ThirdPersonController
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
-from Engine.Managers import SceneManager
 from Engine.Managers.EventSystem.EventData import EventData
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
 
