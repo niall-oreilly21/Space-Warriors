@@ -85,6 +85,7 @@ class SceneManager(Manager):
         elif event_data.event_action_type == EventActionType.SetToLastActiveScene:
             self.__set_scenes()
             if self.__check_level_scene():
+                self.__check_turn_off_spotlight()
                 self.__set_level_music()
                 GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.LoadLevel))
 
@@ -95,6 +96,7 @@ class SceneManager(Manager):
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.GameStateManager, EventActionType.SetUpLevel))
             if self.__check_level_scene():
                 self.__set_level_music()
+                self.__check_turn_off_spotlight()
 
         elif event_data.event_action_type == EventActionType.CharacterSelectionMenuScene:
             self.__set_menu_scene(GameConstants.Scene.CHARACTER_SELECTION_MENU)

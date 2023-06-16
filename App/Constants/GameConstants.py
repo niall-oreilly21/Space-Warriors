@@ -176,10 +176,10 @@ class GameConstants:
     class EnemyAlien:
         MOVE_SPEED = 6
         BOSS_SPEED = 1
-        ATTACK_DAMAGE = 3
+        ATTACK_DAMAGE = 5
         BOSS_SCALE = Vector2(3,3)
         BOSS_HEALTH = 100
-        BOSS_ATTACK_DAMAGE = 5
+        BOSS_ATTACK_DAMAGE = 10
         BOSS_NAME = "Alien Boss"
         HEALTH = 50
 

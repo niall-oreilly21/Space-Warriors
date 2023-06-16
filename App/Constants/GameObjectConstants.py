@@ -350,7 +350,7 @@ class GameObjectConstants:
         material = TextureMaterial2D(texture, None, None, 255)
 
         colors = [(255,255,0), (0,255,0), None]
-        __BULLET_PREFAB = Bullet("Bullet", material, 5, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.13, 0.13)))
+        __BULLET_PREFAB = Bullet("Bullet", material, 6, 15, Transform2D(Vector2(0, 0), 0, Vector2(0.13, 0.13)))
         GUN = Gun("Gun", __BULLET_PREFAB, 1.5, colors, Transform2D(Vector2(2400, 4500), 0, Vector2(0.2, 0.2)))
 
     class Cameras:
