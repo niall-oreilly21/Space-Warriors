@@ -5,11 +5,9 @@ from App.Constants.GameConstants import GameConstants
 from Engine.GameObjects.Components.Component import Component
 from Engine.GameObjects.Components.Physics.BoxCollider2D import BoxCollider2D
 from Engine.GameObjects.Components.Physics.Rigidbody2D import Rigidbody2D
-from Engine.Graphics.Renderers.Renderer2D import Renderer2D
 from Engine.Graphics.Renderers.SpriteRenderer2D import SpriteRenderer2D
 from Engine.Graphics.Sprites.SpriteAnimator2D import SpriteAnimator2D
 from Engine.Managers.EventSystem.EventData import EventData
-from Engine.Managers.SceneManager import SceneManager
 from Engine.Other.Enums import GameObjectEnums
 from Engine.Other.Enums.ActiveTake import ActiveTake
 from Engine.Other.Enums.EventEnums import EventCategoryType, EventActionType
@@ -78,8 +76,6 @@ class PlayerController(Component, IMoveable):
             self._move_down()
             self._attack()
         self.__faint()
-
-
 
     def _move_left(self):
         self._set_idle_animation()
@@ -171,7 +167,7 @@ class PlayerController(Component, IMoveable):
             GameConstants.EVENT_DISPATCHER.dispatch_event(EventData(EventCategoryType.SoundManager, EventActionType.PlaySound,[GameConstants.Music.PLAYER_DEATH_SOUND, False]))
 
     def __handle_faint(self):
-        if self.__animator.is_animation_complete:
+        if self.__animator.is_animation_complete and self.__freeze_movement is True:
             GameConstants.EVENT_DISPATCHER.dispatch_event(
                 EventData(EventCategoryType.SceneManager, EventActionType.EndLevelScene,
                           [GameConstants.Menu.END_LEVEL_DEATH_MENU]))

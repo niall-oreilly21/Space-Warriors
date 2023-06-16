@@ -68,7 +68,6 @@ class SpriteAnimator2D(Component):
                 self.__is_animation_complete = False
                 self.__repeat_count = animator_info.repeat_count
 
-    # ...
 
     def update(self, game_time):
         if self.__active_take is None:

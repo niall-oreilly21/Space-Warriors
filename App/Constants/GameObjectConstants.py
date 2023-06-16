@@ -270,7 +270,6 @@ class GameObjectConstants:
         object_frame = ruins_image.subsurface(pygame.Rect(341, 1, 42, 60))
         texture_material = TextureMaterial2D(object_frame, None, Vector2(0, 0), 255)
         STATUE.add_component(Renderer2D("Renderer-2", texture_material, structures_layer))
-        # STATUE.add_component(BoxCollider2D("Box-3"))
 
         BRIDGE = GameObject("Bridge", Transform2D(Vector2(0, 0), 0, Vector2(3, 3)), GameObjectType.Static,
                             GameObjectCategory.Environment)
