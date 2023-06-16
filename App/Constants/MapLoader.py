@@ -270,6 +270,10 @@ class MapLoader:
         self.__scene_manager.set_active_scene(GameConstants.Scene.EARTH)
         return len(self.__enemies[scene.name])
 
+    def set_up_house_objects(self):
+        scene = self.__scene_manager.set_active_scene(GameConstants.Scene.HOUSE)
+        self.__check_enemy_in_scene(scene)
+
     def __check_enemy_in_scene(self, scene):
         for enemy in self.__enemies[scene.name]:
             enemy.health_bar.get_component(EnemyHealthBarController).reset_health_bar_visibility()
@@ -424,7 +428,7 @@ class MapLoader:
         ruin.transform.scale = Vector2(3, 3)
         scene.add(ruin)
 
-        self.__load_teleporter(scene, Vector2(3640, 4700))
+        self.__load_teleporter(scene, Vector2(2000, 3400))
         self.__load_ui_texts(scene)
 
     def __load_house_specifics(self, scene):

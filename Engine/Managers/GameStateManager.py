@@ -39,6 +39,7 @@ class GameStateManager(Manager):
             self.__set_up_level()
 
         elif event_data.event_action_type == EventActionType.SetUpHouseLevel:
+            self.__map_loader.set_up_house_objects()
             self.__set_up_base_level()
 
         elif event_data.event_action_type == EventActionType.LoadLevel:
